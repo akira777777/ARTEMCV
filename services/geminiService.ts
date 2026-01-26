@@ -8,6 +8,9 @@ export class GeminiService {
   
   private static getAI() {
     const currentKey = process.env.API_KEY;
+    if (!currentKey) {
+      throw new Error("API_KEY is not configured");
+    }
     if (!this.client || this.apiKeySnapshot !== currentKey) {
       this.apiKeySnapshot = currentKey;
       this.client = new GoogleGenAI({ apiKey: currentKey });
