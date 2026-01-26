@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AstraDev | Quiet, Confident Digital Experiences</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary: #6366f1;
+        --bg: #0a0a0a;
+      }
+      body {
+        font-family: 'DM Sans', sans-serif;
+        background-color: var(--bg);
+        color: #ffffff;
+        scroll-behavior: smooth;
+      }
+      .font-serif {
+        font-family: 'Instrument Serif', serif;
+      }
+      .marquee-container {
+        display: flex;
+        overflow: hidden;
+        user-select: none;
+        gap: 2rem;
+      }
+      .marquee-content {
+        flex-shrink: 0;
+        display: flex;
+        justify-content: space-around;
+        gap: 2rem;
+        min-width: 100%;
+        animation: scroll 20s linear infinite;
+      }
+      @keyframes scroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(-100%); }
+      }
+      .progressive-blur {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10;
+        background: linear-gradient(to bottom, transparent, var(--bg));
+        mask-image: linear-gradient(to bottom, transparent, black);
+      }
+      .service-card {
+        background: #111111;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+      .service-card:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        background: #161616;
+      }
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0a0a0a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #222;
+        border-radius: 10px;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0"
+  }
+}
+</script>
+</head>
+  <body class="antialiased selection:bg-white selection:text-black">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

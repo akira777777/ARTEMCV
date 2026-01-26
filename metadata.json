@@ -1,0 +1,8 @@
+{
+  "name": "Brand Bible & Portfolio",
+  "description": "A comprehensive AI-powered Brand Identity Generator and professional portfolio showcasing fullstack development projects.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
