@@ -38,12 +38,12 @@ const BrandGenerator: React.FC = () => {
     setBible(null);
     setImages({});
     try {
-      // Step 1: Deep Thinking for Brand Architecture
-      const generatedBible = await GeminiService.generateBrandBible(mission);
+      // Step 1: Deep Thinking for Brand Architecture (in parallel with placeholder)
+      const [generatedBible, absPlaceholder] = await Promise.all([
+        GeminiService.generateBrandBible(mission),
+        GeminiService.generateAbstractPlaceholder('1K', selectedRatio)
+      ]);
       setBible(generatedBible);
-      
-      // Step 2: Generate Abstract Skeleton Placeholder
-      const absPlaceholder = await GeminiService.generateAbstractPlaceholder('1K', selectedRatio);
       setPlaceholder(absPlaceholder);
 
       // Step 3: Launch Parallel Synthesis
