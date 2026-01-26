@@ -4,10 +4,13 @@ import { BrandBible, ImageSize } from "../types";
 
 export class GeminiService {
   private static client: GoogleGenAI | null = null;
+  private static apiKeySnapshot: string | undefined;
   
   private static getAI() {
-    if (!this.client) {
-      this.client = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const currentKey = process.env.API_KEY;
+    if (!this.client || this.apiKeySnapshot !== currentKey) {
+      this.apiKeySnapshot = currentKey;
+      this.client = new GoogleGenAI({ apiKey: currentKey });
     }
     return this.client;
   }
