@@ -3,8 +3,13 @@ import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
 import { BrandBible, ImageSize } from "../types";
 
 export class GeminiService {
+  private static client: GoogleGenAI | null = null;
+  
   private static getAI() {
-    return new GoogleGenAI({ apiKey: process.env.API_KEY });
+    if (!this.client) {
+      this.client = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    }
+    return this.client;
   }
 
   // Deep Architecture Generation (Thinking Mode)
