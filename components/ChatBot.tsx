@@ -28,19 +28,38 @@ const ChatBot: React.FC = () => {
     setLoading(true);
 
     try {
-      const history = messages.map(m => ({ role: m.role, parts: [{ text: m.text }] }));
+      // Build proper history format for API
+      const history = messages.map(m => ({ 
+        role: m.role as 'user' | 'model',
+        parts: [{ text: m.text }] 
+      }));
+
       const response = await GeminiService.chat(userMessage, history);
       
-      const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks?.map(c => c.web).filter(Boolean);
+      // Extract response text safely
+      const responseText = response.text || response.candidates?.[0]?.content?.parts?.[0]?.text || 'No response';
+      
+      // Extract grounding metadata for sources
+      const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+      const sources = groundingChunks
+        .filter(chunk => chunk.web?.uri)
+        .map(chunk => ({ 
+          title: chunk.web?.title || 'Source',
+          uri: chunk.web?.uri || '#'
+        }));
       
       setMessages(prev => [...prev, { 
         role: 'model', 
-        text: response.text || '', 
+        text: responseText,
         sources: sources as any 
       }]);
-    } catch (err) {
+    } catch (err: any) {
       console.error('ChatBot error:', err);
-      setMessages(prev => [...prev, { role: 'model', text: 'Connection error. Please try again.' }]);
+      const errorMsg = err?.message || 'Connection error. Please try again.';
+      setMessages(prev => [...prev, { 
+        role: 'model', 
+        text: `⚠️ Error: ${errorMsg}` 
+      }]);
     } finally {
       setLoading(false);
     }

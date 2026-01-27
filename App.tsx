@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
 import ErrorBoundary from './components/ErrorBoundary';
+import IdentityLab from './components/IdentityLab';
 import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
 import { I18nProvider } from './i18n';
@@ -40,6 +41,7 @@ const App: React.FC = () => {
               <Hero />
               <About />
               <Projects />
+              <IdentityLab />
               <ErrorBoundary>
                 <Suspense fallback={<FeatureLoader feature="Brand Generator" />}>
                   <BrandGenerator />

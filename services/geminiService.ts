@@ -136,15 +136,23 @@ export class GeminiService {
   }
 
   // Search Grounded Chat
-  static async chat(message: string, history: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }>): Promise<GenerateContentResponse> {
+  static async chat(message: string, history?: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }>): Promise<GenerateContentResponse> {
     const ai = this.getAI();
-    return await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: history.concat({ role: 'user', parts: [{ text: message }] }),
-      config: {
-        tools: [{ googleSearch: {} }],
-        systemInstruction: "You are Astra, a master brand strategist. Use Google Search for up-to-date market trends."
-      }
-    });
+    const contents = history ? history.concat({ role: 'user', parts: [{ text: message }] }) : [{ role: 'user', parts: [{ text: message }] }];
+    
+    try {
+      return await ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        contents: contents as any,
+        config: {
+          tools: [{ googleSearch: {} }],
+          systemInstruction: "You are Astra, a master brand strategist. Use Google Search for up-to-date market trends."
+        }
+      });
+    } catch (error: any) {
+      console.error('Gemini API error:', error);
+      // Fallback response if API fails
+      throw new Error(`API Error: ${error?.message || 'Unknown error'}`);
+    }
   }
 }
