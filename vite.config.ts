@@ -10,6 +10,9 @@ export default defineConfig(({ mode }) => {
         port: 3000,
         host: '0.0.0.0',
         middlewareMode: false,
+        fs: {
+          allow: ['..'],
+        },
       },
       preview: {
         port: 4173,
@@ -35,7 +38,7 @@ export default defineConfig(({ mode }) => {
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),
-        }
+        },
       },
       build: {
         target: 'ES2022',
@@ -56,7 +59,6 @@ export default defineConfig(({ mode }) => {
                 if (id.includes('react')) return 'vendor-react';
                 if (id.includes('google') || id.includes('genai')) return 'vendor-gemini';
                 if (id.includes('framer')) return 'vendor-motion';
-                if (id.includes('three')) return 'vendor-three';
                 return 'vendor';
               }
               if (id.includes('services')) return 'services';
@@ -71,14 +73,14 @@ export default defineConfig(({ mode }) => {
           },
         },
         reportCompressedSize: true,
-        chunkSizeWarningLimit: 1000,
+        chunkSizeWarningLimit: 600,
         sourcemap: false,
         cssCodeSplit: true,
         assetsInlineLimit: 4096,
       },
       optimizeDeps: {
-        include: ['react', 'react-dom', 'framer-motion', 'three'],
-        exclude: ['@google/genai', '@react-three/fiber', '@react-three/drei'],
+        include: ['react', 'react-dom', 'framer-motion'],
+        exclude: ['@google/genai'],
       },
     };
 });

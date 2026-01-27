@@ -1,10 +1,8 @@
 
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useI18n } from '../i18n';
-
-// Lazy load ShaderOrb with Three.js dependency
-const ShaderOrb = lazy(() => import('./ShaderOrb'));
+import Cone3D from './Cone3D';
 
 const Hero: React.FC = () => {
   const { t } = useI18n();
@@ -104,22 +102,33 @@ const Hero: React.FC = () => {
           </div>
 
           <div className="flex-1 relative w-full flex justify-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-              className="w-full max-w-2xl"
-            >
-              <Suspense fallback={
-                <div className="w-full h-96 rounded-3xl bg-gradient-to-br from-black to-slate-900 border border-white/10 flex items-center justify-center">
-                  <div className="animate-pulse">
-                    <div className="w-16 h-16 bg-indigo-600 rounded-full"></div>
-                  </div>
+            <div className="relative w-[320px] h-[360px] lg:w-[420px] lg:h-[440px]">
+              <div className="absolute inset-0 rounded-[3rem] glass-card border-white/10" />
+              <div className="absolute -inset-6 rounded-[3.5rem] bg-gradient-to-b from-white/10 via-white/0 to-white/0 blur-3xl" aria-hidden />
+              <motion.div
+                className="absolute inset-3 rounded-[2.7rem] bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.25),transparent_40%),radial-gradient(circle_at_80%_60%,rgba(16,185,129,0.3),transparent_30%)]"
+                animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+                aria-hidden
+              />
+              <motion.div
+                className="absolute inset-4 rounded-[2.4rem] overflow-hidden"
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+              >
+                <div className="relative h-full w-full bg-gradient-to-br from-[#0f172a] via-[#0b1120] to-black">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.2),transparent_30%)]" aria-hidden />
+                  <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.05),transparent_35%,rgba(255,255,255,0.08))] opacity-60" aria-hidden />
+                  
+                  {/* 3D Cone Element */}
+                  <Cone3D />
+                  
+                  <div className="absolute left-10 top-10 floating-badge px-4 py-2 rounded-full text-xs text-zinc-300 animate-[floaty_6s_ease-in-out_infinite] z-10">Motion-first UI</div>
+                  <div className="absolute right-8 bottom-12 floating-badge px-4 py-2 rounded-full text-xs text-emerald-200 animate-[floaty_7s_ease-in-out_infinite] z-10">3D Canvas</div>
                 </div>
-              }>
-                <ShaderOrb />
-              </Suspense>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>

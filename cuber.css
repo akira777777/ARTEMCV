@@ -1,0 +1,53 @@
+/* Cone */
+
+position: absolute;
+width: 2500px;
+left: calc(50% - 2500px/2);
+top: 7.45%;
+bottom: 39.36%;
+
+
+
+/* Cone_01 2 */
+
+position: absolute;
+left: -1.05%;
+right: 0.56%;
+top: -0.22%;
+bottom: -0.28%;
+
+background: url(Matcap Collection@1-2500x2500 (26).png);
+
+
+/* Mask Group */
+
+position: absolute;
+left: -1.05%;
+right: 0.56%;
+top: -0.22%;
+bottom: -0.28%;
+
+
+
+/* Cone_01 1 */
+
+position: absolute;
+left: -1.05%;
+right: 0.56%;
+top: -0.22%;
+bottom: -0.28%;
+
+background: url(Matcap Collection@1-2500x2500 (26).png);
+
+
+/* Rectangle 15 */
+
+position: absolute;
+width: 2500px;
+left: calc(50% - 2500px/2 - 20.12px);
+top: -0.22%;
+bottom: -0.28%;
+
+/* thorus knot 4/color 1 */
+background: #209B58;
+mix-blend-mode: hard-light;

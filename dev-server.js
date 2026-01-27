@@ -3,7 +3,9 @@
 import { spawn } from 'child_process';
 import { rmSync } from 'fs';
 import { join } from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const cwd = process.cwd();
 
 // Clear caches
@@ -15,8 +17,8 @@ try {
   // Ignore errors
 }
 
-// Start Vite dev server
-const vite = spawn('vite', ['--force'], { cwd, stdio: 'inherit' });
+// Start Vite dev server using npm
+const vite = spawn('npm', ['run', 'dev'], { cwd, stdio: 'inherit', shell: true });
 
 process.on('SIGINT', () => {
   vite.kill();
