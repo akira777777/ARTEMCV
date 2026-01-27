@@ -59,6 +59,7 @@ export default defineConfig(({ mode }) => {
                 if (id.includes('react')) return 'vendor-react';
                 if (id.includes('google') || id.includes('genai')) return 'vendor-gemini';
                 if (id.includes('framer')) return 'vendor-motion';
+                if (id.includes('three')) return 'vendor-three';
                 return 'vendor';
               }
               if (id.includes('services')) return 'services';
@@ -73,7 +74,7 @@ export default defineConfig(({ mode }) => {
           },
         },
         reportCompressedSize: true,
-        chunkSizeWarningLimit: 600,
+        chunkSizeWarningLimit: 800,
         sourcemap: false,
         cssCodeSplit: true,
         assetsInlineLimit: 4096,

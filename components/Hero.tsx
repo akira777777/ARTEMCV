@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useI18n } from '../i18n';
-import Cone3D from './Cone3D';
+import GradientShaderCard from './GradientShaderCard';
 
 const Hero: React.FC = () => {
   const { t } = useI18n();
@@ -121,11 +121,8 @@ const Hero: React.FC = () => {
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.2),transparent_30%)]" aria-hidden />
                   <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.05),transparent_35%,rgba(255,255,255,0.08))] opacity-60" aria-hidden />
                   
-                  {/* 3D Cone Element */}
-                  <Cone3D />
-                  
-                  <div className="absolute left-10 top-10 floating-badge px-4 py-2 rounded-full text-xs text-zinc-300 animate-[floaty_6s_ease-in-out_infinite] z-10">Motion-first UI</div>
-                  <div className="absolute right-8 bottom-12 floating-badge px-4 py-2 rounded-full text-xs text-emerald-200 animate-[floaty_7s_ease-in-out_infinite] z-10">3D Canvas</div>
+                  {/* Gradient Shader Card Element */}
+                  <GradientShaderCard />
                 </div>
               </motion.div>
             </div>
