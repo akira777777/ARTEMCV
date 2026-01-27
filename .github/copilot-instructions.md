@@ -1,35 +1,42 @@
 # ARTEMCV: AI Agent Instructions
 
-## Architecture & Data Flow
-- SPA on Vite: root layout in App.tsx; entry in index.tsx mounts <App /> to #root.
-- Always-mounted sections: Header, Hero, About, Projects, Footer, ContactSection.
-- Optional ChatBot: components/ChatBot.tsx, mount in App.tsx after Footer when enabling Gemini Q&A.
-- AI layer: components never call Gemini directly; use services/geminiService.ts (static methods, typed responses).
-- Content source of truth: constants.tsx (PROJECTS, SKILLS). Define new types in types.ts; components map arrays.
-- Contact form → serverless: ContactSection posts to api/send-telegram.ts (Vercel). Client hint uses VITE_TELEGRAM_CHAT_ID; server requires TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID.
+## Architecture
+- SPA on Vite: [App.tsx](App.tsx) root; [index.tsx](index.tsx) mounts to #root.
+- Always-mounted: [components/Header.tsx](components/Header.tsx), [components/Hero.tsx](components/Hero.tsx), [components/About.tsx](components/About.tsx), [components/Projects.tsx](components/Projects.tsx), [components/Footer.tsx](components/Footer.tsx), [components/ContactSection.tsx](components/ContactSection.tsx).
+- Optional ChatBot: [components/ChatBot.tsx](components/ChatBot.tsx) (render after Footer); Gemini calls via [services/geminiService.ts](services/geminiService.ts) only.
+- Content source: [constants.tsx](constants.tsx) (`PROJECTS`, `SKILLS`); types in [types.ts](types.ts).
 
-## Conventions & Patterns
-- Tailwind only for styling; no CSS Modules or styled-components. Dark theme by default; high-contrast, rounded UI, subtle glow.
-- i18n: i18n.tsx + LanguageSwitcher.tsx handle language toggling; keep copy centralized.
-- Error boundaries: components/ErrorBoundary.tsx available; wrap interactive areas when adding new features.
-- AI request hygiene: services/chatCacheManager.ts dedups duplicate questions; rate limiting guards 429; services/imageCacheManager.ts caches image outputs.
+## Patterns
+- Styling: Tailwind utilities only; dark theme, high contrast, rounded UI, subtle glow.
+- i18n: [i18n.tsx](i18n.tsx) with `useI18n().t(key)`; languages `en|ru|cs`; detect from `localStorage('lang')` or `navigator.language`.
+- Error boundaries: use [components/ErrorBoundary.tsx](components/ErrorBoundary.tsx) for interactive/AI areas.
+- Data mapping: components map arrays from `constants.tsx`; avoid hardcoding content in components.
 
-## Environment & Secrets
-- Vite inlines only import.meta.env.VITE_*; set VITE_API_KEY for Gemini (ChatBot only) and VITE_TELEGRAM_CHAT_ID for client hint.
-- Serverless (Vercel): TELEGRAM_BOT_TOKEN (secret), TELEGRAM_CHAT_ID (destination). ChatBot does not require serverless.
-- Fallbacks in vite.config.ts map GEMINI_API_KEY and API_KEY, but prefer VITE_API_KEY to avoid surprises.
+## Environment
+- Vite inlines only `VITE_*`. Set `VITE_API_KEY` (Gemini, for ChatBot) and `VITE_TELEGRAM_CHAT_ID` (client hint).
+- Serverless (Vercel): `TELEGRAM_BOT_TOKEN` (secret), `TELEGRAM_CHAT_ID` (destination) for [api/send-telegram.ts](api/send-telegram.ts).
+- Fallbacks: [vite.config.ts](vite.config.ts) maps `VITE_API_KEY|GEMINI_API_KEY|API_KEY` to both `process.env.*` and `import.meta.env.VITE_API_KEY`; prefer `VITE_API_KEY`.
 
 ## Workflows
-- Dev: npm run dev (fresh dev server). If cache issues, use npm run dev:clean.
-- Build: npm run build; Preview: npm run preview (serverless routes unavailable here).
-- Enable ChatBot: import and render ChatBot in App.tsx; ensure VITE_API_KEY is set; Gemini calls go through geminiService.
+- Dev: `npm run dev` (use `npm run dev:clean` if cache misbehaves).
+- Build/Preview: `npm run build`, `npm run preview` (serverless routes unavailable in preview).
+- Enable ChatBot: import + render in [App.tsx](App.tsx); ensure `VITE_API_KEY` present.
 
-## Integration Examples
-- Add project: append to PROJECTS[] in constants.tsx; Projects.tsx auto-renders cards (id, title, description, techStack, liveLink, githubLink, image).
-- New AI feature: add a static method in geminiService.ts → define types in types.ts → create a component using the method → wire in App.tsx.
-- Telegram contact: use api/send-telegram.ts for submissions; includes validation, honeypot anti-spam, and 12s timeout; available only in serverless env.
+## AI Guardrails
+- Chat cache: [services/chatCacheManager.ts](services/chatCacheManager.ts) — TTL 30 days, max 100 entries, key = simple hash of message; silent on errors.
+- Image cache: [services/imageCacheManager.ts](services/imageCacheManager.ts) — expiry 7 days, total size ≤ ~50MB, key = `btoa(prompt|style|ratio)`; auto-evicts oldest; handles quota.
+- Rate limiting intent: avoid parallel bursts; reuse cached responses/images to mitigate 429.
+
+## Serverless Contact
+- Endpoint: [api/send-telegram.ts](api/send-telegram.ts) (`POST` only); honeypot `hp`; required `name|email|message` with email regex.
+- Timeout: 12s via `AbortController`; returns 504 on timeout; 500 if env misconfigured; 405 for non-POST.
+- HTML escaped payload; `parse_mode='HTML'`; `disable_web_page_preview=true`.
+
+## Quick Examples
+- Add project: append to `PROJECTS[]` in [constants.tsx](constants.tsx); UI auto-renders in [components/Projects.tsx](components/Projects.tsx).
+- Use i18n: `const { t } = useI18n();` → `t('header.contact')` in components.
+- Gemini feature: add static method in [services/geminiService.ts](services/geminiService.ts), define types in [types.ts](types.ts), create component, wire in [App.tsx](App.tsx).
 
 ## Gotchas
-- Source of truth is package.json (React 19), not README.
-- Avoid parallel Gemini requests that exceed quotas; use provided caching/rate limiting.
-- In preview mode serverless functions won’t run; test contact delivery on a deployed preview in Vercel.
+- Source of truth: [package.json](package.json) (React 19).
+- Preview mode: serverless functions don’t run; test Telegram on deployed Vercel preview.
