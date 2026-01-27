@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Astra" alt="Avatar" className="w-full h-full object-cover" />
               </div>
               <p className="text-sm text-zinc-500 leading-relaxed italic">
-                Every project starts with a story. I turn those stories into digital experiences that feel effortless and expressive.
+                Full Stack разработчик с опытом в сложных веб-приложениях. Специализация: React, Node.js, PostgreSQL, AI-интеграции. Помогу воплотить идею в production.
               </p>
             </div>
             
@@ -24,9 +24,9 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="space-y-12 md:text-right">
-            <h2 className="text-4xl md:text-6xl font-serif">Your story, <br /> <span className="italic text-zinc-500 text-3xl md:text-5xl">well designed.</span></h2>
+            <h2 className="text-4xl md:text-6xl font-serif">Готов к <br /> <span className="italic text-zinc-500 text-3xl md:text-5xl">сотрудничеству.</span></h2>
             <p className="text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">
-              &copy; {new Date().getFullYear()} AstraDev® &bull; London, UK
+              &copy; {new Date().getFullYear()} Artem Mikhailov &bull; Full Stack Developer
             </p>
           </div>
         </div>

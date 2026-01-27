@@ -19,10 +19,10 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
             className="flex items-center space-x-2 cursor-pointer group" 
             onClick={() => setActiveTab('portfolio')}
           >
-            <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center overflow-hidden">
-              <img src="https://api.dicebear.com/7.x/shapes/svg?seed=Astra" alt="logo" className="w-full h-full opacity-80" />
+            <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center overflow-hidden bg-indigo-600 font-bold text-white text-xs">
+              AM
             </div>
-            <span className="text-sm font-bold tracking-widest uppercase text-white">AstraDev®</span>
+            <span className="text-sm font-bold tracking-widest uppercase text-white">Artem Mikhailov</span>
           </div>
 
           {/* Centered Nav Links */}

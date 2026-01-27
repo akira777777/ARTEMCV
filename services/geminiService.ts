@@ -4,7 +4,9 @@ import { BrandBible, ImageSize } from "../types";
 
 export class GeminiService {
   private static getAI() {
-    return new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const apiKey = (import.meta as any)?.env?.VITE_API_KEY || process.env.API_KEY || process.env.GEMINI_API_KEY;
+    if (!apiKey) throw new Error('Missing Gemini API key. Set VITE_API_KEY for Vite builds.');
+    return new GoogleGenAI({ apiKey });
   }
 
   // Deep Architecture Generation (Thinking Mode)

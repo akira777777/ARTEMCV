@@ -23,8 +23,9 @@ const Hero: React.FC = () => {
             
             <div className="space-y-4">
               <h2 className="text-4xl md:text-6xl font-serif leading-tight">
-                Designing quiet, <span className="italic">confident</span> <br /> digital experiences.
+                Full Stack разработчик <br /> <span className="italic">Web & Software</span>
               </h2>
+              <p className="text-zinc-400 text-lg max-w-2xl mx-auto">Создаю масштабируемые приложения с React, Node.js, PostgreSQL. AI-интеграции, оптимизация БД, production-ready code.</p>
             </div>
           </div>
         </div>

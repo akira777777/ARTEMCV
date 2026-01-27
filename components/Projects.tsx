@@ -7,7 +7,7 @@ const Projects: React.FC = () => {
     <section id="work" className="scroll-mt-24 py-32 border-t border-white/5 bg-[#0a0a0a]">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-20">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <h2 className="text-4xl md:text-6xl font-serif">Things <span className="italic text-zinc-500">I’ve Designed.</span></h2>
+          <h2 className="text-4xl md:text-6xl font-serif">My <span className="italic text-zinc-500">projects.</span></h2>
           <div className="flex space-x-2">
             <button className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-zinc-500 hover:text-white transition-colors">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
@@ -20,7 +20,13 @@ const Projects: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {PROJECTS.map((project) => (
-            <div key={project.id} className="group space-y-8 cursor-pointer">
+            <a
+              key={project.id}
+              href={project.liveLink}
+              target="_blank"
+              rel="noreferrer"
+              className="group space-y-8 block"
+            >
               <div className="aspect-[4/3] rounded-[3rem] overflow-hidden bg-zinc-900 border border-white/5 relative">
                 <img 
                   src={project.image} 
@@ -44,7 +50,7 @@ const Projects: React.FC = () => {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>

@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
+import SpinningCube from './components/SpinningCube';
 import BrandGenerator from './components/BrandGenerator';
 import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
@@ -38,6 +39,7 @@ const App: React.FC = () => {
         {activeTab === 'portfolio' ? (
           <div className="space-y-32">
             <Hero />
+            <SpinningCube />
             <About />
             <Projects />
           </div>
