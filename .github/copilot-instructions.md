@@ -1,40 +1,46 @@
-AI coding guide for this repo
+AI Coding Guide — ARTEMCV
 
-- Stack and run
-  - React 19 + TypeScript on Vite; Tailwind-style classes dominate styling. Scripts: `npm run dev`, `npm run build`, `npm run preview` (see package.json). No tests configured.
-  - Google Gemini API key is required; frontend code reads `process.env.API_KEY` inside the Gemini service, so ensure the key is injected into the Vite build (e.g., env var exposure or `define` shim) before expecting API calls to work.
+Architecture & Entry Points
+- React 19 + TypeScript on Vite; Tailwind-style utility classes dominate.
+- Entry [index.tsx](index.tsx) mounts `<App />` into `#root`; keep [index.html](index.html) consistent if changing mount points.
+- Current homepage wires portfolio only: [App.tsx](App.tsx) renders `Header`, `Hero`, `About`, `Projects`, `Footer`. `ChatBot` and `BrandGenerator` exist but are not mounted.
 
-- App structure
-  - Entry at index.tsx mounts <App /> into the `root` element; keep index.html in sync if changing mount points.
-  - App state is minimal: theme toggle adds/removes the `dark` class on `document.documentElement`, and `activeTab` switches between the portfolio view and the Identity Lab generator (App.tsx).
-  - Header controls tab switching; theme prop is plumbed but currently unused. Stick to this pattern if extending nav behavior (components/Header.tsx).
+Commands & Dev Workflow
+- Dev: `npm run dev` (forces Vite fresh start), Clean dev: `npm run dev:clean` (runs dev-server.js), Prod preview: `npm run dev:prod` → build then preview.
+- Build: `npm run build`; Preview static build locally: `npm run preview`.
 
-- Data and content
-  - Portfolio data lives in constants.tsx (`PROJECTS`, `SKILLS`) and is rendered by Projects/About; extend these lists instead of hard-coding in components.
-  - Shared types (Theme, Project, BrandBible, chat message shapes) are centralized in types.ts; add new API payloads here for consistency.
+Environment & API Keys
+- Gemini key sources are unified in [vite.config.ts](vite.config.ts): maps `VITE_API_KEY`/`GEMINI_API_KEY`/`API_KEY` into both `process.env.*` and `import.meta.env.VITE_API_KEY` via `define`.
+- [services/geminiService.ts](services/geminiService.ts) reads `import.meta.env.VITE_API_KEY || process.env.API_KEY || process.env.GEMINI_API_KEY` and throws if missing.
+- For local dev, create `.env` with `VITE_API_KEY=...` then `npm run dev`. For Vercel/Netlify, set `VITE_API_KEY` in project env.
 
-- Gemini integration (services/geminiService.ts)
-  - Single service wraps all Gemini calls; reuse it for new AI features to keep API key handling centralized.
-  - Models in use: `gemini-3-pro-preview` for JSON brand bibles, `gemini-3-pro-image-preview` for logo synthesis and placeholders, `gemini-2.5-flash-image` for edits, `gemini-3-flash-preview` with googleSearch tool for chat.
-  - Responses that are expected to be JSON are parsed from `response.text`; defensive checks are minimal, so validate schemas when changing prompts.
+AI Integration (GeminiService)
+- Centralized wrapper for Gemini models: `gemini-3-pro-preview` (JSON brand bible & vision), `gemini-3-pro-image-preview` (image generation), `gemini-2.5-flash-image` (image editing), `gemini-3-flash-preview` (chat with `googleSearch`).
+- JSON responses are parsed from `response.text`; validate schemas when adjusting prompts or types.
+- Image responses are extracted from `response.candidates[0].content.parts[].inlineData` (base64 → `data:image/png;base64,...`).
 
-- Brand Generator flow (components/BrandGenerator.tsx)
-  - On submit: clears prior state, requests brand bible and abstract placeholder in parallel; then kicks off image generation for six logo variants keyed as `primary`, `mono`, `simplified`, `grayscale`, `sec1`, `sec2`.
-  - Image generation is per-key with loading flags; editing uses `editImage` against the last saved base64 for that key.
-  - Aspect ratios are user-selectable; keep new image requests aligned with `selectedRatio`. Placeholder animations and keyframes are defined inline at the bottom of the component.
-  - Vision Sync uploads an image, base64-encodes it, and sends it to `analyzeVision` to prefill the mission text.
+Brand Generator (components/BrandGenerator.tsx)
+- Flow: submit triggers parallel `generateBrandBible()` + abstract placeholder, then launches six logo synth tasks: `primary`, `mono`, `simplified`, `grayscale`, `sec1`, `sec2` using selected aspect ratio.
+- Vision Sync: drop an image → base64 → `analyzeVision()` to prefill mission.
+- Edit: `editImage()` mutates last image for a key with an edit prompt; per-key loading flags and inline cinematic skeleton animations.
+- To enable in UI, import and render `<BrandGenerator />` (currently not wired into App).
 
-- Chatbot (components/ChatBot.tsx)
-  - Chat history is tracked locally; requests reuse existing messages as `parts` for `GeminiService.chat`. Grounding sources (if present) are surfaced as outbound links.
-  - UI is a floating panel toggled by `isOpen`; keep scroll anchoring by updating the `chatRef` logic if modifying the DOM.
+Chatbot (components/ChatBot.tsx)
+- Local `messages` state; requests reuse history as Gemini `parts`. Displays grounding sources as external links.
+- Floating panel toggled by `isOpen`; scroll anchoring via `chatRef`. To enable, uncomment import and `<ChatBot />` in [App.tsx](App.tsx).
 
-- UI and styling conventions
-  - Tailwind utility classes drive layout/typography; custom animations live inline (Hero marquee, BrandGenerator keyframes). Preserve the high-contrast dark theme and rounded “capsule” shapes when adding sections.
-  - Components favor presentational logic with minimal props; share new cross-cutting state through App rather than duplicating service calls.
+Data & Types
+- Portfolio content in [constants.tsx](constants.tsx) (`PROJECTS`, `SKILLS`); extend lists rather than hard-coding in components.
+- Shared types in [types.ts](types.ts) (`BrandBible`, `ImageSize`, `ChatMessage`, etc.); add new payloads here to keep components and services aligned.
 
-- Deployment and envs
-  - App is static-build ready (Vercel/Netlify). Expose the Gemini key to Vite builds via `VITE_API_KEY` (preferred) or a `define` shim; Vite only inlines `import.meta.env.VITE_*` at build-time.
-  - Runtime access: services/geminiService.ts currently reads `process.env.API_KEY`; either switch to `import.meta.env.VITE_API_KEY` in code or map `API_KEY` → `VITE_API_KEY` using `define` in `vite.config.ts` or your deploy provider’s env rewrite.
-  - Provider notes: Vercel/Netlify → add `VITE_API_KEY` in project env UI; local dev → `.env` with `VITE_API_KEY=...` then `npm run dev`.
+Styling & Conventions
+- Tailwind utilities control layout/typography; high-contrast dark theme, rounded “capsule” shapes, and inline keyframes (Hero/BrandGenerator). Match this aesthetic when adding views.
+- Components are presentational with minimal props; share cross-cutting state via `App` instead of duplicating service calls.
 
-If any section feels thin or you need more specifics (e.g., how to expose API_KEY in your deploy target), tell me and I’ll refine this guide.
+Gotchas & Notes
+- README lists React 18, but actual versions are React 19 (see [package.json](package.json)).
+- If API calls fail, verify env key mapping via [vite.config.ts](vite.config.ts) and that `VITE_API_KEY` is set at build time (Vite only inlines `import.meta.env.VITE_*`).
+
+Examples
+- Add a new AI feature: create a method in `GeminiService`, define return types in `types.ts`, call from a new component, and ensure `VITE_API_KEY` is available.
+- Wire Brand Generator: import component in [App.tsx](App.tsx) and render it in `main`; keep aspect ratio selection consistent with `selectedRatio`.
