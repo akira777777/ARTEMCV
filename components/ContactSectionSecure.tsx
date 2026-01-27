@@ -85,8 +85,13 @@ const ContactSectionSecure: React.FC = () => {
       clearTimeout(timeout);
 
       if (!res.ok) {
-        const err = await res.text().catch(() => '');
-        throw new Error(err || `Failed to send message (status ${res.status})`);
+        // Dev environment fallback (localhost doesn't have serverless functions)
+        if (res.status === 404 && window.location.hostname === 'localhost') {
+          console.warn('API endpoint not available in dev mode. Form would send on Vercel.');
+        } else {
+          const err = await res.text().catch(() => '');
+          throw new Error(err || `Failed to send message (status ${res.status})`);
+        }
       }
 
       setSubmitted(true);
