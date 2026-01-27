@@ -5,10 +5,13 @@
 :root {
   --primary: #6366f1;
   --bg: #0a0a0a;
+  --touch-target: 48px;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -21,6 +24,36 @@ body {
   position: relative;
   min-height: 100vh;
   will-change: transform;
+  overflow-x: hidden;
+}
+
+/* Mobile touch targets */
+button, a {
+  min-height: var(--touch-target);
+  min-width: var(--touch-target);
+}
+
+/* Prevent double-tap zoom on buttons */
+button {
+  touch-action: manipulation;
+}
+
+/* Optimize for high DPI screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body {
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  html {
+    font-size: 16px;
+  }
+  
+  body {
+    overflow-x: hidden;
+  }
 }
 
 .font-serif {
