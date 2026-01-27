@@ -21,7 +21,7 @@ export class ImageCacheManager {
    */
   private static generateKey(prompt: string, style: string, ratio: string): string {
     const hash = `${prompt}|${style}|${ratio}`;
-    return `${CACHE_PREFIX}${CACHE_VERSION}_${btoa(hash).replace(/[^a-zA-Z0-9]/g, '')}`;
+    return `${CACHE_PREFIX}${CACHE_VERSION}_${btoa(hash).replaceAll(/[^a-zA-Z0-9]/g, '')}`;
   }
 
   /**

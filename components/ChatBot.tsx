@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { GeminiService } from '../services/geminiService';
+import { ChatCacheManager } from '../services/chatCacheManager';
 import { ChatMessage } from '../types';
 import { useI18n } from '../i18n';
 
@@ -12,7 +13,9 @@ const ChatBot: React.FC = () => {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [lastRequestTime, setLastRequestTime] = useState(0);
   const chatRef = useRef<HTMLDivElement>(null);
+  const MIN_REQUEST_DELAY = 2000; // 2 seconds between requests
 
   useEffect(() => {
     if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -22,12 +25,35 @@ const ChatBot: React.FC = () => {
     e.preventDefault();
     if (!input.trim() || loading) return;
 
+    // Rate limiting: prevent too many requests
+    const now = Date.now();
+    const timeSinceLastRequest = now - lastRequestTime;
+    if (timeSinceLastRequest < MIN_REQUEST_DELAY) {
+      const waitTime = Math.ceil((MIN_REQUEST_DELAY - timeSinceLastRequest) / 1000);
+      alert(`Please wait ${waitTime} seconds before sending another message.`);
+      return;
+    }
+
     const userMessage = input;
     setInput('');
     setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
     setLoading(true);
+    setLastRequestTime(now);
 
     try {
+      // Check cache first
+      const cachedResponse = ChatCacheManager.getResponse(userMessage);
+      if (cachedResponse) {
+        console.log('📦 Chat cache HIT - using cached response');
+        setMessages(prev => [...prev, { 
+          role: 'model', 
+          text: cachedResponse.response,
+          sources: cachedResponse.sources as any
+        }]);
+        setLoading(false);
+        return;
+      }
+
       // Build proper history format for API
       const history = messages.map(m => ({ 
         role: m.role as 'user' | 'model',
@@ -48,6 +74,9 @@ const ChatBot: React.FC = () => {
           uri: chunk.web?.uri || '#'
         }));
       
+      // Cache successful response
+      ChatCacheManager.cacheResponse(userMessage, responseText, sources);
+      
       setMessages(prev => [...prev, { 
         role: 'model', 
         text: responseText,
@@ -55,10 +84,20 @@ const ChatBot: React.FC = () => {
       }]);
     } catch (err: any) {
       console.error('ChatBot error:', err);
-      const errorMsg = err?.message || 'Connection error. Please try again.';
+      let errorMsg = 'Connection error. Please try again.';
+      
+      // Handle specific API errors
+      if (err?.message?.includes('429') || err?.message?.includes('RESOURCE_EXHAUSTED')) {
+        errorMsg = '⚠️ API quota exceeded. Please wait a moment and try again, or update your API key.';
+      } else if (err?.message?.includes('401') || err?.message?.includes('UNAUTHENTICATED')) {
+        errorMsg = '❌ API authentication failed. Please check your API key in .env';
+      } else if (err?.message) {
+        errorMsg = `⚠️ Error: ${err.message.slice(0, 100)}`;
+      }
+      
       setMessages(prev => [...prev, { 
         role: 'model', 
-        text: `⚠️ Error: ${errorMsg}` 
+        text: errorMsg
       }]);
     } finally {
       setLoading(false);

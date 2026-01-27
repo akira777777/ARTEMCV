@@ -170,6 +170,8 @@ const BrandGenerator: React.FC = () => {
               <button 
                 onClick={() => setEditMode(key)}
                 className="absolute top-4 right-4 p-3 bg-black/40 backdrop-blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-white border border-white/10 hover:bg-white hover:text-black shadow-lg"
+                title="Edit image"
+                aria-label="Edit image"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
               </button>
@@ -220,19 +222,8 @@ const BrandGenerator: React.FC = () => {
 
       <div className="max-w-4xl mx-auto space-y-12">
         {/* Vision Sync Dropzone */}
-        <div
-          onClick={() => fileInputRef.current?.click()}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              fileInputRef.current?.click();
-            }
-          }}
-          className="group relative p-12 rounded-[3rem] border-2 border-dashed border-white/5 hover:border-white/20 bg-zinc-900/50 cursor-pointer transition-all text-center"
-          role="button"
-          tabIndex={0}
-          aria-label="Upload mood board image"
-        >
-          <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleVisionSync} aria-hidden="true" />
+        <label className="group relative p-12 rounded-[3rem] border-2 border-dashed border-white/5 hover:border-white/20 bg-zinc-900/50 cursor-pointer transition-all text-center block">
+          <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleVisionSync} aria-label="Upload mood board image" />
           {analyzing ? (
             <div className="space-y-4">
               <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto" />
@@ -244,7 +235,7 @@ const BrandGenerator: React.FC = () => {
               <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600">Drop mood board to pre-fill mission</p>
             </div>
           )}
-        </div>
+        </label>
 
             <div className="p-12 rounded-[3rem] bg-[#111111] border border-white/5 shadow-2xl">
           <form onSubmit={handleGenerate} className="space-y-12">
@@ -255,7 +246,7 @@ const BrandGenerator: React.FC = () => {
                 value={mission}
                 onChange={(e) => setMission(e.target.value)}
                 placeholder="The narrative for your brand..."
-                className="w-full h-40 p-10 rounded-[3rem] border border-white/5 bg-black/50 focus:ring-1 focus:ring-white/20 outline-none transition-all text-xl text-white resize-none"
+          label   className="w-full h-40 p-10 rounded-[3rem] border border-white/5 bg-black/50 focus:ring-1 focus:ring-white/20 outline-none transition-all text-xl text-white resize-none"
               />
             </div>
 
@@ -331,7 +322,7 @@ const BrandGenerator: React.FC = () => {
                     {activeTooltip === color.hex && (
                       <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-4 w-72 z-50 animate-in fade-in zoom-in-95 duration-200">
                         <div className="p-6 bg-zinc-800/90 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl ring-1 ring-white/10">
-                          <div className="flex justify-between items-center mb-3">
+                          <div className="flex justify-between items-center mb-3"> title="Close tooltip" aria-label="Close tooltip"
                             <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">System Usage</p>
                             <button onClick={() => setActiveTooltip(null)} className="text-zinc-500 hover:text-white">
                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
