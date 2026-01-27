@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
           '@': path.resolve(__dirname, '.'),
         },
       },
+      base: '/',
       build: {
         target: 'ES2022',
         minify: 'terser',
