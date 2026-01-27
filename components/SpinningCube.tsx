@@ -181,7 +181,6 @@ const SpinningCube: React.FC = () => {
           50% { opacity: 0.7; }
         }
       `}</style>
-          </div>
         </div>
       </div>
     </section>

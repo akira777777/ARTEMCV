@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const SERVICES = [
   {
@@ -24,26 +25,42 @@ const SERVICES = [
 
 const About: React.FC = () => {
   return (
-    <section id="services" className="scroll-mt-24 py-32 px-6 lg:px-12">
-      <div className="max-w-7xl mx-auto space-y-20">
+    <section id="services" className="scroll-mt-24 py-32 px-6 lg:px-12 relative">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_30%),radial-gradient(circle_at_80%_30%,rgba(16,185,129,0.08),transparent_35%)] opacity-60" aria-hidden />
+      <div className="max-w-7xl mx-auto space-y-20 relative z-10">
         <div className="text-center space-y-4">
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full floating-badge accent-pill text-zinc-400">
+            <span className="w-2 h-2 rounded-full bg-sky-400" />
+            Services & Stack
+          </div>
           <h2 className="text-4xl md:text-6xl font-serif">Мой <span className="italic">стек</span> и услуги.</h2>
+          <p className="text-zinc-500 max-w-3xl mx-auto">Беру на себя полный цикл: от продуктового дизайна и motion до API, данных и продакшн-инфры. Анимации — не декор, а навигация и ясность.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {SERVICES.map((s) => (
-            <div key={s.num} className="service-card p-10 rounded-[2.5rem] relative overflow-hidden group">
+          {SERVICES.map((s, idx) => (
+            <motion.div
+              key={s.num}
+              className="service-card p-10 rounded-[2.5rem] relative overflow-hidden group glass-card"
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.55, ease: 'easeOut', delay: idx * 0.08 }}
+              whileHover={{ y: -6 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-[rgba(255,255,255,0.04)] via-transparent to-transparent opacity-60" aria-hidden />
+              <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-gradient-to-br from-emerald-400/10 via-sky-400/0 to-white/0 blur-3xl" aria-hidden />
               <div className="text-xs font-bold text-zinc-700 absolute top-8 right-10">{s.num}</div>
-              <div className="space-y-8">
-                <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:scale-110 transition-all">
+              <div className="space-y-8 relative">
+                <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-zinc-300 group-hover:text-white group-hover:scale-110 transition-all bg-white/5">
                   {s.icon}
                 </div>
                 <div className="space-y-4">
-                  <h3 className="text-xl font-bold tracking-tight">{s.title}</h3>
+                  <h3 className="text-xl font-bold tracking-tight text-white">{s.title}</h3>
                   <p className="text-zinc-500 text-sm leading-relaxed">{s.desc}</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
