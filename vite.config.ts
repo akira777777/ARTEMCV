@@ -9,14 +9,22 @@ export default defineConfig(({ mode }) => {
       server: {
         port: 3000,
         host: '0.0.0.0',
+        middlewareMode: false,
+      },
+      preview: {
+        port: 4173,
+        host: '0.0.0.0',
       },
       plugins: [
-        react(),
+        react({
+          jsxRuntime: 'automatic',
+        }),
         visualizer({
           filename: 'dist/stats.html',
           template: 'treemap',
           gzipSize: true,
-          brotliSize: true
+          brotliSize: true,
+          open: false,
         })
       ],
       define: {
@@ -30,19 +38,47 @@ export default defineConfig(({ mode }) => {
         }
       },
       build: {
+        target: 'ES2022',
+        minify: 'terser',
+        terserOptions: {
+          compress: {
+            drop_console: mode === 'production',
+            drop_debugger: true,
+          },
+          format: {
+            comments: false,
+          },
+        },
         rollupOptions: {
           output: {
             manualChunks(id) {
               if (id.includes('node_modules')) {
                 if (id.includes('react')) return 'vendor-react';
-                // let other deps merge into main unless heavy
+                if (id.includes('google') || id.includes('genai')) return 'vendor-gemini';
+                if (id.includes('framer')) return 'vendor-motion';
+                if (id.includes('three')) return 'vendor-three';
+                return 'vendor';
               }
-            }
-          }
+              if (id.includes('services')) return 'services';
+              if (id.includes('components')) return 'components';
+            },
+            entryFileNames: 'js/[name]-[hash].js',
+            chunkFileNames: 'js/[name]-[hash].js',
+            assetFileNames: ({ name }) => {
+              if (name?.endsWith('.css')) return 'css/[name]-[hash][extname]';
+              return '[name]-[hash][extname]';
+            },
+          },
         },
-        // Report chunk sizes
         reportCompressedSize: true,
-        chunkSizeWarningLimit: 500
-      }
+        chunkSizeWarningLimit: 1000,
+        sourcemap: false,
+        cssCodeSplit: true,
+        assetsInlineLimit: 4096,
+      },
+      optimizeDeps: {
+        include: ['react', 'react-dom', 'framer-motion', 'three'],
+        exclude: ['@google/genai', '@react-three/fiber', '@react-three/drei'],
+      },
     };
 });

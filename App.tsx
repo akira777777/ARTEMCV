@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -8,6 +8,18 @@ import ContactSectionSecure from './components/ContactSectionSecure';
 import ErrorBoundary from './components/ErrorBoundary';
 import Footer from './components/Footer';
 import { I18nProvider } from './i18n';
+
+// Lazy load ChatBot with large Gemini dependency
+const ChatBot = lazy(() => import('./components/ChatBot'));
+
+// Loading component for ChatBot
+const ChatBotLoader = () => (
+  <div className="flex items-center justify-center py-8">
+    <div className="animate-pulse">
+      <div className="w-12 h-12 bg-indigo-600 rounded-full"></div>
+    </div>
+  </div>
+);
 
 const App: React.FC = () => {
   return (
@@ -26,6 +38,9 @@ const App: React.FC = () => {
               <About />
               <Projects />
               <ContactSectionSecure />
+              <Suspense fallback={<ChatBotLoader />}>
+                <ChatBot />
+              </Suspense>
             </div>
           </main>
 

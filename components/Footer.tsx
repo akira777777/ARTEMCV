@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-20 items-start">
           <div className="space-y-12">
             <div className="flex items-center space-x-6 p-8 rounded-[2.5rem] bg-zinc-900 border border-white/5">
-              <div className="w-16 h-16 rounded-2xl overflow-hidden border border-white/15 shadow-lg shadow-indigo-900/40 bg-black/40 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden border border-white/15 shadow-lg shadow-indigo-900/40 bg-black/40 flex items-center justify-center flex-shrink-0">
                 {avatarError ? (
                   <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-500 flex items-center justify-center">
                     <span className="text-white font-black text-lg tracking-tight">AM</span>
@@ -24,6 +24,7 @@ const Footer: React.FC = () => {
                     alt="Artem Mikhailov"
                     className="w-full h-full object-cover"
                     loading="lazy"
+                    decoding="async"
                     onError={() => setAvatarError(true)}
                   />
                 )}
@@ -70,4 +71,4 @@ const Footer: React.FC = () => {
   );
 };
 
-export default Footer;
+export default React.memo(Footer);

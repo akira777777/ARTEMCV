@@ -42,12 +42,14 @@ const Projects: React.FC = () => {
               transition={{ duration: 0.55, ease: 'easeOut', delay: idx * 0.05 }}
               whileHover={{ y: -6 }}
             >
-              <div className="aspect-[4/3] rounded-[3rem] overflow-hidden bg-zinc-900 border border-white/10 relative shine-border">
+              <div className="aspect-[4/3] rounded-[3rem] overflow-hidden bg-zinc-900 border border-white/10 relative shine-border group/image">
                 <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-700" aria-hidden />
                 <img 
                   src={project.image} 
                   alt={project.title} 
-                  className="w-full h-full object-cover brightness-80 group-hover:brightness-110 group-hover:scale-105 transition-all duration-1000 ease-out"
+                  className="w-full h-full object-cover brightness-80 group-hover:brightness-110 group-hover:scale-105 transition-all duration-1000 ease-out will-change-transform"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute top-8 left-8 flex gap-2">
                   {project.techStack.slice(0, 3).map(tag => (
@@ -78,4 +80,4 @@ const Projects: React.FC = () => {
   );
 };
 
-export default Projects;
+export default React.memo(Projects);
