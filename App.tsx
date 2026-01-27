@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
-import ChatBot from './components/ChatBot';
+// import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
 
 const App: React.FC = () => {
@@ -24,7 +24,7 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      <ChatBot />
+      {/* <ChatBot /> */}
       <Footer />
     </div>
   );
