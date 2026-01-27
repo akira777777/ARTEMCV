@@ -8,7 +8,12 @@ interface ContactFormData {
   message: string;
 }
 
+// Telegram Bot Configuration
+const TELEGRAM_BOT_TOKEN = '8227241325:AAGdBygQG9plCgHBmT7nIE8QrJkjR6L2xjU';
+
 const ContactSection: React.FC = () => {
+  const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+  
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
@@ -17,6 +22,7 @@ const ContactSection: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -25,24 +31,62 @@ const ContactSection: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) return;
+    
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    if (!TELEGRAM_CHAT_ID) {
+      setError('Telegram configuration missing. Please contact support.');
+      return;
+    }
 
     setLoading(true);
+    setError(null);
 
     try {
-      // Send data to your backend endpoint
-      // Example: await fetch('/api/contact', { method: 'POST', body: JSON.stringify(formData) })
-      console.log('Contact form submitted:', formData);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      // Format message for Telegram
+      const telegramMessage = `
+📩 **New Contact Message**
+
+👤 **Name:** ${formData.name}
+📧 **Email:** ${formData.email}
+${formData.subject ? `📌 **Subject:** ${formData.subject}` : ''}
+
+💬 **Message:**
+${formData.message}
+
+---
+_From portfolio contact form_
+      `.trim();
+
+      // Send to Telegram Bot API
+      const telegramResponse = await fetch(
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: telegramMessage,
+            parse_mode: 'Markdown'
+          })
+        }
+      );
+
+      if (!telegramResponse.ok) {
+        const errorData = await telegramResponse.json();
+        throw new Error(errorData.description || 'Failed to send message to Telegram');
+      }
+
       setSubmitted(true);
       setFormData({ name: '', email: '', subject: '', message: '' });
       
       setTimeout(() => setSubmitted(false), 5000);
-    } catch (error) {
-      console.error('Error submitting form:', error);
+    } catch (err: any) {
+      console.error('Error sending message:', err);
+      setError(err.message || 'Failed to send message. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -146,6 +190,12 @@ const ContactSection: React.FC = () => {
           {submitted && (
             <div className="p-4 bg-green-500/10 border border-green-500/50 rounded-xl text-green-400 text-center font-bold animate-in fade-in">
               ✓ Message sent! I'll get back to you soon.
+            </div>
+          )}
+
+          {error && (
+            <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-center font-bold animate-in fade-in">
+              ❌ {error}
             </div>
           )}
         </form>

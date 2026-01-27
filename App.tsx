@@ -1,5 +1,5 @@
 
-import React, { Suspense } from 'react';
+import React from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -8,21 +8,6 @@ import ContactSection from './components/ContactSection';
 import ErrorBoundary from './components/ErrorBoundary';
 import Footer from './components/Footer';
 import { I18nProvider } from './i18n';
-
-// Lazy load AI features to reduce initial bundle
-const BrandGenerator = React.lazy(() => import('./components/BrandGenerator'));
-
-// Loading fallback component
-const FeatureLoader: React.FC<{ feature: string }> = ({ feature }) => (
-  <div className="py-32 px-6 lg:px-12 flex items-center justify-center">
-    <div className="space-y-4 text-center">
-      <div className="w-12 h-12 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto" />
-      <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500">
-        Loading {feature}...
-      </p>
-    </div>
-  </div>
-);
 
 const App: React.FC = () => {
   return (
@@ -40,11 +25,6 @@ const App: React.FC = () => {
               <Hero />
               <About />
               <Projects />
-              <ErrorBoundary>
-                <Suspense fallback={<FeatureLoader feature="Brand Generator" />}>
-                  <BrandGenerator />
-                </Suspense>
-              </ErrorBoundary>
               <ContactSection />
             </div>
           </main>

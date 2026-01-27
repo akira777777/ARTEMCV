@@ -17,7 +17,6 @@
 | **Main Bundle** | 397.77 KB | 332.15 KB | ↓ **16.5%** ✨ |
 | **React Vendor** | (combined) | 11.32 KB | Extracted ✨ |
 | **Gemini Vendor** | (combined) | 249.42 KB | Extracted ✨ |
-| **BrandGenerator Chunk** | (inline) | 16.87 KB | **Lazy-loaded** ✨ |
 | **Total CSS** | 41.56 KB | 42.05 KB | ↑ 1.2% (negligible) |
 | **CSS Gzipped** | 7.75 KB | 7.85 KB | ↑ 1.3% (negligible) |
 
@@ -38,13 +37,13 @@
 **Impact**:
 - Prevents white-screen crashes in AI features
 - Better UX for API failures and unexpected errors
-- Isolated error boundaries per feature (BrandGenerator, ChatBot)
+- Isolated error boundaries per feature (ChatBot)
 
 **Usage**:
 ```tsx
 <ErrorBoundary>
-  <Suspense fallback={<FeatureLoader feature="Brand Generator" />}>
-    <BrandGenerator />
+  <Suspense fallback={<FeatureLoader feature="Chat" />}>
+    <ChatBot />
   </Suspense>
 </ErrorBoundary>
 ```
@@ -55,19 +54,13 @@
 **File**: [App.tsx](App.tsx)
 
 **Components Lazy-Loaded**:
-- `BrandGenerator.tsx` → **Deferred until scrolled to section**
-- `ChatBot.tsx` → **Wrapped in ErrorBoundary** (remains eager, but wrapped)
+- `ChatBot.tsx` → **Wrapped in ErrorBoundary** (historical setup)
 
 **Suspense Boundaries**:
 - Custom `<FeatureLoader>` component with spinner UI
-- Shows "Loading Brand Generator..." while chunk downloads
-- Prevents layout shift with proper dimensions
 
 **Impact**:
 - **Initial page load**: Only critical components (Header, Hero, About, Projects, Footer)
-- **Deferred**: BrandGenerator (~16.87 KB) loaded on-demand
-- **LCP improvement**: ~25-30% faster initial paint
-- **FCP improvement**: ~40-50% faster first contentful paint
 
 ---
 
@@ -90,22 +83,9 @@ ImageCacheManager.getStats(): { count, sizeBytes, oldest }
 - **Stats Tracking**: Count, total size, oldest timestamp
 
 **Integration**:
-In [components/BrandGenerator.tsx](components/BrandGenerator.tsx):
-```tsx
-// Check cache first
-const cachedImage = ImageCacheManager.getImage(prompt, style, ratio);
-if (cachedImage) {
-  console.log(`📦 Cache HIT for ${key}`);
-  setImages(prev => ({ ...prev, [key]: cachedImage }));
-  return;
-}
+Currently unused after removal of the BrandGenerator component; available for future AI image features.
 
-// Generate if not cached
-const url = await GeminiService.generateBrandImage(...);
-ImageCacheManager.setImage(prompt, style, ratio, url);
-```
-
-**Impact**:
+**Impact (when used)**:
 - **API call reduction**: ~70-80% fewer requests for repeated designs
 - **Perceived performance**: Instant image loading from localStorage
 - **Bandwidth savings**: ~5-10 MB per session for repeated brand generation
@@ -229,7 +209,7 @@ npm run preview    # Preview production build locally
 ```
 
 ### Vercel Deployment
-1. Set `VITE_API_KEY` in Vercel environment variables
+1. Set `VITE_TELEGRAM_CHAT_ID` in Vercel environment variables
 2. Push to GitHub → Vercel auto-deploys
 3. Monitor bundle sizes in Vercel Analytics dashboard
 
@@ -247,7 +227,6 @@ npm run preview    # Preview production build locally
 | [components/ErrorBoundary.tsx](components/ErrorBoundary.tsx) | Created | Error handling |
 | [services/imageCacheManager.ts](services/imageCacheManager.ts) | Created | Caching layer |
 | [App.tsx](App.tsx) | ErrorBoundary wrapper, React.lazy imports, Suspense boundaries | Code-splitting |
-| [components/BrandGenerator.tsx](components/BrandGenerator.tsx) | ImageCacheManager integration, cache checks, stats logging | Cache integration |
 | [vite.config.ts](vite.config.ts) | Manual chunking, chunk size warnings, esbuild minification | Build optimization |
 
 ---
@@ -271,7 +250,7 @@ This implementation demonstrates:
 3. **Analytics Integration**: Track cache hit rates and performance metrics
 4. **Image Compression**: Use WebP format for cached images (30-40% size reduction)
 5. **Stale-While-Revalidate**: Keep cached images for longer, refresh in background
-6. **Prefetching**: Pre-fetch BrandGenerator chunk on user hover/focus
+6. **Prefetching**: Pre-fetch ChatBot chunk on user hover/focus (if re-enabled)
 7. **Web Vitals Library**: Real user monitoring (RUM) data collection
 
 ---
@@ -282,7 +261,7 @@ For issues or questions:
 1. Check browser console for cache/error logs (🔍 icons)
 2. Run `ImageCacheManager.getStats()` in DevTools console
 3. Clear cache with `ImageCacheManager.clearAll()`
-4. Verify Gemini API key in `VITE_API_KEY` environment variable
+4. Verify Telegram chat ID in `VITE_TELEGRAM_CHAT_ID` environment variable
 
 **Build Status**: ✅ Passing (0 TypeScript errors)  
 **Preview Status**: ✅ Running on http://localhost:4173/  
