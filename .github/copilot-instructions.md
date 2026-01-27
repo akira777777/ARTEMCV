@@ -1,98 +1,35 @@
-# ARTEMCV: AI Coding Guide
+# ARTEMCV: AI Agent Instructions
 
-## System Architecture
+## Architecture & Data Flow
+- SPA on Vite: root layout in App.tsx; entry in index.tsx mounts <App /> to #root.
+- Always-mounted sections: Header, Hero, About, Projects, Footer, ContactSection.
+- Optional ChatBot: components/ChatBot.tsx, mount in App.tsx after Footer when enabling Gemini Q&A.
+- AI layer: components never call Gemini directly; use services/geminiService.ts (static methods, typed responses).
+- Content source of truth: constants.tsx (PROJECTS, SKILLS). Define new types in types.ts; components map arrays.
+- Contact form → serverless: ContactSection posts to api/send-telegram.ts (Vercel). Client hint uses VITE_TELEGRAM_CHAT_ID; server requires TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID.
 
-**Tech Stack:** React 19 + TypeScript on Vite + Tailwind CSS + Google Gemini API (`@google/genai`)
+## Conventions & Patterns
+- Tailwind only for styling; no CSS Modules or styled-components. Dark theme by default; high-contrast, rounded UI, subtle glow.
+- i18n: i18n.tsx + LanguageSwitcher.tsx handle language toggling; keep copy centralized.
+- Error boundaries: components/ErrorBoundary.tsx available; wrap interactive areas when adding new features.
+- AI request hygiene: services/chatCacheManager.ts dedups duplicate questions; rate limiting guards 429; services/imageCacheManager.ts caches image outputs.
 
-**Core Pattern:**
-- Single-page React app: [App.tsx](App.tsx) is the root layout. Entry [index.tsx](index.tsx) mounts `<App />` into `#root`.
-- **Main components** (always visible): `Header`, `Hero`, `About`, `Projects`, `Footer`, `ContactSection` (Telegram form).
-- **Optional feature** (not mounted): `ChatBot`. Enable by importing and rendering in [App.tsx](App.tsx).
-- **AI layer:** All Gemini API calls go through [services/geminiService.ts](services/geminiService.ts) (static methods). Components never touch the API directly.
-- **Shared data:** Portfolio content in [constants.tsx](constants.tsx) (`PROJECTS`, `SKILLS`). New types go to [types.ts](types.ts).
+## Environment & Secrets
+- Vite inlines only import.meta.env.VITE_*; set VITE_API_KEY for Gemini (ChatBot only) and VITE_TELEGRAM_CHAT_ID for client hint.
+- Serverless (Vercel): TELEGRAM_BOT_TOKEN (secret), TELEGRAM_CHAT_ID (destination). ChatBot does not require serverless.
+- Fallbacks in vite.config.ts map GEMINI_API_KEY and API_KEY, but prefer VITE_API_KEY to avoid surprises.
 
-## Critical Developer Workflows
+## Workflows
+- Dev: npm run dev (fresh dev server). If cache issues, use npm run dev:clean.
+- Build: npm run build; Preview: npm run preview (serverless routes unavailable here).
+- Enable ChatBot: import and render ChatBot in App.tsx; ensure VITE_API_KEY is set; Gemini calls go through geminiService.
 
-### Local Development Commands
-```bash
-npm run dev          # Fresh Vite dev server (--force flag)
-npm run dev:clean    # Runs dev-server.js (custom Node watcher)
-npm run build        # Production Vite build
-npm run preview      # Serve static dist/ locally
-```
+## Integration Examples
+- Add project: append to PROJECTS[] in constants.tsx; Projects.tsx auto-renders cards (id, title, description, techStack, liveLink, githubLink, image).
+- New AI feature: add a static method in geminiService.ts → define types in types.ts → create a component using the method → wire in App.tsx.
+- Telegram contact: use api/send-telegram.ts for submissions; includes validation, honeypot anti-spam, and 12s timeout; available only in serverless env.
 
-### Enabling Optional ChatBot
-1. **ChatBot.tsx** → Import in [App.tsx](App.tsx), render after `<Footer />`. Creates floating toggle button.
-ChatBot remains code-ready; mount only if you want Gemini Q&A.
-
-## Environment & API Keys (Critical)
-
-**Setup:**
-- **Local:** Create `.env` with `VITE_TELEGRAM_CHAT_ID=your_chat_id` for ContactSection delivery. Add `VITE_API_KEY=your_gemini_key` only if enabling ChatBot.
-- **Vercel:** Add the same env vars in Project Settings → Environment Variables.
-- **Why:** [vite.config.ts](vite.config.ts) inlines `VITE_*` vars at build time. Gemini fallback (`VITE_API_KEY` → `GEMINI_API_KEY` → `API_KEY`) applies only when ChatBot is mounted.
-
-**Critical:** Vite only inlines `import.meta.env.VITE_*`. Setting `API_KEY` or `GEMINI_API_KEY` alone won't work unless mapped in vite.config.ts.
-
-## AI Service Layer (GeminiService)
-
-Used only if enabling ChatBot. Methods remain available for future AI features.
-
-## Component Deep Dives
-
-### ChatBot (components/ChatBot.tsx)
-**Design:**
-- Local `messages: { role, text, sources? }[]` state.
-- Each request includes full history as Gemini `parts` (stateful conversation).
-- Web search grounding: Gemini returns source URIs; ChatBot displays them as clickable links.
-- Floating panel toggled by `isOpen`; scroll anchors latest message via `chatRef`.
-
-## Data & Extensibility
-
-**Portfolio:** Extend [constants.tsx](constants.tsx)—don't hard-code in components.
-- `PROJECTS[]` → Project card array (id, title, description, techStack, liveLink, githubLink, image path).
-- `SKILLS[]` → Skill categories (name, items[]).
-
-**Example:** Add project → append to `PROJECTS[]` → [Projects.tsx](components/Projects.tsx) auto-renders (it maps the array).
-
-## Styling & Aesthetic
-
-- **Framework:** Tailwind CSS utilities only. NO styled-components, CSS modules.
-- **Theme:** High-contrast dark mode by default. Smooth transitions on theme toggle.
-- **Shapes:** Rounded capsule buttons (`rounded-full`), subtle borders (`border-gray-700`), soft glows.
-- **Animations:** Inline `<style>` keyframes for cinematic effects (Hero parallax). Prefer CSS over Framer Motion for weight.
-- **Typography:** Plus Jakarta Sans (imported in [index.css](index.css)); Google Fonts fallbacks in [tailwind.config.js](tailwind.config.js).
-
-**When adding features:** Match the minimalist dark aesthetic; use high contrast, rounded shapes, subtle animations.
-
-## Testing & Debugging
-
-**Build Verification:**
-- `npm run build` → Check `dist/` folder exists and is NOT empty.
-- `npm run preview` → Serves static build; validates Vite env inlining and asset paths.
-
-**API Issues:**
-- Missing key: DevTools Console shows `Missing Gemini API key...` → Verify `.env` (local) or Vercel env vars.
-- Empty images: Gemini safety classifier may block prompt → Rephrase or add "professional logo, white background".
-- 429 rate limit: Don't launch 6 parallel image tasks repeatedly → Stagger or add delays.
-
-## Known Quirks
-
-1. README says React 18, but [package.json](package.json) has React 19. Use package.json as source of truth.
-2. Vite inlines only `VITE_*` at build time. Triple fallback in vite.config.ts handles `GEMINI_API_KEY` and `API_KEY`, but always set `VITE_API_KEY`.
-3. If `generateBrandBible()` returns `{}`, schema validation failed in Gemini API. Check prompt in method + Gemini logs.
-4. Keep aspect ratios consistent when adding any future image features.
-
-## Quick Recipes
-
-**Add AI feature:**
-1. Static method in GeminiService (call Gemini, return typed response).
-2. Types in [types.ts](types.ts).
-3. React component (local state, call method).
-4. Wire in [App.tsx](App.tsx), ensure `.env` has `VITE_API_KEY`.
-
-**Extend portfolio:**
-Add object to `PROJECTS[]` in [constants.tsx](constants.tsx) → [Projects.tsx](components/Projects.tsx) auto-renders.
-
-**Update theme colors:**
-Modify [tailwind.config.js](tailwind.config.js) or pull dynamically from design tokens.
+## Gotchas
+- Source of truth is package.json (React 19), not README.
+- Avoid parallel Gemini requests that exceed quotas; use provided caching/rate limiting.
+- In preview mode serverless functions won’t run; test contact delivery on a deployed preview in Vercel.
