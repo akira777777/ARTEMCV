@@ -34,6 +34,9 @@ const Footer: React.FC = () => {
                 <div className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-zinc-300">
                   Локация: Прага, Чехия
                 </div>
+                <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
+                  GitHub: akira777777
+                </a>
               </div>
             </div>
           </div>
