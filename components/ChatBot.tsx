@@ -2,11 +2,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GeminiService } from '../services/geminiService';
 import { ChatMessage } from '../types';
+import { useI18n } from '../i18n';
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useI18n();
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: 'Quietly observing. How can I assist with your strategy today?' }
+    { role: 'model', text: t('chat.initial') }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);

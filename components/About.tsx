@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useI18n } from '../i18n';
 
 const SERVICES = [
   {
@@ -24,6 +25,7 @@ const SERVICES = [
 ];
 
 const About: React.FC = () => {
+  const { t } = useI18n();
   return (
     <section id="services" className="scroll-mt-24 py-32 px-6 lg:px-12 relative">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_30%),radial-gradient(circle_at_80%_30%,rgba(16,185,129,0.08),transparent_35%)] opacity-60" aria-hidden />
@@ -31,10 +33,10 @@ const About: React.FC = () => {
         <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full floating-badge accent-pill text-zinc-400">
             <span className="w-2 h-2 rounded-full bg-sky-400" />
-            Services & Stack
+            {t('about.badge')}
           </div>
-          <h2 className="text-4xl md:text-6xl font-serif">Мой <span className="italic">стек</span> и услуги.</h2>
-          <p className="text-zinc-500 max-w-3xl mx-auto">Беру на себя полный цикл: от продуктового дизайна и motion до API, данных и продакшн-инфры. Анимации — не декор, а навигация и ясность.</p>
+          <h2 className="text-4xl md:text-6xl font-serif">{t('about.title')}</h2>
+          <p className="text-zinc-500 max-w-3xl mx-auto">{t('about.desc')}</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">

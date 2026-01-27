@@ -1,8 +1,10 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useI18n } from '../i18n';
 
 const Hero: React.FC = () => {
+  const { t } = useI18n();
   return (
     <motion.section
       className="relative pt-32 pb-28 overflow-hidden border-b border-white/5"
@@ -28,7 +30,7 @@ const Hero: React.FC = () => {
           <div className="flex-1 space-y-10 text-center lg:text-left">
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full floating-badge accent-pill text-zinc-400 animate-[floaty_8s_ease-in-out_infinite]">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              Motion-led design & engineering
+              {t('hero.badge')}
             </div>
 
             <motion.div
@@ -38,11 +40,11 @@ const Hero: React.FC = () => {
               className="space-y-6"
             >
               <h2 className="text-4xl md:text-6xl font-serif leading-tight">
-                Full Stack разработчик <br />
-                <span className="italic text-zinc-300">Web, Motion, AI</span>
+                {t('hero.title.line1')} <br />
+                <span className="italic text-zinc-300">{t('hero.title.line2')}</span>
               </h2>
               <p className="text-zinc-400 text-lg max-w-2xl mx-auto lg:mx-0">
-                Создаю динамичные интерфейсы с продуманной анимацией, масштабируемые backend-ядра и AI-интеграции. Кодирую под продакшн: перформанс, отказоустойчивость, понятная архитектура.
+                {t('hero.desc')}
               </p>
             </motion.div>
 
@@ -53,7 +55,7 @@ const Hero: React.FC = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Портфолио
+                {t('hero.cta.portfolio')}
               </motion.a>
               <motion.a
                 href="#services"
@@ -61,25 +63,25 @@ const Hero: React.FC = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Связаться
+                {t('hero.cta.contact')}
               </motion.a>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 lg:gap-6">
               {[{
-                label: 'UI/UX + Motion',
+                label: t('hero.stat.uiux'),
                 value: '60+',
                 color: 'from-emerald-500/25 via-white/5 to-transparent'
               }, {
-                label: 'Backend & Data',
+                label: t('hero.stat.backend'),
                 value: '40+',
                 color: 'from-sky-500/25 via-white/5 to-transparent'
               }, {
-                label: 'AI/Automation',
+                label: t('hero.stat.ai'),
                 value: '15',
                 color: 'from-fuchsia-500/25 via-white/5 to-transparent'
               }, {
-                label: 'Delivery NPS',
+                label: t('hero.stat.nps'),
                 value: '9.4',
                 color: 'from-amber-500/25 via-white/5 to-transparent'
               }].map((item, idx) => (

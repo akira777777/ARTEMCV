@@ -7,9 +7,11 @@ import Projects from './components/Projects';
 import BrandGenerator from './components/BrandGenerator';
 import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
+import { I18nProvider } from './i18n';
 
 const App: React.FC = () => {
   return (
+    <I18nProvider>
     <div className="min-h-screen transition-colors duration-300 relative overflow-hidden">
       <div className="glow-ring" aria-hidden />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.04),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(59,130,246,0.08),transparent_40%)] blur-3xl opacity-70" aria-hidden />
@@ -29,6 +31,7 @@ const App: React.FC = () => {
       <ChatBot />
       <Footer />
     </div>
+    </I18nProvider>
   );
 };
 

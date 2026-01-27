@@ -1,7 +1,9 @@
 
 import React from 'react';
+import { useI18n } from '../i18n';
 
 const Footer: React.FC = () => {
+  const { t } = useI18n();
   return (
     <footer id="contact" className="border-t border-white/5 py-24 px-6 lg:px-12 bg-[#0a0a0a]">
       <div className="max-w-7xl mx-auto">
@@ -20,31 +22,31 @@ const Footer: React.FC = () => {
             </div>
 
             <div className="p-8 rounded-[2.5rem] bg-zinc-900 border border-white/5 space-y-6">
-              <h3 className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-500">Контакты</h3>
+              <h3 className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-500">{t('footer.contacts')}</h3>
               <div className="grid sm:grid-cols-2 gap-4">
                 <a href="https://t.me/younghustle45" target="_blank" rel="noopener noreferrer" className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
-                  Telegram: @younghustle45
+                  {t('contacts.telegram')}
                 </a>
                 <a href="mailto:fear75412@gmail.com" className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
-                  Email: fear75412@gmail.com
+                  {t('contacts.email')}
                 </a>
                 <a href="tel:+420737500587" className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
-                  Телефон: +420 737 500 587
+                  {t('contacts.phone')}
                 </a>
                 <div className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-zinc-300">
-                  Локация: Прага, Чехия
+                  {t('contacts.location')}
                 </div>
                 <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
-                  GitHub: akira777777
+                  {t('contacts.github')}
                 </a>
               </div>
             </div>
           </div>
 
           <div className="space-y-12 md:text-right">
-            <h2 className="text-4xl md:text-6xl font-serif">Готов к <br /> <span className="italic text-zinc-500 text-3xl md:text-5xl">сотрудничеству.</span></h2>
+            <h2 className="text-4xl md:text-6xl font-serif">{t('footer.ready.title.main')} <br /> <span className="italic text-zinc-500 text-3xl md:text-5xl">{t('footer.ready.title.sub')}</span></h2>
             <p className="text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">
-              &copy; {new Date().getFullYear()} Artem Mikhailov &bull; Full Stack Developer
+              &copy; {new Date().getFullYear()} Artem Mikhailov &bull; {t('footer.copyright')}
             </p>
           </div>
         </div>

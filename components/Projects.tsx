@@ -2,8 +2,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PROJECTS } from '../constants';
+import { useI18n } from '../i18n';
 
 const Projects: React.FC = () => {
+  const { t } = useI18n();
   return (
     <section id="work" className="scroll-mt-24 py-32 border-t border-white/5 bg-[#0a0a0a] relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.04),transparent_60%)]" aria-hidden />
@@ -12,9 +14,9 @@ const Projects: React.FC = () => {
           <div className="space-y-3">
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full floating-badge accent-pill text-zinc-400">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              Selected Work
+              {t('projects.badge')}
             </div>
-            <h2 className="text-4xl md:text-6xl font-serif">My <span className="italic text-zinc-500">projects.</span></h2>
+            <h2 className="text-4xl md:text-6xl font-serif">{t('projects.title')}</h2>
           </div>
           <div className="flex space-x-2">
             <button className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-zinc-500 hover:text-white transition-colors">

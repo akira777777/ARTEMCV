@@ -1,13 +1,15 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import { GeminiService } from '../services/geminiService';
-import { BrandBible, ImageSize } from '../types';
+import { BrandBible } from '../types';
+import { useI18n } from '../i18n';
 
 const ASPECT_RATIOS = ["1:1", "2:3", "3:2", "3:4", "4:3", "9:16", "16:9", "21:9"];
 
 const BrandGenerator: React.FC = () => {
   const [mission, setMission] = useState('');
   const [loadingBible, setLoadingBible] = useState(false);
+    const { t } = useI18n();
   const [bible, setBible] = useState<BrandBible | null>(null);
   const [selectedRatio, setSelectedRatio] = useState<string>("1:1");
   const [images, setImages] = useState<Record<string, string>>({});
@@ -203,7 +205,7 @@ const BrandGenerator: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              <h3 className="text-2xl font-serif italic text-zinc-300 group-hover:text-white transition-colors">Vision Sync</h3>
+              <h3 className="text-2xl font-serif italic text-zinc-300 group-hover:text-white transition-colors">{t('brand.vision')}</h3>
               <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600">Drop mood board to pre-fill mission</p>
             </div>
           )}
@@ -212,7 +214,7 @@ const BrandGenerator: React.FC = () => {
         <div className="p-12 rounded-[3rem] bg-[#111111] border border-white/5 shadow-2xl">
           <form onSubmit={handleGenerate} className="space-y-12">
             <div className="space-y-6">
-              <label className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-500">Mission Parameters</label>
+              <label className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-500">{t('brand.mission')}</label>
               <textarea
                 required
                 value={mission}
@@ -224,7 +226,7 @@ const BrandGenerator: React.FC = () => {
 
             <div className="grid md:grid-cols-2 gap-12 items-end">
               <div className="space-y-6">
-                <label className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-500">Aspect Geometry</label>
+                <label className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-500">{t('brand.aspect')}</label>
                 <div className="grid grid-cols-4 gap-2">
                   {ASPECT_RATIOS.map((ratio) => (
                     <button
@@ -240,7 +242,7 @@ const BrandGenerator: React.FC = () => {
               </div>
               <button disabled={loadingBible} type="submit" className="w-full py-5 bg-white text-black font-black uppercase tracking-[0.2em] rounded-full text-xs disabled:opacity-50 flex items-center justify-center gap-3 hover:bg-zinc-200 transition-colors">
                 {loadingBible && <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />}
-                {loadingBible ? 'Deep Thinking...' : 'Generate Identity'}
+                {loadingBible ? 'Deep Thinking...' : t('brand.generate')}
               </button>
             </div>
           </form>
