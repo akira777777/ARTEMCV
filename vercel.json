@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "name": "artemcv",
   "builds": [
     { "src": "api/send-telegram.ts", "use": "@vercel/node" }
   ],
