@@ -117,20 +117,20 @@ const ChatBot: React.FC = () => {
 
           <div ref={chatRef} className="flex-1 p-8 overflow-y-auto space-y-8 scrollbar-hide">
             {messages.map((m, i) => (
-              <div key={`${m.role}-${i}-${m.text.slice(0, 10)}`} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
+              <div key={`${m.role}-${i}-${String(m.text).slice(0, 10)}`} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
                 <div className={`max-w-[85%] p-5 rounded-[1.5rem] text-sm leading-relaxed ${m.role === 'user' ? 'bg-white text-black font-bold' : 'text-zinc-400 font-serif'}`}>
-                  {m.text}
+                  {String(m.text)}
                 </div>
                 {m.sources && m.sources.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {m.sources.map((s, idx) => s.web && (
                       <a 
                         key={`${s.web.uri}-${idx}`}
-                        href={s.web.uri} 
+                        href={String(s.web.uri)} 
                         target="_blank" 
                         className="px-3 py-1 bg-zinc-800 border border-white/5 rounded-full text-[8px] font-bold uppercase tracking-widest text-zinc-500 hover:text-white"
                       >
-                        {idx + 1}. {s.web.title.slice(0, 15)}...
+                        {idx + 1}. {String(s.web?.title || 'Source').slice(0, 15)}...
                       </a>
                     ))}
                   </div>
