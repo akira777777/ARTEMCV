@@ -1,6 +1,7 @@
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { GeminiService } from '../services/geminiService';
+import { ImageCacheManager } from '../services/imageCacheManager';
 import { BrandBible } from '../types';
 import { useI18n } from '../i18n';
 
@@ -21,10 +22,36 @@ const BrandGenerator: React.FC = () => {
   const [editPrompt, setEditPrompt] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Log cache statistics on mount and when cache changes
+  useEffect(() => {
+    const stats = ImageCacheManager.getStats();
+    if (stats.count > 0) {
+      console.log(`📊 Image Cache Status:`, {
+        cached_images: stats.count,
+        size_mb: (stats.sizeBytes / (1024 * 1024)).toFixed(2),
+        oldest_timestamp: new Date(stats.oldest).toLocaleString()
+      });
+    }
+  }, []);
+
   const generateVariation = useCallback(async (key: string, prompt: string, style: string, ratio: string) => {
     setLoadingImages(prev => ({ ...prev, [key]: true }));
     try {
+      // Check cache first
+      const cachedImage = ImageCacheManager.getImage(prompt, style, ratio);
+      if (cachedImage) {
+        console.log(`📦 Cache HIT for ${key}`);
+        setImages(prev => ({ ...prev, [key]: cachedImage }));
+        setLoadingImages(prev => ({ ...prev, [key]: false }));
+        return;
+      }
+      
+      // Generate if not cached
+      console.log(`🌐 Cache MISS for ${key}, generating...`);
       const url = await GeminiService.generateBrandImage(prompt, '1K', style, ratio);
+      
+      // Store in cache
+      ImageCacheManager.setImage(prompt, style, ratio, url);
       setImages(prev => ({ ...prev, [key]: url }));
     } catch (err) {
       console.error(`Error generating ${key}:`, err);

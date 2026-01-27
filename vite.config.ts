@@ -19,6 +19,20 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      build: {
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              // Vendor chunks
+              'vendor-react': ['react', 'react-dom'],
+              'vendor-gemini': ['@google/genai']
+            }
+          }
+        },
+        // Report chunk sizes
+        reportCompressedSize: true,
+        chunkSizeWarningLimit: 500
       }
     };
 });
