@@ -1,14 +1,18 @@
 {
-  "version": 2,
-  "name": "artemcv",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "builds": [
-    { "src": "api/send-telegram.ts", "use": "@vercel/node" }
-  ],
+  "env": {
+    "VITE_API_KEY": "@vite_api_key",
+    "VITE_TELEGRAM_CHAT_ID": "@vite_telegram_chat_id"
+  },
+  "functions": {
+    "api/send-telegram.ts": {
+      "memory": 1024,
+      "maxDuration": 30,
+      "runtime": "nodejs20.x"
+    }
+  },
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1.ts" },
-    { "src": "^/(.*\\.(?:js|css|html|json|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot))$", "dest": "/dist/$1" },
-    { "src": "/(.*)", "dest": "/dist/index.html" }
+    { "src": "/api/(.*)", "dest": "/api/$1" }
   ]
 }
