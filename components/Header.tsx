@@ -27,10 +27,12 @@ const Header: React.FC = () => {
 
           <div className="flex items-center space-x-6">
             <a 
-              href="#contact"
+              href="https://t.me/younghustle45"
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-6 py-2 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest bg-white text-black hover:bg-zinc-200 transition-colors"
             >
-              Contact
+              Contact — Telegram
             </a>
           </div>
         </div>
