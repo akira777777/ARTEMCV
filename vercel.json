@@ -1,12 +1,14 @@
 {
   "version": 2,
   "name": "artemcv",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "builds": [
     { "src": "api/send-telegram.ts", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.ts" },
-    { "src": "^/(favicon\\.svg|.*\\.(?:js|css|html|json|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot))$", "dest": "/$1" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    { "src": "^/(.*\\.(?:js|css|html|json|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot))$", "dest": "/dist/$1" },
+    { "src": "/(.*)", "dest": "/dist/index.html" }
   ]
 }
