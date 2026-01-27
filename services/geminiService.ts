@@ -5,7 +5,9 @@ import { BrandBible, ImageSize } from "../types";
 export class GeminiService {
   private static getAI() {
     const apiKey = (import.meta as any)?.env?.VITE_API_KEY || process.env.API_KEY || process.env.GEMINI_API_KEY;
-    if (!apiKey) throw new Error('Missing Gemini API key. Set VITE_API_KEY for Vite builds.');
+    if (!apiKey) {
+      throw new Error('Missing Gemini API key. Set VITE_API_KEY environment variable.');
+    }
     return new GoogleGenAI({ apiKey });
   }
 
@@ -92,7 +94,7 @@ export class GeminiService {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-image-preview',
       contents: { parts: [{ text: `${prompt}. ${style}. High-end brand mark, white background.` }] },
-      config: { imageConfig: { aspectRatio: ratio as any, imageSize: size } }
+      config: { imageConfig: { aspectRatio: ratio as unknown as string, imageSize: size } }
     });
 
     for (const part of response.candidates?.[0]?.content?.parts || []) {
@@ -125,7 +127,7 @@ export class GeminiService {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-image-preview',
       contents: { parts: [{ text: "Minimalist Bauhaus abstract geometric composition, premium muted colors, white background." }] },
-      config: { imageConfig: { aspectRatio: ratio as any, imageSize: size } }
+      config: { imageConfig: { aspectRatio: ratio as unknown as string, imageSize: size } }
     });
     for (const part of response.candidates?.[0]?.content?.parts || []) {
       if (part.inlineData) return `data:image/png;base64,${part.inlineData.data}`;
@@ -134,7 +136,7 @@ export class GeminiService {
   }
 
   // Search Grounded Chat
-  static async chat(message: string, history: any[]): Promise<GenerateContentResponse> {
+  static async chat(message: string, history: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }>): Promise<GenerateContentResponse> {
     const ai = this.getAI();
     return await ai.models.generateContent({
       model: 'gemini-3-flash-preview',

@@ -27,7 +27,7 @@ const BrandGenerator: React.FC = () => {
       const url = await GeminiService.generateBrandImage(prompt, '1K', style, ratio);
       setImages(prev => ({ ...prev, [key]: url }));
     } catch (err) {
-      console.error(err);
+      console.error(`Error generating ${key}:`, err);
     } finally {
       setLoadingImages(prev => ({ ...prev, [key]: false }));
     }
@@ -163,7 +163,7 @@ const BrandGenerator: React.FC = () => {
                 className="bg-transparent border-none outline-none text-[10px] flex-1 px-4 text-white placeholder:text-zinc-600"
                 onKeyDown={(e) => e.key === 'Enter' && handleEdit(key)}
               />
-              <button onClick={() => handleEdit(key)} className="px-3 py-1 bg-white text-black rounded-full text-[10px] font-bold active:scale-95 transition-transform">Apply</button>
+              <button onClick={() => handleEdit(key)} className="px-3 py-1 bg-white text-black rounded-full text-[10px] font-bold active:scale-95 transition-transform" title="Apply edit" aria-label="Apply edit">Apply</button>
             </div>
           </div>
         )}
@@ -193,11 +193,19 @@ const BrandGenerator: React.FC = () => {
 
       <div className="max-w-4xl mx-auto space-y-12">
         {/* Vision Sync Dropzone */}
-        <div 
+        <div
           onClick={() => fileInputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              fileInputRef.current?.click();
+            }
+          }}
           className="group relative p-12 rounded-[3rem] border-2 border-dashed border-white/5 hover:border-white/20 bg-zinc-900/50 cursor-pointer transition-all text-center"
+          role="button"
+          tabIndex={0}
+          aria-label="Upload mood board image"
         >
-          <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleVisionSync} />
+          <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleVisionSync} aria-hidden="true" />
           {analyzing ? (
             <div className="space-y-4">
               <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto" />
@@ -211,7 +219,7 @@ const BrandGenerator: React.FC = () => {
           )}
         </div>
 
-        <div className="p-12 rounded-[3rem] bg-[#111111] border border-white/5 shadow-2xl">
+            <div className="p-12 rounded-[3rem] bg-[#111111] border border-white/5 shadow-2xl">
           <form onSubmit={handleGenerate} className="space-y-12">
             <div className="space-y-6">
               <label className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-500">{t('brand.mission')}</label>
@@ -245,8 +253,8 @@ const BrandGenerator: React.FC = () => {
                 {loadingBible ? 'Deep Thinking...' : t('brand.generate')}
               </button>
             </div>
-          </form>
-        </div>
+            </form>
+            </div>
       </div>
 
       {bible && (
@@ -268,21 +276,23 @@ const BrandGenerator: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Chromatic Spectrum */}
             <div className="space-y-12">
               <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.4em]">Chromatic Spectrum</h3>
-              <div className="grid gap-6">
-                {bible.palette.map((color, i) => (
-                  <div key={i} className="relative">
+      <div className="grid gap-6">
+                {bible.palette.map((color) => (
+                  <div key={color.hex} className="relative">
                     <div className="flex items-center space-x-6 p-6 rounded-[2.5rem] bg-zinc-900 border border-white/5 transition-all hover:bg-zinc-800/50">
                       <div className="w-20 h-20 rounded-[1.5rem] border border-white/10 shadow-2xl" style={{ backgroundColor: color.hex }} />
                       <div className="flex-1">
                         <div className="flex items-center gap-3">
                           <p className="text-xl font-bold tracking-tighter text-white">{color.hex}</p>
                           <button 
-                            onClick={() => setActiveTooltip(activeTooltip === i ? null : i)}
-                            className={`p-1.5 rounded-full transition-all hover:scale-110 ${activeTooltip === i ? 'bg-white text-black' : 'text-zinc-600 hover:text-white hover:bg-white/5'}`}
+                            onClick={() => setActiveTooltip(activeTooltip === color.hex ? null : color.hex)}
+                            className={`p-1.5 rounded-full transition-all hover:scale-110 ${activeTooltip === color.hex ? 'bg-white text-black' : 'text-zinc-600 hover:text-white hover:bg-white/5'}`}
+                            title="Show color usage"
+                            aria-label="Show color usage"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                           </button>
@@ -291,7 +301,7 @@ const BrandGenerator: React.FC = () => {
                       </div>
                     </div>
 
-                    {activeTooltip === i && (
+                    {activeTooltip === color.hex && (
                       <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-4 w-72 z-50 animate-in fade-in zoom-in-95 duration-200">
                         <div className="p-6 bg-zinc-800/90 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl ring-1 ring-white/10">
                           <div className="flex justify-between items-center mb-3">
