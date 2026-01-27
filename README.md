@@ -9,9 +9,11 @@ A modern React-based portfolio with a Telegram-powered contact form.
 - **Dark/Light Theme**: Smooth theme transitions.
 
 ## Setup
-1. **Telegram Chat ID**: Add to `.env` → `VITE_TELEGRAM_CHAT_ID=your_chat_id`.
-2. **Install Dependencies**: `npm install`
-3. **Run Dev Server**: `npm run dev`
+1) **Install dependencies**: `npm install`
+2) **Env (.env)**
+	- `VITE_TELEGRAM_CHAT_ID=<your_chat_id>` (optional on client; used as hint)
+	- For ChatBot (if mounted): `VITE_API_KEY=<gemini_key>`
+3) **Run dev**: `npm run dev`
 
 ## Technologies Used
 - **Frontend**: React 19, TypeScript, Tailwind CSS
@@ -23,7 +25,16 @@ A modern React-based portfolio with a Telegram-powered contact form.
 - **Framework Preset**: Vite
 - **Build Command**: `npm run build`
 - **Output Directory**: `dist`
-- **Environment Variables**: Add `VITE_TELEGRAM_CHAT_ID` in Vercel Project Settings → Environment Variables.
+- **Environment Variables** (Project Settings → Environment Variables):
+	- `TELEGRAM_BOT_TOKEN` (secret, required for /api/send-telegram)
+	- `TELEGRAM_CHAT_ID` (destination chat/channel)
+	- `VITE_TELEGRAM_CHAT_ID` (optional client hint)
+	- `VITE_API_KEY` (only if ChatBot is enabled)
+
+## Serverless function for Telegram
+- Endpoint: `/api/send-telegram` (see `api/send-telegram.ts`)
+- Runs only in serverless environment (not available in `npm run preview`).
+- Validates input, honeypot anti-spam, 12s timeout, returns JSON with error details on failure.
 
 ### Useful Scripts
 - Dev (fresh): `npm run dev`
@@ -32,4 +43,16 @@ A modern React-based portfolio with a Telegram-powered contact form.
 - Preview build: `npm run preview`
 
 ## Troubleshooting
-- **Telegram delivery**: Ensure `VITE_TELEGRAM_CHAT_ID` is set and the bot token in code is valid. Message errors will surface in the form UI.
+- **Telegram delivery**: In production, set `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`. On local preview, serverless functions are unavailable.
+- **ChatBot**: Needs `VITE_API_KEY` (Gemini). 429/401 errors surface in the widget text.
+
+## Deployment checklist (Vercel)
+1) **Connect repo**: Vercel → Import project → pick this repo.
+2) **Env (Project Settings → Environment Variables)**:
+	- `TELEGRAM_BOT_TOKEN` (required, secret)
+	- `TELEGRAM_CHAT_ID` (required)
+	- `VITE_TELEGRAM_CHAT_ID` (optional client hint)
+	- `VITE_API_KEY` (only if enabling ChatBot)
+3) **Build settings**: Framework Vite; Build `npm run build`; Output `dist`.
+4) **Deploy**: Trigger build; verify dist/stats.html if you want bundle view.
+5) **Smoke test**: Open preview URL, submit contact form (serverless function live), check success/error banners.

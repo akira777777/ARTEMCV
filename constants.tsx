@@ -4,7 +4,7 @@ import { Project } from './types';
 export const PROJECTS: Project[] = [
   {
     id: '1',
-    title: 'Barber Auto Copilot',
+    title: 'Barber Shop',
     description: 'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',
     techStack: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS'],
     liveLink: 'https://barber-auto-copilot-prepare-deploy.vercel.app/',

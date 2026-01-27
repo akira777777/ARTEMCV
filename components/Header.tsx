@@ -6,7 +6,7 @@ import { useI18n } from '../i18n';
 const Header: React.FC = () => {
   const { t } = useI18n();
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5">
+    <nav className="fixed top-0 inset-x-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5" role="navigation" aria-label="Main Navigation">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex justify-between h-20 items-center">
           <a className="flex items-center space-x-2 cursor-pointer group" href="#top">

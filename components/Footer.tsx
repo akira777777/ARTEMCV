@@ -1,17 +1,32 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useI18n } from '../i18n';
 
 const Footer: React.FC = () => {
   const { t } = useI18n();
+  const [avatarError, setAvatarError] = useState(false);
+  const avatarSrc = `${import.meta.env.BASE_URL || '/'}avatar.jpg`;
+
   return (
     <footer id="contact" className="border-t border-white/5 py-24 px-6 lg:px-12 bg-[#0a0a0a]">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-20 items-start">
           <div className="space-y-12">
             <div className="flex items-center space-x-6 p-8 rounded-[2.5rem] bg-zinc-900 border border-white/5">
-              <div className="w-16 h-16 rounded-2xl overflow-hidden">
-                <img src="/avatar.jpg" alt="Artem Mikhailov" className="w-full h-full object-cover" />
+              <div className="w-16 h-16 rounded-2xl overflow-hidden border border-white/15 shadow-lg shadow-indigo-900/40 bg-black/40 flex items-center justify-center">
+                {avatarError ? (
+                  <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-500 flex items-center justify-center">
+                    <span className="text-white font-black text-lg tracking-tight">AM</span>
+                  </div>
+                ) : (
+                  <img
+                    src={avatarSrc}
+                    alt="Artem Mikhailov"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    onError={() => setAvatarError(true)}
+                  />
+                )}
               </div>
               <div className="space-y-2">
                 <p className="text-sm text-zinc-500 leading-relaxed italic">

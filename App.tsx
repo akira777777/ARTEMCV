@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
-import ContactSection from './components/ContactSection';
+import ContactSectionSecure from './components/ContactSectionSecure';
 import ErrorBoundary from './components/ErrorBoundary';
 import Footer from './components/Footer';
 import { I18nProvider } from './i18n';
@@ -25,7 +25,7 @@ const App: React.FC = () => {
               <Hero />
               <About />
               <Projects />
-              <ContactSection />
+              <ContactSectionSecure />
             </div>
           </main>
 
