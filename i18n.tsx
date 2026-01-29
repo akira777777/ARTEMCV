@@ -150,7 +150,7 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (nav.startsWith('ru')) return 'ru';
     return 'en';
   };
-  const [lang, setLangState] = useState<Lang>(detect());
+  const [lang, setLangState] = useState<Lang>(detect);
 
   const setLang = (l: Lang) => {
     setLangState(l);
