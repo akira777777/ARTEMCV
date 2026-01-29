@@ -17,6 +17,8 @@ const escapeHtml = (s: string) =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const ContactSection: React.FC = () => {
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID; // optional; backend may override
   const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN; // prefer server-side in production
@@ -42,8 +44,7 @@ const ContactSection: React.FC = () => {
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       return 'Please fill in all required fields';
     }
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(formData.email.trim())) {
+    if (!EMAIL_PATTERN.test(formData.email.trim())) {
       return 'Please enter a valid email address';
     }
     if (formData.message.trim().length < 10) {
