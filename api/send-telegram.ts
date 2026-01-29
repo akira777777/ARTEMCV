@@ -9,6 +9,8 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -33,7 +35,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email.trim())) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
