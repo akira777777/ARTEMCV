@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 interface ContactFormData {
   name: string;
   email: string;
@@ -32,8 +34,7 @@ const ContactSectionSecure: React.FC = () => {
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       return 'Please fill in all required fields';
     }
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(formData.email.trim())) {
+    if (!EMAIL_PATTERN.test(formData.email.trim())) {
       return 'Please enter a valid email address';
     }
     if (formData.message.trim().length < 10) {
