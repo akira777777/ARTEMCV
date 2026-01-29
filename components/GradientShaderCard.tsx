@@ -87,29 +87,26 @@ const GradientShaderCard: React.FC = () => {
       ctx.strokeStyle = 'rgba(0, 200, 255, 0.1)';
       ctx.lineWidth = 1;
 
+      ctx.beginPath();
       for (let x = 0; x < w; x += gridSize) {
         for (let y = 0; y < h; y += gridSize) {
           const wave = Math.sin((x + time * 20) * 0.02) * 3 + Math.cos((y + time * 15) * 0.02) * 3;
           
-          ctx.beginPath();
+          ctx.moveTo(x + 2, y + wave);
           ctx.arc(x, y + wave, 2, 0, Math.PI * 2);
-          ctx.stroke();
 
           if (x + gridSize < w) {
-            ctx.beginPath();
             ctx.moveTo(x, y);
             ctx.lineTo(x + gridSize, y + Math.sin((y + time * 20) * 0.02) * 3);
-            ctx.stroke();
           }
 
           if (y + gridSize < h) {
-            ctx.beginPath();
             ctx.moveTo(x, y);
             ctx.lineTo(x + Math.cos((x + time * 20) * 0.02) * 3, y + gridSize);
-            ctx.stroke();
           }
         }
       }
+      ctx.stroke();
 
       // Draw gradient overlay
       const gradOverlay = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.hypot(w, h) * 0.7);
@@ -172,12 +169,12 @@ const GradientShaderCard: React.FC = () => {
       // Add scanlines
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
       ctx.lineWidth = 1;
+      ctx.beginPath();
       for (let y = 0; y < h; y += 4) {
-        ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(w, y);
-        ctx.stroke();
       }
+      ctx.stroke();
 
       animationId = requestAnimationFrame(animate);
     };
