@@ -17,7 +17,7 @@ const Hero: React.FC = () => {
       <div className="absolute -bottom-32 right-0 w-96 h-96 bg-sky-500/15 blur-3xl" aria-hidden />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(255,255,255,0.06),transparent_45%)]" aria-hidden />
 
-      <div className="marquee-container w-full py-3 opacity-20">
+      <div className="marquee-container w-full py-3 opacity-20" aria-hidden="true">
         <div className="marquee-content">
           <h1 className="text-[11vw] font-serif uppercase leading-none tracking-tighter whitespace-nowrap">AstraDev® AstraDev® AstraDev®</h1>
         </div>

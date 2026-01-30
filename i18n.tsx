@@ -142,7 +142,6 @@ interface I18nCtx {
 const I18nContext = createContext<I18nCtx | null>(null);
 
 const detect = (): Lang => {
-  if (typeof window === 'undefined') return 'en';
   const fromStorage = localStorage.getItem('lang') as Lang | null;
   if (fromStorage && ['en', 'ru', 'cs'].includes(fromStorage)) return fromStorage;
   const nav = navigator.language.toLowerCase();
@@ -152,7 +151,7 @@ const detect = (): Lang => {
 };
 
 export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [lang, setLangState] = useState<Lang>(detect);
+  const [lang, setLangState] = useState<Lang>(() => detect());
 
   const setLang = (l: Lang) => {
     setLangState(l);
