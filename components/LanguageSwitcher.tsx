@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useI18n, Lang } from '../i18n';
 
 const langs: { code: Lang; label: string }[] = [
@@ -10,17 +10,13 @@ const langs: { code: Lang; label: string }[] = [
 const LanguageSwitcher: React.FC = () => {
   const { lang, setLang } = useI18n();
   
-  const handleLangChange = useCallback((code: Lang) => {
-    setLang(code);
-  }, [setLang]);
-  
   return (
     <div className="flex items-center gap-2">
       {langs.map((l) => (
         <button
           key={l.code}
           type="button"
-          onClick={() => handleLangChange(l.code)}
+          onClick={() => setLang(l.code)}
           className={`px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest transition-all ${
             lang === l.code ? 'bg-white text-black border-white' : 'text-zinc-500 hover:text-white border-white/10'
           }`}

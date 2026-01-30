@@ -48,11 +48,8 @@ const Projects: React.FC = () => {
                   src={project.image} 
                   alt={project.title} 
                   className="w-full h-full object-cover brightness-80 group-hover:brightness-110 group-hover:scale-105 transition-all duration-1000 ease-out"
-                  style={{ willChange: 'transform, filter' }}
                   loading="lazy"
                   decoding="async"
-                  width="800"
-                  height="600"
                 />
                 <div className="absolute top-8 left-8 flex gap-2">
                   {project.techStack.slice(0, 3).map(tag => (
