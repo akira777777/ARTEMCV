@@ -37,6 +37,17 @@ const GradientShaderCard: React.FC = () => {
     const h = rect.height;
     let time = 0;
 
+    const gridSize = 40;
+    const xValues: number[] = [];
+    const yValues: number[] = [];
+    for (let x = 0; x < w; x += gridSize) xValues.push(x);
+    for (let y = 0; y < h; y += gridSize) yValues.push(y);
+
+    const wavePartX = new Float32Array(xValues.length);
+    const lineDispX = new Float32Array(xValues.length);
+    const wavePartY = new Float32Array(yValues.length);
+    const lineDispY = new Float32Array(yValues.length);
+
     // Create initial particle emitter
     const createParticles = (x: number, y: number, count: number = 3) => {
       const colors = ['#20B5B5', '#0088FF', '#209B58', '#00FF88'];
@@ -83,26 +94,48 @@ const GradientShaderCard: React.FC = () => {
 
       // Draw animated mesh grid
       time += 0.01;
-      const gridSize = 40;
+      // const gridSize = 40; // Moved to outer scope
       ctx.strokeStyle = 'rgba(0, 200, 255, 0.1)';
       ctx.lineWidth = 1;
 
+      // Precompute values
+      const time20 = time * 20;
+      const time15 = time * 15;
+
+      for (let i = 0; i < xValues.length; i++) {
+        const x = xValues[i];
+        wavePartX[i] = Math.sin((x + time20) * 0.02) * 3;
+        lineDispX[i] = Math.cos((x + time20) * 0.02) * 3;
+      }
+
+      for (let i = 0; i < yValues.length; i++) {
+        const y = yValues[i];
+        wavePartY[i] = Math.cos((y + time15) * 0.02) * 3;
+        lineDispY[i] = Math.sin((y + time20) * 0.02) * 3;
+      }
+
       ctx.beginPath();
-      for (let x = 0; x < w; x += gridSize) {
-        for (let y = 0; y < h; y += gridSize) {
-          const wave = Math.sin((x + time * 20) * 0.02) * 3 + Math.cos((y + time * 15) * 0.02) * 3;
+      for (let i = 0; i < xValues.length; i++) {
+        const x = xValues[i];
+        const wx = wavePartX[i];
+        const hasNextX = (x + gridSize < w);
+
+        for (let j = 0; j < yValues.length; j++) {
+          const y = yValues[j];
+          const wy = wavePartY[j];
+          const wave = wx + wy;
           
           ctx.moveTo(x + 2, y + wave);
           ctx.arc(x, y + wave, 2, 0, Math.PI * 2);
 
-          if (x + gridSize < w) {
+          if (hasNextX) {
             ctx.moveTo(x, y);
-            ctx.lineTo(x + gridSize, y + Math.sin((y + time * 20) * 0.02) * 3);
+            ctx.lineTo(x + gridSize, y + lineDispY[j]);
           }
 
           if (y + gridSize < h) {
             ctx.moveTo(x, y);
-            ctx.lineTo(x + Math.cos((x + time * 20) * 0.02) * 3, y + gridSize);
+            ctx.lineTo(x + lineDispX[i], y + gridSize);
           }
         }
       }
