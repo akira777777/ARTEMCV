@@ -9,7 +9,7 @@ export const PROJECTS: Project[] = [
     techStack: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS'],
     liveLink: 'https://barber-auto-copilot-prepare-deploy.vercel.app/',
     githubLink: '#',
-    image: '/barber.png'
+    image: '/barber.webp'
   },
   {
     id: '2',
@@ -18,7 +18,7 @@ export const PROJECTS: Project[] = [
     techStack: ['Next.js', 'Framer Motion', 'Tailwind', 'Supabase'],
     liveLink: 'https://dental-clinic-vakalova.vercel.app/',
     githubLink: '#',
-    image: '/dental.png'
+    image: '/dental.webp'
   },
   {
     id: '3',
@@ -27,7 +27,7 @@ export const PROJECTS: Project[] = [
     techStack: ['React', 'Redux Toolkit', 'FastAPI', 'MongoDB', 'Python'],
     liveLink: 'https://game-store-snowy-rho.vercel.app/',
     githubLink: '#',
-    image: '/game.png'
+    image: '/game.webp'
   }
 ];
 
