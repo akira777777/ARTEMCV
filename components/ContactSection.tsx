@@ -19,6 +19,8 @@ const escapeHtml = (s: string) =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const ContactSection: React.FC = () => {
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID; // optional; backend may override
   const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN; // prefer server-side in production
