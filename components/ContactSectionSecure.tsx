@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -25,12 +25,12 @@ const ContactSectionSecure: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  }, []);
 
-  const validate = (): string | null => {
+  const validate = useCallback((): string | null => {
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       return 'Please fill in all required fields';
     }
@@ -48,9 +48,9 @@ const ContactSectionSecure: React.FC = () => {
       return 'Please wait a moment before sending again';
     }
     return null;
-  };
+  }, [formData]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     const validationError = validate();
     if (validationError) {
@@ -109,7 +109,7 @@ const ContactSectionSecure: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [formData, validate, TELEGRAM_CHAT_ID]);
 
   return (
     <section className="py-32 px-6 lg:px-12">
@@ -172,4 +172,4 @@ const ContactSectionSecure: React.FC = () => {
   );
 };
 
-export default ContactSectionSecure;
+export default React.memo(ContactSectionSecure);

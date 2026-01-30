@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 const InteractiveShowcase: React.FC = () => {
@@ -10,19 +10,19 @@ const InteractiveShowcase: React.FC = () => {
   const rotateX = useTransform(springY, [ -50, 50 ], [ 10, -10 ]);
   const rotateY = useTransform(springX, [ -50, 50 ], [ -12, 12 ]);
 
-  const handleMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMove = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     const rect = cardRef.current?.getBoundingClientRect();
     if (!rect) return;
     const posX = event.clientX - rect.left - rect.width / 2;
     const posY = event.clientY - rect.top - rect.height / 2;
     x.set(Math.max(Math.min(posX, 50), -50));
     y.set(Math.max(Math.min(posY, 50), -50));
-  };
+  }, [x, y]);
 
-  const handleLeave = () => {
+  const handleLeave = useCallback(() => {
     x.set(0);
     y.set(0);
-  };
+  }, [x, y]);
 
   return (
     <section className="py-24" id="lab">
@@ -107,4 +107,4 @@ const InteractiveShowcase: React.FC = () => {
   );
 };
 
-export default InteractiveShowcase;
+export default React.memo(InteractiveShowcase);

@@ -161,17 +161,12 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try { localStorage.setItem('lang', l); } catch {}
   };
 
-  useEffect(() => {
-    // ensure initial storage
-    try { localStorage.setItem('lang', lang); } catch {}
-  }, [lang]);
-
   const t = useMemo(() => (key: string) => {
     const dict = translations[lang] || translations.en;
     return dict[key] ?? key;
   }, [lang]);
 
-  const value = useMemo(() => ({ lang, setLang, t }), [lang]);
+  const value = useMemo(() => ({ lang, setLang, t }), [lang, t]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 };
