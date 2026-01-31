@@ -1,11 +1,153 @@
+<<<<<<< HEAD
 import React, { useState, useCallback, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+=======
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
+>>>>>>> aa50e13e283121bac91a04f9ba697ceef36c1aeb
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { ServicesGrid } from './ServicesGrid';
 
 // Lazy load ParticleText to prevent chunk duplication
 const ParticleText = React.lazy(() => import('./InteractiveElements').then(m => ({ default: m.ParticleText })));
+<<<<<<< HEAD
+=======
+
+// Floating orbs that follow cursor
+const FloatingOrb: React.FC<{ 
+  delay: number; 
+  size: number; 
+  color: string;
+  mouseX: number;
+  mouseY: number;
+}> = ({ delay, size, color, mouseX, mouseY }) => {
+  const springConfig = { stiffness: 100 - delay * 10, damping: 20 };
+  const x = useSpring(mouseX * (0.3 - delay * 0.05), springConfig);
+  const y = useSpring(mouseY * (0.3 - delay * 0.05), springConfig);
+
+  useEffect(() => {
+    x.set(mouseX * (0.3 - delay * 0.05));
+    y.set(mouseY * (0.3 - delay * 0.05));
+  }, [mouseX, mouseY, x, y, delay]);
+
+  return (
+    <motion.div
+      className="absolute rounded-full pointer-events-none"
+      style={{
+        width: size,
+        height: size,
+        background: color,
+        x,
+        y,
+        filter: 'blur(1px)',
+      }}
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ 
+        opacity: [0.6, 1, 0.6],
+        scale: [1, 1.2, 1],
+      }}
+      transition={{
+        opacity: { duration: 2, repeat: Infinity, delay: delay * 0.3 },
+        scale: { duration: 3, repeat: Infinity, delay: delay * 0.3 },
+      }}
+    />
+  );
+};
+
+// Letter animation component for ARTEM
+const AnimatedLetter: React.FC<{ 
+  letter: string; 
+  index: number;
+  mouseX: number;
+  mouseY: number;
+}> = ({ letter, index, mouseX, mouseY }) => {
+  const baseDelay = index * 0.1;
+  
+  return (
+    <motion.span
+      className="inline-block relative"
+      initial={{ opacity: 0, y: 100, rotateX: -90 }}
+      animate={{ opacity: 1, y: 0, rotateX: 0 }}
+      transition={{
+        duration: 0.8,
+        delay: baseDelay,
+        type: 'spring',
+        stiffness: 100,
+      }}
+      whileHover={{
+        scale: 1.1,
+        color: '#a855f7',
+        textShadow: '0 0 40px rgba(168, 85, 247, 0.8)',
+        transition: { duration: 0.2 },
+      }}
+      style={{
+        transformStyle: 'preserve-3d',
+      }}
+    >
+      {letter}
+      {/* Dot decoration for specific letters */}
+      {(letter === 'R' || letter === 'E') && (
+        <motion.span
+          className="absolute -top-2 -right-1 w-3 h-3 rounded-full"
+          style={{
+            background: letter === 'R' ? '#ec4899' : '#22d3ee',
+            boxShadow: `0 0 15px ${letter === 'R' ? 'rgba(236, 72, 153, 0.8)' : 'rgba(34, 211, 238, 0.8)'}`,
+          }}
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.7, 1, 0.7],
+          }}
+          transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+        />
+      )}
+    </motion.span>
+  );
+};
+
+// Custom cursor component
+const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = ({ mouseX, mouseY }) => {
+  const springConfig = { stiffness: 500, damping: 28 };
+  const cursorX = useSpring(mouseX, springConfig);
+  const cursorY = useSpring(mouseY, springConfig);
+
+  return (
+    <>
+      {/* Outer ring */}
+      <motion.div
+        className="fixed pointer-events-none z-[9999] mix-blend-difference"
+        style={{
+          x: cursorX,
+          y: cursorY,
+          width: 40,
+          height: 40,
+          borderRadius: '50%',
+          border: '2px solid rgba(168, 85, 247, 0.8)',
+          transform: 'translate(-50%, -50%)',
+        }}
+        animate={{
+          scale: [1, 1.1, 1],
+        }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+      />
+      {/* Inner dot */}
+      <motion.div
+        className="fixed pointer-events-none z-[9999]"
+        style={{
+          x: cursorX,
+          y: cursorY,
+          width: 8,
+          height: 8,
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+          transform: 'translate(-50%, -50%)',
+          boxShadow: '0 0 20px rgba(168, 85, 247, 0.8)',
+        }}
+      />
+    </>
+  );
+};
+>>>>>>> aa50e13e283121bac91a04f9ba697ceef36c1aeb
 
 export const Hero: React.FC = React.memo(() => {
   const { t } = useI18n();
@@ -43,8 +185,39 @@ export const Hero: React.FC = React.memo(() => {
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_70%)] pointer-events-none" aria-hidden="true" />
       
+<<<<<<< HEAD
       {/* Holographic Abstract Sphere */}
       <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
+=======
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+      {/* Decorative Purple Star */}
+      <div className="hero-purple-star" aria-hidden="true" />
+=======
+      {/* Holographic Abstract Sphere */}
+      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
+>>>>>>> Stashed changes
+=======
+      {/* Holographic Abstract Sphere */}
+      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
+>>>>>>> Stashed changes
+=======
+      {/* Holographic Abstract Sphere */}
+      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
+>>>>>>> Stashed changes
+=======
+      {/* Holographic Abstract Sphere */}
+      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
+>>>>>>> Stashed changes
+=======
+      {/* Holographic Abstract Sphere */}
+      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
+>>>>>>> Stashed changes
+>>>>>>> aa50e13e283121bac91a04f9ba697ceef36c1aeb
 
       {/* Main Typography */}
       <div className="z-10 relative w-full max-w-6xl px-6">
