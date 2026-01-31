@@ -8,10 +8,12 @@ import ScrollProgress from './components/ScrollProgress';
 import ErrorBoundary from './components/ErrorBoundary';
 import CursorTrail from './components/CursorTrail';
 import SkipLink from './components/SkipLink';
+import { SectionDivider } from './components/SectionDivider';
 
 // Lazy load heavy components
-const WorkGallery = lazy(() => import('./components/WorkGallery').then(m => ({ default: m.WorkGallery })));
+const SpotlightGallery = lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
 const About = lazy(() => import('./components/About').then(m => ({ default: m.About })));
+const CTASection = lazy(() => import('./components/CTASection').then(m => ({ default: m.CTASection })));
 const ContactSectionSecure = lazy(() => import('./components/ContactSectionSecure'));
 const SimpleTelegramChat = lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
 const GradientShaderCard = lazy(() => import('./components/GradientShaderCard'));
@@ -29,13 +31,21 @@ const App: React.FC = () => {
         <Navigation />
         <main id="main-content">
           <Hero />
+          <SectionDivider variant="dots" />
           <React.Suspense fallback={<div className="h-96" />}>
-            <WorkGallery />
-            <About />
-            <ErrorBoundary>
-              <ContactSectionSecure id="contact" />
-            </ErrorBoundary>
+            <SpotlightGallery />
           </React.Suspense>
+          <SectionDivider variant="lines" />
+          <React.Suspense fallback={<div className="h-96" />}>
+            <About />
+          </React.Suspense>
+          <SectionDivider variant="gradient" />
+          <React.Suspense fallback={<div className="h-72" />}>
+            <CTASection />
+          </React.Suspense>
+          <ErrorBoundary>
+            <ContactSectionSecure id="contact" />
+          </ErrorBoundary>
         </main>
         <Footer />
         <React.Suspense fallback={null}>
