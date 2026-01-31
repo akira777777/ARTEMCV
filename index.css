@@ -9,35 +9,7 @@
 
 /* Fixed 1200px centered container */
 .content-wrapper {
-  width: var(--container-width);
-  max-width: 100%;
-  height: min-content;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  background-color: transparent;
-=======
-  background-color: #000000;
->>>>>>> Stashed changes
-=======
-  background-color: #000000;
->>>>>>> Stashed changes
-=======
-  background-color: #000000;
->>>>>>> Stashed changes
-=======
-  background-color: #000000;
->>>>>>> Stashed changes
-=======
-  background-color: #000000;
->>>>>>> Stashed changes
+    background-color: transparent;
 =======
   background-color: #000000;
 >>>>>>> Stashed changes
