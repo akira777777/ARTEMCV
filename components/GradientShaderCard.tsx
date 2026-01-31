@@ -21,7 +21,7 @@ const GradientShaderCard: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
     if (!ctx) return;
 
     // Set canvas size
@@ -37,16 +37,16 @@ const GradientShaderCard: React.FC = () => {
     const h = rect.height;
     let time = 0;
 
-    const gridSize = 40;
-    const xValues: number[] = [];
-    const yValues: number[] = [];
-    for (let x = 0; x < w; x += gridSize) xValues.push(x);
-    for (let y = 0; y < h; y += gridSize) yValues.push(y);
+    // Cache gradients (created once, not every frame)
+    const bgGradient = ctx.createLinearGradient(0, 0, w, h);
+    bgGradient.addColorStop(0, '#0a1a2e');
+    bgGradient.addColorStop(0.5, '#16213e');
+    bgGradient.addColorStop(1, '#0f3460');
 
-    const wavePartX = new Float32Array(xValues.length);
-    const lineDispX = new Float32Array(xValues.length);
-    const wavePartY = new Float32Array(yValues.length);
-    const lineDispY = new Float32Array(yValues.length);
+    const gradOverlay = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.hypot(w, h) * 0.7);
+    gradOverlay.addColorStop(0, 'rgba(0, 255, 136, 0.15)');
+    gradOverlay.addColorStop(0.5, 'rgba(0, 136, 255, 0.1)');
+    gradOverlay.addColorStop(1, 'rgba(10, 26, 46, 0.3)');
 
     // Create initial particle emitter
     const createParticles = (x: number, y: number, count: number = 3) => {
@@ -67,8 +67,13 @@ const GradientShaderCard: React.FC = () => {
       }
     };
 
-    // Handle mouse movement
+    // Throttle mouse movement for better performance
+    let lastMouseTime = 0;
     const handleMouseMove = (e: MouseEvent) => {
+      const now = performance.now();
+      if (now - lastMouseTime < 16) return; // ~60fps throttle
+      lastMouseTime = now;
+      
       const rect = canvas.getBoundingClientRect();
       mouseRef.current = {
         x: e.clientX - rect.left,
@@ -79,16 +84,12 @@ const GradientShaderCard: React.FC = () => {
       }
     };
 
-    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     let animationId: number;
 
     const animate = () => {
-      // Clear with gradient background
-      const bgGradient = ctx.createLinearGradient(0, 0, w, h);
-      bgGradient.addColorStop(0, '#0a1a2e');
-      bgGradient.addColorStop(0.5, '#16213e');
-      bgGradient.addColorStop(1, '#0f3460');
+      // Clear with cached gradient background
       ctx.fillStyle = bgGradient;
       ctx.fillRect(0, 0, w, h);
 
@@ -141,11 +142,7 @@ const GradientShaderCard: React.FC = () => {
       }
       ctx.stroke();
 
-      // Draw gradient overlay
-      const gradOverlay = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.hypot(w, h) * 0.7);
-      gradOverlay.addColorStop(0, 'rgba(0, 255, 136, 0.15)');
-      gradOverlay.addColorStop(0.5, 'rgba(0, 136, 255, 0.1)');
-      gradOverlay.addColorStop(1, 'rgba(10, 26, 46, 0.3)');
+      // Draw cached gradient overlay
       ctx.fillStyle = gradOverlay;
       ctx.fillRect(0, 0, w, h);
 
@@ -185,6 +182,7 @@ const GradientShaderCard: React.FC = () => {
 
       // Draw interactive center glow when hovered
       if (isHovered) {
+        // Create glow gradient (only when hovered)
         const glow = ctx.createRadialGradient(mouseRef.current.x, mouseRef.current.y, 0, mouseRef.current.x, mouseRef.current.y, 100);
         glow.addColorStop(0, 'rgba(0, 255, 136, 0.3)');
         glow.addColorStop(1, 'rgba(0, 136, 255, 0)');

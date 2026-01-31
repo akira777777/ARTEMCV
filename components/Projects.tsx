@@ -47,7 +47,7 @@ const Projects: React.FC = () => {
                 <img 
                   src={project.image} 
                   alt={project.title} 
-                  className="w-full h-full object-cover brightness-80 group-hover:brightness-110 group-hover:scale-105 transition-all duration-1000 ease-out will-change-transform"
+                  className="w-full h-full object-cover brightness-80 group-hover:brightness-110 group-hover:scale-105 transition-all duration-1000 ease-out"
                   loading="lazy"
                   decoding="async"
                 />
