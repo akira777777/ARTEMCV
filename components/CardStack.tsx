@@ -44,7 +44,7 @@ export const CardStack: React.FC = () => {
   const rotate = useTransform(x, [-200, 200], [-15, 15]);
   const opacity = useTransform(x, [-200, 0, 200], [0.5, 1, 0.5]);
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent, info: PanInfo) => {
     if (Math.abs(info.offset.x) > 100) {
       // Remove card and add to end
       const newCards = [...cards.slice(1), cards[0]];

@@ -2,6 +2,9 @@ import React, { useMemo } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { useReducedMotion } from '../lib/hooks';
 
+// Memoized style objects for performance
+const TEXT_REVEAL_CONTAINER_STYLE = { perspective: 1000 } as const;
+
 type RevealMode = 'letters' | 'words' | 'lines';
 
 interface TextRevealProps {
@@ -148,7 +151,7 @@ const TextReveal: React.FC<TextRevealProps> = ({
       initial="hidden"
       whileInView="visible"
       viewport={{ once, margin: '-50px' }}
-      style={{ perspective: 1000 }}
+      style={TEXT_REVEAL_CONTAINER_STYLE}
     >
       {elements.map(({ key, content }, index) => (
         <motion.span

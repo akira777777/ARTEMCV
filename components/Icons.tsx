@@ -1,4 +1,4 @@
-import React from 'react';
+import devLog from '../lib/logger';
 
 // Icon component props
 interface IconProps {
@@ -58,7 +58,7 @@ export const Icon: React.FC<IconProps> = ({
   const pathData = ICON_PATHS[name];
   
   if (!pathData) {
-    console.warn(`Icon "${name}" not found`);
+    devLog.warn(`Icon "${name}" not found`);
     return (
       <svg 
         className={`${SIZE_CLASSES[size]} ${className}`} 

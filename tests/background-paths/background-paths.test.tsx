@@ -6,14 +6,18 @@ import BackgroundPaths from '../../components/BackgroundPaths';
 
 
 // Mock MagneticButton component
-vi.mock('../../components/MagneticButton', () => ({
-  __esModule: true,
-  default: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props} data-testid="magnetic-button">
-      {children}
-    </button>
-  ),
-}));
+vi.mock('../../components/MagneticButton', async () => {
+  const actual = await vi.importActual('../../components/MagneticButton');
+  return {
+    __esModule: true,
+    ...actual,
+    default: ({ children, onClick, ...props }: any) => (
+      <button onClick={onClick} {...props} data-testid="magnetic-button">
+        {children}
+      </button>
+    ),
+  };
+});
 
 describe('BackgroundPaths Component', () => {
   beforeEach(() => {

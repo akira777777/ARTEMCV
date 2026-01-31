@@ -1,5 +1,6 @@
 import React from 'react';
 import { useI18n } from '../i18n';
+import devLog from '../lib/logger';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -22,7 +23,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    devLog.error('Error caught by boundary:', error, errorInfo);
   }
 
   resetError = () => {

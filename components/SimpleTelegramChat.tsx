@@ -2,6 +2,10 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, X, Send, Loader2, Maximize2, Minimize2 } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { useFetchWithTimeout } from '../lib/hooks';
+import devLog from '../lib/logger';
+
+// Memoized style objects for performance
+const SCROLLBAR_STYLE = { scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' } as const;
 
 interface Message {
   id: string;
@@ -122,7 +126,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       if (!res.ok) {
         // Local dev mode may return 404
         if (res.status === 404 && window.location.hostname === 'localhost') {
-          console.warn('API endpoint not available in dev mode.');
+          devLog.warn('API endpoint not available in dev mode.');
         } else {
           const err = await res.text().catch(() => '');
           throw new Error(err || `Failed to send (status ${res.status})`);
@@ -139,14 +143,14 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       }]);
 
       lastSubmitRef.current = now;
-    } catch (err: any) {
-      console.error('Error sending message:', err);
+    } catch (err: unknown) {
+      devLog.error('Error sending message:', err);
       
       let errorText = t('chat.error.sending') || 'Error sending message';
-      if (err?.name === 'AbortError') {
+      if ((err as Error)?.name === 'AbortError') {
         errorText = t('chat.error.timeout') || 'Timeout sending message. Please try again.';
-      } else if (err?.message) {
-        errorText = err.message;
+      } else if ((err as Error)?.message) {
+        errorText = (err as Error).message;
       }
       
       setError(errorText);
@@ -208,7 +212,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50" style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' }}>
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50" style={SCROLLBAR_STYLE}>
           {messages.map((msg) => (
             <div 
               key={msg.id} 
