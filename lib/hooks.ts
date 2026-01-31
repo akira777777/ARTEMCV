@@ -4,12 +4,13 @@ import { useState, useEffect, useCallback, useRef } from 'react';
  * Hook to detect user's preference for reduced motion
  */
 export function useReducedMotion(): boolean {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  });
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-
     const handler = (event: MediaQueryListEvent) => {
       setPrefersReducedMotion(event.matches);
     };
@@ -119,7 +120,10 @@ export function useInView(options?: IntersectionObserverInit) {
  * Hook for window size with debounced updates
  */
 export function useWindowSize() {
-  const [size, setSize] = useState({ width: 0, height: 0 });
+  const [size, setSize] = useState(() => {
+    if (typeof window === 'undefined') return { width: 0, height: 0 };
+    return { width: window.innerWidth, height: window.innerHeight };
+  });
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -131,8 +135,6 @@ export function useWindowSize() {
       }, 100);
     };
 
-    // Set initial size immediately
-    setSize({ width: window.innerWidth, height: window.innerHeight });
     window.addEventListener('resize', handler, { passive: true });
     return () => {
       window.removeEventListener('resize', handler);
