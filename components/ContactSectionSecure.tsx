@@ -10,8 +10,12 @@ interface ContactFormData {
   hp?: string;
 }
 
-const ContactSectionSecure: React.FC = () => {
-  const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID; // optional; backend may override
+interface ContactSectionSecureProps {
+  id?: string;
+}
+
+const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'contact' }) => {
+  const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
   const lastSubmitRef = useRef<number>(0);
 
   const [formData, setFormData] = useState<ContactFormData>({
@@ -41,7 +45,7 @@ const ContactSectionSecure: React.FC = () => {
       return 'Message is too short. Please provide more details.';
     }
     if (formData.hp && formData.hp.trim().length > 0) {
-      return null; // silently succeed
+      return null;
     }
     const now = Date.now();
     if (lastSubmitRef.current && now - lastSubmitRef.current < 10_000) {
@@ -81,8 +85,7 @@ const ContactSectionSecure: React.FC = () => {
       clearTimeout(timeout);
 
       if (!res.ok) {
-        // Dev environment fallback (localhost doesn't have serverless functions)
-        if (res.status === 404 && window.location.hostname === 'localhost') {
+        if (res.status === 404 && globalThis.location.hostname === 'localhost') {
           console.warn('API endpoint not available in dev mode. Form would send on Vercel.');
         } else {
           const err = await res.text().catch(() => '');
@@ -107,7 +110,7 @@ const ContactSectionSecure: React.FC = () => {
   }, [formData, validate, TELEGRAM_CHAT_ID]);
 
   return (
-    <section className="py-32 px-6 lg:px-12">
+    <section id={id} className="py-32 px-6 lg:px-12">
       <div className="max-w-3xl mx-auto">
         <div className="mb-16 text-center">
           <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter">Get In Touch</h2>
@@ -143,9 +146,9 @@ const ContactSectionSecure: React.FC = () => {
           </button>
 
           {submitted && (
-            <div role="status" aria-live="polite" className="p-4 bg-green-500/10 border border-green-500/50 rounded-xl text-green-400 text-center font-bold animate-in fade-in">
+            <output aria-live="polite" className="p-4 bg-green-500/10 border border-green-500/50 rounded-xl text-green-400 text-center font-bold animate-in fade-in block">
               ✓ Message sent! I'll get back to you soon.
-            </div>
+            </output>
           )}
           {error && (
             <div role="alert" aria-live="assertive" className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-center font-bold animate-in fade-in">

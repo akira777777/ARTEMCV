@@ -10,11 +10,11 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "strict": true,
     "types": [
       "node",
-      "@vercel/node"
+      "vitest/globals"
     ],
     "moduleResolution": "bundler",
     "isolatedModules": true,
@@ -29,7 +29,16 @@
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
+  "include": [
+    "*.ts",
+    "*.tsx",
+    "components/**/*",
+    "lib/**/*",
+    "tests/**/*",
+    "api/**/*"
+  ],
   "exclude": [
-    "portfolio-next"
+    "node_modules",
+    "dist"
   ]
 }

@@ -10,7 +10,13 @@ const Projects: React.FC = () => {
     <section id="work" className="scroll-mt-24 py-32 border-t border-white/5 bg-[#0a0a0a] relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.04),transparent_60%)]" aria-hidden />
       <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-16 relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+        <motion.div
+          className="flex flex-col md:flex-row md:items-end justify-between gap-8"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
           <div className="space-y-3">
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full floating-badge accent-pill text-zinc-400">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -18,7 +24,7 @@ const Projects: React.FC = () => {
             </div>
             <h2 className="text-4xl md:text-6xl font-serif">{t('projects.title')}</h2>
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {PROJECTS.map((project, idx) => (
@@ -32,7 +38,7 @@ const Projects: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.55, ease: 'easeOut', delay: idx * 0.05 }}
-              whileHover={{ y: -6 }}
+              whileHover={{ y: -8, rotate: -0.3 }}
             >
               <div className="aspect-[4/3] rounded-[3rem] overflow-hidden bg-zinc-900 border border-white/10 relative shine-border group/image">
                 <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-700" aria-hidden />

@@ -1,71 +1,61 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0" />
-    <meta name="apple-mobile-web-app-capable" content="true" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Full Stack Developer & Designer specializing in React, TypeScript, and modern web architecture. Building high-performance applications with exceptional user experiences." />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Artem Mikhailov - Full Stack Developer specializing in React, Node.js, TypeScript, and PostgreSQL. Building scalable web applications with modern technologies." />
-    <meta name="keywords" content="Full Stack Developer, React, Node.js, TypeScript, PostgreSQL, Web Developer, Frontend, Backend, Prague, Czechia" />
-    <meta name="author" content="Artem Mikhailov" />
-    <meta name="robots" content="index, follow" />
-    <meta name="apple-mobile-web-app-title" content="Artem Mikhailov" />
     
-    <!-- Open Graph / Facebook -->
+    <!-- SEO & Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://artemcv.vercel.app/" />
-    <meta property="og:title" content="Artem Mikhailov | Full Stack Developer" />
-    <meta property="og:description" content="Full Stack Developer specializing in React, Node.js, TypeScript, and PostgreSQL. Building scalable web applications with modern technologies." />
-    <meta property="og:image" content="https://artemcv.vercel.app/og-image.png" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="Artem Mikhailov Portfolio" />
-    
-    <!-- Twitter -->
+    <meta property="og:title" content="ARTEM.DEV — Full Stack Developer & Designer" />
+    <meta property="og:description" content="Full Stack Developer specializing in React, TypeScript, Node.js, and modern architecture. Based in Prague." />
+    <meta property="og:url" content="https://artem.dev" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://artemcv.vercel.app/" />
-    <meta name="twitter:title" content="Artem Mikhailov | Full Stack Developer" />
-    <meta name="twitter:description" content="Full Stack Developer specializing in React, Node.js, TypeScript, and PostgreSQL. Building scalable web applications with modern technologies." />
-    <meta name="twitter:image" content="https://artemcv.vercel.app/og-image.png" />
     
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://artemcv.vercel.app/" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     
-    <title>Artem Mikhailov | Full Stack Developer | React, Node.js, PostgreSQL</title>
+    <!-- Font Optimization -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Structured Data JSON-LD -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Artem Mikhailov",
-      "url": "https://artemcv.vercel.app/",
-      "image": "https://artemcv.vercel.app/avatar.jpg",
-      "sameAs": [
-        "https://github.com/akira777777",
-        "https://t.me/younghustle45"
-      ],
-      "jobTitle": "Full Stack Developer",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Freelance"
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Prague",
-        "addressCountry": "CZ"
-      },
-      "email": "fear75412@gmail.com",
-      "telephone": "+420737500587",
-      "knowsAbout": ["React", "Node.js", "TypeScript", "PostgreSQL", "Next.js", "Python", "MongoDB", "Tailwind CSS"]
-    }
-    </script>
+    <!-- Critical Inline Styles -->
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        font-family: 'Syne', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Hide Scrollbar (cross-browser) */
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Reduce motion for accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
+    </style>
+    
+    <title>ARTEM.DEV — Full Stack Developer & Designer</title>
   </head>
-  <body class="antialiased selection:bg-white selection:text-black">
+  <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

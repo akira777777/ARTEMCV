@@ -1,88 +1,85 @@
 import path from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
-import { visualizer } from 'rollup-plugin-visualizer';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
-    return {
-      server: {
-        port: 3000,
-        host: '0.0.0.0',
-        middlewareMode: false,
-        fs: {
-          allow: ['..'],
-        },
-      },
-      preview: {
-        port: 4173,
-        host: '0.0.0.0',
-      },
-      plugins: [
-        react({
-          jsxRuntime: 'automatic',
-        }),
-        visualizer({
-          filename: 'dist/stats.html',
-          template: 'treemap',
-          gzipSize: true,
-          brotliSize: true,
-          open: false,
-        })
-      ],
-      define: {
-        'process.env.API_KEY': JSON.stringify(env.VITE_API_KEY || env.GEMINI_API_KEY || env.API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.VITE_API_KEY || env.GEMINI_API_KEY || env.API_KEY),
-        'import.meta.env.VITE_API_KEY': JSON.stringify(env.VITE_API_KEY || env.GEMINI_API_KEY || env.API_KEY)
-      },
-      resolve: {
-        alias: {
-          '@': path.resolve(__dirname, '.'),
-        },
-      },
-      base: '/',
-      build: {
-        target: 'ES2022',
-        minify: 'terser',
-        terserOptions: {
-          compress: {
-            drop_console: mode === 'production',
-            drop_debugger: true,
+  const env = loadEnv(mode, '.', '');
+  const apiKey = env.VITE_API_KEY || env.GEMINI_API_KEY || env.API_KEY;
+  const isProd = mode === 'production';
+  
+  return {
+    server: {
+      port: 3000,
+      host: '0.0.0.0',
+    },
+    
+    plugins: [react()],
+    
+    build: {
+      // Use esbuild for minification (faster, built-in)
+      minify: 'esbuild',
+      
+      // esbuild options for production
+      esbuildOptions: isProd ? {
+        drop: ['console', 'debugger'],
+        legalComments: 'none',
+      } : undefined,
+      
+      // Code splitting for better caching
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            react: ['react', 'react-dom'],
+            icons: ['lucide-react'],
           },
-          format: {
-            comments: false,
-          },
+          // Optimize chunk file names
+          chunkFileNames: isProd ? 'assets/[hash].js' : 'assets/[name]-[hash].js',
+          entryFileNames: isProd ? 'assets/[hash].js' : 'assets/[name]-[hash].js',
+          assetFileNames: isProd ? 'assets/[hash].[ext]' : 'assets/[name]-[hash].[ext]',
         },
-        rollupOptions: {
-          output: {
-            manualChunks(id) {
-              if (id.includes('node_modules')) {
-                if (id.includes('react')) return 'vendor-react';
-                if (id.includes('google') || id.includes('genai')) return 'vendor-gemini';
-                if (id.includes('framer')) return 'vendor-motion';
-                if (id.includes('three')) return 'vendor-three';
-                return 'vendor';
-              }
-              if (id.includes('services')) return 'services';
-              if (id.includes('components')) return 'components';
-            },
-            entryFileNames: 'js/[name]-[hash].js',
-            chunkFileNames: 'js/[name]-[hash].js',
-            assetFileNames: ({ name }) => {
-              if (name?.endsWith('.css')) return 'css/[name]-[hash][extname]';
-              return '[name]-[hash][extname]';
-            },
-          },
-        },
-        reportCompressedSize: true,
-        chunkSizeWarningLimit: 800,
-        sourcemap: false,
-        cssCodeSplit: true,
-        assetsInlineLimit: 4096,
       },
-      optimizeDeps: {
-        include: ['react', 'react-dom', 'framer-motion'],
-        exclude: ['@google/genai'],
+      
+      // Report compressed size
+      reportCompressedSize: true,
+      sourcemap: false,
+      
+      // Optimize for modern browsers
+      target: 'ES2020',
+      
+      // CSS code splitting
+      cssCodeSplit: true,
+      
+      // Chunk size warnings
+      chunkSizeWarningLimit: 500,
+    },
+    
+    // Optimize dependencies
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'lucide-react'],
+    },
+    
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./tests/setup.ts'],
+      globals: true,
+      clearMocks: true,
+      coverage: {
+        provider: 'v8',
+        reporter: ['text', 'json', 'html'],
       },
-    };
+      // Include test files
+      include: ['tests/**/*.{test,spec}.{ts,tsx}'],
+    },
+    
+    define: {
+      'process.env.API_KEY': JSON.stringify(apiKey),
+      'process.env.GEMINI_API_KEY': JSON.stringify(apiKey),
+    },
+    
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, '.'),
+      },
+    },
+  };
 });

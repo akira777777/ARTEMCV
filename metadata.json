@@ -1,8 +1,5 @@
 {
-  "name": "Brand Bible & Portfolio",
-  "description": "A comprehensive AI-powered Brand Identity Generator and professional portfolio showcasing fullstack development projects.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ]
+  "name": "Infinite Studio Portfolio",
+  "description": "A premium, dark-themed portfolio featuring smooth interactions, card-based layouts, and a minimal aesthetic inspired by high-end design studios.",
+  "requestFramePermissions": []
 }

@@ -20,7 +20,7 @@ const LanguageSwitcher: React.FC = () => {
           className={`px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest transition-all ${
             lang === l.code ? 'bg-white text-black border-white' : 'text-zinc-500 hover:text-white border-white/10'
           }`}
-          aria-pressed={lang === l.code}
+          aria-pressed={lang === l.code ? 'true' : 'false'}
           title={`Switch to ${l.label}`}
         >
           {l.label}
