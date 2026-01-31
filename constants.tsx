@@ -9,7 +9,7 @@ export const PROJECTS: Project[] = [
     techStack: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS'],
     liveLink: 'https://barber-am.vercel.app/',
     githubLink: 'https://github.com/akira777777',
-    image: '/barber.png'
+    image: '/barber.webp'
   },
   {
     id: '2',
@@ -18,7 +18,7 @@ export const PROJECTS: Project[] = [
     techStack: ['Next.js', 'Framer Motion', 'Tailwind', 'Supabase'],
     liveLink: 'https://dental-clinic-vakalova.vercel.app/',
     githubLink: 'https://github.com/akira777777',
-    image: '/dental.png'
+    image: '/dental.webp'
   },
   {
     id: '3',
@@ -27,7 +27,7 @@ export const PROJECTS: Project[] = [
     techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'],
     liveLink: 'https://game-marketplace-seven.vercel.app/',
     githubLink: 'https://github.com/akira777777',
-    image: '/marketplace.png'
+    image: '/marketplace.webp'
   },
   {
     id: '4',
@@ -36,7 +36,7 @@ export const PROJECTS: Project[] = [
     techStack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Vercel'],
     liveLink: 'https://detailing-mu.vercel.app/',
     githubLink: 'https://github.com/akira777777',
-    image: '/detailing.png'
+    image: '/detailing.webp'
   }
 ];
 
@@ -48,10 +48,10 @@ export const SKILLS = [
 ];
 
 export const SERVICES = [
-  { name: 'service.web.title', desc: 'service.web.desc' },
-  { name: 'service.uiux.title', desc: 'service.uiux.desc' },
-  { name: 'service.api.title', desc: 'service.api.desc' },
-  { name: 'service.db.title', desc: 'service.db.desc' },
-  { name: 'service.perf.title', desc: 'service.perf.desc' },
-  { name: 'service.cloud.title', desc: 'service.cloud.desc' },
+  { name: 'service.1.name', desc: 'service.1.desc' },
+  { name: 'service.2.name', desc: 'service.2.desc' },
+  { name: 'service.3.name', desc: 'service.3.desc' },
+  { name: 'service.4.name', desc: 'service.4.desc' },
+  { name: 'service.5.name', desc: 'service.5.desc' },
+  { name: 'service.6.name', desc: 'service.6.desc' },
 ];

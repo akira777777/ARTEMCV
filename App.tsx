@@ -2,11 +2,11 @@ import React from 'react';
 import { I18nProvider } from './i18n';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
-import { WorkGallery } from './components/WorkGallery';
-import { About } from './components/About';
-import ContactSectionSecure from './components/ContactSectionSecure';
+const WorkGallery = React.lazy(() => import('./components/WorkGallery').then(m => ({ default: m.WorkGallery })));
+const About = React.lazy(() => import('./components/About').then(m => ({ default: m.About })));
+const ContactSectionSecure = React.lazy(() => import('./components/ContactSectionSecure'));
+const SimpleTelegramChat = React.lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
 import { Footer } from './components/Footer';
-import { SimpleTelegramChat } from './components/SimpleTelegramChat';
 import { ScrollToTop } from './components/ScrollToTop';
 import ScrollProgress from './components/ScrollProgress';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -21,14 +21,18 @@ const App: React.FC = () => {
         <Navigation />
         <main id="main-content">
           <Hero />
-          <WorkGallery />
-          <About />
-          <ErrorBoundary>
-            <ContactSectionSecure id="contact" />
-          </ErrorBoundary>
+          <React.Suspense fallback={<div className="h-96" />}>
+            <WorkGallery />
+            <About />
+            <ErrorBoundary>
+              <ContactSectionSecure id="contact" />
+            </ErrorBoundary>
+          </React.Suspense>
         </main>
         <Footer />
-        <SimpleTelegramChat />
+        <React.Suspense fallback={null}>
+          <SimpleTelegramChat />
+        </React.Suspense>
         <ScrollToTop />
       </div>
     </I18nProvider>

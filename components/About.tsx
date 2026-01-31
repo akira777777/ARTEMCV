@@ -1,5 +1,5 @@
 import React from 'react';
-import { SKILLS } from '../constants';
+import { SKILLS, SERVICES } from '../constants';
 import { useI18n } from '../i18n';
 
 export const About: React.FC = React.memo(() => {
@@ -57,14 +57,7 @@ export const About: React.FC = React.memo(() => {
         <div id="services" className="mt-32 scroll-mt-24">
           <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-8 border-b border-white/10 pb-4">{t('about.offer')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { name: t('service.1.name'), desc: t('service.1.desc') },
-              { name: t('service.2.name'), desc: t('service.2.desc') },
-              { name: t('service.3.name'), desc: t('service.3.desc') },
-              { name: t('service.4.name'), desc: t('service.4.desc') },
-              { name: t('service.5.name'), desc: t('service.5.desc') },
-              { name: t('service.6.name'), desc: t('service.6.desc') },
-            ].map((service, index) => (
+            {SERVICES.map((service, index) => (
               <div key={service.name} className="service-card rounded-2xl px-6 py-5 group cursor-pointer transition-transform duration-500 hover:-translate-y-1">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xl font-display font-medium group-hover:text-neutral-300 transition-colors">
