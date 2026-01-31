@@ -16,16 +16,23 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+<<<<<<< Updated upstream
   background-color: transparent;
+=======
+  background-color: #000000;
+>>>>>>> Stashed changes
   overflow: visible;
   padding: 0;
   margin: 0 auto;
   position: relative;
+<<<<<<< Updated upstream
 }
 
 /* Inner sections should take full width of wrapper */
 .content-wrapper > section {
   width: 100%;
+=======
+>>>>>>> Stashed changes
 }
 
 html {
