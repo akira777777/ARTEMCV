@@ -1,54 +1,49 @@
-import React from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import React, { useRef, useEffect, useState } from 'react';
 import { useReducedMotion } from '../lib/hooks';
 
 const ScrollProgress: React.FC = () => {
   const prefersReducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll();
-  
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
+  const barRef = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(0);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const handleScroll = () => {
+      if (rafRef.current !== null) return;
+
+      rafRef.current = requestAnimationFrame(() => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollProgress = docHeight > 0 ? scrollTop / docHeight : 0;
+        setProgress(Math.min(1, Math.max(0, scrollProgress)));
+        rafRef.current = null;
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [prefersReducedMotion]);
 
   if (prefersReducedMotion) return null;
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 h-[3px] z-[100] origin-left"
+    <div
+      ref={barRef}
+      className="fixed top-0 left-0 right-0 h-1 z-[100] origin-left"
       style={{
-        scaleX,
         background: 'linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6, #ec4899)',
-        backgroundSize: '200% 100%',
+        width: `${progress * 100}%`,
+        transition: 'width 0.1s ease-out',
+        boxShadow: '0 0 10px rgba(16, 185, 129, 0.6)',
       }}
-    >
-      {/* Glow effect */}
-      <div 
-        className="absolute inset-0 blur-sm"
-        style={{
-          background: 'inherit',
-          opacity: 0.6,
-        }}
-      />
-      
-      {/* Shine effect */}
-      <motion.div
-        className="absolute inset-0"
-        style={{
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-          backgroundSize: '50% 100%',
-        }}
-        animate={{
-          backgroundPosition: ['0% 0%', '200% 0%'],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
-      />
-    </motion.div>
+    />
   );
 };
 
