@@ -54,11 +54,6 @@ const ContactSectionSecure: React.FC = () => {
     e.preventDefault();
     const validationError = validate();
     if (validationError) {
-      if (validationError === null) {
-        setSubmitted(true);
-        setTimeout(() => setSubmitted(false), 3000);
-        return;
-      }
       setError(validationError);
       return;
     }
@@ -162,9 +157,9 @@ const ContactSectionSecure: React.FC = () => {
         <div className="mt-16 pt-16 border-t border-white/10">
           <p className="text-center text-zinc-400 mb-8">Or reach out through:</p>
           <div className="flex justify-center gap-6 flex-wrap">
-            <a href="mailto:contact@example.com" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="Send email">📧 Email</a>
+            <a href="mailto:fear75412@gmail.com" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="Send email">📧 Email</a>
             <a href="https://t.me/younghustle45" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="Message on Telegram">💬 Telegram</a>
-            <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="Connect on LinkedIn">🔗 LinkedIn</a>
+            <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="View GitHub profile">💻 GitHub</a>
           </div>
         </div>
       </div>

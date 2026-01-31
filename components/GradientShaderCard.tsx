@@ -48,6 +48,17 @@ const GradientShaderCard: React.FC = () => {
     gradOverlay.addColorStop(0.5, 'rgba(0, 136, 255, 0.1)');
     gradOverlay.addColorStop(1, 'rgba(10, 26, 46, 0.3)');
 
+    // Grid precomputation
+    const gridSize = 40;
+    const xValues: number[] = [];
+    const yValues: number[] = [];
+    for (let x = 0; x < w; x += gridSize) xValues.push(x);
+    for (let y = 0; y < h; y += gridSize) yValues.push(y);
+    const wavePartX = new Float32Array(xValues.length);
+    const wavePartY = new Float32Array(yValues.length);
+    const lineDispX = new Float32Array(xValues.length);
+    const lineDispY = new Float32Array(yValues.length);
+
     // Create initial particle emitter
     const createParticles = (x: number, y: number, count: number = 3) => {
       const colors = ['#20B5B5', '#0088FF', '#209B58', '#00FF88'];

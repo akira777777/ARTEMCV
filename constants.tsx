@@ -8,7 +8,7 @@ export const PROJECTS: Project[] = [
     description: 'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',
     techStack: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS'],
     liveLink: 'https://barber-auto-copilot-prepare-deploy.vercel.app/',
-    githubLink: '#',
+    githubLink: 'https://github.com/akira777777',
     image: '/barber.webp'
   },
   {
@@ -17,7 +17,7 @@ export const PROJECTS: Project[] = [
     description: 'Лендинг и запись к врачу: каталог услуг, интерактивные планы лечения, отзывы пациентов. Уделено внимание доступности и скорости загрузки.',
     techStack: ['Next.js', 'Framer Motion', 'Tailwind', 'Supabase'],
     liveLink: 'https://dental-clinic-vakalova.vercel.app/',
-    githubLink: '#',
+    githubLink: 'https://github.com/akira777777',
     image: '/dental.webp'
   },
   {
@@ -26,8 +26,26 @@ export const PROJECTS: Project[] = [
     description: 'Интернет-магазин игр: фильтры по жанрам/платформам, отзывы, управление складом и мгновенная выдача ключей. Сделан с акцентом на быстроту поиска.',
     techStack: ['React', 'Redux Toolkit', 'FastAPI', 'MongoDB', 'Python'],
     liveLink: 'https://game-store-snowy-rho.vercel.app/',
-    githubLink: '#',
+    githubLink: 'https://github.com/akira777777',
     image: '/game.webp'
+  },
+  {
+    id: '4',
+    title: 'Game Marketplace',
+    description: 'Современный маркетплейс игр с каталогом, корзиной покупок, системой фильтрации и адаптивным интерфейсом. Реализованы анимации и плавные переходы.',
+    techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'],
+    liveLink: 'https://game-marketplace-seven.vercel.app/',
+    githubLink: 'https://github.com/akira777777',
+    image: '/marketplace.webp'
+  },
+  {
+    id: '5',
+    title: 'Detailing Service',
+    description: 'Лендинг для детейлинг-сервиса с галереей работ, формой записи, калькулятором услуг и интерактивными элементами. Оптимизирован для мобильных устройств.',
+    techStack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Vercel'],
+    liveLink: 'https://detailing-mu.vercel.app/',
+    githubLink: 'https://github.com/akira777777',
+    image: '/detailing.webp'
   }
 ];
 
