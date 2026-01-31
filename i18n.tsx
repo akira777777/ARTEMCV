@@ -355,9 +355,14 @@ interface I18nCtx {
 const I18nContext = createContext<I18nCtx | null>(null);
 
 const detect = (): Lang => {
-  const fromStorage = localStorage.getItem('lang') as Lang | null;
-  if (fromStorage && ['en', 'ru', 'cs'].includes(fromStorage)) return fromStorage;
-  const nav = navigator.language.toLowerCase();
+  if (typeof window === 'undefined') return 'en';
+  try {
+    const fromStorage = localStorage.getItem('lang') as Lang | null;
+    if (fromStorage && ['en', 'ru', 'cs'].includes(fromStorage)) return fromStorage;
+  } catch (e) {
+    // localStorage might be blocked
+  }
+  const nav = (navigator.language || 'en').toLowerCase();
   if (nav.startsWith('cs')) return 'cs';
   if (nav.startsWith('ru')) return 'ru';
   return 'en';

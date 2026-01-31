@@ -11,11 +11,14 @@ interface TrailPoint {
 const TRAIL_LENGTH = 12;
 const SPRING_CONFIG = { damping: 25, stiffness: 300, mass: 0.5 };
 
+// Pre-calculate hues to avoid math in animation loop
+const HUES = Array.from({ length: TRAIL_LENGTH }, (_, i) => 160 + (i / TRAIL_LENGTH) * 100);
+
 const CursorTrail: React.FC = () => {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const trailRef = useRef<TrailPoint[]>([]);
-  const rafRef = useRef<number>(undefined);
+  const rafRef = useRef<number | undefined>(undefined);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const mouseX = useMotionValue(0);
@@ -63,24 +66,26 @@ const CursorTrail: React.FC = () => {
       const currentX = springX.get();
       const currentY = springY.get();
 
-      // Update trail positions
-      for (let i = trailRef.current.length - 1; i > 0; i--) {
-        trailRef.current[i] = {
-          x: trailRef.current[i - 1].x,
-          y: trailRef.current[i - 1].y,
-          opacity: 1 - (i / TRAIL_LENGTH),
-        };
+      // Update trail positions by reusing objects (reduces GC pressure)
+      const trail = trailRef.current;
+      for (let i = TRAIL_LENGTH - 1; i > 0; i--) {
+        const p = trail[i];
+        const prev = trail[i - 1];
+        p.x = prev.x;
+        p.y = prev.y;
+        p.opacity = 1 - (i / TRAIL_LENGTH);
       }
-      trailRef.current[0] = { x: currentX, y: currentY, opacity: 1 };
+      const p0 = trail[0];
+      p0.x = currentX;
+      p0.y = currentY;
+      p0.opacity = 1;
 
       // Draw gradient trail
-      for (let i = trailRef.current.length - 1; i >= 0; i--) {
-        const point = trailRef.current[i];
+      for (let i = TRAIL_LENGTH - 1; i >= 0; i--) {
+        const point = trail[i];
         const size = (1 - i / TRAIL_LENGTH) * 8 + 2;
         const alpha = point.opacity * 0.6;
-
-        // Gradient from emerald to indigo
-        const hue = 160 + (i / TRAIL_LENGTH) * 100; // emerald to indigo
+        const hue = HUES[i];
         
         ctx.beginPath();
         ctx.arc(point.x, point.y, size, 0, Math.PI * 2);
@@ -89,11 +94,12 @@ const CursorTrail: React.FC = () => {
 
         // Glow effect
         if (i < 3) {
+          const glowSize = size * 3;
           ctx.beginPath();
           ctx.arc(point.x, point.y, size * 2, 0, Math.PI * 2);
           const gradient = ctx.createRadialGradient(
             point.x, point.y, 0,
-            point.x, point.y, size * 3
+            point.x, point.y, glowSize
           );
           gradient.addColorStop(0, `hsla(${hue}, 80%, 60%, ${alpha * 0.3})`);
           gradient.addColorStop(1, 'transparent');

@@ -26,7 +26,9 @@ Object.defineProperty(window, 'scrollTo', {
 });
 
 // Mock scrollIntoView
-Element.prototype.scrollIntoView = vi.fn();
+if (typeof Element !== 'undefined') {
+  Element.prototype.scrollIntoView = vi.fn();
+}
 
 // Mock IntersectionObserver
 class MockIntersectionObserver {

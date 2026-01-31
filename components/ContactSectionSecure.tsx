@@ -19,6 +19,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
   const { t } = useI18n();
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
   const lastSubmitRef = useRef<number>(0);
+  const fetchWithTimeout = useFetchWithTimeout(12_000);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -75,16 +76,11 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
         chatId: TELEGRAM_CHAT_ID
       };
 
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 12_000);
-
-      const res = await fetch('/api/send-telegram', {
+      const res = await fetchWithTimeout('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: controller.signal
+        body: JSON.stringify(payload)
       });
-      clearTimeout(timeout);
 
       if (!res.ok) {
         if (res.status === 404 && globalThis.location.hostname === 'localhost') {
@@ -109,17 +105,19 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
     } finally {
       setLoading(false);
     }
-  }, [formData, validate, TELEGRAM_CHAT_ID]);
+  }, [formData, validate, TELEGRAM_CHAT_ID, fetchWithTimeout]);
 
   return (
-    <section id={id} className="py-32 px-6 lg:px-12">
-      <div className="max-w-3xl mx-auto">
+    <section id={id} className="py-32 px-6 lg:px-12 relative overflow-hidden">
+      <div className="absolute -top-20 right-0 w-96 h-96 rounded-full bg-indigo-500/20 blur-3xl" aria-hidden />
+      <div className="absolute -bottom-20 left-0 w-96 h-96 rounded-full bg-purple-500/20 blur-3xl" aria-hidden />
+      <div className="max-w-3xl mx-auto relative z-10">
         <div className="mb-16 text-center">
           <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter">{t('contact.title')}</h2>
           <p className="text-lg text-zinc-400">{t('contact.subtitle')}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+        <form onSubmit={handleSubmit} className="space-y-6 backdrop-blur-sm bg-gradient-to-br from-white/5 to-transparent p-8 md:p-10 rounded-3xl border border-indigo-400/20 shadow-[0_0_40px_rgba(99,102,241,0.1)]" noValidate>
           <input type="text" name="hp" value={formData.hp || ''} onChange={handleChange} className="hidden" aria-hidden="true" tabIndex={-1} autoComplete="off" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -153,7 +151,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
             </output>
           )}
           {error && (
-            <div role="alert" aria-live="assertive" className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-center font-bold animate-in fade-in">
+            <div role="alert" aria-live="assertive" className="p-5 bg-gradient-to-r from-red-500/20 to-red-600/10 border border-red-500/50 rounded-2xl text-red-300 text-center font-bold animate-in fade-in shadow-[0_0_20px_rgba(239,68,68,0.2)]">
               ❌ {error}
             </div>
           )}

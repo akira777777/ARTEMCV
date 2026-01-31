@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, X, Send, Loader2, Maximize2, Minimize2 } from 'lucide-react';
 import { useI18n } from '../i18n';
+import { useFetchWithTimeout } from '../lib/hooks';
 
 interface Message {
   id: string;
@@ -13,6 +14,7 @@ const createId = () => globalThis.crypto?.randomUUID?.() ?? `msg-${Date.now()}-$
 
 export const SimpleTelegramChat: React.FC = () => {
   const { t, lang } = useI18n();
+  const fetchWithTimeout = useFetchWithTimeout(12_000);
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -97,10 +99,7 @@ export const SimpleTelegramChat: React.FC = () => {
 
     try {
       // Отправить в Telegram через /api/send-telegram
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 12_000);
-
-      const res = await fetch('/api/send-telegram', {
+      const res = await fetchWithTimeout('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -109,11 +108,8 @@ export const SimpleTelegramChat: React.FC = () => {
           subject: 'Chat Message',
           message: userMessage,
           chatId: import.meta.env.VITE_TELEGRAM_CHAT_ID // optional
-        }),
-        signal: controller.signal
+        })
       });
-      
-      clearTimeout(timeout);
 
       if (!res.ok) {
         // Локальный dev режим может вернуть 404
@@ -158,7 +154,7 @@ export const SimpleTelegramChat: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [inputValue, userName, loading]);
+  }, [inputValue, userName, loading, fetchWithTimeout]);
 
   return (
     <>
@@ -281,4 +277,6 @@ export const SimpleTelegramChat: React.FC = () => {
       </div>
     </>
   );
-};
+});
+
+SimpleTelegramChat.displayName = 'SimpleTelegramChat';

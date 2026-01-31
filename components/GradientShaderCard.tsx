@@ -48,6 +48,23 @@ const GradientShaderCard: React.FC = () => {
     gradOverlay.addColorStop(0.5, 'rgba(0, 136, 255, 0.1)');
     gradOverlay.addColorStop(1, 'rgba(10, 26, 46, 0.3)');
 
+    // Pre-render scanlines to offscreen canvas
+    const scanlineCanvas = document.createElement('canvas');
+    scanlineCanvas.width = canvas.width;
+    scanlineCanvas.height = canvas.height;
+    const sCtx = scanlineCanvas.getContext('2d');
+    if (sCtx) {
+      sCtx.scale(dpr, dpr);
+      sCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+      sCtx.lineWidth = 1;
+      sCtx.beginPath();
+      for (let y = 0; y < h; y += 4) {
+        sCtx.moveTo(0, y);
+        sCtx.lineTo(w, y);
+      }
+      sCtx.stroke();
+    }
+
     // Grid precomputation
     const gridSize = 40;
     const xValues: number[] = [];
@@ -61,7 +78,12 @@ const GradientShaderCard: React.FC = () => {
 
     // Create initial particle emitter
     const createParticles = (x: number, y: number, count: number = 3) => {
-      const colors = ['#20B5B5', '#0088FF', '#209B58', '#00FF88'];
+      const colors = [
+        'rgba(32, 181, 181', // #20B5B5
+        'rgba(0, 136, 255',   // #0088FF
+        'rgba(32, 155, 88',   // #209B58
+        'rgba(0, 255, 136'    // #00FF88
+      ];
       for (let i = 0; i < count; i++) {
         const angle = (Math.random() * Math.PI * 2);
         const speed = 1 + Math.random() * 2;
@@ -166,16 +188,20 @@ const GradientShaderCard: React.FC = () => {
         }
 
         const alpha = (p.life / p.maxLife) * 0.8;
-        ctx.fillStyle = p.color.replace(')', `, ${alpha})`).replace('rgb', 'rgba');
+        // Faster color formatting
+        ctx.fillStyle = `${p.color}, ${alpha})`;
         
-        ctx.shadowColor = p.color;
-        ctx.shadowBlur = 10;
+        // shadowBlur is extremely expensive, replaced with a glow arc
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
+        ctx.fillStyle = `${p.color}, ${alpha * 0.3})`;
+        ctx.fill();
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `${p.color}, ${alpha})`;
         ctx.fill();
       }
-
-      ctx.shadowColor = 'transparent';
     };
 
     const drawHoverGlow = () => {
@@ -195,14 +221,7 @@ const GradientShaderCard: React.FC = () => {
     };
 
     const drawScanlines = () => {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      for (let y = 0; y < h; y += 4) {
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-      }
-      ctx.stroke();
+      ctx.drawImage(scanlineCanvas, 0, 0, w, h);
     };
 
     const animate = () => {

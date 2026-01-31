@@ -55,3 +55,12 @@ export const SERVICES = [
   { name: 'service.perf.title', desc: 'service.perf.desc' },
   { name: 'service.cloud.title', desc: 'service.cloud.desc' },
 ];
+
+/**
+ * Common Tailwind CSS class names for form elements
+ * Use these constants to maintain consistency across components
+ */
+export const FORM_INPUT_CLASS = "w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all";
+export const FORM_TEXTAREA_CLASS = "w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all resize-none";
+export const FORM_BUTTON_PRIMARY_CLASS = "px-8 py-3 bg-white text-black rounded-xl font-medium hover:bg-white/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed";
+export const FORM_BUTTON_SECONDARY_CLASS = "px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all";
