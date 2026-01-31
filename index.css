@@ -9,23 +9,6 @@
 
 /* Fixed 1200px centered container */
 .content-wrapper {
-<<<<<<< Updated upstream
-  width: 100%;
-  height: min-content;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  max-width: 1200px;
-  overflow: visible;
-  z-index: 2;
-  padding: 0px;
-  align-content: center;
-  flex-wrap: wrap;
-  gap: 40px;
-  position: absolute;
-  border-radius: 0px 0px 0px 0px;
-=======
   width: var(--container-width);
   max-width: 100%;
   height: min-content;
@@ -38,7 +21,6 @@
   padding: 0;
   margin: 0 auto;
   position: relative;
->>>>>>> Stashed changes
 }
 
 html {
