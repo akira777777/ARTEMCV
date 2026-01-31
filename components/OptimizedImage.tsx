@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 
 interface OptimizedImageProps {
   src: string;
@@ -20,7 +20,7 @@ interface OptimizedImageProps {
  * - Lazy loading with intersection observer
  * - Loading states and error handling
  */
-const OptimizedImage: React.FC<OptimizedImageProps> = ({
+const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
   src,
   alt,
   className = '',
@@ -31,11 +31,14 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   placeholder = 'empty',
   onLoad,
   onError
-}) => {
+}, ref) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const internalImgRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Use the forwarded ref or fall back to internal ref
+  useImperativeHandle(ref, () => internalImgRef.current!, [internalImgRef]);
 
   // Determine WebP version of image if available
   const getWebPSrc = (originalSrc: string): string => {
@@ -146,7 +149,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
             />
           )}
           <img
-            ref={imgRef}
+            ref={internalImgRef}
             src={currentSrc}
             alt={alt}
             width={width}
@@ -173,6 +176,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       )}
     </div>
   );
-};
+});
+
+OptimizedImage.displayName = 'OptimizedImage';
 
 export default OptimizedImage;
