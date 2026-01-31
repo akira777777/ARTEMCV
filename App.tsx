@@ -11,24 +11,12 @@ import SkipLink from './components/SkipLink';
 import { SectionDivider } from './components/SectionDivider';
 
 // Lazy load heavy components
-<<<<<<< Updated upstream
 const SpotlightGallery = React.lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
 const About = React.lazy(() => import('./components/About').then(m => ({ default: m.About })));
 const CTASection = React.lazy(() => import('./components/CTASection').then(m => ({ default: m.CTASection })));
 const ContactSectionSecure = React.lazy(() => import('./components/ContactSectionSecure'));
 const SimpleTelegramChat = React.lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
 const InteractiveShowcase = React.lazy(() => import('./components/InteractiveShowcase'));
-=======
-const SpotlightGallery = lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
-const About = lazy(() => import('./components/About').then(m => ({ default: m.About })));
-const CTASection = lazy(() => import('./components/CTASection').then(m => ({ default: m.CTASection })));
-const ContactSectionSecure = lazy(() => import('./components/ContactSectionSecure'));
-const SimpleTelegramChat = lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
-const GradientShaderCard = lazy(() => import('./components/GradientShaderCard'));
-const InteractiveShowcase = lazy(() => import('./components/InteractiveShowcase'));
-const SpinningCube = lazy(() => import('./components/SpinningCube'));
-const InteractiveSection = lazy(() => import('./components/InteractiveElements').then(m => ({ default: m.InteractiveSection })));
->>>>>>> Stashed changes
 
 const App: React.FC = () => {
   return (
@@ -60,30 +48,10 @@ const App: React.FC = () => {
           <React.Suspense fallback={<div className="h-96" />}>
             <About />
           </React.Suspense>
-=======
->>>>>>> Stashed changes
           <SectionDivider variant="gradient" />
           <React.Suspense fallback={<div className="h-72" />}>
             <CTASection />
           </React.Suspense>
-<<<<<<< Updated upstream
-          <React.Suspense fallback={<div className="h-96" />}>
-            <ContactSectionSecure id="contact" />
-          <SectionDivider variant="dots" />
-=======
->>>>>>> Stashed changes
-          <ErrorBoundary>
-            <ContactSectionSecure id="contact" />
-          </ErrorBoundary>
-        </main>
-        <Footer />
-        <React.Suspense fallback={null}>
-          <SimpleTelegramChat />
-        </React.Suspense>
-        <ScrollToTop />
-      </div>
-    </I18nProvider>
-  );
 };
 
 export default App;
