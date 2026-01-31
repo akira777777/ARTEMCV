@@ -117,7 +117,7 @@ const CursorTrail: React.FC = () => {
     return () => {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouseMove);
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      if (rafRef.current !== undefined) cancelAnimationFrame(rafRef.current);
     };
   }, [prefersReducedMotion, isMobile, springX, springY, handleMouseMove]);
 

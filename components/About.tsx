@@ -1,5 +1,5 @@
 import React from 'react';
-import { SKILLS } from '../constants';
+import { SKILLS, SERVICES } from '../constants';
 import { useI18n } from '../i18n';
 
 export const About: React.FC = React.memo(() => {
