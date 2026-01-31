@@ -121,7 +121,8 @@ const translations: Record<Lang, Dict> = {
     'footer.version': 'Version',
     'footer.available': 'Available Q4 2026',
     'footer.location': 'London / Remote',
-    'footer.rights': '© All rights reserved 2026'
+    'footer.rights': '© All rights reserved 2026',
+    'footer.start_project': 'START A PROJECT'
 
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
@@ -284,7 +285,8 @@ const translations: Record<Lang, Dict> = {
     'footer.version': 'Версия',
     'footer.available': 'Доступен Q4 2026',
     'footer.location': 'Лондон / Удалённо',
-    'footer.rights': '© Все права защищены 2026'
+    'footer.rights': '© Все права защищены 2026',
+    'footer.start_project': 'НАЧАТЬ ПРОЕКТ'
 
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
@@ -444,7 +446,8 @@ const translations: Record<Lang, Dict> = {
     'footer.version': 'Verze',
     'footer.available': 'Dostupný Q4 2026',
     'footer.location': 'Londýn / Dálkově',
-    'footer.rights': '© Všechna práva vyhrazena 2026'
+    'footer.rights': '© Všechna práva vyhrazena 2026',
+    'footer.start_project': 'ZAHÁJIT PROJEKT'
 
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',

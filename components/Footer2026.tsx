@@ -14,7 +14,7 @@ export const Footer2026: React.FC = () => {
         <div className="relative group cursor-pointer">
           <div className="absolute inset-0 bg-indigo-500 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
           <button className="relative bg-white text-black px-12 py-6 rounded-full font-display text-2xl font-bold hover:scale-105 active:scale-95 transition-all">
-            START A PROJECT
+            {t('footer.start_project')}
           </button>
         </div>
 
