@@ -8,12 +8,14 @@ import ContactSectionSecure from './components/ContactSectionSecure';
 import { Footer } from './components/Footer';
 import { SimpleTelegramChat } from './components/SimpleTelegramChat';
 import { ScrollToTop } from './components/ScrollToTop';
+import ScrollProgress from './components/ScrollProgress';
 import ErrorBoundary from './components/ErrorBoundary';
 
 const App: React.FC = () => {
   return (
     <I18nProvider>
       <div className="bg-black min-h-screen text-white selection:bg-white selection:text-black">
+        <ScrollProgress />
         <Navigation />
         <main>
           <Hero />

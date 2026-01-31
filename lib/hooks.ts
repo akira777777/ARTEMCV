@@ -152,6 +152,30 @@ export function useIsMobile(breakpoint = 768) {
 }
 
 /**
+ * Hook for throttled callback
+ */
+export function useThrottle<T extends (...args: unknown[]) => void>(callback: T, delay: number): T {
+  const lastRan = useRef(Date.now());
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  return useCallback((...args: Parameters<T>) => {
+    const now = Date.now();
+    const remaining = delay - (now - lastRan.current);
+
+    if (remaining <= 0) {
+      lastRan.current = now;
+      callback(...args);
+    } else {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        lastRan.current = Date.now();
+        callback(...args);
+      }, remaining);
+    }
+  }, [callback, delay]) as T;
+}
+
+/**
  * Hook for debounced value
  */
 export function useDebounce<T>(value: T, delay: number): T {

@@ -1,14 +1,33 @@
-import React, { useRef, useState, useMemo, useEffect } from 'react';
+import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
 import { ArrowUpRight, X } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
+import { useReducedMotion } from '../lib/hooks';
 
 const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.memo(({ project, onClick }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  // Use IntersectionObserver to track visibility
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { rootMargin: '50px', threshold: 0 }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
+    if (prefersReducedMotion || !isInView) return;
+
     let animationFrameId: number;
     let ticking = false;
 
@@ -23,13 +42,9 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
 
       // Only calculate if the element is roughly in view
       if (rect.top < viewportHeight && rect.bottom > 0) {
-        // Calculate offset based on distance from center of viewport
-        const speed = 0.15; // Parallax speed factor
-        const centerOffset = (window.innerHeight / 2) - (rect.top + rect.height / 2);
+        const speed = 0.15;
+        const centerOffset = (viewportHeight / 2) - (rect.top + rect.height / 2);
         const translateY = centerOffset * speed;
-        
-        // Apply transform directly to avoid React render cycle overhead
-        // Scale 1.2 ensures the image covers the container even when shifted
         imgRef.current.style.transform = `translateY(${translateY}px) scale(1.2)`;
       }
 
@@ -44,7 +59,6 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    // Initial calculation
     updateParallax();
 
     return () => {
@@ -53,7 +67,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, []);
+  }, [isInView, prefersReducedMotion]);
 
   const primaryTag = project.techStack[0] || 'PROJECT';
 
@@ -63,8 +77,9 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
       onClick={onClick}
       aria-label={`Open ${project.title} details`}
       className="flex-none w-[85vw] md:w-[400px] lg:w-[500px] group snap-start cursor-pointer animate-fade-up text-left bg-transparent border-0"
+      style={{ contain: 'layout style' }}
     >
-      <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-sm mb-6 bg-neutral-900">
+      <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-sm mb-6 bg-neutral-900" style={{ contain: 'strict' }}>
          
          {/* Wrapper for Hover Animations (Scale & Brightness) 
              Separating this allows the inner image to handle Parallax transform independently.
