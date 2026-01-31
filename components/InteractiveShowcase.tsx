@@ -142,4 +142,4 @@ const InteractiveShowcase: React.FC = () => {
   );
 };
 
-export default InteractiveShowcase;
+export default React.memo(InteractiveShowcase);

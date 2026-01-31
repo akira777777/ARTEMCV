@@ -10,6 +10,7 @@ const translations: Record<Lang, Dict> = {
     'header.work': 'Work',
     'header.contact': 'Contact',
     'header.contact.telegram': 'Contact — Telegram',
+    'skip.content': 'Skip to content',
 
     'hero.badge': 'Motion-led design & engineering',
     'hero.title.line1': 'Full Stack Developer',
@@ -52,6 +53,7 @@ const translations: Record<Lang, Dict> = {
     'header.work': 'Работы',
     'header.contact': 'Контакт',
     'header.contact.telegram': 'Связаться — Telegram',
+    'skip.content': 'Перейти к контенту',
 
     'hero.badge': 'Дизайн и разработка с упором на motion',
     'hero.title.line1': 'Full Stack разработчик',
@@ -94,6 +96,7 @@ const translations: Record<Lang, Dict> = {
     'header.work': 'Práce',
     'header.contact': 'Kontakt',
     'header.contact.telegram': 'Kontakt — Telegram',
+    'skip.content': 'Přejít na obsah',
 
     'hero.badge': 'Design a inženýrství vedené motionem',
     'hero.title.line1': 'Full Stack vývojář',
@@ -158,17 +161,12 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try { localStorage.setItem('lang', l); } catch {}
   };
 
-  useEffect(() => {
-    // ensure initial storage
-    try { localStorage.setItem('lang', lang); } catch {}
-  }, [lang]);
-
   const t = useMemo(() => (key: string) => {
     const dict = translations[lang] || translations.en;
     return dict[key] ?? key;
   }, [lang]);
 
-  const value = useMemo(() => ({ lang, setLang, t }), [lang]);
+  const value = useMemo(() => ({ lang, setLang, t }), [lang, t]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 };
