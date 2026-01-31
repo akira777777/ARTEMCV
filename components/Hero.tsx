@@ -1,23 +1,16 @@
-<<<<<<< HEAD
-import React, { useState, useCallback, Suspense } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-=======
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
->>>>>>> aa50e13e283121bac91a04f9ba697ceef36c1aeb
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { ServicesGrid } from './ServicesGrid';
 
 // Lazy load ParticleText to prevent chunk duplication
 const ParticleText = React.lazy(() => import('./InteractiveElements').then(m => ({ default: m.ParticleText })));
-<<<<<<< HEAD
-=======
 
 // Floating orbs that follow cursor
-const FloatingOrb: React.FC<{ 
-  delay: number; 
-  size: number; 
+const FloatingOrb: React.FC<{
+  delay: number;
+  size: number;
   color: string;
   mouseX: number;
   mouseY: number;
@@ -43,7 +36,7 @@ const FloatingOrb: React.FC<{
         filter: 'blur(1px)',
       }}
       initial={{ opacity: 0, scale: 0 }}
-      animate={{ 
+      animate={{
         opacity: [0.6, 1, 0.6],
         scale: [1, 1.2, 1],
       }}
@@ -56,14 +49,14 @@ const FloatingOrb: React.FC<{
 };
 
 // Letter animation component for ARTEM
-const AnimatedLetter: React.FC<{ 
-  letter: string; 
+const AnimatedLetter: React.FC<{
+  letter: string;
   index: number;
   mouseX: number;
   mouseY: number;
 }> = ({ letter, index, mouseX, mouseY }) => {
   const baseDelay = index * 0.1;
-  
+
   return (
     <motion.span
       className="inline-block relative"
@@ -147,7 +140,6 @@ const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = ({ mouseX, mo
     </>
   );
 };
->>>>>>> aa50e13e283121bac91a04f9ba697ceef36c1aeb
 
 export const Hero: React.FC = React.memo(() => {
   const { t } = useI18n();
@@ -184,40 +176,9 @@ export const Hero: React.FC = React.memo(() => {
     >
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_70%)] pointer-events-none" aria-hidden="true" />
-      
-<<<<<<< HEAD
+
       {/* Holographic Abstract Sphere */}
       <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
-=======
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-      {/* Decorative Purple Star */}
-      <div className="hero-purple-star" aria-hidden="true" />
-=======
-      {/* Holographic Abstract Sphere */}
-      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
->>>>>>> Stashed changes
-=======
-      {/* Holographic Abstract Sphere */}
-      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
->>>>>>> Stashed changes
-=======
-      {/* Holographic Abstract Sphere */}
-      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
->>>>>>> Stashed changes
-=======
-      {/* Holographic Abstract Sphere */}
-      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
->>>>>>> Stashed changes
-=======
-      {/* Holographic Abstract Sphere */}
-      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
->>>>>>> Stashed changes
->>>>>>> aa50e13e283121bac91a04f9ba697ceef36c1aeb
 
       {/* Main Typography */}
       <div className="z-10 relative w-full max-w-6xl px-6">
@@ -312,15 +273,15 @@ export const Hero: React.FC = React.memo(() => {
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 1.5 + stat.delay, duration: 0.5 }}
-              whileHover={{ 
-                scale: 1.05, 
+              whileHover={{
+                scale: 1.05,
                 boxShadow: '0 0 30px rgba(168, 85, 247, 0.3)',
                 borderColor: 'rgba(168, 85, 247, 0.5)',
               }}
               whileTap={{ scale: 0.95 }}
             >
               <stat.icon className={`w-6 h-6 mx-auto mb-2 ${stat.color} group-hover:scale-110 transition-transform`} aria-hidden="true" />
-              <motion.div 
+              <motion.div
                 className="text-2xl md:text-3xl font-black text-white"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -335,7 +296,7 @@ export const Hero: React.FC = React.memo(() => {
       </aside>
 
       {/* Interactive Elements Section */}
-      <motion.div 
+      <motion.div
         className="relative w-full max-w-6xl py-12 space-y-12"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
