@@ -13,37 +13,53 @@ export const Navigation: React.FC = () => {
   const [active, setActive] = useState('HOME');
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollYRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Determine scroll direction and toggle visibility
-      if (currentScrollY < 50) {
-        setIsVisible(true); // Always show at top
-      } else if (currentScrollY > lastScrollYRef.current) {
-        setIsVisible(false); // Hide when scrolling down
-      } else {
-        setIsVisible(true); // Show when scrolling up
+      // Cancel any pending animation frame to prevent multiple updates
+      if (rafRef.current !== null) {
+        return;
       }
-      lastScrollYRef.current = currentScrollY;
 
-      // Active Link Logic
-      for (const item of navItems) {
-        const sectionId = item.href.substring(1);
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // Adjust detection zone for top header
-          if (rect.top >= -100 && rect.top <= 300) {
-            setActive(item.label);
+      rafRef.current = requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+
+        // Determine scroll direction and toggle visibility
+        if (currentScrollY < 50) {
+          setIsVisible(true); // Always show at top
+        } else if (currentScrollY > lastScrollYRef.current) {
+          setIsVisible(false); // Hide when scrolling down
+        } else {
+          setIsVisible(true); // Show when scrolling up
+        }
+        lastScrollYRef.current = currentScrollY;
+
+        // Active Link Logic
+        for (const item of navItems) {
+          const sectionId = item.href.substring(1);
+          const element = document.getElementById(sectionId);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            // Adjust detection zone for top header
+            if (rect.top >= -100 && rect.top <= 300) {
+              setActive(item.label);
+              break; // Exit early once active section is found
+            }
           }
         }
-      }
+
+        rafRef.current = null;
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, []);
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

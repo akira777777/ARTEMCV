@@ -3,16 +3,20 @@ import { ArrowUpRight, X } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 
-const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ project, onClick }) => {
+const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.memo(({ project, onClick }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     let animationFrameId: number;
+    let ticking = false;
 
     const updateParallax = () => {
-      if (!containerRef.current || !imgRef.current) return;
+      if (!containerRef.current || !imgRef.current) {
+        ticking = false;
+        return;
+      }
       
       const rect = containerRef.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
@@ -28,19 +32,26 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
         // Scale 1.2 ensures the image covers the container even when shifted
         imgRef.current.style.transform = `translateY(${translateY}px) scale(1.2)`;
       }
+
+      ticking = false;
     };
 
     const onScroll = () => {
-       animationFrameId = requestAnimationFrame(updateParallax);
+      if (!ticking) {
+        animationFrameId = requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
     // Initial calculation
     updateParallax();
 
     return () => {
       window.removeEventListener('scroll', onScroll);
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
   }, []);
 
@@ -98,7 +109,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
       </div>
     </button>
   );
-};
+});
 
 export const WorkGallery: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
