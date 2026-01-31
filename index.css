@@ -8,6 +8,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Account for fixed header */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -89,6 +90,16 @@ button {
   touch-action: manipulation;
 }
 
+/* Improve focus visibility for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* Optimize for high DPI screens */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   body {
@@ -103,6 +114,18 @@ button {
   }
   body {
     overflow-x: hidden;
+  }
+  
+  /* Reduce animation complexity on mobile */
+  .float-slow,
+  .float-slower {
+    animation: none;
+  }
+  
+  /* Optimize images on mobile */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
 }
 
