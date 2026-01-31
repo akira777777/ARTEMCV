@@ -21,7 +21,7 @@ export const Hero: React.FC = React.memo(() => {
       10: 'z-10',
       20: 'z-20',
       30: 'z-30',
-    }),
+    } as const),
     []
   );
 
@@ -101,7 +101,7 @@ export const Hero: React.FC = React.memo(() => {
               ref={(el) => {
                 cardRefs.current[index] = el;
               }}
-              className={`absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden border border-white/5 transition-transform duration-700 ease-out group shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] ${zClassByValue[card.z] ?? 'z-10'}`}
+              className={`absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden border border-white/5 transition-transform duration-700 ease-out group shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] ${zClassByValue[card.z as keyof typeof zClassByValue] ?? 'z-10'}`}
             >
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
               <img

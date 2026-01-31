@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
 
-<<<<<<< Updated upstream
 // Mock localStorage
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
@@ -20,20 +19,15 @@ Object.defineProperty(window, 'localStorage', {
   writable: true,
 });
 
-=======
->>>>>>> Stashed changes
 // Mock window.scrollTo
 Object.defineProperty(window, 'scrollTo', {
   value: vi.fn(),
   writable: true,
 });
 
-<<<<<<< Updated upstream
 // Mock scrollIntoView
 Element.prototype.scrollIntoView = vi.fn();
 
-=======
->>>>>>> Stashed changes
 // Mock IntersectionObserver
 class MockIntersectionObserver {
   observe = vi.fn();
@@ -60,7 +54,6 @@ Object.defineProperty(window, 'matchMedia', {
   })),
   writable: true,
 });
-<<<<<<< Updated upstream
 
 // Mock ResizeObserver
 class MockResizeObserver {
@@ -73,5 +66,3 @@ Object.defineProperty(window, 'ResizeObserver', {
   value: MockResizeObserver,
   writable: true,
 });
-=======
->>>>>>> Stashed changes
