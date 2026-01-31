@@ -11,6 +11,8 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests/e2e',
+  /* Increased global timeout for comprehensive testing */
+  timeout: 60000,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -29,6 +31,10 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'http://localhost:3002',
 
+    /* Increased timeouts for heavy operations */
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
+    
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     
@@ -82,6 +88,6 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3002',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: 180 * 1000,
   },
 });

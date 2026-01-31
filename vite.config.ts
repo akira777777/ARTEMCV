@@ -39,7 +39,6 @@ export default defineConfig(({ mode }) => {
             react: ['react', 'react-dom'],
             icons: ['lucide-react'],
             motion: ['framer-motion'],
-            vendor: ['pg', 'dotenv'],
           },
           // Optimize chunk file names
           chunkFileNames: isProd ? 'assets/[name]-[hash:8].js' : 'assets/[name]-[hash].js',
@@ -58,7 +57,7 @@ export default defineConfig(({ mode }) => {
       
       // CSS optimizations
       cssCodeSplit: true,
-      cssMinify: 'lightningcss',
+      // cssMinify: 'lightningcss', // Temporarily disable due to compatibility issues
       
       // Chunk size warnings and limits
       chunkSizeWarningLimit: 300,
@@ -75,11 +74,9 @@ export default defineConfig(({ mode }) => {
         'react', 
         'react-dom', 
         'lucide-react',
-        'framer-motion',
-        'pg',
-        'dotenv'
+        'framer-motion'
       ],
-      exclude: [],
+      exclude: ['pg', 'dotenv'],
       esbuildOptions: {
         target: 'ES2020',
       },
@@ -109,4 +106,5 @@ export default defineConfig(({ mode }) => {
       },
     },
   };
+});
 });
