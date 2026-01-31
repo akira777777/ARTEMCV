@@ -196,8 +196,13 @@ export const Hero: React.FC = React.memo(() => {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       {/* Decorative Purple Star */}
       <div className="hero-purple-star" aria-hidden="true" />
+=======
+      {/* Holographic Abstract Sphere */}
+      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
+>>>>>>> Stashed changes
 =======
       {/* Holographic Abstract Sphere */}
       <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />

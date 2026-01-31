@@ -19,7 +19,11 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   background-color: transparent;
+=======
+  background-color: #000000;
+>>>>>>> Stashed changes
 =======
   background-color: #000000;
 >>>>>>> Stashed changes
@@ -36,11 +40,14 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 }
 
 /* Inner sections should take full width of wrapper */
 .content-wrapper > section {
   width: 100%;
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -661,6 +668,10 @@ textarea:focus-visible {
   height: 1275px;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  width: 1275px;
+>>>>>>> Stashed changes
 =======
   width: 1275px;
 >>>>>>> Stashed changes
@@ -679,7 +690,10 @@ textarea:focus-visible {
   pointer-events: none;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   opacity: 0.6;
@@ -722,6 +736,9 @@ textarea:focus-visible {
     opacity: 0.4;
   }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
