@@ -16,47 +16,73 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     
     build: {
-      // Use esbuild for minification (faster, built-in)
-      minify: 'esbuild',
-      
-      // esbuild options for production
-      esbuildOptions: isProd ? {
-        drop: ['console', 'debugger'],
-        legalComments: 'none',
+      // Use terser for better compression (smaller bundles)
+      minify: 'terser',
+          
+      // Advanced terser options for maximum compression
+      terserOptions: isProd ? {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log', 'console.info', 'console.debug'],
+        },
+        format: {
+          comments: false,
+        },
+        mangle: true,
       } : undefined,
-      
-      // Code splitting for better caching
+          
+      // Enhanced code splitting for better caching
       rollupOptions: {
         output: {
           manualChunks: {
             react: ['react', 'react-dom'],
             icons: ['lucide-react'],
             motion: ['framer-motion'],
+            vendor: ['pg', 'dotenv'],
           },
           // Optimize chunk file names
-          chunkFileNames: isProd ? 'assets/[hash].js' : 'assets/[name]-[hash].js',
-          entryFileNames: isProd ? 'assets/[hash].js' : 'assets/[name]-[hash].js',
-          assetFileNames: isProd ? 'assets/[hash].[ext]' : 'assets/[name]-[hash].[ext]',
+          chunkFileNames: isProd ? 'assets/[name]-[hash:8].js' : 'assets/[name]-[hash].js',
+          entryFileNames: isProd ? 'assets/[name]-[hash:8].js' : 'assets/[name]-[hash].js',
+          assetFileNames: isProd ? 'assets/[name]-[hash:8].[ext]' : 'assets/[name]-[hash].[ext]',
         },
       },
       
-      // Report compressed size
+      // Performance optimizations
       reportCompressedSize: true,
       sourcemap: false,
+      brotliSize: true,
       
       // Optimize for modern browsers
       target: 'ES2020',
       
-      // CSS code splitting
+      // CSS optimizations
       cssCodeSplit: true,
+      cssMinify: 'lightningcss',
       
-      // Chunk size warnings
-      chunkSizeWarningLimit: 500,
+      // Chunk size warnings and limits
+      chunkSizeWarningLimit: 300,
+      
+      // Enable module preloading
+      modulePreload: {
+        polyfill: true,
+      },
     },
     
-    // Optimize dependencies
+    // Enhanced dependency optimization
     optimizeDeps: {
-      include: ['react', 'react-dom', 'lucide-react'],
+      include: [
+        'react', 
+        'react-dom', 
+        'lucide-react',
+        'framer-motion',
+        'pg',
+        'dotenv'
+      ],
+      exclude: [],
+      esbuildOptions: {
+        target: 'ES2020',
+      },
     },
     
     test: {

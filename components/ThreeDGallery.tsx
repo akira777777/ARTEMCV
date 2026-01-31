@@ -218,8 +218,8 @@ export const Interactive3DGallery: React.FC = () => {
                 onClick={() => setCurrentIndex(index)}
                 className={`w-3 h-3 rounded-full transition-all ${
                   index === currentIndex 
-                    ? 'bg-emerald-500 w-8' 
-                    : 'bg-neutral-700 hover:bg-neutral-600'
+                    ? 'bg-primary-500 w-8' 
+                    : 'bg-gray-700 hover:bg-gray-600'
                 }`}
                 aria-label={`Go to model ${index + 1}`}
               />
@@ -254,11 +254,11 @@ export const Interactive3DGallery: React.FC = () => {
               ].map((feature, index) => (
                 <div 
                   key={index}
-                  className="glass-card-modern rounded-xl p-6 text-center hover:border-cyan-500/50 transition-all"
+                  className="glass-card-modern rounded-xl p-6 text-center hover:border-secondary/50 transition-all"
                 >
                   <div className="text-3xl mb-3">{feature.icon}</div>
                   <h4 className="text-lg font-bold text-white mb-2">{feature.title}</h4>
-                  <p className="text-neutral-400 text-sm">{feature.description}</p>
+                  <p className="text-gray-400 text-sm">{feature.description}</p>
                 </div>
               ))}
             </motion.div>
