@@ -50,6 +50,9 @@ const translations: Record<Lang, Dict> = {
     'cta.subtitle': 'Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.',
     'cta.button': 'Start Collaboration',
     'cta.secondary': 'View GitHub',
+    'cta.stat.projects': 'Projects Completed',
+    'cta.stat.clients': 'Happy Clients',
+    'cta.stat.experience': 'Years Experience',
 
     'project.1.title': 'Barber Shop',
     'project.1.desc': 'AI Barber Shop Dispatcher: online booking, anti-overbooking, customer CRM, and payment analytics. Optimized for multi-chair salons.',
@@ -197,6 +200,9 @@ const translations: Record<Lang, Dict> = {
     'cta.subtitle': 'Готовы воплотить ваше видение в жизнь? Я специализируюсь на создании высокопроизводительных интерактивных веб-приложений, адаптированных под ваши потребности.',
     'cta.button': 'Начать сотрудничество',
     'cta.secondary': 'Смотреть GitHub',
+    'cta.stat.projects': 'Завершённых проектов',
+    'cta.stat.clients': 'Довольных клиентов',
+    'cta.stat.experience': 'Лет опыта',
 
     'project.1.title': 'Barber Shop',
     'project.1.desc': 'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',

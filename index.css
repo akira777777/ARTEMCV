@@ -18,7 +18,11 @@
   align-items: center;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   background-color: transparent;
+=======
+  background-color: #000000;
+>>>>>>> Stashed changes
 =======
   background-color: #000000;
 >>>>>>> Stashed changes
@@ -31,11 +35,14 @@
   position: relative;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 }
 
 /* Inner sections should take full width of wrapper */
 .content-wrapper > section {
   width: 100%;
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -653,6 +660,10 @@ textarea:focus-visible {
 .holo-abstract-sphere {
   height: 1275px;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  width: 1275px;
+>>>>>>> Stashed changes
 =======
   width: 1275px;
 >>>>>>> Stashed changes
@@ -667,7 +678,10 @@ textarea:focus-visible {
   border-radius: 0;
   pointer-events: none;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
   opacity: 0.6;
   animation: sphereFloat 20s ease-in-out infinite, sphereGlow 8s ease-in-out infinite;
   filter: blur(0.5px);
@@ -707,5 +721,8 @@ textarea:focus-visible {
     width: 500px;
     opacity: 0.4;
   }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }
