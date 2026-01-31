@@ -171,7 +171,6 @@ async function sendToTelegram(
       body: JSON.stringify({
         chat_id: TELEGRAM_CHAT_ID,
         text: messageText,
-        parse_mode: 'HTML',
         disable_web_page_preview: true,
       }),
       signal: controller.signal,
