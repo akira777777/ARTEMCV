@@ -220,3 +220,24 @@ export function useMagnetic(strength = 0.3) {
 
   return { ref, offset, handleMouseMove, handleMouseLeave };
 }
+
+/**
+ * Hook for fetch requests with automatic timeout
+ * Returns a function that performs fetch with built-in AbortController and timeout
+ */
+export function useFetchWithTimeout(timeoutMs: number = 12_000) {
+  return useCallback(async (url: string, options: RequestInit = {}) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+      return response;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }, [timeoutMs]);
+}

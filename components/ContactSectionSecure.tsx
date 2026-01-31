@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback } from 'react';
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { EMAIL_PATTERN } from '../lib/utils';
+import { useFetchWithTimeout } from '../lib/hooks';
 
 interface ContactFormData {
   name: string;
@@ -17,6 +17,7 @@ interface ContactSectionSecureProps {
 const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'contact' }) => {
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
   const lastSubmitRef = useRef<number>(0);
+  const fetchWithTimeout = useFetchWithTimeout(12_000);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -73,16 +74,11 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
         chatId: TELEGRAM_CHAT_ID
       };
 
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 12_000);
-
-      const res = await fetch('/api/send-telegram', {
+      const res = await fetchWithTimeout('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: controller.signal
+        body: JSON.stringify(payload)
       });
-      clearTimeout(timeout);
 
       if (!res.ok) {
         if (res.status === 404 && globalThis.location.hostname === 'localhost') {
@@ -107,7 +103,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
     } finally {
       setLoading(false);
     }
-  }, [formData, validate, TELEGRAM_CHAT_ID]);
+  }, [formData, validate, TELEGRAM_CHAT_ID, fetchWithTimeout]);
 
   return (
     <section id={id} className="py-32 px-6 lg:px-12">

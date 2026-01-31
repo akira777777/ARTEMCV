@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { EMAIL_PATTERN, escapeHtml } from '../lib/utils';
+import { useFetchWithTimeout } from '../lib/hooks';
 
 interface ContactFormData {
   name: string;
@@ -12,19 +12,11 @@ interface ContactFormData {
 
 type ValidationResult = { type: 'honeypot' } | { type: 'error'; message: string } | null;
 
-// HTML escaping for safe Telegram HTML parse mode
-const escapeHtml = (value: string) =>
-  value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-
 const ContactSection: React.FC = () => {
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID; // optional; backend may override
   const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN; // prefer server-side in production
   const lastSubmitRef = useRef<number>(0);
+  const fetchWithTimeout = useFetchWithTimeout(12_000);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -80,10 +72,8 @@ const ContactSection: React.FC = () => {
       throw new Error('Missing Telegram chat ID');
     }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12_000);
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    const res = await fetch(url, {
+    const res = await fetchWithTimeout(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -91,10 +81,8 @@ const ContactSection: React.FC = () => {
         text: buildTelegramMessage(),
         parse_mode: 'HTML',
         disable_web_page_preview: true,
-      }),
-      signal: controller.signal,
+      })
     });
-    clearTimeout(timeout);
 
     if (!res.ok) {
       const err = await res.text().catch(() => '');
@@ -103,9 +91,7 @@ const ContactSection: React.FC = () => {
   };
 
   const sendViaApi = async () => {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12_000);
-    const res = await fetch('/api/send-telegram', {
+    const res = await fetchWithTimeout('/api/send-telegram', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -114,10 +100,8 @@ const ContactSection: React.FC = () => {
         subject: formData.subject?.trim() || '',
         message: formData.message.trim(),
         chatId: TELEGRAM_CHAT_ID,
-      }),
-      signal: controller.signal,
+      })
     });
-    clearTimeout(timeout);
 
     if (!res.ok) {
       const err = await res.text().catch(() => '');
