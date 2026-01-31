@@ -26,21 +26,21 @@ export const Footer2026: React.FC = () => {
             <a href="https://github.com/akira777777" className="hover:text-white transition-colors">GitHub</a>
           </div>
           <div className="flex flex-col gap-4">
-            <span className="font-bold text-white uppercase tracking-widest text-[10px]">Status</span>
+            <span className="font-bold text-white uppercase tracking-widest text-[10px]">{t('footer.status')}</span>
             <span className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-              Available Q4 2026
+              {t('footer.available')}
             </span>
-            <span>London / Remote</span>
+            <span>{t('footer.location')}</span>
           </div>
           <div className="flex flex-col gap-4">
-            <span className="font-bold text-white uppercase tracking-widest text-[10px]">Version</span>
+            <span className="font-bold text-white uppercase tracking-widest text-[10px]">{t('footer.version')}</span>
             <span>2026.04.12</span>
             <span>Build: #AM-0922</span>
           </div>
           <div className="flex flex-col gap-4 text-right">
             <div className="text-white font-display font-bold text-lg">Artem Mikhailov</div>
-            <p>© All rights reserved 2026</p>
+            <p>{t('footer.rights')}</p>
           </div>
         </div>
       </div>

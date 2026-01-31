@@ -117,6 +117,11 @@ const translations: Record<Lang, Dict> = {
     'footer.build': "LET'S BUILD",
     'footer.ready.desc': "Ready to bring your project to life? Let's create something exceptional together.",
     'footer.social': 'Social',
+    'footer.status': 'Status',
+    'footer.version': 'Version',
+    'footer.available': 'Available Q4 2026',
+    'footer.location': 'London / Remote',
+    'footer.rights': '© All rights reserved 2026'
 
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
@@ -275,6 +280,11 @@ const translations: Record<Lang, Dict> = {
     'footer.build': 'ПОСТРОИМ ВМЕСТЕ',
     'footer.ready.desc': 'Готовы воплотить проект в жизнь? Давайте создадим что-то исключительное вместе.',
     'footer.social': 'Социальные сети',
+    'footer.status': 'Статус',
+    'footer.version': 'Версия',
+    'footer.available': 'Доступен Q4 2026',
+    'footer.location': 'Лондон / Удалённо',
+    'footer.rights': '© Все права защищены 2026'
 
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
@@ -429,6 +439,12 @@ const translations: Record<Lang, Dict> = {
     'footer.copyright': 'Full Stack vývojář',
     'footer.build': 'POSTAVME TO',
     'footer.ready.desc': 'Jste připraveni oživit svůj projekt? Pojďme společně vytvořit něco výjimečného.',
+    'footer.social': 'Sociální sítě',
+    'footer.status': 'Stav',
+    'footer.version': 'Verze',
+    'footer.available': 'Dostupný Q4 2026',
+    'footer.location': 'Londýn / Dálkově',
+    'footer.rights': '© Všechna práva vyhrazena 2026'
 
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
