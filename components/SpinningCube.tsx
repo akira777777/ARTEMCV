@@ -189,4 +189,6 @@ const SpinningCube: React.FC = React.memo(() => {
   );
 });
 
+SpinningCube.displayName = 'SpinningCube';
+
 export default SpinningCube;

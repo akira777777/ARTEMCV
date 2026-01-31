@@ -13,4 +13,6 @@ const SkipLink: React.FC = React.memo(() => {
   );
 });
 
+SkipLink.displayName = 'SkipLink';
+
 export default SkipLink;

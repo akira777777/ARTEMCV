@@ -50,3 +50,5 @@ export const ScrollToTop: React.FC = React.memo(() => {
     </div>
   );
 });
+
+ScrollToTop.displayName = 'ScrollToTop';

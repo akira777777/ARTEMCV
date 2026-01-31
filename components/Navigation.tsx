@@ -147,3 +147,5 @@ export const Navigation: React.FC = React.memo(() => {
     </header>
   );
 });
+
+Navigation.displayName = 'Navigation';
