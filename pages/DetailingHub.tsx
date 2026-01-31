@@ -2,7 +2,9 @@ import React from 'react';
 import ProjectNavigation from '../components/detailing/ProjectNavigation';
 import CarConfigurator from '../components/detailing/CarConfigurator';
 
-const DetailingHub: React.FC = () => {
+interface DetailingHubProps {}
+
+const DetailingHub: React.FC<DetailingHubProps> = () => {
   return (
     <div className="bg-[#050505] text-white min-h-screen selection:bg-blue-500 selection:text-white font-sans">
       <ProjectNavigation />

@@ -8,6 +8,9 @@ const DECORATIVE_BLOB_BASE_STYLE = "absolute rounded-full blur-[120px] animate-p
 const TOP_BLOB_STYLE = `${DECORATIVE_BLOB_BASE_STYLE} top-1/4 left-1/4 w-96 h-96 bg-indigo-500/20`;
 const BOTTOM_BLOB_STYLE = `${DECORATIVE_BLOB_BASE_STYLE} bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10`;
 
+// Memoized style objects for performance
+const BOTTOM_BLOB_DELAY_STYLE = { animationDelay: '-2s' } as const;
+
 const Hero2026: React.FC = () => {
   const { t } = useI18n();
 
@@ -51,7 +54,7 @@ const Hero2026: React.FC = () => {
 
       {/* Decorative Blobs from CSS - Using memoized classes */}
       <div className={TOP_BLOB_STYLE}></div>
-      <div className={BOTTOM_BLOB_STYLE} style={{ animationDelay: '-2s' }}></div>
+      <div className={BOTTOM_BLOB_STYLE} style={BOTTOM_BLOB_DELAY_STYLE}></div>
 
       {/* Content */}
       <div className="relative z-10 text-center">

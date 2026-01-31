@@ -3,6 +3,9 @@ import { MessageCircle, X, Send, Loader2, Maximize2, Minimize2 } from 'lucide-re
 import { useI18n } from '../i18n';
 import { useFetchWithTimeout } from '../lib/hooks';
 
+// Memoized style objects for performance
+const SCROLLBAR_STYLE = { scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' } as const;
+
 interface Message {
   id: string;
   role: 'user' | 'bot';
@@ -208,7 +211,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50" style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' }}>
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50" style={SCROLLBAR_STYLE}>
           {messages.map((msg) => (
             <div 
               key={msg.id} 

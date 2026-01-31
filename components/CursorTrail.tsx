@@ -14,6 +14,9 @@ const SPRING_CONFIG = { damping: 25, stiffness: 300, mass: 0.5 };
 // Pre-calculate hues to avoid math in animation loop
 const HUES = Array.from({ length: TRAIL_LENGTH }, (_, i) => 160 + (i / TRAIL_LENGTH) * 100);
 
+// Memoized style objects for performance
+const CANVAS_TRAIL_STYLE = { mixBlendMode: 'screen' } as const;
+
 const CursorTrail: React.FC = () => {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
@@ -129,7 +132,7 @@ const CursorTrail: React.FC = () => {
       <canvas
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none z-[9998]"
-        style={{ mixBlendMode: 'screen' }}
+        style={CANVAS_TRAIL_STYLE}
       />
       
       {/* Main cursor dot */}

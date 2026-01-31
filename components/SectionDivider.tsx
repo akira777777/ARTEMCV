@@ -10,6 +10,10 @@ interface SectionDividerProps {
   className?: string;
 }
 
+// Memoized style objects for performance
+const CENTER_ELEMENT_STYLE = { transform: 'rotate(45deg)' } as const;
+const CENTER_DOT_STYLE = { boxShadow: '0 0 15px rgba(99, 102, 241, 0.6)' } as const;
+
 export const SectionDivider: React.FC<SectionDividerProps> = ({ 
   variant = 'gradient',
   className = ''
@@ -171,7 +175,7 @@ export const SectionDivider: React.FC<SectionDividerProps> = ({
           {/* Center element */}
           <motion.div
             className="relative w-3 h-3 bg-white/10 border border-white/20"
-            style={{ transform: 'rotate(45deg)' }}
+            style={CENTER_ELEMENT_STYLE}
             animate={{
               scale: [1, 1.2, 1],
               borderColor: ['rgba(255,255,255,0.2)', 'rgba(99,102,241,0.5)', 'rgba(255,255,255,0.2)'],
@@ -269,7 +273,7 @@ export const SectionDivider: React.FC<SectionDividerProps> = ({
           {/* Center dot */}
           <motion.div
             className="w-4 h-4 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500"
-            style={{ boxShadow: '0 0 15px rgba(99, 102, 241, 0.6)' }}
+            style={CENTER_DOT_STYLE}
             animate={{
               scale: [1, 1.2, 1],
             }}
