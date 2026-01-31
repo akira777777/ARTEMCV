@@ -30,9 +30,9 @@ const migrations = [
         notes TEXT
       );
       
-      CREATE INDEX idx_contact_submissions_email ON contact_submissions(email);
-      CREATE INDEX idx_contact_submissions_created_at ON contact_submissions(created_at DESC);
-      CREATE INDEX idx_contact_submissions_status ON contact_submissions(status);
+      CREATE INDEX IF NOT EXISTS idx_contact_submissions_email ON contact_submissions(email);
+      CREATE INDEX IF NOT EXISTS idx_contact_submissions_created_at ON contact_submissions(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_contact_submissions_status ON contact_submissions(status);
     `,
   },
   {
@@ -49,7 +49,7 @@ const migrations = [
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
       
-      CREATE UNIQUE INDEX idx_contact_analytics_date ON contact_analytics(date);
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_contact_analytics_date ON contact_analytics(date);
     `,
   },
   {
@@ -63,8 +63,8 @@ const migrations = [
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
       
-      CREATE INDEX idx_audit_log_submission_id ON contact_audit_log(submission_id);
-      CREATE INDEX idx_audit_log_created_at ON contact_audit_log(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_audit_log_submission_id ON contact_audit_log(submission_id);
+      CREATE INDEX IF NOT EXISTS idx_audit_log_created_at ON contact_audit_log(created_at DESC);
     `,
   },
 ];
