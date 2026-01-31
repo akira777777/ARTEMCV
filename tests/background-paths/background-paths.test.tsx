@@ -11,18 +11,24 @@ vi.mock('framer-motion', () => ({
     span: ({ children, ...props }: any) => <span {...props}>{children}</span>,
     path: ({ children, ...props }: any) => <path {...props}>{children}</path>,
     svg: ({ children, ...props }: any) => <svg {...props}>{children}</svg>,
+    a: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
   },
 }));
 
 // Mock MagneticButton component
-vi.mock('../../components/MagneticButton', () => ({
-  __esModule: true,
-  default: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props} data-testid="magnetic-button">
-      {children}
-    </button>
-  ),
-}));
+vi.mock('../../components/MagneticButton', async () => {
+  const actual = await vi.importActual('../../components/MagneticButton');
+  return {
+    __esModule: true,
+    ...actual,
+    default: ({ children, onClick, ...props }: any) => (
+      <button onClick={onClick} {...props} data-testid="magnetic-button">
+        {children}
+      </button>
+    ),
+  };
+});
 
 describe('BackgroundPaths Component', () => {
   beforeEach(() => {

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { useI18n } from '../i18n';
 import { useFetchWithTimeout } from '../lib/hooks';
+import devLog from '../lib/logger';
 import { MailIcon, MessageCircleIcon, GithubIcon } from 'lucide-react';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -86,7 +87,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
 
       if (!res.ok) {
         if (res.status === 404 && globalThis.location.hostname === 'localhost') {
-          console.warn('API endpoint not available in dev mode. Form would send on Vercel.');
+          devLog.warn('API endpoint not available in dev mode. Form would send on Vercel.');
         } else {
           const err = await res.text().catch(() => '');
           throw new Error(err || `Failed to send message (status ${res.status})`);
@@ -97,12 +98,12 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
       setFormData({ name: '', email: '', subject: '', message: '', hp: '' });
       lastSubmitRef.current = Date.now();
       setTimeout(() => setSubmitted(false), 5000);
-    } catch (err: any) {
-      console.error('Error sending message:', err);
-      if (err?.name === 'AbortError') {
+    } catch (err: unknown) {
+      devLog.error('Error sending message:', err);
+      if ((err as Error)?.name === 'AbortError') {
         setError(t('contact.error.timeout'));
       } else {
-        setError(err?.message || t('contact.error.sending'));
+        setError((err as Error)?.message || t('contact.error.sending'));
       }
     } finally {
       setLoading(false);

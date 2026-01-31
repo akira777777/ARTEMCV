@@ -1,4 +1,5 @@
 import React, { ReactNode, ReactElement } from 'react';
+import devLog from '../lib/logger';
 
 interface Props {
   children: ReactNode;
@@ -26,7 +27,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    devLog.error('ErrorBoundary caught an error:', error, errorInfo);
     
     // Optional: Send to error tracking service (Sentry, LogRocket, etc.)
     // logErrorToService(error, errorInfo);

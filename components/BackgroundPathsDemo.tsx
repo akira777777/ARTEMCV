@@ -1,11 +1,11 @@
 "use client"
 
-import React from 'react';
+import devLog from '../lib/logger';
 import BackgroundPaths from './BackgroundPaths';
 
 const BackgroundPathsDemo: React.FC = () => {
   const handleButtonClick = () => {
-    console.log('Button clicked!');
+    devLog.log('Button clicked!');
     // You can add your navigation logic here
   };
 
