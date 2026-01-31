@@ -2036,3 +2036,264 @@ corner-enhanced:hover::after {
     transition: none;
   }
 }
+
+/* ====================
+   Interactive Elements & Micro-Animations
+   ==================== */
+
+/* Enhanced Button States */
+.interactive-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+}
+
+.interactive-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.interactive-button:hover::before {
+  left: 100%;
+}
+
+.interactive-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(14, 165, 233, 0.3);
+}
+
+.interactive-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Smooth Link Transitions */
+.interactive-link {
+  position: relative;
+  color: hsl(var(--color-primary));
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.interactive-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, hsl(var(--color-primary)), hsl(var(--color-accent)));
+  transition: width 0.3s ease;
+}
+
+.interactive-link:hover {
+  color: hsl(var(--color-accent));
+  transform: translateY(-1px);
+}
+
+.interactive-link:hover::after {
+  width: 100%;
+}
+
+/* Card Hover Effects */
+.interactive-card {
+  transition: 
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.3s ease;
+  transform: translateZ(0);
+}
+
+.interactive-card:hover {
+  transform: 
+    translateY(-8px) 
+    scale(1.02);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(14, 165, 233, 0.1);
+  filter: brightness(1.05);
+}
+
+/* Form Element Enhancements */
+.interactive-input {
+  transition: 
+    all 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s ease;
+  border: 2px solid hsl(var(--color-border) / 0.3);
+}
+
+.interactive-input:focus {
+  outline: none;
+  border-color: hsl(var(--color-primary));
+  box-shadow: 
+    0 0 0 3px hsl(var(--color-primary) / 0.2),
+    0 4px 12px rgba(14, 165, 233, 0.15);
+  transform: translateY(-1px);
+}
+
+.interactive-input:hover:not(:focus) {
+  border-color: hsl(var(--color-primary) / 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading States with Micro-Animations */
+.loading-dots {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 20px;
+}
+
+.loading-dots div {
+  position: absolute;
+  top: 8px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: hsl(var(--color-primary));
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.loading-dots div:nth-child(1) {
+  left: 8px;
+  animation: loading1 0.6s infinite;
+}
+
+.loading-dots div:nth-child(2) {
+  left: 8px;
+  animation: loading2 0.6s infinite;
+}
+
+.loading-dots div:nth-child(3) {
+  left: 32px;
+  animation: loading2 0.6s infinite;
+}
+
+.loading-dots div:nth-child(4) {
+  left: 56px;
+  animation: loading3 0.6s infinite;
+}
+
+@keyframes loading1 {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+@keyframes loading2 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(24px, 0); }
+}
+
+@keyframes loading3 {
+  0% { transform: scale(1); }
+  100% { transform: scale(0); }
+}
+
+/* Smooth State Transitions */
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.smooth-transition-fast {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.smooth-transition-slow {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Interactive Feedback States */
+.feedback-success {
+  animation: feedbackSuccess 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feedback-error {
+  animation: feedbackError 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes feedbackSuccess {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes feedbackError {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Cursor Interaction Effects */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+cursor-pointer:hover {
+  filter: brightness(1.1);
+}
+
+cursor-pointer:active {
+  transform: scale(0.95);
+}
+
+/* Scroll-triggered Animations */
+.scroll-fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 
+    opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered Animations */
+.stagger-delay-1 { animation-delay: 0.1s; }
+.stagger-delay-2 { animation-delay: 0.2s; }
+.stagger-delay-3 { animation-delay: 0.3s; }
+.stagger-delay-4 { animation-delay: 0.4s; }
+.stagger-delay-5 { animation-delay: 0.5s; }
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .interactive-button:hover,
+  .interactive-link:hover,
+  .interactive-card:hover {
+    transform: none;
+  }
+  
+  .interactive-button:active,
+  .interactive-link:active,
+  .interactive-card:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Focus Visible Enhancements */
+.focus-visible-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-visible-ring:focus-visible {
+  outline: 2px solid hsl(var(--color-primary));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px hsl(var(--color-primary) / 0.3);
+}
+}
