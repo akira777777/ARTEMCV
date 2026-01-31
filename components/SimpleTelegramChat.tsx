@@ -12,7 +12,7 @@ interface Message {
 
 const createId = () => globalThis.crypto?.randomUUID?.() ?? `msg-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
-export const SimpleTelegramChat: React.FC = () => {
+export const SimpleTelegramChat: React.FC = React.memo(() => {
   const { t, lang } = useI18n();
   const fetchWithTimeout = useFetchWithTimeout(12_000);
   const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +32,7 @@ export const SimpleTelegramChat: React.FC = () => {
        setMessages([{ ...messages[0], text: t('chat.bot.welcome') }]);
     }
   }, [lang, t]);
+
   const [inputValue, setInputValue] = useState('');
   const [userName, setUserName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -134,9 +135,9 @@ export const SimpleTelegramChat: React.FC = () => {
     } catch (err: any) {
       console.error('Error sending message:', err);
       
-      let errorText = 'Error sending message';
+      let errorText = t('chat.error.sending') || 'Error sending message';
       if (err?.name === 'AbortError') {
-        errorText = 'Timeout sending message. Please try again.';
+        errorText = t('chat.error.timeout') || 'Timeout sending message. Please try again.';
       } else if (err?.message) {
         errorText = err.message;
       }
@@ -154,7 +155,7 @@ export const SimpleTelegramChat: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [inputValue, userName, loading, fetchWithTimeout]);
+  }, [inputValue, userName, loading, fetchWithTimeout, t]);
 
   return (
     <>
@@ -277,6 +278,6 @@ export const SimpleTelegramChat: React.FC = () => {
       </div>
     </>
   );
-};
+});
 
 SimpleTelegramChat.displayName = 'SimpleTelegramChat';

@@ -94,7 +94,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
             <img 
               ref={imgRef}
               src={project.image} 
-              alt={project.title} 
+              alt={t(project.title)}
               loading="lazy"
               onLoad={() => setIsLoaded(true)}
               className={`
@@ -112,9 +112,18 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
          {/* Gradient Overlay */}
          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
          
-         {/* Arrow Icon */}
-         <div className="absolute top-4 right-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-4 scale-90 group-hover:translate-y-0 group-hover:scale-100 shadow-[0_0_20px_rgba(99,102,241,0.6)] z-20">
-           <ArrowUpRight size={20} className="group-hover:animate-pulse" />
+         {/* Action Buttons */}
+         <div className="absolute top-4 right-4 flex gap-2 z-20">
+           <a
+             href={project.liveLink}
+             target="_blank"
+             rel="noopener noreferrer"
+             onClick={(e) => e.stopPropagation()}
+             aria-label={`${t('works.cta.view')} ${t(project.title)}`}
+             className="bg-white text-black p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-4 scale-90 group-hover:translate-y-0 group-hover:scale-100 shadow-xl hover:bg-indigo-500 hover:text-white"
+           >
+             <ArrowUpRight size={20} />
+           </a>
          </div>
       </div>
       
@@ -135,7 +144,9 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
   );
 });
 
-export const WorkGallery: React.FC = () => {
+ProjectCard.displayName = 'ProjectCard';
+
+export const WorkGallery: React.FC = React.memo(() => {
   const { t } = useI18n();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeCategory, setActiveCategory] = useState('All');
@@ -275,7 +286,7 @@ export const WorkGallery: React.FC = () => {
               <div className="w-full md:w-1/2 h-64 md:h-auto relative overflow-hidden bg-neutral-800">
                  <img 
                    src={selectedProject.image} 
-                   alt={selectedProject.title}
+                   alt={t(selectedProject.title)}
                    className="w-full h-full object-cover animate-breathe-zoom" 
                    loading="lazy"
                  />
@@ -309,7 +320,7 @@ export const WorkGallery: React.FC = () => {
                  
                  <div className="mt-12 pt-8 border-t border-white/10">
                      <a 
-                       href={selectedProject.liveLink || selectedProject.link || '#'} 
+                       href={selectedProject.liveLink || selectedProject.githubLink || '#'}
                        target="_blank"
                        rel="noopener noreferrer"
                        className="group flex items-center justify-center gap-3 w-full py-4 bg-white text-black text-xs font-bold tracking-widest rounded hover:bg-neutral-200 transition-all duration-300"
@@ -324,4 +335,6 @@ export const WorkGallery: React.FC = () => {
       )}
     </section>
   );
-};
+});
+
+WorkGallery.displayName = 'WorkGallery';

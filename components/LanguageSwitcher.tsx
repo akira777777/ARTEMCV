@@ -8,7 +8,7 @@ const langs: { code: Lang; label: string }[] = [
 ];
 
 const LanguageSwitcher: React.FC = () => {
-  const { lang, setLang } = useI18n();
+  const { lang, setLang, t } = useI18n();
   
   return (
     <div className="flex items-center gap-2">
@@ -21,8 +21,8 @@ const LanguageSwitcher: React.FC = () => {
             lang === l.code ? 'bg-white text-black border-white' : 'text-zinc-500 hover:text-white border-white/10'
           }`}
           aria-pressed={lang === l.code ? 'true' : 'false'}
-          aria-label={`Switch to ${l.label}`}
-          title={`Switch to ${l.label}`}
+          aria-label={`${t('switch.to')} ${l.label}`}
+          title={`${t('switch.to')} ${l.label}`}
         >
           {l.label}
         </button>

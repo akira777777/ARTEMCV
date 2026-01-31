@@ -60,12 +60,12 @@ export const About: React.FC = React.memo(() => {
           <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-8 border-b border-white/10 pb-4">{t('about.offer')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8" role="list">
             {[
-              { name: t('service.1.name'), desc: t('service.1.desc') },
-              { name: t('service.2.name'), desc: t('service.2.desc') },
-              { name: t('service.3.name'), desc: t('service.3.desc') },
-              { name: t('service.4.name'), desc: t('service.4.desc') },
-              { name: t('service.5.name'), desc: t('service.5.desc') },
-              { name: t('service.6.name'), desc: t('service.6.desc') },
+              { name: 'service.1.name', desc: 'service.1.desc' },
+              { name: 'service.2.name', desc: 'service.2.desc' },
+              { name: 'service.3.name', desc: 'service.3.desc' },
+              { name: 'service.4.name', desc: 'service.4.desc' },
+              { name: 'service.5.name', desc: 'service.5.desc' },
+              { name: 'service.6.name', desc: 'service.6.desc' },
             ].map((service, index) => (
               <article key={service.name} className="service-card rounded-2xl px-6 py-5 group cursor-pointer transition-transform duration-500 hover:-translate-y-1">
                 <div className="flex items-center justify-between">
@@ -84,3 +84,5 @@ export const About: React.FC = React.memo(() => {
     </section>
   );
 });
+
+About.displayName = 'About';

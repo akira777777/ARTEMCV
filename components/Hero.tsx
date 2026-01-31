@@ -2,6 +2,11 @@ import React, { useRef, useEffect, useMemo } from 'react';
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
 
+// Extract long className for better readability
+const CARD_BASE_CLASSES =
+  'absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden border border-white/5 ' +
+  'transition-transform duration-700 ease-out group shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)]';
+
 export const Hero: React.FC = React.memo(() => {
   const { t } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -10,20 +15,20 @@ export const Hero: React.FC = React.memo(() => {
 
   const cards = useMemo(
     () => [
-      { src: 'https://picsum.photos/400/600?random=1', rotate: -15, z: 10, label: 'BRAND' },
-      { src: 'https://picsum.photos/400/600?random=2', rotate: -5, z: 20, label: 'WEB' },
-      { src: 'https://picsum.photos/400/600?random=3', rotate: 5, z: 30, label: 'MOTION' },
-      { src: 'https://picsum.photos/400/600?random=4', rotate: 15, z: 10, label: 'DESIGN' },
+      { src: 'https://picsum.photos/400/600?random=1', rotate: -15, z: 10, label: 'BRAND', key: 'hero.label.brand' },
+      { src: 'https://picsum.photos/400/600?random=2', rotate: -5, z: 20, label: 'WEB', key: 'hero.label.web' },
+      { src: 'https://picsum.photos/400/600?random=3', rotate: 5, z: 30, label: 'MOTION', key: 'hero.label.motion' },
+      { src: 'https://picsum.photos/400/600?random=4', rotate: 15, z: 10, label: 'DESIGN', key: 'hero.label.design' },
     ],
     []
   );
 
-  const zClassByValue: Record<number, string> = useMemo(
+  const zClassByValue = useMemo(
     () => ({
       10: 'z-10',
       20: 'z-20',
       30: 'z-30',
-    } as Record<number, string>),
+    } as const),
     []
   );
 
@@ -100,18 +105,18 @@ export const Hero: React.FC = React.memo(() => {
         <div className="relative w-64 h-96 md:w-80 md:h-[450px]">
           {cards.map((card, index) => (
             <div
-              key={card.label}
+              key={card.key}
               ref={(el) => {
                 cardRefs.current[index] = el;
               }}
-              className={`absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden border border-white/5 transition-transform duration-700 ease-out group shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] ${zClassByValue[card.z] ?? 'z-10'}`}
+              className={`${CARD_BASE_CLASSES} ${zClassByValue[card.z as keyof typeof zClassByValue] ?? 'z-10'}`}
               role="img"
-              aria-label={`${card.label} showcase image`}
+              aria-label={`${t(card.key)} showcase image`}
             >
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
               <img
                 src={card.src}
-                alt={`${card.label} portfolio work`}
+                alt={`${t(card.key)} portfolio work`}
                 className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-700 scale-105 group-hover:scale-110"
               />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" aria-hidden="true">
