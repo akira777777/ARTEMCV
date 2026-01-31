@@ -207,6 +207,7 @@ export const WorkGallery: React.FC = () => {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
+              aria-pressed={activeCategory === cat}
               className={`
                 px-4 py-2 rounded-full text-xs tracking-widest transition-all duration-300 border
                 ${activeCategory === cat 
@@ -302,6 +303,8 @@ export const WorkGallery: React.FC = () => {
                  <div className="mt-12 pt-8 border-t border-white/10">
                      <a 
                        href={selectedProject.liveLink || selectedProject.link || '#'} 
+                       target="_blank"
+                       rel="noopener noreferrer"
                        className="group flex items-center justify-center gap-3 w-full py-4 bg-white text-black text-xs font-bold tracking-widest rounded hover:bg-neutral-200 transition-all duration-300"
                      >
                         {t('works.cta.view')}
