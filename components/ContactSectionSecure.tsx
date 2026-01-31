@@ -1,5 +1,6 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { useI18n } from '../i18n';
+import { useFetchWithTimeout } from '../lib/hooks';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

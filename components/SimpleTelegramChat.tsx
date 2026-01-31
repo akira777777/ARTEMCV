@@ -277,6 +277,6 @@ export const SimpleTelegramChat: React.FC = () => {
       </div>
     </>
   );
-});
+};
 
 SimpleTelegramChat.displayName = 'SimpleTelegramChat';
