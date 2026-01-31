@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { escapeHtml, EMAIL_PATTERN } from '../lib/utils.js';
+import { escapeHtml, EMAIL_PATTERN, fetchWithTimeout } from '../lib/utils.js';
 
 // ============================================================================
 // UTILITIES & CONSTANTS
@@ -150,24 +150,16 @@ async function sendToTelegram(
   const messageText = buildTelegramMessage(cleanName, cleanEmail, cleanSubject, cleanMessage);
   const apiUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
-  try {
-    return await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: messageText,
-        parse_mode: 'HTML',
-        disable_web_page_preview: true,
-      }),
-      signal: controller.signal,
-    });
-  } finally {
-    clearTimeout(timeout);
-  }
+  return await fetchWithTimeout(apiUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: messageText,
+      parse_mode: 'HTML',
+      disable_web_page_preview: true,
+    })
+  }, REQUEST_TIMEOUT_MS);
 }
 
 function buildTelegramMessage(

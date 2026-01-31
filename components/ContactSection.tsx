@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { EMAIL_PATTERN, escapeHtml } from '../lib/utils';
 import { useFetchWithTimeout } from '../lib/hooks';
+import { FORM_INPUT_CLASS, FORM_TEXTAREA_CLASS, FORM_BUTTON_PRIMARY_CLASS, FORM_BUTTON_SECONDARY_CLASS } from '../constants';
 
 interface ContactFormData {
   name: string;
@@ -188,7 +189,7 @@ const ContactSection: React.FC = () => {
                 onChange={handleChange}
                 placeholder="Your name"
                 required
-                className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all"
+                className={FORM_INPUT_CLASS}
               />
             </div>
 
@@ -204,7 +205,7 @@ const ContactSection: React.FC = () => {
                 onChange={handleChange}
                 placeholder="your@email.com"
                 required
-                className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all"
+                className={FORM_INPUT_CLASS}
               />
             </div>
           </div>
@@ -220,7 +221,7 @@ const ContactSection: React.FC = () => {
               value={formData.subject}
               onChange={handleChange}
               placeholder="Project subject"
-              className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all"
+              className={FORM_INPUT_CLASS}
             />
           </div>
 
@@ -236,7 +237,7 @@ const ContactSection: React.FC = () => {
               placeholder="Tell me about your project..."
               rows={6}
               required
-              className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all resize-none"
+              className={FORM_TEXTAREA_CLASS}
             />
           </div>
 
