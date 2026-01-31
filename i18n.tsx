@@ -116,6 +116,7 @@ const translations: Record<Lang, Dict> = {
     'footer.copyright': 'Full Stack Developer',
     'footer.build': "LET'S BUILD",
     'footer.ready.desc': "Ready to bring your project to life? Let's create something exceptional together.",
+    'footer.social': 'Social',
 
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
@@ -273,6 +274,7 @@ const translations: Record<Lang, Dict> = {
     'footer.copyright': 'Full Stack разработчик',
     'footer.build': 'ПОСТРОИМ ВМЕСТЕ',
     'footer.ready.desc': 'Готовы воплотить проект в жизнь? Давайте создадим что-то исключительное вместе.',
+    'footer.social': 'Социальные сети',
 
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
