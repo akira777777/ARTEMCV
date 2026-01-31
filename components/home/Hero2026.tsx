@@ -6,7 +6,7 @@ import { useI18n } from '../../i18n';
 import { motion } from 'framer-motion';
 
 function ParticleField(props: any) {
-  const ref = useRef<any>();
+  const ref = useRef<any>(null);
   const sphere = useMemo(() => {
     const temp = new Float32Array(5000 * 3);
     for (let i = 0; i < 5000; i++) {
@@ -23,7 +23,7 @@ function ParticleField(props: any) {
     return temp;
   }, []);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (ref.current) {
       ref.current.rotation.x -= delta / 10;
       ref.current.rotation.y -= delta / 15;
