@@ -45,24 +45,24 @@ export const ServicesGrid: React.FC = React.memo(() => {
 
   return (
     <div className="w-full py-20 px-4 flex flex-col items-center justify-center relative z-10">
-      {/* Заголовок секции */}
+      {/* Section Header */}
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-          {t('about.offer')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-600">специализации</span>
+          {t('about.offer')}
         </h2>
         <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-          Превращаю идеи в работающие цифровые продукты высокого качества.
+          {t('about.desc')}
         </p>
       </div>
 
-      {/* Сетка карточек */}
+      {/* Services Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full mb-20">
         {services.map((item, idx) => (
           <div
             key={idx}
             className="group relative p-8 rounded-2xl bg-[#0a0a0a] border border-white/5 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
           >
-            {/* Градиентная подсветка на фоне при наведении */}
+            {/* Gradient background highlight on hover */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
             <div className="relative z-10">

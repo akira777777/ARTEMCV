@@ -40,7 +40,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastSubmitRef = useRef<number>(0);
 
-  // Загрузить имя из localStorage
+  // Load name from localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem('chat_user_name');
@@ -48,26 +48,26 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     } catch {}
   }, []);
 
-  // Скролл к низу чата
+  // Scroll to bottom of chat
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen]);
 
-  // Обработчик отправки сообщения
+  // Handle message submission
   const handleSendMessage = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!inputValue.trim()) return;
     if (loading) return;
 
-    // Проверка rate limit (5 секунд между сообщениями)
+    // Check rate limit (5 seconds between messages)
     const now = Date.now();
     if (lastSubmitRef.current && now - lastSubmitRef.current < 5_000) {
       setError(t('chat.error.wait'));
       return;
     }
 
-    // Запросить имя если не заполнено
+    // Prompt for name if not provided
     let name = userName.trim();
     if (!name) {
       const promptName = window.prompt(t('chat.prompt.name'));
@@ -87,7 +87,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     setInputValue('');
     setError(null);
 
-    // Добавить сообщение пользователя в UI
+    // Add user message to UI
     const userMsgId = createId();
     setMessages(prev => [...prev, {
       id: userMsgId,
@@ -99,7 +99,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     setLoading(true);
 
     try {
-      // Отправить в Telegram через /api/send-telegram
+      // Send to Telegram via /api/send-telegram
       const res = await fetchWithTimeout('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -113,7 +113,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       });
 
       if (!res.ok) {
-        // Локальный dev режим может вернуть 404
+        // Local dev mode may return 404
         if (res.status === 404 && window.location.hostname === 'localhost') {
           console.warn('API endpoint not available in dev mode.');
         } else {
@@ -122,7 +122,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         }
       }
 
-      // Добавить ответ бота
+      // Add bot response
       const botMsgId = createId();
       setMessages(prev => [...prev, {
         id: botMsgId,
@@ -144,7 +144,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       
       setError(errorText);
       
-      // Добавить сообщение об ошибке в чат
+      // Add error message to chat
       const errorMsgId = createId();
       setMessages(prev => [...prev, {
         id: errorMsgId,

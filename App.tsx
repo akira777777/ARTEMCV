@@ -16,10 +16,7 @@ const About = lazy(() => import('./components/About').then(m => ({ default: m.Ab
 const CTASection = lazy(() => import('./components/CTASection').then(m => ({ default: m.CTASection })));
 const ContactSectionSecure = lazy(() => import('./components/ContactSectionSecure'));
 const SimpleTelegramChat = lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
-const GradientShaderCard = lazy(() => import('./components/GradientShaderCard'));
 const InteractiveShowcase = lazy(() => import('./components/InteractiveShowcase'));
-const SpinningCube = lazy(() => import('./components/SpinningCube'));
-const InteractiveSection = lazy(() => import('./components/InteractiveElements').then(m => ({ default: m.InteractiveSection })));
 
 const App: React.FC = () => {
   return (
@@ -43,9 +40,9 @@ const App: React.FC = () => {
           <React.Suspense fallback={<div className="h-72" />}>
             <CTASection />
           </React.Suspense>
-          <ErrorBoundary>
+          <React.Suspense fallback={<div className="h-96" />}>
             <ContactSectionSecure id="contact" />
-          </ErrorBoundary>
+          </React.Suspense>
         </main>
         <Footer />
         <React.Suspense fallback={null}>
