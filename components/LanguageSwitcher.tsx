@@ -9,6 +9,7 @@ const langs: { code: Lang; label: string }[] = [
 
 const LanguageSwitcher: React.FC = () => {
   const { lang, setLang } = useI18n();
+  
   return (
     <div className="flex items-center gap-2">
       {langs.map((l) => (
@@ -29,4 +30,4 @@ const LanguageSwitcher: React.FC = () => {
   );
 };
 
-export default LanguageSwitcher;
+export default React.memo(LanguageSwitcher);

@@ -16,15 +16,68 @@ html {
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.12), transparent 30%),
-              radial-gradient(circle at 80% 10%, rgba(34, 197, 235, 0.12), transparent 32%),
-              radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.12), transparent 30%),
-              var(--bg);
+  background: var(--bg);
   color: #ffffff;
   position: relative;
   min-height: 100vh;
   will-change: transform;
   overflow-x: hidden;
+}
+
+/* Animated gradient mesh background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15), transparent 35%),
+    radial-gradient(circle at 80% 10%, rgba(34, 197, 235, 0.12), transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.15), transparent 35%),
+    radial-gradient(circle at 90% 70%, rgba(236, 72, 153, 0.1), transparent 30%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  animation: gradientMesh 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes gradientMesh {
+  0%, 100% {
+    background-position: 0% 0%, 100% 0%, 50% 100%, 100% 100%;
+  }
+  25% {
+    background-position: 100% 50%, 0% 100%, 100% 0%, 0% 50%;
+  }
+  50% {
+    background-position: 50% 100%, 50% 0%, 0% 50%, 50% 0%;
+  }
+  75% {
+    background-position: 0% 50%, 100% 50%, 50% 0%, 100% 50%;
+  }
+}
+
+/* Aurora effect layer */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    125deg,
+    transparent 0%,
+    rgba(99, 102, 241, 0.03) 25%,
+    rgba(16, 185, 129, 0.05) 50%,
+    rgba(236, 72, 153, 0.03) 75%,
+    transparent 100%
+  );
+  background-size: 400% 400%;
+  animation: auroraShift 15s ease-in-out infinite;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+@keyframes auroraShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 /* Mobile touch targets */
@@ -50,7 +103,6 @@ button {
   html {
     font-size: 16px;
   }
-  
   body {
     overflow-x: hidden;
   }
@@ -131,11 +183,25 @@ button {
   position: fixed;
   will-change: opacity;
   contain: layout style;
-  inset: 0;
+  inset: -10%;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
   mix-blend-mode: soft-light;
   z-index: 5;
+  animation: grain 8s steps(10) infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2%, -2%); }
+  20% { transform: translate(2%, 2%); }
+  30% { transform: translate(-1%, 1%); }
+  40% { transform: translate(1%, -1%); }
+  50% { transform: translate(-2%, 2%); }
+  60% { transform: translate(2%, -2%); }
+  70% { transform: translate(-1%, -1%); }
+  80% { transform: translate(1%, 1%); }
+  90% { transform: translate(-2%, -2%); }
 }
 
 .glow-ring {
@@ -275,7 +341,134 @@ button {
   border-radius: 10px;
 }
 
-*:focus-visible {
+.magnetic-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: visible;
+}
+
+.skip-nav {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  padding: 1rem 2rem;
+  background: white;
+  color: black;
+  font-weight: 600;
+  border-radius: 0 0 1rem 1rem;
+  transition: top 0.3s ease;
+}
+
+.skip-nav:focus {
+  top: 0;
   outline: 2px solid #6366f1;
   outline-offset: 2px;
+}
+
+.tilt-card {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.tilt-card-inner {
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+}
+
+.tilt-card:hover .tilt-card-inner {
+  transform: translateZ(20px);
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  top: -20px;
+  animation: confettiFall 3s ease-in forwards;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmerText 3s ease-in-out infinite;
+}
+
+@keyframes shimmerText {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.carousel-container {
+  cursor: grab;
+  overflow: hidden;
+}
+
+.carousel-container:active {
+  cursor: grabbing;
+}
+
+.carousel-item {
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.glass-reflection {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-reflection::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+  transform: scaleY(-1);
+  opacity: 0.3;
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  body::before,
+  body::after {
+    animation: none !important;
+  }
+  .noise-overlay {
+    animation: none !important;
+  }
 }
