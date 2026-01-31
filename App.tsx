@@ -10,14 +10,16 @@ import { SimpleTelegramChat } from './components/SimpleTelegramChat';
 import { ScrollToTop } from './components/ScrollToTop';
 import ScrollProgress from './components/ScrollProgress';
 import ErrorBoundary from './components/ErrorBoundary';
+import SkipLink from './components/SkipLink';
 
 const App: React.FC = () => {
   return (
     <I18nProvider>
       <div className="bg-black min-h-screen text-white selection:bg-white selection:text-black">
+        <SkipLink />
         <ScrollProgress />
         <Navigation />
-        <main>
+        <main id="main-content">
           <Hero />
           <WorkGallery />
           <About />
@@ -30,20 +32,6 @@ const App: React.FC = () => {
         <ScrollToTop />
       </div>
     </I18nProvider>
-    <div className="bg-black min-h-screen text-white selection:bg-white selection:text-black">
-      <Navigation />
-      <main>
-        <Hero />
-        <WorkGallery />
-        <About />
-        <ErrorBoundary>
-          <ContactSectionSecure id="contact" />
-        </ErrorBoundary>
-        <Footer />
-      </main>
-      <SimpleTelegramChat />
-      <ScrollToTop />
-    </div>
   );
 };
 

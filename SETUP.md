@@ -1,6 +1,6 @@
 # AstraDev Portfolio
 
-Full Stack developer portfolio featuring Artem Mikhailov's work and expertise.
+Full Stack developer portfolio featuring Jules Engineer's work and expertise.
 
 ## 🚀 Quick Start
 
@@ -34,7 +34,7 @@ npm run preview
 - **Styling**: Tailwind CSS with custom utilities
 - **Responsive**: Mobile-first, fully responsive design
 - **Fast**: Optimized builds, production-ready
-- **Personalized**: Content in Russian (Artem Mikhailov's portfolio)
+- **Personalized**: Content in Russian (Jules Engineer's portfolio)
 
 ## 📊 Performance
 

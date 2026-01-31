@@ -133,7 +133,7 @@ export const Navigation: React.FC = () => {
             className="flex items-center gap-2 group"
           >
             <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-neutral-400 transition-colors">
-              ARTEM.DEV
+              JULES.ENGINEER
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-white group-hover:bg-indigo-500 transition-colors" />
           </a>

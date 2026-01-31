@@ -30,8 +30,8 @@ describe('ContactSectionSecure', () => {
 
     render(<ContactSectionSecure />);
 
-    await userEvent.type(screen.getByLabelText(/name/i), 'Artem');
-    await userEvent.type(screen.getByLabelText(/email/i), 'artem@example.com');
+    await userEvent.type(screen.getByLabelText(/name/i), 'Jules');
+    await userEvent.type(screen.getByLabelText(/email/i), 'jules@example.com');
     await userEvent.type(screen.getByLabelText(/^message$/i), 'Hello, I need a website built for me.');
 
     await userEvent.click(screen.getByRole('button', { name: /send message/i }));
@@ -45,7 +45,7 @@ describe('ContactSectionSecure', () => {
   it('displays error when email format is invalid', async () => {
     render(<ContactSectionSecure />);
 
-    await userEvent.type(screen.getByLabelText(/name/i), 'Artem');
+    await userEvent.type(screen.getByLabelText(/name/i), 'Jules');
     await userEvent.type(screen.getByLabelText(/email/i), 'invalid-email');
     await userEvent.type(screen.getByLabelText(/^message$/i), 'Hello, I need a website built.');
 

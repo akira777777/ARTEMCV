@@ -4,17 +4,17 @@ import { Project } from './types';
 export const PROJECTS: Project[] = [
   {
     id: '1',
-    title: 'Barber Shop',
-    description: 'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',
-    techStack: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS'],
+    title: 'project.1.title',
+    description: 'project.1.desc',
+    techStack: ['React 19', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS'],
     liveLink: 'https://barber-am.vercel.app/',
     githubLink: 'https://github.com/akira777777',
     image: '/barber.png'
   },
   {
     id: '2',
-    title: 'Dental Clinic Vakalova',
-    description: 'Лендинг и запись к врачу: каталог услуг, интерактивные планы лечения, отзывы пациентов. Уделено внимание доступности и скорости загрузки.',
+    title: 'project.2.title',
+    description: 'project.2.desc',
     techStack: ['Next.js', 'Framer Motion', 'Tailwind', 'Supabase'],
     liveLink: 'https://dental-clinic-vakalova.vercel.app/',
     githubLink: 'https://github.com/akira777777',
@@ -22,8 +22,8 @@ export const PROJECTS: Project[] = [
   },
   {
     id: '3',
-    title: 'Game Marketplace',
-    description: 'Современный маркетплейс игр с каталогом, корзиной покупок, системой фильтрации и адаптивным интерфейсом. Реализованы анимации и плавные переходы.',
+    title: 'project.3.title',
+    description: 'project.3.desc',
     techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'],
     liveLink: 'https://game-marketplace-seven.vercel.app/',
     githubLink: 'https://github.com/akira777777',
@@ -31,8 +31,8 @@ export const PROJECTS: Project[] = [
   },
   {
     id: '4',
-    title: 'Detailing Service',
-    description: 'Лендинг для детейлинг-сервиса с галереей работ, формой записи, калькулятором услуг и интерактивными элементами. Оптимизирован для мобильных устройств.',
+    title: 'project.4.title',
+    description: 'project.4.desc',
     techStack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Vercel'],
     liveLink: 'https://detailing-mu.vercel.app/',
     githubLink: 'https://github.com/akira777777',
@@ -41,8 +41,17 @@ export const PROJECTS: Project[] = [
 ];
 
 export const SKILLS = [
-  { name: 'Frontend', items: ['React 19', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'Redux Toolkit'] },
-  { name: 'Backend', items: ['Node.js', 'Python (FastAPI, Django)', 'Java (Spring Boot)', 'PostgreSQL queries'] },
-  { name: 'Database', items: ['PostgreSQL', 'MongoDB', 'Redis', 'Supabase', 'Query optimization'] },
-  { name: 'Tools', items: ['Docker', 'Git', 'Vite', 'AWS/Vercel', 'Google Gemini API'] }
+  { name: 'skill.frontend', items: ['React 19', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'Canvas API', 'Three.js'] },
+  { name: 'skill.backend', items: ['Node.js (Fastify/Express)', 'Python (FastAPI)', 'Java (Spring Boot)', 'PostgreSQL / Prisma'] },
+  { name: 'skill.architecture', items: ['Microservices', 'Event-driven', 'Serverless', 'WebSockets', 'Query optimization'] },
+  { name: 'skill.tools', items: ['Docker', 'Git', 'Vite', 'AWS/Vercel', 'Google Gemini AI', 'Claude API'] }
+];
+
+export const SERVICES = [
+  { name: 'service.web.title', desc: 'service.web.desc' },
+  { name: 'service.uiux.title', desc: 'service.uiux.desc' },
+  { name: 'service.api.title', desc: 'service.api.desc' },
+  { name: 'service.db.title', desc: 'service.db.desc' },
+  { name: 'service.perf.title', desc: 'service.perf.desc' },
+  { name: 'service.cloud.title', desc: 'service.cloud.desc' },
 ];

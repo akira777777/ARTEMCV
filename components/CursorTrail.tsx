@@ -15,7 +15,7 @@ const CursorTrail: React.FC = () => {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const trailRef = useRef<TrailPoint[]>([]);
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const mouseX = useMotionValue(0);
@@ -111,7 +111,7 @@ const CursorTrail: React.FC = () => {
     return () => {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouseMove);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
   }, [prefersReducedMotion, isMobile, springX, springY, handleMouseMove]);
 

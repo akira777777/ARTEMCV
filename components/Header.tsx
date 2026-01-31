@@ -13,9 +13,9 @@ const Header: React.FC = () => {
         <div className="flex justify-between h-20 items-center">
           <a className="flex items-center space-x-2 cursor-pointer group" href="#top">
             <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center overflow-hidden bg-indigo-600 font-bold text-white text-xs">
-              AM
+              JE
             </div>
-            <span className="text-sm font-bold tracking-widest uppercase text-white">Artem Mikhailov</span>
+            <span className="text-sm font-bold tracking-widest uppercase text-white">Jules Engineer</span>
           </a>
 
           <div className="hidden md:flex items-center space-x-12">
