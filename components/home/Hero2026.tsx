@@ -43,7 +43,7 @@ const Hero2026: React.FC = () => {
   }), []);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
+    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
       {/* Background Canvas - Using performance optimization */}
       <div className="absolute inset-0 z-0 opacity-60">
         <OptimizedParticleCanvas />
@@ -84,7 +84,7 @@ const Hero2026: React.FC = () => {
           className="flex flex-col md:flex-row gap-4 justify-center"
         >
           <a 
-            href="#work" 
+            href="#works"
             className="bg-indigo-600 px-10 py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-600/20 text-white"
           >
             {t('hero.cta.portfolio')} <span className="material-symbols-outlined text-sm">arrow_downward</span>

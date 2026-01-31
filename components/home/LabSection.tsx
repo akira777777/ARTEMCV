@@ -1,7 +1,6 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { useI18n } from '../../i18n';
-
-const GradientShaderCard = React.lazy(() => import('../GradientShaderCard'));
+import LazyGradientShaderCard from '../LazyGradientShaderCard';
 
 const LabSection: React.FC = () => {
   const { t } = useI18n();
@@ -19,13 +18,7 @@ const LabSection: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="group cursor-pointer md:col-span-2">
-            <Suspense fallback={
-              <div className="w-full h-[360px] lg:h-[440px] rounded-[2.7rem] bg-[#0f172a] animate-pulse flex items-center justify-center">
-                <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
-              </div>
-            }>
-              <GradientShaderCard />
-            </Suspense>
+            <LazyGradientShaderCard />
           </div>
           <div className="group cursor-pointer">
             <div className="aspect-video glass rounded-3xl mb-6 overflow-hidden relative border border-white/10">

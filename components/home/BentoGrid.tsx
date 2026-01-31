@@ -13,7 +13,7 @@ const BentoGrid: React.FC = () => {
   const tertiaryProject = PROJECTS[1]; // Dental Clinic
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-32" id="work">
+    <section className="max-w-7xl mx-auto px-6 py-32" id="works">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[300px]">
         {/* Main Project: Detailing Hub */}
         <motion.div
@@ -65,7 +65,7 @@ const BentoGrid: React.FC = () => {
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
           className="md:col-span-4 md:row-span-2 relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-md flex flex-col p-10"
-          id="stack"
+          id="services"
         >
           <h3 className="text-2xl font-display font-bold mb-8 text-white">{t('about.title')}</h3>
           <div className="flex-grow flex flex-col gap-6">

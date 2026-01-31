@@ -7,9 +7,19 @@ interface Particle {
   vy: number;
   radius: number;
   color: string;
+  colorIdx: number;
   life: number;
   maxLife: number;
 }
+
+const COLORS = [
+  'rgba(14, 165, 233',  // Sky Blue
+  'rgba(16, 185, 129',  // Emerald
+  'rgba(245, 158, 11',  // Amber
+  'rgba(139, 92, 246'   // Violet
+];
+
+const ALPHA_STEPS = 10;
 
 const GradientShaderCard: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -93,18 +103,16 @@ const GradientShaderCard: React.FC = () => {
     // Pre-create particle objects to avoid GC pressure
     for (let i = 0; i < PARTICLE_POOL_SIZE; i++) {
       particlePool.push({
-        x: 0, y: 0, vx: 0, vy: 0, radius: 0, color: '', life: 0, maxLife: 0
+        x: 0, y: 0, vx: 0, vy: 0, radius: 0, color: '', colorIdx: 0, life: 0, maxLife: 0
       });
     }
     
+    // Batches for optimized drawing
+    const batches: number[][][] = Array.from({ length: COLORS.length }, () =>
+      Array.from({ length: ALPHA_STEPS }, () => [])
+    );
+
     const createParticles = (x: number, y: number, count: number = 1) => {
-      const colors = [
-        'rgba(14, 165, 233',  // Sky Blue
-        'rgba(16, 185, 129',  // Emerald
-        'rgba(245, 158, 11',  // Amber
-        'rgba(139, 92, 246'   // Violet
-      ];
-      
       for (let i = 0; i < count; i++) {
         // Find inactive particle in pool
         if (activeParticleCount < PARTICLE_POOL_SIZE) {
@@ -118,7 +126,9 @@ const GradientShaderCard: React.FC = () => {
           p.vx = Math.cos(angle) * speed;
           p.vy = Math.sin(angle) * speed;
           p.radius = 1 + Math.random() * 3;
-          p.color = colors[Math.floor(Math.random() * colors.length)];
+          const colorIdx = Math.floor(Math.random() * COLORS.length);
+          p.colorIdx = colorIdx;
+          p.color = COLORS[colorIdx];
           p.life = 100;
           p.maxLife = 100;
         }
@@ -227,6 +237,13 @@ const GradientShaderCard: React.FC = () => {
     };
 
     const drawParticles = () => {
+      // Reset batches
+      for (let c = 0; c < COLORS.length; c++) {
+        for (let a = 0; a < ALPHA_STEPS; a++) {
+          batches[c][a].length = 0;
+        }
+      }
+
       // Use particle pool instead of dynamic array for better performance
       for (let i = activeParticleCount - 1; i >= 0; i--) {
         const p = particlePool[i];
@@ -239,11 +256,12 @@ const GradientShaderCard: React.FC = () => {
         p.life -= 1;
 
         if (p.life <= 0) {
-          // Move last active particle to current position and decrease count
-          if (i < activeParticleCount - 1) {
-            particlePool[i] = particlePool[activeParticleCount - 1];
-          }
           activeParticleCount--;
+          const lastIdx = activeParticleCount;
+          // Swap references in the pool to avoid object spread and GC pressure
+          const tmp = particlePool[i];
+          particlePool[i] = particlePool[lastIdx];
+          particlePool[lastIdx] = tmp;
           continue;
         }
 
@@ -265,7 +283,7 @@ const GradientShaderCard: React.FC = () => {
           ctx.beginPath();
           ctx.fillStyle = `${baseColor}, ${alpha * 0.3})`;
           for (const idx of indices) {
-            const p = pool[idx];
+            const p = particlePool[idx];
             ctx.moveTo(p.x + p.radius * 2, p.y);
             ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
           }
@@ -275,7 +293,7 @@ const GradientShaderCard: React.FC = () => {
           ctx.beginPath();
           ctx.fillStyle = `${baseColor}, ${alpha})`;
           for (const idx of indices) {
-            const p = pool[idx];
+            const p = particlePool[idx];
             ctx.moveTo(p.x + p.radius, p.y);
             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           }
@@ -305,6 +323,11 @@ const GradientShaderCard: React.FC = () => {
     };
 
     const animate = () => {
+      // Ambient particle emission for visual consistency
+      if (activeParticleCount < 10 && Math.random() < 0.02) {
+        createParticles(Math.random() * w, Math.random() * h, 1);
+      }
+
       ctx.fillStyle = bgGradient;
       ctx.fillRect(0, 0, w, h);
 

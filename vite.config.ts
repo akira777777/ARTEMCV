@@ -93,8 +93,10 @@ export default defineConfig(({ mode }) => {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
       },
-      // Include test files
-      include: ['tests/**/*.{test,spec}.{ts,tsx}'],
+      // Include unit test files
+      include: ['tests/**/*.test.{ts,tsx}'],
+      // Exclude E2E tests from Vitest
+      exclude: ['node_modules', 'tests/e2e/**'],
     },
     
     define: {

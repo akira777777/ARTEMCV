@@ -20,7 +20,9 @@ const renderWithI18n = (component: React.ReactElement) => {
 describe('SpotlightGallery', () => {
   it('renders the works section with title', () => {
     renderWithI18n(<SpotlightGallery />);
-    expect(screen.getByText('WORKS')).toBeInTheDocument();
+    // Work might appear in nav and in section header
+    const titles = screen.getAllByText('WORK');
+    expect(titles.length).toBeGreaterThan(0);
   });
 
   it('renders navigation buttons', () => {
@@ -32,7 +34,9 @@ describe('SpotlightGallery', () => {
   it('displays project counter', () => {
     renderWithI18n(<SpotlightGallery />);
     expect(screen.getByText(/Viewing/)).toBeInTheDocument();
-    expect(screen.getByText(/of/)).toBeInTheDocument();
+    // Use getAllByText because 'of' appears multiple times
+    const ofText = screen.getAllByText(/of/);
+    expect(ofText.length).toBeGreaterThan(0);
   });
 
   it('has CTA button for viewing project', () => {

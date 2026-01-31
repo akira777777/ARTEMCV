@@ -11,7 +11,13 @@ vi.mock('framer-motion', () => ({
     span: ({ children, ...props }: any) => <span {...props}>{children}</span>,
     path: ({ children, ...props }: any) => <path {...props}>{children}</path>,
     svg: ({ children, ...props }: any) => <svg {...props}>{children}</svg>,
+    p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
+    a: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
   },
+  AnimatePresence: ({ children }: any) => <>{children}</>,
+  useSpring: () => ({ get: () => 0, set: () => {} }),
+  useMotionValue: () => ({ get: () => 0, set: () => {} }),
 }));
 
 // Mock MagneticButton component
