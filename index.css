@@ -4,6 +4,41 @@
   --primary: #6366f1;
   --bg: #0a0a0a;
   --touch-target: 48px;
+  --container-width: 1200px;
+}
+
+/* Fixed 1200px centered container */
+.content-wrapper {
+<<<<<<< Updated upstream
+  width: 100%;
+  height: min-content;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  overflow: visible;
+  z-index: 2;
+  padding: 0px;
+  align-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  position: absolute;
+  border-radius: 0px 0px 0px 0px;
+=======
+  width: var(--container-width);
+  max-width: 100%;
+  height: min-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #000000;
+  overflow: visible;
+  padding: 0;
+  margin: 0 auto;
+  position: relative;
+>>>>>>> Stashed changes
 }
 
 html {
@@ -582,5 +617,19 @@ textarea:focus-visible {
   transform: scaleY(-1);
   opacity: 0.3;
   filter: blur(4px);
+  pointer-events: none;
+}
+
+.holo-abstract-sphere {
+  height: 1275px;
+  display: block;
+  overflow: visible;
+  aspect-ratio: 1 / 1;
+  background-image: url('/holo-abstract-sphere.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  border-radius: 0;
   pointer-events: none;
 }
