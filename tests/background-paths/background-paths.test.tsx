@@ -4,17 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import BackgroundPaths from '../../components/BackgroundPaths';
 
-// Mock framer-motion for testing
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    span: ({ children, ...props }: any) => <span {...props}>{children}</span>,
-    path: ({ children, ...props }: any) => <path {...props}>{children}</path>,
-    svg: ({ children, ...props }: any) => <svg {...props}>{children}</svg>,
-    a: ({ children, ...props }: any) => <a {...props}>{children}</a>,
-    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
-  },
-}));
 
 // Mock MagneticButton component
 vi.mock('../../components/MagneticButton', async () => {

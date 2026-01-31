@@ -5,6 +5,11 @@ import Home2026 from './pages/Home2026';
 import DetailingHub from './pages/DetailingHub';
 import { ScrollToTop } from './components/ScrollToTop';
 
+// Lazy load heavy components
+const SimpleTelegramChat = React.lazy(() =>
+  import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat }))
+);
+
 // Loading fallback
 const PageLoader = () => (
   <div className="min-h-screen bg-[#050505] flex items-center justify-center">
@@ -24,6 +29,7 @@ const App: React.FC = () => {
             {/* Fallback for old routes or 404 could go here */}
             <Route path="*" element={<Home2026 />} />
           </Routes>
+          <SimpleTelegramChat />
         </Suspense>
       </Router>
     </I18nProvider>
