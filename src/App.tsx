@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from './components/ProjectCard';
 import ParticleField from './components/ParticleField';
 import { Github, Linkedin, Mail, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const PortfolioPage = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -61,36 +61,7 @@ const PortfolioPage = () => {
       {/* Generative Particle Background */}
       <ParticleField mousePosition={mousePosition} />
       
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Navigation */}
-        <nav className="flex justify-between items-center py-6">
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
-          >
-            Artem Mikhailov
-          </motion.div>
-          
-          <div className="flex space-x-6">
-            <a href="#projects" className="text-muted-foreground hover:text-foreground transition-colors">Projects</a>
-            <a href="#skills" className="text-muted-foreground hover:text-foreground transition-colors">Skills</a>
-            <a href="#contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</a>
-          </div>
-          
-          <div className="flex space-x-4">
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-              <Github className="w-5 h-5" />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-              <Mail className="w-5 h-5" />
-            </a>
-          </div>
-        </nav>
-
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
         {/* Hero Section */}
         <section className="py-20">
           <div className="text-center max-w-4xl mx-auto">
@@ -122,12 +93,12 @@ const PortfolioPage = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="flex justify-center space-x-4"
             >
-              <button className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-semibold text-white hover:opacity-90 transition-opacity glow-on-hover">
+              <Link to="/detailing-hub" className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-semibold text-white hover:opacity-90 transition-opacity glow-on-hover">
                 View Projects
-              </button>
-              <button className="px-8 py-3 border border-border rounded-lg font-semibold text-foreground hover:bg-muted transition-colors">
+              </Link>
+              <a href="mailto:artem@example.com" className="px-8 py-3 border border-border rounded-lg font-semibold text-foreground hover:bg-muted transition-colors">
                 Contact Me
-              </button>
+              </a>
             </motion.div>
           </div>
         </section>
