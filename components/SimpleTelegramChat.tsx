@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, X, Send, Loader2, Maximize2, Minimize2 } from 'lucide-react';
+import { useI18n } from '../i18n';
 
 interface Message {
   id: string;
@@ -11,16 +12,24 @@ interface Message {
 const createId = () => globalThis.crypto?.randomUUID?.() ?? `msg-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
 export const SimpleTelegramChat: React.FC = () => {
+  const { t, lang } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { 
       id: createId(), 
       role: 'bot', 
-      text: 'Привет! 👋 Отправьте мне сообщение, и я пересошлю его вам в Telegram.',
+      text: t('chat.bot.welcome'),
       timestamp: new Date() 
     }
   ]);
+
+  // Update initial message when language changes if it's the only one
+  useEffect(() => {
+    if (messages.length === 1 && messages[0].role === 'bot') {
+       setMessages([{ ...messages[0], text: t('chat.bot.welcome') }]);
+    }
+  }, [lang, t]);
   const [inputValue, setInputValue] = useState('');
   const [userName, setUserName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -51,18 +60,18 @@ export const SimpleTelegramChat: React.FC = () => {
     // Проверка rate limit (5 секунд между сообщениями)
     const now = Date.now();
     if (lastSubmitRef.current && now - lastSubmitRef.current < 5_000) {
-      setError('Пожалуйста, подождите перед следующим сообщением');
+      setError(t('chat.error.wait'));
       return;
     }
 
     // Запросить имя если не заполнено
     let name = userName.trim();
     if (!name) {
-      const promptName = window.prompt('Укажите ваше имя:');
+      const promptName = window.prompt(t('chat.prompt.name'));
       if (!promptName) return;
       name = promptName.trim();
       if (!name) {
-        setError('Имя обязательно');
+        setError(t('chat.error.name_required'));
         return;
       }
       setUserName(name);
@@ -121,7 +130,7 @@ export const SimpleTelegramChat: React.FC = () => {
       setMessages(prev => [...prev, {
         id: botMsgId,
         role: 'bot',
-        text: '✓ Сообщение отправлено! Я ответу вам в Telegram как можно скорее.',
+        text: t('chat.bot.success'),
         timestamp: new Date()
       }]);
 
@@ -129,9 +138,9 @@ export const SimpleTelegramChat: React.FC = () => {
     } catch (err: any) {
       console.error('Error sending message:', err);
       
-      let errorText = 'Ошибка при отправке сообщения';
+      let errorText = 'Error sending message';
       if (err?.name === 'AbortError') {
-        errorText = 'Timeout при отправке. Попробуйте позже.';
+        errorText = 'Timeout sending message. Please try again.';
       } else if (err?.message) {
         errorText = err.message;
       }
@@ -157,7 +166,7 @@ export const SimpleTelegramChat: React.FC = () => {
       <div className="fixed bottom-8 right-8 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          aria-label={isOpen ? 'Закрыть чат' : 'Открыть чат'}
+          aria-label={isOpen ? t('chat.aria.close') : t('chat.aria.open')}
           className={`
             w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500
             ${isOpen ? 'bg-white text-black rotate-90' : 'bg-neutral-900 text-white hover:scale-110 border border-white/20'}
@@ -182,13 +191,13 @@ export const SimpleTelegramChat: React.FC = () => {
         <div className="flex items-center justify-between p-4 border-b border-white/10 bg-black/40">
           <div className="flex items-center gap-2">
             <MessageCircle className="w-4 h-4 text-blue-400" />
-            <span className="font-display font-bold tracking-widest text-sm text-white">TELEGRAM CHAT</span>
+            <span className="font-display font-bold tracking-widest text-sm text-white">{t('chat.label.telegram')}</span>
           </div>
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="text-neutral-400 hover:text-white transition-colors"
-            aria-label={isExpanded ? 'Свернуть панель' : 'Развернуть панель'}
-            title={isExpanded ? 'Свернуть панель' : 'Развернуть панель'}
+            aria-label={isExpanded ? t('chat.aria.collapse') : t('chat.aria.expand')}
+            title={isExpanded ? t('chat.aria.collapse') : t('chat.aria.expand')}
           >
             {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
           </button>
@@ -211,7 +220,7 @@ export const SimpleTelegramChat: React.FC = () => {
               >
                 <p className="whitespace-pre-wrap break-words">{msg.text}</p>
                 <span className={`text-[10px] mt-2 block ${msg.role === 'user' ? 'text-black/60' : 'text-neutral-500'}`}>
-                  {msg.timestamp.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
+                  {msg.timestamp.toLocaleTimeString(lang === 'ru' ? 'ru-RU' : lang === 'cs' ? 'cs-CZ' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
             </div>
@@ -222,7 +231,7 @@ export const SimpleTelegramChat: React.FC = () => {
               <div className="bg-white/5 p-4 rounded-2xl rounded-tl-none border border-white/5 flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin text-neutral-400" />
                 <span className="text-xs text-neutral-400 font-mono animate-pulse">
-                  Отправка...
+                  {t('contact.button.sending')}
                 </span>
               </div>
             </div>
@@ -255,14 +264,14 @@ export const SimpleTelegramChat: React.FC = () => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(e as any)}
-              placeholder="Введите сообщение..."
+              placeholder={t('chat.placeholder')}
               disabled={loading}
               className="flex-1 bg-white/5 border border-white/10 rounded-full py-3 px-4 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50"
             />
             <button
               type="submit"
               disabled={loading || !inputValue.trim()}
-              aria-label="Отправить сообщение"
+              aria-label={t('chat.button.send')}
               className="p-3 bg-white text-black rounded-full hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <Send size={16} />
