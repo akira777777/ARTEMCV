@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { fetchWithTimeout as fetchWithTimeoutUtil } from './utils';
 
 /**
  * Hook to detect user's preference for reduced motion
@@ -219,4 +220,15 @@ export function useMagnetic(strength = 0.3) {
   }, []);
 
   return { ref, offset, handleMouseMove, handleMouseLeave };
+}
+
+/**
+ * Hook for fetch requests with automatic timeout
+ * Returns a function that performs fetch with built-in AbortController and timeout
+ * Uses the fetchWithTimeout utility function for consistency
+ */
+export function useFetchWithTimeout(timeoutMs: number = 12_000) {
+  return useCallback((url: string, options: RequestInit = {}) => {
+    return fetchWithTimeoutUtil(url, options, timeoutMs);
+  }, [timeoutMs]);
 }
