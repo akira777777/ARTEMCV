@@ -20,7 +20,7 @@ export const Footer2026: React.FC = () => {
 
         <div className="mt-32 w-full grid grid-cols-2 md:grid-cols-4 gap-12 text-left opacity-40 text-sm border-t border-white/5 pt-12 text-white">
           <div className="flex flex-col gap-4">
-            <span className="font-bold text-white uppercase tracking-widest text-[10px]">Social</span>
+            <span className="font-bold text-white uppercase tracking-widest text-[10px]">{t('footer.social')}</span>
             <a href="https://twitter.com" className="hover:text-white transition-colors">Twitter (X)</a>
             <a href="https://linkedin.com" className="hover:text-white transition-colors">LinkedIn</a>
             <a href="https://github.com/akira777777" className="hover:text-white transition-colors">GitHub</a>

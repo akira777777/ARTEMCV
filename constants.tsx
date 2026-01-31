@@ -34,7 +34,7 @@ export const PROJECTS: Project[] = [
 export const SKILLS = [
   { name: 'skill.frontend', items: ['Next.js 16', 'Three.js / R3F', 'Framer Motion', 'GSAP', 'Tailwind CSS', 'WebGPU'] },
   { name: 'skill.backend', items: ['Go (Golang)', 'PostgreSQL', 'Edge Runtime', 'Real-time Data Sync'] },
-  { name: 'skill.infrastructure', items: ['AWS Lambda', 'OpenAI API (Multi-agent)', 'CI/CD', 'Vercel'] },
+  { name: 'skill.architecture', items: ['AWS Lambda', 'OpenAI API (Multi-agent)', 'CI/CD', 'Vercel'] },
   { name: 'skill.tools', items: ['TypeScript 6.0', 'Copilot Pro+', 'Figma', 'Docker'] }
 ];
 
