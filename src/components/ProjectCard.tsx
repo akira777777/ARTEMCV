@@ -18,7 +18,7 @@ interface ProjectCardProps {
   delay?: number;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, delay = 0 }) => {
+const ProjectCard: React.FC<ProjectCardProps> = React.memo(({ project, delay = 0 }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -63,6 +63,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, delay = 0 }) => {
       <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity" />
     </motion.div>
   );
-};
+});
 
 export default ProjectCard;
