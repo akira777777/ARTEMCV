@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { NavItem } from '../types';
+import { useReducedMotion } from '../lib/hooks';
 
 const navItems: NavItem[] = [
   { label: 'HOME', href: '#home' },
@@ -32,15 +33,24 @@ const NavLink = React.memo<{
 ));
 
 export const Navigation: React.FC = () => {
+  const prefersReducedMotion = useReducedMotion();
   const [active, setActive] = useState('HOME');
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollYRef = useRef(0);
   const rafRef = useRef<number | null>(null);
+  const sectionCacheRef = useRef<Map<string, HTMLElement | null>>(new Map());
+
+  // Cache section elements on mount
+  useEffect(() => {
+    navItems.forEach(item => {
+      sectionCacheRef.current.set(item.href, document.getElementById(item.href.substring(1)));
+    });
+  }, []);
 
   // Optimize scroll detection with debouncing
   const updateActiveSection = useCallback(() => {
     for (const item of navItems) {
-      const element = document.getElementById(item.href.substring(1));
+      const element = sectionCacheRef.current.get(item.href);
       if (!element) continue;
       
       const rect = element.getBoundingClientRect();
@@ -105,10 +115,12 @@ export const Navigation: React.FC = () => {
     [active, handleLinkClick]
   );
 
+  const transitionClass = prefersReducedMotion ? '' : 'transition-all duration-500 ease-in-out';
+
   return (
     <header 
       className={`
-        fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out
+        fixed top-0 left-0 right-0 z-50 ${transitionClass}
         ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
       `}
     >
