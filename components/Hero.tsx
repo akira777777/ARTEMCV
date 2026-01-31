@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
-import { ParticleText } from './InteractiveElements';
 import { ServicesGrid } from './ServicesGrid';
+
+// Lazy load ParticleText to prevent chunk duplication
+const ParticleText = React.lazy(() => import('./InteractiveElements').then(m => ({ default: m.ParticleText })));
 
 // Floating orbs that follow cursor
 const FloatingOrb: React.FC<{ 
@@ -198,8 +200,13 @@ export const Hero: React.FC = React.memo(() => {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       {/* Decorative Purple Star */}
       <div className="hero-purple-star" aria-hidden="true" />
+=======
+      {/* Holographic Abstract Sphere */}
+      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
+>>>>>>> Stashed changes
 =======
       {/* Holographic Abstract Sphere */}
       <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />

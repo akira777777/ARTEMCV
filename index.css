@@ -9,37 +9,16 @@
 
 /* Fixed 1200px centered container */
 .content-wrapper {
-    background-color: transparent;
-=======
-  background-color: #000000;
->>>>>>> Stashed changes
+  background-color: transparent;
   overflow: visible;
   padding: 0;
   margin: 0 auto;
   position: relative;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 }
 
 /* Inner sections should take full width of wrapper */
 .content-wrapper > section {
   width: 100%;
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
 
 html {
