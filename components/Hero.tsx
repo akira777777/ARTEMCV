@@ -1,5 +1,9 @@
 import React, { useRef, useEffect, useMemo } from 'react';
+<<<<<<< Updated upstream
 import { ArrowRight } from 'lucide-react';
+=======
+import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
+>>>>>>> Stashed changes
 
 export const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -64,10 +68,20 @@ export const Hero: React.FC = () => {
            <span className="text-4xl md:text-6xl font-display font-bold mr-4 animate-pulse">∞</span>
         </div>
         <h1 className="text-[12vw] leading-[0.85] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 select-none">
+<<<<<<< Updated upstream
           STUDIO
         </h1>
         <p className="mt-8 text-neutral-400 max-w-md mx-auto text-sm md:text-base font-light tracking-wide leading-relaxed">
           The forefront of innovation &gt; Seamlessly blending creativity with technology to deliver stunning visual experiences.
+=======
+          ARTEM
+        </h1>
+        <p className="mt-4 text-lg md:text-xl text-white font-medium tracking-wide">
+          Full-Stack Developer & UI/UX Designer
+        </p>
+        <p className="mt-4 text-neutral-400 max-w-lg mx-auto text-sm md:text-base font-light tracking-wide leading-relaxed">
+          Crafting high-performance web applications with modern technologies. Specialized in React, TypeScript, and creating exceptional user experiences.
+>>>>>>> Stashed changes
         </p>
       </div>
 
@@ -93,6 +107,7 @@ export const Hero: React.FC = () => {
               </div>
             </div>
           ))}
+<<<<<<< Updated upstream
         </div>
       </div>
       
@@ -100,6 +115,41 @@ export const Hero: React.FC = () => {
         type="button"
         onClick={scrollToWorks}
         className="absolute bottom-10 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group"
+=======
+        </div>
+      </div>
+      
+      {/* Stats Section */}
+      <div className="absolute bottom-24 left-1/2 -translate-x-1/2 w-full max-w-4xl px-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+          <div className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all group">
+            <Code2 className="w-6 h-6 mx-auto mb-2 text-indigo-400 group-hover:scale-110 transition-transform" />
+            <div className="text-2xl md:text-3xl font-black text-white">50+</div>
+            <div className="text-xs text-neutral-500 tracking-wider">PROJECTS</div>
+          </div>
+          <div className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all group">
+            <Users className="w-6 h-6 mx-auto mb-2 text-emerald-400 group-hover:scale-110 transition-transform" />
+            <div className="text-2xl md:text-3xl font-black text-white">30+</div>
+            <div className="text-xs text-neutral-500 tracking-wider">CLIENTS</div>
+          </div>
+          <div className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all group">
+            <Zap className="w-6 h-6 mx-auto mb-2 text-yellow-400 group-hover:scale-110 transition-transform" />
+            <div className="text-2xl md:text-3xl font-black text-white">3+</div>
+            <div className="text-xs text-neutral-500 tracking-wider">YEARS EXP</div>
+          </div>
+          <div className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all group">
+            <Palette className="w-6 h-6 mx-auto mb-2 text-pink-400 group-hover:scale-110 transition-transform" />
+            <div className="text-2xl md:text-3xl font-black text-white">100%</div>
+            <div className="text-xs text-neutral-500 tracking-wider">SATISFACTION</div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={scrollToWorks}
+        className="absolute bottom-4 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group"
+>>>>>>> Stashed changes
       >
         SCROLL TO EXPLORE <ArrowRight className="w-4 h-4 animate-bounce group-hover:translate-x-1 transition-transform" />
       </button>

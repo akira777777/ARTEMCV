@@ -3,8 +3,14 @@ import { NavItem } from '../types';
 
 const navItems: NavItem[] = [
   { label: 'HOME', href: '#home' },
+<<<<<<< Updated upstream
   { label: 'STUDIO', href: '#studio' },
   { label: 'WORKS', href: '#works' },
+=======
+  { label: 'WORKS', href: '#works' },
+  { label: 'SERVICES', href: '#services' },
+  { label: 'ABOUT', href: '#studio' },
+>>>>>>> Stashed changes
   { label: 'CONTACT', href: '#contact' },
 ];
 
@@ -70,9 +76,15 @@ export const Navigation: React.FC = () => {
             className="flex items-center gap-2 group"
           >
             <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-neutral-400 transition-colors">
+<<<<<<< Updated upstream
               INFINITE
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-white group-hover:bg-purple-500 transition-colors" />
+=======
+              ARTEM.DEV
+            </span>
+            <span className="w-1.5 h-1.5 rounded-full bg-white group-hover:bg-indigo-500 transition-colors" />
+>>>>>>> Stashed changes
           </a>
 
           {/* Desktop Nav */}

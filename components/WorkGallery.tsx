@@ -88,9 +88,19 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
           <h3 className="text-2xl font-bold font-display tracking-wide group-hover:text-neutral-300 transition-colors">{project.title}</h3>
           <p className="text-neutral-500 text-sm mt-1">{primaryTag}</p>
         </div>
+<<<<<<< Updated upstream
         <span className="text-xs font-mono border border-white/10 px-2 py-1 rounded text-neutral-400">
           {project.techStack[1] || 'BUILD'}
         </span>
+=======
+        <div className="flex gap-2">
+          {project.techStack.slice(1, 3).map((tech) => (
+            <span key={tech} className="text-xs font-mono border border-white/10 px-2 py-1 rounded text-neutral-400 hover:border-white/20 transition-colors">
+              {tech}
+            </span>
+          ))}
+        </div>
+>>>>>>> Stashed changes
       </div>
     </div>
   );
