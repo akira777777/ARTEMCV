@@ -102,7 +102,7 @@ const InteractiveShowcase: React.FC = () => {
             
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full floating-badge accent-pill text-zinc-400">
               <span className="w-2 h-2 rounded-full bg-fuchsia-400" />
-              Interactive Lab
+              <span>Interactive Lab</span>
             </div>
             
             <h3 id="lab-heading" className="text-3xl md:text-4xl font-serif leading-tight">
@@ -117,7 +117,8 @@ const InteractiveShowcase: React.FC = () => {
               <div className="rounded-3xl glass-card p-6 border border-white/10 space-y-4">
                 <h4 className="text-xs uppercase tracking-[0.2em] text-zinc-500">Holo Orb</h4>
                 <div className="relative flex items-center justify-center h-48">
-                  <div className="holo-orb" role="img" aria-label="Decorative holographic orb" />
+                  <div className="holo-orb" aria-hidden="true" />
+                  <span className="sr-only">Decorative holographic orb</span>
                   <div className="absolute text-[11px] uppercase tracking-[0.3em] text-emerald-100">touchless motion</div>
                 </div>
               </div>

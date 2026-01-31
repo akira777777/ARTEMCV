@@ -28,7 +28,7 @@ const GradientShaderCard: React.FC = () => {
     const rect = canvas.parentElement?.getBoundingClientRect();
     if (!rect) return;
 
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = globalThis.devicePixelRatio || 1;
     canvas.width = Math.floor(rect.width * dpr);
     canvas.height = Math.floor(rect.height * dpr);
     ctx.scale(dpr, dpr);
@@ -99,18 +99,11 @@ const GradientShaderCard: React.FC = () => {
 
     let animationId: number;
 
-    const animate = () => {
-      // Clear with cached gradient background
-      ctx.fillStyle = bgGradient;
-      ctx.fillRect(0, 0, w, h);
-
-      // Draw animated mesh grid
+    const drawGrid = () => {
       time += 0.01;
-      // const gridSize = 40; // Moved to outer scope
       ctx.strokeStyle = 'rgba(0, 200, 255, 0.1)';
       ctx.lineWidth = 1;
 
-      // Precompute values
       const time20 = time * 20;
       const time15 = time * 15;
 
@@ -152,22 +145,17 @@ const GradientShaderCard: React.FC = () => {
         }
       }
       ctx.stroke();
+    };
 
-      // Draw cached gradient overlay
-      ctx.fillStyle = gradOverlay;
-      ctx.fillRect(0, 0, w, h);
-
-      // Update and draw particles
+    const drawParticles = () => {
       const particles = particlesRef.current;
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         
-        // Apply gravity/damping
         p.vy += 0.05;
         p.vx *= 0.99;
         p.vy *= 0.99;
         
-        // Update position
         p.x += p.vx;
         p.y += p.vy;
         p.life -= 1;
@@ -177,11 +165,9 @@ const GradientShaderCard: React.FC = () => {
           continue;
         }
 
-        // Draw particle with glow
         const alpha = (p.life / p.maxLife) * 0.8;
         ctx.fillStyle = p.color.replace(')', `, ${alpha})`).replace('rgb', 'rgba');
         
-        // Glow
         ctx.shadowColor = p.color;
         ctx.shadowBlur = 10;
         ctx.beginPath();
@@ -190,25 +176,25 @@ const GradientShaderCard: React.FC = () => {
       }
 
       ctx.shadowColor = 'transparent';
+    };
 
-      // Draw interactive center glow when hovered
-      if (isHovered) {
-        // Create glow gradient (only when hovered)
-        const glow = ctx.createRadialGradient(mouseRef.current.x, mouseRef.current.y, 0, mouseRef.current.x, mouseRef.current.y, 100);
-        glow.addColorStop(0, 'rgba(0, 255, 136, 0.3)');
-        glow.addColorStop(1, 'rgba(0, 136, 255, 0)');
-        ctx.fillStyle = glow;
-        ctx.fillRect(0, 0, w, h);
+    const drawHoverGlow = () => {
+      if (!isHovered) return;
 
-        // Draw interactive circle
-        ctx.strokeStyle = 'rgba(0, 255, 136, 0.5)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(mouseRef.current.x, mouseRef.current.y, 30, 0, Math.PI * 2);
-        ctx.stroke();
-      }
+      const glow = ctx.createRadialGradient(mouseRef.current.x, mouseRef.current.y, 0, mouseRef.current.x, mouseRef.current.y, 100);
+      glow.addColorStop(0, 'rgba(0, 255, 136, 0.3)');
+      glow.addColorStop(1, 'rgba(0, 136, 255, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, w, h);
 
-      // Add scanlines
+      ctx.strokeStyle = 'rgba(0, 255, 136, 0.5)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(mouseRef.current.x, mouseRef.current.y, 30, 0, Math.PI * 2);
+      ctx.stroke();
+    };
+
+    const drawScanlines = () => {
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -217,6 +203,20 @@ const GradientShaderCard: React.FC = () => {
         ctx.lineTo(w, y);
       }
       ctx.stroke();
+    };
+
+    const animate = () => {
+      ctx.fillStyle = bgGradient;
+      ctx.fillRect(0, 0, w, h);
+
+      drawGrid();
+
+      ctx.fillStyle = gradOverlay;
+      ctx.fillRect(0, 0, w, h);
+
+      drawParticles();
+      drawHoverGlow();
+      drawScanlines();
 
       animationId = requestAnimationFrame(animate);
     };
@@ -229,31 +229,31 @@ const GradientShaderCard: React.FC = () => {
     };
   }, [isHovered]);
 
+  const handleFocus = () => setIsHovered(true);
+  const handleBlur = () => {
+    setIsHovered(false);
+    mouseRef.current = { x: 0, y: 0 };
+  };
+
   return (
     <div 
       className="w-full h-[360px] lg:h-[440px] rounded-[2.7rem] overflow-hidden relative bg-[#0a1a2e] cursor-crosshair transition-all"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        mouseRef.current = { x: 0, y: 0 };
-      }}
+      onMouseEnter={handleFocus}
+      onMouseLeave={handleBlur}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      tabIndex={0}
+      role="img"
+      aria-label="Interactive gradient shader card"
     >
       <canvas
         ref={canvasRef}
-        className="w-full h-full"
-        style={{
-          display: 'block',
-          backgroundColor: '#0a1a2e',
-        }}
+        className="w-full h-full gradient-shader-canvas"
       />
       
       {/* Border glow */}
       <div
-        className="absolute inset-0 rounded-[2.7rem] pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle at 30% 20%, rgba(0, 255, 136, 0.1), transparent 40%), radial-gradient(circle at 70% 70%, rgba(0, 136, 255, 0.1), transparent 50%)',
-          boxShadow: 'inset 0 0 30px rgba(0, 255, 136, 0.05)',
-        }}
+        className="absolute inset-0 rounded-[2.7rem] pointer-events-none gradient-shader-border"
       />
 
       {/* Labels */}

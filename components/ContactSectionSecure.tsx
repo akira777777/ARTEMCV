@@ -10,7 +10,11 @@ interface ContactFormData {
   hp?: string;
 }
 
-const ContactSectionSecure: React.FC = () => {
+interface ContactSectionSecureProps {
+  id?: string;
+}
+
+const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'contact' }) => {
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID; // optional; backend may override
   const lastSubmitRef = useRef<number>(0);
 
@@ -107,7 +111,7 @@ const ContactSectionSecure: React.FC = () => {
   }, [formData, validate, TELEGRAM_CHAT_ID]);
 
   return (
-    <section className="py-32 px-6 lg:px-12">
+    <section id={id} className="py-32 px-6 lg:px-12">
       <div className="max-w-3xl mx-auto">
         <div className="mb-16 text-center">
           <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter">Get In Touch</h2>

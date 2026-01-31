@@ -1,40 +1,30 @@
-
 import React from 'react';
-import Header from './components/Header';
-import SkipLink from './components/SkipLink';
-import Hero from './components/Hero';
-import About from './components/About';
-import Projects from './components/Projects';
+import { Navigation } from './components/Navigation';
+import { Hero } from './components/Hero';
+import { WorkGallery } from './components/WorkGallery';
+import { About } from './components/About';
 import ContactSectionSecure from './components/ContactSectionSecure';
+import { Footer } from './components/Footer';
+import { AIChatOverlay } from './components/AIChatOverlay';
+import { ScrollToTop } from './components/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
-import Footer from './components/Footer';
-import { I18nProvider } from './i18n';
 
 const App: React.FC = () => {
   return (
-    <I18nProvider>
-      <ErrorBoundary>
-        <div className="min-h-screen transition-colors duration-300 relative overflow-hidden">
-          <div className="glow-ring" aria-hidden />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.04),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(59,130,246,0.08),transparent_40%)] blur-3xl opacity-70" aria-hidden />
-          <div className="grid-overlay" aria-hidden />
-          <div className="noise-overlay" aria-hidden />
-          <SkipLink />
-          <Header />
-          
-          <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="space-y-32">
-              <Hero />
-              <About />
-              <Projects />
-              <ContactSectionSecure />
-            </div>
-          </main>
-
-          <Footer />
-        </div>
-      </ErrorBoundary>
-    </I18nProvider>
+    <div className="bg-black min-h-screen text-white selection:bg-white selection:text-black">
+      <Navigation />
+      <main>
+        <Hero />
+        <WorkGallery />
+        <About />
+        <ErrorBoundary>
+          <ContactSectionSecure id="contact" />
+        </ErrorBoundary>
+        <Footer />
+      </main>
+      <AIChatOverlay />
+      <ScrollToTop />
+    </div>
   );
 };
 

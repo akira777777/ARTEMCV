@@ -1,72 +1,94 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0" />
-    <meta name="apple-mobile-web-app-capable" content="true" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Artem Mikhailov - Full Stack Developer specializing in React, Node.js, TypeScript, and PostgreSQL. Building scalable web applications with modern technologies." />
-    <meta name="keywords" content="Full Stack Developer, React, Node.js, TypeScript, PostgreSQL, Web Developer, Frontend, Backend, Prague, Czechia" />
-    <meta name="author" content="Artem Mikhailov" />
-    <meta name="robots" content="index, follow" />
-    <meta name="apple-mobile-web-app-title" content="Artem Mikhailov" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://artemcv.vercel.app/" />
-    <meta property="og:title" content="Artem Mikhailov | Full Stack Developer" />
-    <meta property="og:description" content="Full Stack Developer specializing in React, Node.js, TypeScript, and PostgreSQL. Building scalable web applications with modern technologies." />
-    <meta property="og:image" content="https://artemcv.vercel.app/og-image.png" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="Artem Mikhailov Portfolio" />
-    
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://artemcv.vercel.app/" />
-    <meta name="twitter:title" content="Artem Mikhailov | Full Stack Developer" />
-    <meta name="twitter:description" content="Full Stack Developer specializing in React, Node.js, TypeScript, and PostgreSQL. Building scalable web applications with modern technologies." />
-    <meta name="twitter:image" content="https://artemcv.vercel.app/og-image.png" />
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://artemcv.vercel.app/" />
-    
-    <title>Artem Mikhailov | Full Stack Developer | React, Node.js, PostgreSQL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Infinite Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-    
-    <!-- Structured Data JSON-LD -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Artem Mikhailov",
-      "url": "https://artemcv.vercel.app/",
-      "image": "https://artemcv.vercel.app/avatar.jpg",
-      "sameAs": [
-        "https://github.com/akira777777",
-        "https://t.me/younghustle45"
-      ],
-      "jobTitle": "Full Stack Developer",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Freelance"
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Prague",
-        "addressCountry": "CZ"
-      },
-      "email": "fear75412@gmail.com",
-      "telephone": "+420737500587",
-      "knowsAbout": ["React", "Node.js", "TypeScript", "PostgreSQL", "Next.js", "Python", "MongoDB", "Tailwind CSS"]
-    }
-    </script>
-  </head>
-  <body class="antialiased selection:bg-white selection:text-black">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      body {
+        background-color: #050505;
+        color: #ffffff;
+        font-family: 'Manrope', sans-serif;
+        overflow-x: hidden;
+      }
+
+      /* Global scroll padding for sticky header */
+      html {
+        scroll-padding-top: 100px;
+      }
+      
+      .font-display {
+        font-family: 'Syne', sans-serif;
+      }
+
+      /* Hide Scrollbar but keep functionality */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Custom cursor styles */
+      .custom-cursor-hover {
+        cursor: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="19" stroke="white" stroke-width="1.5"/></svg>') 20 20, auto;
+      }
+      
+      /* Markdown styles for chat */
+      .prose p {
+        margin-bottom: 0.5em;
+      }
+      .prose ul {
+        list-style-type: disc;
+        padding-left: 1.2em;
+        margin-bottom: 0.5em;
+      }
+
+      /* Custom Animations */
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-up {
+        animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes fadeOutDown {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(20px); }
+      }
+      .animate-fade-out-down {
+        animation: fadeOutDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes breatheZoom {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+      .animate-breathe-zoom {
+        animation: breatheZoom 12s ease-in-out infinite;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@0.1.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+  <script type="module" src="/index.tsx"></script>
+</body>
 </html>

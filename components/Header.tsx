@@ -8,7 +8,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5" role="navigation" aria-label="Main Navigation">
+    <nav className="fixed top-0 inset-x-0 z-50 bg-gradient-to-b from-[#0a0a0a]/90 to-[#0a0a0a]/70 backdrop-blur-md border-b border-white/5" role="navigation" aria-label="Main Navigation">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex justify-between h-20 items-center">
           <a className="flex items-center space-x-2 cursor-pointer group" href="#top">
@@ -19,13 +19,13 @@ const Header: React.FC = () => {
           </a>
 
           <div className="hidden md:flex items-center space-x-12">
-            <a href="#services" className="text-[11px] uppercase tracking-[0.2em] font-bold text-zinc-500 hover:text-white transition-all">
+            <a href="#services" className="relative text-[11px] uppercase tracking-[0.2em] font-bold text-zinc-500 hover:text-white transition-all after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">
               {t('header.services')}
             </a>
-            <a href="#work" className="text-[11px] uppercase tracking-[0.2em] font-bold text-zinc-500 hover:text-white transition-all">
+            <a href="#work" className="relative text-[11px] uppercase tracking-[0.2em] font-bold text-zinc-500 hover:text-white transition-all after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">
               {t('header.work')}
             </a>
-            <a href="#contact" className="text-[11px] uppercase tracking-[0.2em] font-bold text-zinc-500 hover:text-white transition-all">
+            <a href="#contact" className="relative text-[11px] uppercase tracking-[0.2em] font-bold text-zinc-500 hover:text-white transition-all after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">
               {t('header.contact')}
             </a>
           </div>
@@ -35,7 +35,7 @@ const Header: React.FC = () => {
               href="https://t.me/younghustle45"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:block px-6 py-2 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest bg-white text-black hover:bg-zinc-200 transition-colors"
+              className="hidden sm:block px-6 py-2 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest bg-white text-black hover:bg-zinc-200 transition-colors sheen-sweep relative"
             >
               {t('header.contact.telegram')}
             </a>

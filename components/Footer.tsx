@@ -1,74 +1,23 @@
+import React from 'react';
 
-import React, { useState } from 'react';
-import { useI18n } from '../i18n';
-
-const Footer: React.FC = () => {
-  const { t } = useI18n();
-  const [avatarError, setAvatarError] = useState(false);
-  const avatarSrc = `${import.meta.env.BASE_URL || '/'}avatar.jpg`;
-
+export const Footer: React.FC = () => {
   return (
-    <footer id="contact" className="border-t border-white/5 py-24 px-6 lg:px-12 bg-[#0a0a0a]">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-20 items-start">
-          <div className="space-y-12">
-            <div className="flex items-center space-x-6 p-8 rounded-[2.5rem] bg-zinc-900 border border-white/5">
-              <div className="w-16 h-16 rounded-2xl overflow-hidden border border-white/15 shadow-lg shadow-indigo-900/40 bg-black/40 flex items-center justify-center flex-shrink-0">
-                {avatarError ? (
-                  <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-500 flex items-center justify-center">
-                    <span className="text-white font-black text-lg tracking-tight">AM</span>
-                  </div>
-                ) : (
-                  <img
-                    src={avatarSrc}
-                    alt="Artem Mikhailov"
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                    onError={() => setAvatarError(true)}
-                  />
-                )}
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm text-zinc-500 leading-relaxed italic">
-                  Full Stack разработчик. React, TypeScript, Node.js, PostgreSQL, AI-интеграции. Базируюсь: Прага, Чехия.
-                </p>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">Доступен к сотрудничеству и консультациям.</p>
-              </div>
-            </div>
-
-            <div className="p-8 rounded-[2.5rem] bg-zinc-900 border border-white/5 space-y-6">
-              <h3 className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-500">{t('footer.contacts')}</h3>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <a href="https://t.me/younghustle45" target="_blank" rel="noopener noreferrer" className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
-                  {t('contacts.telegram')}
-                </a>
-                <a href="mailto:fear75412@gmail.com" className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
-                  {t('contacts.email')}
-                </a>
-                <a href="tel:+420737500587" className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
-                  {t('contacts.phone')}
-                </a>
-                <div className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-zinc-300">
-                  {t('contacts.location')}
-                </div>
-                <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" className="px-4 py-3 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors">
-                  {t('contacts.github')}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-12 md:text-right">
-            <h2 className="text-4xl md:text-6xl font-serif">{t('footer.ready.title.main')} <br /> <span className="italic text-zinc-500 text-3xl md:text-5xl">{t('footer.ready.title.sub')}</span></h2>
-            <p className="text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">
-              &copy; {new Date().getFullYear()} Artem Mikhailov &bull; {t('footer.copyright')}
-            </p>
-          </div>
+    <footer id="footer" className="py-20 bg-black border-t border-white/10 pb-40 relative overflow-hidden">
+      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[32rem] h-[32rem] rounded-full bg-indigo-500/10 blur-3xl float-slower" aria-hidden />
+      <div className="container mx-auto px-6 text-center relative z-10">
+        <h2 className="text-[10vw] font-display font-black tracking-tighter leading-none mb-8 text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer bg-[length:200%_200%] motion-safe:animate-[subtlePan_12s_ease-in-out_infinite]">
+          LET'S TALK
+        </h2>
+        <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16 text-sm tracking-widest font-bold">
+          <a href="mailto:hello@infinite.studio" className="relative hover:text-neutral-400 transition-colors after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">HELLO@INFINITE.STUDIO</a>
+              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="relative hover:text-neutral-400 transition-colors after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">INSTAGRAM</a>
+              <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="relative hover:text-neutral-400 transition-colors after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">TWITTER</a>
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="relative hover:text-neutral-400 transition-colors after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">LINKEDIN</a>
         </div>
+        <p className="mt-20 text-neutral-600 text-xs">
+          © {new Date().getFullYear()} INFINITE STUDIO. ALL RIGHTS RESERVED.
+        </p>
       </div>
     </footer>
   );
 };
-
-export default React.memo(Footer);
