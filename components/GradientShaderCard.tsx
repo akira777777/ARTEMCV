@@ -39,14 +39,14 @@ const GradientShaderCard: React.FC = () => {
 
     // Cache gradients (created once, not every frame)
     const bgGradient = ctx.createLinearGradient(0, 0, w, h);
-    bgGradient.addColorStop(0, '#0a1a2e');
-    bgGradient.addColorStop(0.5, '#16213e');
-    bgGradient.addColorStop(1, '#0f3460');
+    bgGradient.addColorStop(0, '#0f172a');
+    bgGradient.addColorStop(0.5, '#1e293b');
+    bgGradient.addColorStop(1, '#0c4a6e');
 
     const gradOverlay = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.hypot(w, h) * 0.7);
-    gradOverlay.addColorStop(0, 'rgba(0, 255, 136, 0.15)');
-    gradOverlay.addColorStop(0.5, 'rgba(0, 136, 255, 0.1)');
-    gradOverlay.addColorStop(1, 'rgba(10, 26, 46, 0.3)');
+    gradOverlay.addColorStop(0, 'rgba(14, 165, 233, 0.15)');
+    gradOverlay.addColorStop(0.5, 'rgba(16, 185, 129, 0.1)');
+    gradOverlay.addColorStop(1, 'rgba(15, 23, 42, 0.3)');
 
     // Pre-render scanlines to offscreen canvas
     const scanlineCanvas = document.createElement('canvas');
@@ -55,7 +55,7 @@ const GradientShaderCard: React.FC = () => {
     const sCtx = scanlineCanvas.getContext('2d');
     if (sCtx) {
       sCtx.scale(dpr, dpr);
-      sCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+      sCtx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
       sCtx.lineWidth = 1;
       sCtx.beginPath();
       for (let y = 0; y < h; y += 4) {
@@ -79,10 +79,10 @@ const GradientShaderCard: React.FC = () => {
     // Create initial particle emitter
     const createParticles = (x: number, y: number, count: number = 3) => {
       const colors = [
-        'rgba(32, 181, 181', // #20B5B5
-        'rgba(0, 136, 255',   // #0088FF
-        'rgba(32, 155, 88',   // #209B58
-        'rgba(0, 255, 136'    // #00FF88
+        'rgba(14, 165, 233',  // Sky Blue
+        'rgba(16, 185, 129',  // Emerald
+        'rgba(245, 158, 11',  // Amber
+        'rgba(139, 92, 246'   // Violet
       ];
       for (let i = 0; i < count; i++) {
         const angle = (Math.random() * Math.PI * 2);
@@ -123,7 +123,7 @@ const GradientShaderCard: React.FC = () => {
 
     const drawGrid = () => {
       time += 0.01;
-      ctx.strokeStyle = 'rgba(0, 200, 255, 0.1)';
+      ctx.strokeStyle = 'rgba(14, 165, 233, 0.15)';
       ctx.lineWidth = 1;
 
       const time20 = time * 20;
@@ -208,12 +208,12 @@ const GradientShaderCard: React.FC = () => {
       if (!isHovered) return;
 
       const glow = ctx.createRadialGradient(mouseRef.current.x, mouseRef.current.y, 0, mouseRef.current.x, mouseRef.current.y, 100);
-      glow.addColorStop(0, 'rgba(0, 255, 136, 0.3)');
-      glow.addColorStop(1, 'rgba(0, 136, 255, 0)');
+      glow.addColorStop(0, 'rgba(14, 165, 233, 0.3)');
+      glow.addColorStop(1, 'rgba(16, 185, 129, 0)');
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, w, h);
 
-      ctx.strokeStyle = 'rgba(0, 255, 136, 0.5)';
+      ctx.strokeStyle = 'rgba(14, 165, 233, 0.5)';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(mouseRef.current.x, mouseRef.current.y, 30, 0, Math.PI * 2);
@@ -256,7 +256,7 @@ const GradientShaderCard: React.FC = () => {
 
   return (
     <div 
-      className="w-full h-[360px] lg:h-[440px] rounded-[2.7rem] overflow-hidden relative bg-[#0a1a2e] cursor-crosshair transition-all"
+      className="w-full h-[360px] lg:h-[440px] rounded-[2.7rem] overflow-hidden relative bg-[#0f172a] cursor-crosshair transition-all"
       onMouseEnter={handleFocus}
       onMouseLeave={handleBlur}
       onFocus={handleFocus}
@@ -276,8 +276,8 @@ const GradientShaderCard: React.FC = () => {
       />
 
       {/* Labels */}
-      <div className="absolute left-6 top-6 text-sm text-emerald-300/60 font-medium z-10">Motion-first UI</div>
-      <div className="absolute right-6 bottom-6 text-sm text-cyan-300/60 font-medium z-10">Interactive 3D</div>
+      <div className="absolute left-6 top-6 text-sm text-primary-300/60 font-medium z-10">Motion-first UI</div>
+      <div className="absolute right-6 bottom-6 text-sm text-secondary-300/60 font-medium z-10">Interactive 3D</div>
     </div>
   );
 };

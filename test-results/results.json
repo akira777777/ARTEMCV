@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 8
+      "actualWorkers": 1
     },
     "preserveOutput": "always",
     "projects": [
@@ -20,7 +20,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 1
         },
         "id": "chromium",
         "name": "chromium",
@@ -36,7 +36,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 1
         },
         "id": "firefox",
         "name": "firefox",
@@ -52,7 +52,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 1
         },
         "id": "webkit",
         "name": "webkit",
@@ -68,7 +68,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 1
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
@@ -84,7 +84,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 1
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
@@ -145,7 +145,7 @@
           "specs": [
             {
               "title": "Homepage loads and basic functionality works",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -158,660 +158,39 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 50064,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Users\\WW\\Desktop\\ARTEMCV\\tests\\e2e\\direct-testing.spec.ts",
-                            "column": 30,
-                            "line": 20
-                          },
-                          "message": "Error: page.title: Target page, context or browser has been closed\n\n\u001b[0m \u001b[90m 18 |\u001b[39m     \n \u001b[90m 19 |\u001b[39m     \u001b[90m// Check page title\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m     \u001b[36mconst\u001b[39m title \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mtitle()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m`Page title: ${title}`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 22 |\u001b[39m     expect(title)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m 23 |\u001b[39m     \u001b[0m\n\u001b[2m    at C:\\Users\\WW\\Desktop\\ARTEMCV\\tests\\e2e\\direct-testing.spec.ts:20:30\u001b[22m"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 4569,
+                      "errors": [],
                       "stdout": [
                         {
                           "text": "Starting homepage test...\n"
                         },
                         {
                           "text": "Page loaded successfully\n"
+                        },
+                        {
+                          "text": "Page title: JULES.ENGINEER — Full Stack Developer & Designer\n"
+                        },
+                        {
+                          "text": "Main wrapper visible: true\n"
+                        },
+                        {
+                          "text": "Homepage test completed successfully\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-01-31T17:38:47.396Z",
+                      "startTime": "2026-01-31T17:40:29.073Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-234d7-d-basic-functionality-works-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-234d7-d-basic-functionality-works-chromium\\error-context.md"
-                        }
-                      ]
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "76f503708ed95673a377-54a00498345bc5b9b374",
               "file": "direct-testing.spec.ts",
               "line": 5,
-              "column": 3
-            },
-            {
-              "title": "Language switching works with specific selectors",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "timedOut",
-                      "duration": 50642,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Users\\WW\\Desktop\\ARTEMCV\\tests\\e2e\\direct-testing.spec.ts",
-                            "column": 22,
-                            "line": 51
-                          },
-                          "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button[title*=\"Switch to\"]').nth(1)\u001b[22m\n\n\n\u001b[0m \u001b[90m 49 |\u001b[39m         console\u001b[33m.\u001b[39mlog(\u001b[32m`Testing button: ${buttonText}`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 50 |\u001b[39m         \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 51 |\u001b[39m         \u001b[36mawait\u001b[39m button\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 52 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m1000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 53 |\u001b[39m         \n \u001b[90m 54 |\u001b[39m         \u001b[90m// Take screenshot after each language switch\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\WW\\Desktop\\ARTEMCV\\tests\\e2e\\direct-testing.spec.ts:51:22\u001b[22m"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "Starting language switching test...\n"
-                        },
-                        {
-                          "text": "Found 3 language buttons\n"
-                        },
-                        {
-                          "text": "Testing button: EN\n"
-                        },
-                        {
-                          "text": "Testing button: RU\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-31T17:38:47.395Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-ef0ec-rks-with-specific-selectors-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-ef0ec-rks-with-specific-selectors-chromium\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "76f503708ed95673a377-1e3295447a686fdd9c2c",
-              "file": "direct-testing.spec.ts",
-              "line": 33,
-              "column": 3
-            },
-            {
-              "title": "Scroll and navigation functionality",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "timedOut",
-                      "duration": 50316,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "Starting scroll test...\n"
-                        },
-                        {
-                          "text": "Scroll test completed\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-31T17:38:47.409Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-4cfd9-nd-navigation-functionality-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-4cfd9-nd-navigation-functionality-chromium\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "76f503708ed95673a377-aba9922aa5e3b1ef3d93",
-              "file": "direct-testing.spec.ts",
-              "line": 65,
-              "column": 3
-            },
-            {
-              "title": "Interactive elements and animations",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "timedOut",
-                      "duration": 47985,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Users\\WW\\Desktop\\ARTEMCV\\tests\\e2e\\direct-testing.spec.ts",
-                            "column": 16,
-                            "line": 108
-                          },
-                          "message": "Error: page.screenshot: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n\n\n\u001b[0m \u001b[90m 106 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m200\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 107 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 108 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mscreenshot({ \n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 109 |\u001b[39m       path\u001b[33m:\u001b[39m \u001b[32m'tests/e2e/screenshots/direct_interactive.png'\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 110 |\u001b[39m       fullPage\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m \n \u001b[90m 111 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\WW\\Desktop\\ARTEMCV\\tests\\e2e\\direct-testing.spec.ts:108:16\u001b[22m"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "Starting interactive elements test...\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-31T17:38:47.427Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-9a1cd-ive-elements-and-animations-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-9a1cd-ive-elements-and-animations-chromium\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "76f503708ed95673a377-4e5dd25a01f79af1b04d",
-              "file": "direct-testing.spec.ts",
-              "line": 90,
-              "column": 3
-            },
-            {
-              "title": "Component visibility verification",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 4,
-                      "status": "timedOut",
-                      "duration": 50446,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "Starting component visibility test...\n"
-                        },
-                        {
-                          "text": "Headers: 17 elements found\n"
-                        },
-                        {
-                          "text": "Headers first element visible: true\n"
-                        },
-                        {
-                          "text": "Paragraphs: 24 elements found\n"
-                        },
-                        {
-                          "text": "Paragraphs first element visible: true\n"
-                        },
-                        {
-                          "text": "Buttons: 18 elements found\n"
-                        },
-                        {
-                          "text": "Buttons first element visible: true\n"
-                        },
-                        {
-                          "text": "Links: 15 elements found\n"
-                        },
-                        {
-                          "text": "Links first element visible: true\n"
-                        },
-                        {
-                          "text": "Images: 0 elements found\n"
-                        },
-                        {
-                          "text": "Sections: 6 elements found\n"
-                        },
-                        {
-                          "text": "Sections first element visible: true\n"
-                        },
-                        {
-                          "text": "Component visibility test completed\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-31T17:38:47.476Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-ac04d-ent-visibility-verification-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-ac04d-ent-visibility-verification-chromium\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "76f503708ed95673a377-bf43f172e65b7e5d6c0a",
-              "file": "direct-testing.spec.ts",
-              "line": 116,
-              "column": 3
-            },
-            {
-              "title": "Text content verification across languages",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 5,
-                      "status": "timedOut",
-                      "duration": 50344,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "Starting text content test...\n"
-                        },
-                        {
-                          "text": "English text elements: 283\n"
-                        },
-                        {
-                          "text": "Sample English text: \n    import { injectIntoGlobalHook } from \"/@react...\n"
-                        },
-                        {
-                          "text": "Russian text elements: 0\n"
-                        },
-                        {
-                          "text": "Czech text elements: 283\n"
-                        },
-                        {
-                          "text": "Sample Czech text: \n    import { injectIntoGlobalHook } from \"/@react...\n"
-                        },
-                        {
-                          "text": "Text content test completed\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-31T17:38:47.442Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-a760f-rification-across-languages-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-a760f-rification-across-languages-chromium\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "76f503708ed95673a377-9c90a55566543282012a",
-              "file": "direct-testing.spec.ts",
-              "line": 152,
-              "column": 3
-            },
-            {
-              "title": "Mobile responsiveness simulation",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 6,
-                      "status": "timedOut",
-                      "duration": 50828,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Users\\WW\\Desktop\\ARTEMCV\\tests\\e2e\\direct-testing.spec.ts",
-                            "column": 18,
-                            "line": 202
-                          },
-                          "message": "Error: page.setViewportSize: Test timeout of 30000ms exceeded.\n\n\u001b[0m \u001b[90m 200 |\u001b[39m       console\u001b[33m.\u001b[39mlog(\u001b[32m`Testing viewport: ${viewport.width}x${viewport.height}`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 201 |\u001b[39m       \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 202 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39msetViewportSize({ \n \u001b[90m     |\u001b[39m                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 203 |\u001b[39m         width\u001b[33m:\u001b[39m viewport\u001b[33m.\u001b[39mwidth\u001b[33m,\u001b[39m \n \u001b[90m 204 |\u001b[39m         height\u001b[33m:\u001b[39m viewport\u001b[33m.\u001b[39mheight \n \u001b[90m 205 |\u001b[39m       })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\WW\\Desktop\\ARTEMCV\\tests\\e2e\\direct-testing.spec.ts:202:18\u001b[22m"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "Starting mobile responsiveness test...\n"
-                        },
-                        {
-                          "text": "Testing viewport: 1920x1080\n"
-                        },
-                        {
-                          "text": "Testing viewport: 1280x800\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-31T17:38:47.442Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-7771d-e-responsiveness-simulation-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-7771d-e-responsiveness-simulation-chromium\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "76f503708ed95673a377-1b161fe222759168455b",
-              "file": "direct-testing.spec.ts",
-              "line": 188,
-              "column": 3
-            },
-            {
-              "title": "Performance and loading verification",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 7,
-                      "parallelIndex": 7,
-                      "status": "timedOut",
-                      "duration": 47484,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Users\\WW\\Desktop\\ARTEMCV\\tests\\e2e\\direct-testing.spec.ts",
-                            "column": 22,
-                            "line": 237
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m15000\u001b[39m\nReceived:   \u001b[31m19710\u001b[39m\n\n\u001b[0m \u001b[90m 235 |\u001b[39m     \n \u001b[90m 236 |\u001b[39m     expect(clickableCount)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m     expect(loadTime)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m15000\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m// Should load within 15 seconds\u001b[39m\n \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m     \n \u001b[90m 239 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mscreenshot({ \n \u001b[90m 240 |\u001b[39m       path\u001b[33m:\u001b[39m \u001b[32m'tests/e2e/screenshots/direct_performance.png'\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\u001b[2m    at C:\\Users\\WW\\Desktop\\ARTEMCV\\tests\\e2e\\direct-testing.spec.ts:237:22\u001b[22m"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "Starting performance test...\n"
-                        },
-                        {
-                          "text": "Page loaded in 19710ms\n"
-                        },
-                        {
-                          "text": "Interactive elements found: 33\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-31T17:38:47.458Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-42e23-ce-and-loading-verification-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\WW\\Desktop\\ARTEMCV\\test-results\\direct-testing-Direct-Port-42e23-ce-and-loading-verification-chromium\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "76f503708ed95673a377-d8eb81499863babd01ee",
-              "file": "direct-testing.spec.ts",
-              "line": 220,
-              "column": 3
-            },
-            {
-              "title": "Error handling and edge cases",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 8,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 9200,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Starting error handling test...\n"
-                        },
-                        {
-                          "text": "Error handling test completed\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-31T17:39:38.131Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "76f503708ed95673a377-0823f8cb91199277b937",
-              "file": "direct-testing.spec.ts",
-              "line": 247,
-              "column": 3
-            },
-            {
-              "title": "Final comprehensive verification",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 9,
-                      "parallelIndex": 7,
-                      "status": "passed",
-                      "duration": 7055,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "Starting final verification...\n"
-                        },
-                        {
-                          "text": "Title exists: ✓\n"
-                        },
-                        {
-                          "text": "Main content visible: ✓\n"
-                        },
-                        {
-                          "text": "Has interactive elements: ✓\n"
-                        },
-                        {
-                          "text": "Has text content: ✓\n"
-                        },
-                        {
-                          "text": "Final verification completed\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-31T17:39:38.131Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "76f503708ed95673a377-a834f26a0aa598ebc3d4",
-              "file": "direct-testing.spec.ts",
-              "line": 280,
               "column": 3
             }
           ]
@@ -821,11 +200,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-01-31T17:38:45.257Z",
-    "duration": 62267.687999999995,
-    "expected": 2,
+    "startTime": "2026-01-31T17:40:27.668Z",
+    "duration": 6090.847000000001,
+    "expected": 1,
     "skipped": 0,
-    "unexpected": 8,
+    "unexpected": 0,
     "flaky": 0
   }
 }

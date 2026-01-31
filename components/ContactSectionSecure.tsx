@@ -223,12 +223,12 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
           )}
         </form>
 
-        <div className="mt-16 pt-16 border-t border-emerald-500/20">
-          <p className="text-center text-neutral-400 mb-8">{t('contact.reach_out')}</p>
+        <div className="mt-16 pt-16 border-t border-primary/20">
+          <p className="text-center text-gray-400 mb-8">{t('contact.reach_out')}</p>
           <div className="flex justify-center gap-6 flex-wrap">
             <a 
               href="mailto:fear75412@gmail.com" 
-              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all flex items-center gap-2"
+              className="px-6 py-3 border border-primary/30 text-primary-300 rounded-xl hover:bg-primary/10 hover:border-secondary/50 hover:text-secondary-300 transition-all flex items-center gap-2"
               title="Send email"
             >
               <MailIcon className="w-5 h-5" />
@@ -238,7 +238,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
               href="https://t.me/younghustle45" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all flex items-center gap-2"
+              className="px-6 py-3 border border-primary/30 text-primary-300 rounded-xl hover:bg-primary/10 hover:border-secondary/50 hover:text-secondary-300 transition-all flex items-center gap-2"
               title="Message on Telegram"
             >
               <MessageCircleIcon className="w-5 h-5" />
@@ -248,7 +248,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
               href="https://github.com/akira777777" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all flex items-center gap-2"
+              className="px-6 py-3 border border-primary/30 text-primary-300 rounded-xl hover:bg-primary/10 hover:border-secondary/50 hover:text-secondary-300 transition-all flex items-center gap-2"
               title="View GitHub profile"
             >
               <GithubIcon className="w-5 h-5" />
