@@ -173,9 +173,13 @@ Run benchmarks to verify optimizations:
 npx tsx benchmarks/i18n_perf.ts
 # Expected: ~4.46x improvement (updated)
 
-# Canvas optimization
+# Canvas optimization (Grid)
 npx tsx benchmarks/canvas_benchmark.ts
 # Expected: ~62.61% improvement (updated)
+
+# Particle system (Pooling & Batching)
+npx tsx benchmarks/particle_perf.ts
+# Expected: ~53% improvement
 
 # CursorTrail object reuse
 npx tsx benchmarks/cursortrail_benchmark.ts  

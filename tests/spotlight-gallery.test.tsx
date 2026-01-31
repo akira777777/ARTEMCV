@@ -37,6 +37,6 @@ describe('SpotlightGallery', () => {
 
   it('has CTA button for viewing project', () => {
     renderWithI18n(<SpotlightGallery />);
-    expect(screen.getByText('VIEW CASE STUDY')).toBeInTheDocument();
+    expect(screen.getByText('EXPLORE')).toBeInTheDocument();
   });
 });

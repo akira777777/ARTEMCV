@@ -9,7 +9,7 @@ export const PROJECTS: Project[] = [
     techStack: ['React Three Fiber', 'Next.js 16', 'GSAP', 'WebGL', 'Tailwind CSS'],
     liveLink: '/project/detailing', // Internal link for the deep dive
     githubLink: 'https://github.com/akira777777',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBlRnEYUb_E6jb2-sLG20uFppxJFEtM8hjmw9N6M0eaqmdVFWHvRmRL74sqRU6ZIbUg_wccJ9SrGQEFjhtzeNfx3kysnHQOEY0jAf-iBpT4xZVyzMSVW-CyS4W6RAjGi0sj6vbZC27zXy_b9sj4d2m-FG-LhHsYhoRdoGl-NFwGp0TvbdsH1yQmjDLIT7A4h7TfxjZntYEeArknq1LZJykiDdonGSDYqZulBul_4cAzJQe0nzOoprFnABrHWLH8IzN2dfP6E-oVnn3P'
+    image: '/detailing.webp'
   },
   {
     id: '2',
@@ -18,7 +18,7 @@ export const PROJECTS: Project[] = [
     techStack: ['AI Orchestration', 'WebSockets', 'Real-time Sync', 'SVG Morphing'],
     liveLink: 'https://dental-clinic-vakalova.vercel.app/',
     githubLink: 'https://github.com/akira777777',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAIucNwJVttoy_oN1SlGPY6EP1rl-Z4gWi17TWHy85oVwGRezyzSTkE-Qi46eSXD0MbUJ2fwSpDn-X1Xa3afB-uqmjwYbSJXhaECz0lOh_BsGRylWg4fZYb3c7k7JwzwFDzubwtnVcrk-UHK7JGhap5DOGoWytDe4knKbnZdsmo8zXet-j3kphtwS227pOLVDc17h1u6V560wLan8p55IQhrN8hXEahQs6vJuOI4uDtj56Wm1NtZdi_9tUsv6GUDzXTnEPEEIzzcClL'
+    image: '/dental.webp'
   },
   {
     id: '3',
@@ -27,7 +27,7 @@ export const PROJECTS: Project[] = [
     techStack: ['Edge Runtime', 'Scroll-driven Animation', 'React 19', 'LCP Optimization'],
     liveLink: 'https://barber-am.vercel.app/',
     githubLink: 'https://github.com/akira777777',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBlRnEYUb_E6jb2-sLG20uFppxJFEtM8hjmw9N6M0eaqmdVFWHvRmRL74sqRU6ZIbUg_wccJ9SrGQEFjhtzeNfx3kysnHQOEY0jAf-iBpT4xZVyzMSVW-CyS4W6RAjGi0sj6vbZC27zXy_b9sj4d2m-FG-LhHsYhoRdoGl-NFwGp0TvbdsH1yQmjDLIT7A4h7TfxjZntYEeArknq1LZJykiDdonGSDYqZulBul_4cAzJQe0nzOoprFnABrHWLH8IzN2dfP6E-oVnn3P'
+    image: '/barber.webp'
   }
 ];
 

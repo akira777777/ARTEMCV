@@ -234,7 +234,6 @@ const GradientShaderCard: React.FC = () => {
         p.vy += 0.05;
         p.vx *= 0.99;
         p.vy *= 0.99;
-        
         p.x += p.vx;
         p.y += p.vy;
         p.life -= 1;
@@ -248,20 +247,40 @@ const GradientShaderCard: React.FC = () => {
           continue;
         }
 
-        const alpha = (p.life / p.maxLife) * 0.8;
-        // Faster color formatting
-        ctx.fillStyle = `${p.color}, ${alpha})`;
-        
-        // shadowBlur is extremely expensive, replaced with a glow arc
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color}, ${alpha * 0.3})`;
-        ctx.fill();
+        const alphaNorm = p.life / p.maxLife;
+        const alphaIdx = Math.min(Math.floor(alphaNorm * ALPHA_STEPS), ALPHA_STEPS - 1);
+        batches[p.colorIdx][alphaIdx].push(i);
+      }
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color}, ${alpha})`;
-        ctx.fill();
+      // Draw batched particles
+      for (let c = 0; c < COLORS.length; c++) {
+        const baseColor = COLORS[c];
+        for (let a = 0; a < ALPHA_STEPS; a++) {
+          const indices = batches[c][a];
+          if (indices.length === 0) continue;
+
+          const alpha = (a + 1) / ALPHA_STEPS * 0.8;
+
+          // Draw Glow Layer (combined)
+          ctx.beginPath();
+          ctx.fillStyle = `${baseColor}, ${alpha * 0.3})`;
+          for (const idx of indices) {
+            const p = pool[idx];
+            ctx.moveTo(p.x + p.radius * 2, p.y);
+            ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
+          }
+          ctx.fill();
+
+          // Draw Core Layer (combined)
+          ctx.beginPath();
+          ctx.fillStyle = `${baseColor}, ${alpha})`;
+          for (const idx of indices) {
+            const p = pool[idx];
+            ctx.moveTo(p.x + p.radius, p.y);
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          }
+          ctx.fill();
+        }
       }
     };
 

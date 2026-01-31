@@ -39,6 +39,8 @@ export default defineConfig(({ mode }) => {
             react: ['react', 'react-dom'],
             icons: ['lucide-react'],
             motion: ['framer-motion'],
+            three: ['three', '@react-three/fiber', '@react-three/drei'],
+            utils: ['gsap', 'clsx', 'tailwind-merge'],
           },
           // Optimize chunk file names
           chunkFileNames: isProd ? 'assets/[name]-[hash:8].js' : 'assets/[name]-[hash].js',

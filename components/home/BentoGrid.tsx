@@ -26,7 +26,7 @@ const BentoGrid: React.FC = () => {
           <div className="absolute inset-0 opacity-40 mix-blend-overlay group-hover:scale-105 transition-transform duration-1000">
             <OptimizedImage
               alt={t(mainProject.title)}
-              className="w-full h-full object-cover"
+              className="w-full h-full"
               src={mainProject.image}
               priority={true} // Priority loading for above-the-fold content
             />
@@ -116,7 +116,7 @@ const BentoGrid: React.FC = () => {
         >
           <OptimizedImage
             alt={t(secondaryProject.title)}
-            className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            className="absolute inset-0 w-full h-full opacity-60 group-hover:scale-105 transition-transform duration-700"
             src={secondaryProject.image}
             priority={false} // Lazy loading for below-the-fold content
           />

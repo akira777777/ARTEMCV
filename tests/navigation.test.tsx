@@ -11,15 +11,15 @@ const renderWithI18n = (component: React.ReactElement) => {
 describe('Navigation', () => {
   it('renders the logo', () => {
     renderWithI18n(<Navigation />);
-    expect(screen.getByText('JULES.ENGINEER')).toBeInTheDocument();
+    expect(screen.getByText('ARTEM.DEV')).toBeInTheDocument();
   });
 
   it('renders all nav links', () => {
     renderWithI18n(<Navigation />);
     expect(screen.getByText('HOME')).toBeInTheDocument();
-    expect(screen.getByText('WORKS')).toBeInTheDocument();
+    expect(screen.getByText('WORK')).toBeInTheDocument();
     expect(screen.getByText('LAB')).toBeInTheDocument();
-    expect(screen.getByText('SERVICES')).toBeInTheDocument();
+    expect(screen.getByText('STACK')).toBeInTheDocument();
     expect(screen.getByText('ABOUT')).toBeInTheDocument();
     expect(screen.getByText('CONTACT')).toBeInTheDocument();
   });
