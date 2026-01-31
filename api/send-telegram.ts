@@ -132,9 +132,6 @@ function getClientIp(req: VercelRequest): string {
 /**
  * Sets CORS headers on the response
  * @param res - Vercel response object
-/**
- * Sets CORS headers on the response
- * @param res - Vercel response object
  * @param origin - Origin header from request
  */
 function setCorsHeaders(res: VercelResponse, origin: string | undefined): void {
@@ -142,10 +139,16 @@ function setCorsHeaders(res: VercelResponse, origin: string | undefined): void {
   
   if (isAllowed && origin) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin'); // Prevent cache issues with CORS
   }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Max-Age', CORS_MAX_AGE);
+  
+  // Security headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
 }
 
 /**
@@ -189,6 +192,12 @@ function validateRequest(req: VercelRequest): ValidationError | null {
     return { status: 415, error: 'Content-Type must be application/json' };
   }
 
+  // Check request size (approximate)
+  const bodyString = JSON.stringify(req.body);
+  if (bodyString.length > MAX_REQUEST_SIZE) {
+    return { status: 413, error: 'Request too large' };
+  }
+
   return null;
 }
 
@@ -197,6 +206,7 @@ function validateRequest(req: VercelRequest): ValidationError | null {
  * @param body - Request body object
  * @returns ValidationError if invalid, ValidatedData if valid
  */
+function validateFields(body: unknown): ValidationError | ValidatedData {
   const { name, email, subject, message, hp } = body as Record<string, unknown>;
 
   // Type checking
@@ -221,21 +231,25 @@ function validateRequest(req: VercelRequest): ValidationError | null {
 
   // Required fields
   if (!cleanName || !cleanEmail || !cleanMessage) {
-    return { status: 400, error: 'Missing required fields' };
+    const missing = [];
+    if (!cleanName) missing.push('name');
+    if (!cleanEmail) missing.push('email');
+    if (!cleanMessage) missing.push('message');
+    return { status: 400, error: `Missing required fields: ${missing.join(', ')}` };
   }
 
   // Length validation
   if (cleanName.length < 2) {
-    return { status: 400, error: 'Name too short' };
+    return { status: 400, error: 'Name must be at least 2 characters long' };
   }
 
   if (cleanMessage.length < 10) {
-    return { status: 400, error: 'Message too short' };
+    return { status: 400, error: 'Message must be at least 10 characters long' };
   }
 
   // Email validation
   if (!EMAIL_PATTERN.test(cleanEmail)) {
-    return { status: 400, error: 'Invalid email format' };
+    return { status: 400, error: 'Invalid email format. Please provide a valid email address' };
   }
 
   return { cleanName, cleanEmail, cleanSubject, cleanMessage };
