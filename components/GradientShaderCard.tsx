@@ -20,14 +20,19 @@ const GradientShaderCard: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
+    // Canvas 2D context with performance optimizations
+    const ctx = canvas.getContext('2d', { 
+      alpha: false, // Disable transparency for better performance
+      desynchronized: true, // Enable async rendering for smoother animation
+      willReadFrequently: false // We don't read pixels back, better for GPU acceleration
+    });
     if (!ctx) return;
 
     // Set canvas size
     const rect = canvas.parentElement?.getBoundingClientRect();
     if (!rect) return;
 
-    const dpr = globalThis.devicePixelRatio || 1;
+    const dpr: number = globalThis.devicePixelRatio || 1; // Explicit type annotation
     canvas.width = Math.floor(rect.width * dpr);
     canvas.height = Math.floor(rect.height * dpr);
     ctx.scale(dpr, dpr);
@@ -51,7 +56,12 @@ const GradientShaderCard: React.FC = () => {
     const scanlineCanvas = document.createElement('canvas');
     scanlineCanvas.width = canvas.width;
     scanlineCanvas.height = canvas.height;
-    const sCtx = scanlineCanvas.getContext('2d');
+    // Scanline canvas with performance optimizations
+    const sCtx = scanlineCanvas.getContext('2d', { 
+      alpha: false, // Disable transparency for better performance
+      desynchronized: true, // Enable async rendering
+      willReadFrequently: false // No pixel reading needed
+    });
     if (sCtx) {
       sCtx.scale(dpr, dpr);
       sCtx.strokeStyle = 'rgba(255, 255, 255, 0.04)';

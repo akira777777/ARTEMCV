@@ -81,7 +81,12 @@ const OptimizedGradientShaderCard: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
+    // Optimized Canvas 2D context configuration
+    const ctx = canvas.getContext('2d', { 
+      alpha: false, // Disable transparency for better performance
+      desynchronized: true, // Enable async rendering for smoother animation
+      willReadFrequently: false // We don't read pixels back, better for GPU acceleration
+    });
     if (!ctx) return;
 
     // Set canvas size
@@ -89,7 +94,7 @@ const OptimizedGradientShaderCard: React.FC = () => {
       const rect = canvas.parentElement?.getBoundingClientRect();
       if (!rect) return;
 
-      const dpr = globalThis.devicePixelRatio || 1;
+      const dpr: number = globalThis.devicePixelRatio || 1; // Explicit type annotation
       canvas.width = Math.floor(rect.width * dpr);
       canvas.height = Math.floor(rect.height * dpr);
       ctx.scale(dpr, dpr);

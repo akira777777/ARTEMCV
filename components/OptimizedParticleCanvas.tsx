@@ -6,15 +6,12 @@ import ParticleField from './home/ParticleField';
 const OptimizedParticleCanvas: React.FC = () => {
   // Memoize canvas props to prevent re-creation
   const canvasProps = useMemo(() => ({
-    camera: { position: [0, 0, 3] },
+    camera: { position: [0, 0, 3] as [number, number, number] },
     gl: { 
       alpha: true,
-      antialias: false, // Disable antialiasing for better performance
-      powerPreference: "high-performance" // Prioritize performance over quality
+      antialias: false // Disable antialiasing for better performance
     },
-    dpr: [1, 1.5], // Limit device pixel ratio to improve performance
-    linear: true, // Disable color management for performance
-    flat: true,   // Use flat shading for performance
+    dpr: [1, 1.5] as [number, number], // Limit device pixel ratio to improve performance
   }), []);
 
   return (

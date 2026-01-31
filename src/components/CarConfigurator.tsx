@@ -83,7 +83,23 @@ const CarConfigurator = ({ selectedColor, rotationSpeed, onColorChange }: { sele
 
   return (
     <div className="w-full h-96 relative">
-      <Canvas shadows camera={{ position: [5, 2, 5], fov: 50 }}>
+      <Canvas 
+              shadows 
+              camera={{ 
+                position: [5, 2, 5] as const, // Typed tuple for camera position
+                fov: 50 
+              }}
+              gl={{ 
+                // WebGL performance optimizations
+                antialias: true,
+                alpha: false,
+                stencil: false,
+                depth: true,
+                preserveDrawingBuffer: false // Better performance, no need to preserve buffer
+              }}
+              frameloop="always" // Continuous rendering for smooth animation
+              dpr={globalThis.devicePixelRatio || 1} // Explicit device pixel ratio
+            >
         <CarScene selectedColor={selectedColor} rotationSpeed={autoRotate ? localRotationSpeed : 0} />
       </Canvas>
       

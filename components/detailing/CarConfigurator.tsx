@@ -25,7 +25,22 @@ function Model() {
 const CarConfigurator: React.FC = () => {
   return (
     <div className="w-full h-full relative">
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+      <Canvas 
+              camera={{ 
+                position: [0, 0, 5] as const, // Typed tuple for camera position
+                fov: 45 
+              }}
+              gl={{ 
+                // WebGL performance optimizations
+                antialias: true,
+                alpha: false,
+                stencil: false,
+                depth: true,
+                preserveDrawingBuffer: false // Better performance, disabled buffer preservation
+              }}
+              frameloop="always"
+              dpr={globalThis.devicePixelRatio || 1} // Explicit device pixel ratio
+            >
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
         <Environment preset="city" />
