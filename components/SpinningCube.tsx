@@ -80,7 +80,7 @@ const SpinningCube: React.FC = React.memo(() => {
           className="relative"
           style={containerStyle}
         >
-          {/* скрытая подпись сбоку */}
+          {/* Side label */}
           <div
             className="absolute -left-64 top-4 text-white/60 select-none"
             aria-hidden

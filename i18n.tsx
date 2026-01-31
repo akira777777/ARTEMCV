@@ -115,6 +115,11 @@ const translations: Record<Lang, Dict> = {
     'footer.build': "LET'S BUILD",
     'footer.ready.desc': "Ready to bring your project to life? Let's create something exceptional together.",
 
+    'cta.title': 'Ready to Start Your Next Project?',
+    'cta.subtitle': "Let's collaborate and bring your vision to life. I'm ready to start immediately.",
+    'cta.button': 'Start Collaboration',
+    'cta.secondary': 'View GitHub',
+
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
     'contacts.phone': 'Phone: +420 737 500 587',
@@ -153,7 +158,12 @@ const translations: Record<Lang, Dict> = {
     'lab.tokens': 'Depth Tokens',
     'lab.tokens.desc': 'Adaptable for any section: cards, CTA, case previews, or avatars.',
     'lab.tilt.title': '3D Tilt Card',
-    'lab.tilt.hint': 'Hover to explore'
+    'lab.tilt.hint': 'Hover to explore',
+
+    'error.title': 'Something went wrong',
+    'error.description': 'We encountered an unexpected error. Please try refreshing the page or come back later.',
+    'error.details': 'Error Details',
+    'error.retry': 'Try Again'
   },
   ru: {
     'header.services': 'Услуги',
@@ -265,6 +275,11 @@ const translations: Record<Lang, Dict> = {
     'footer.build': 'ПОСТРОИМ ВМЕСТЕ',
     'footer.ready.desc': 'Готовы воплотить проект в жизнь? Давайте создадим что-то исключительное вместе.',
 
+    'cta.title': 'Готовы начать следующий проект?',
+    'cta.subtitle': 'Давайте сотрудничать и воплотим вашу идею в жизнь. Я готов начать немедленно.',
+    'cta.button': 'Начать сотрудничество',
+    'cta.secondary': 'GitHub',
+
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
     'contacts.phone': 'Телефон: +420 737 500 587',
@@ -303,7 +318,12 @@ const translations: Record<Lang, Dict> = {
     'lab.tokens': 'Токены глубины',
     'lab.tokens.desc': 'Адаптируй под любые секции: карточки, CTA, превью кейсов или аватары.',
     'lab.tilt.title': '3D Tilt карта',
-    'lab.tilt.hint': 'Наведите для изучения'
+    'lab.tilt.hint': 'Наведите для изучения',
+
+    'error.title': 'Что-то пошло не так',
+    'error.description': 'Произошла неожиданная ошибка. Попробуйте обновить страницу или вернитесь позже.',
+    'error.details': 'Детали ошибки',
+    'error.retry': 'Попробовать снова'
   },
   cs: {
     'header.services': 'Služby',
@@ -412,6 +432,11 @@ const translations: Record<Lang, Dict> = {
     'footer.build': 'POSTAVME TO',
     'footer.ready.desc': 'Jste připraveni oživit svůj projekt? Pojďme společně vytvořit něco výjimečného.',
 
+    'cta.title': 'Připraveni začít další projekt?',
+    'cta.subtitle': 'Pojďme spolupracovat a oživit vaši vizi. Jsem připraven začít okamžitě.',
+    'cta.button': 'Začít spolupráci',
+    'cta.secondary': 'GitHub',
+
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
     'contacts.phone': 'Telefon: +420 737 500 587',
@@ -450,7 +475,12 @@ const translations: Record<Lang, Dict> = {
     'lab.tokens': 'Tokeny hloubky',
     'lab.tokens.desc': 'Adaptabilní pro jakoukoli sekci: karty, CTA, náhledy případů nebo avatary.',
     'lab.tilt.title': '3D Tilt Karta',
-    'lab.tilt.hint': 'Najetím prozkoumejte'
+    'lab.tilt.hint': 'Najetím prozkoumejte',
+
+    'error.title': 'Něco se pokazilo',
+    'error.description': 'Nastala neočekávaná chyba. Zkuste prosím stránku obnovit nebo se vraťte později.',
+    'error.details': 'Podrobnosti chyby',
+    'error.retry': 'Zkusit znovu'
   }
 };
 

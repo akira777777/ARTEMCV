@@ -28,10 +28,10 @@ export const CTASection: React.FC = React.memo(() => {
           className="text-center"
         >
           <h2 className="text-5xl md:text-6xl font-display font-black text-white mb-6 tracking-tighter leading-tight">
-            {t('cta.title') || 'Ready to Start Your Next Project?'}
+            {t('cta.title')}
           </h2>
           <p className="text-lg md:text-xl text-neutral-300 mb-12 max-w-2xl mx-auto">
-            {t('cta.subtitle') || 'Let\'s collaborate and bring your vision to life. I\'m ready to start immediately.'}
+            {t('cta.subtitle')}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -41,7 +41,7 @@ export const CTASection: React.FC = React.memo(() => {
               whileTap={{ scale: 0.95 }}
               className="group px-10 py-4 bg-white text-black rounded-full font-bold text-base hover:bg-neutral-100 transition-all shadow-xl hover:shadow-2xl flex items-center gap-2"
             >
-              {t('cta.button') || 'Start Collaboration'}
+              {t('cta.button')}
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </motion.button>
 
@@ -51,7 +51,7 @@ export const CTASection: React.FC = React.memo(() => {
               rel="noopener noreferrer"
               className="px-10 py-4 bg-white/10 text-white rounded-full font-bold text-base border border-white/20 hover:border-white/50 hover:bg-white/20 transition-all"
             >
-              {t('cta.secondary') || 'View GitHub'}
+              {t('cta.secondary')}
             </a>
           </div>
         </motion.div>
