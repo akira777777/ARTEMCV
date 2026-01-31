@@ -2,13 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-// Mock framer-motion for testing FloatingPaths
-vi.mock('framer-motion', () => ({
-  motion: {
-    path: ({ children, ...props }: any) => <path {...props}>{children}</path>,
-    svg: ({ children, ...props }: any) => <svg {...props}>{children}</svg>,
-  },
-}));
 
 // Since FloatingPaths is not exported, we'll test it indirectly through BackgroundPaths
 // But let's create a test version that exports it for testing purposes

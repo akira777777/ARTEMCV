@@ -20,7 +20,7 @@ const renderWithI18n = (component: React.ReactElement) => {
 describe('SpotlightGallery', () => {
   it('renders the works section with title', () => {
     renderWithI18n(<SpotlightGallery />);
-    expect(screen.getByText('WORKS')).toBeInTheDocument();
+    expect(screen.getByText('WORK')).toBeInTheDocument();
   });
 
   it('renders navigation buttons', () => {
@@ -31,8 +31,8 @@ describe('SpotlightGallery', () => {
 
   it('displays project counter', () => {
     renderWithI18n(<SpotlightGallery />);
-    expect(screen.getByText(/Viewing/)).toBeInTheDocument();
-    expect(screen.getByText(/of/)).toBeInTheDocument();
+    expect(screen.getByText(/Viewing/i)).toBeInTheDocument();
+    expect(screen.getByText(/Project #/i)).toBeInTheDocument();
   });
 
   it('has CTA button for viewing project', () => {

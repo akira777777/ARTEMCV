@@ -93,8 +93,9 @@ export default defineConfig(({ mode }) => {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
       },
-      // Include test files
-      include: ['tests/**/*.{test,spec}.{ts,tsx}'],
+      // Include unit test files only, exclude E2E tests
+      include: ['tests/**/*.test.{ts,tsx}'],
+      exclude: ['tests/e2e/**/*'],
     },
     
     define: {

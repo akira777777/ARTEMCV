@@ -11,7 +11,8 @@ const renderWithI18n = (component: React.ReactElement) => {
 describe('Navigation', () => {
   it('renders the logo', () => {
     renderWithI18n(<Navigation />);
-    expect(screen.getByText('ARTEM.DEV')).toBeInTheDocument();
+    // Target the first instance of ARTEM.DEV (the one for screen readers)
+    expect(screen.getAllByText('ARTEM.DEV')[0]).toBeInTheDocument();
   });
 
   it('renders all nav links', () => {
@@ -36,7 +37,7 @@ describe('Navigation', () => {
     const homeLink = screen.getByText('HOME').closest('a');
     expect(homeLink).toHaveAttribute('href', '#home');
     
-    const worksLink = screen.getByText('WORKS').closest('a');
+    const worksLink = screen.getByText('WORK').closest('a');
     expect(worksLink).toHaveAttribute('href', '#works');
   });
 });
