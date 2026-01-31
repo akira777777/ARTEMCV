@@ -25,6 +25,36 @@
   --supporting-light: #C4B5FD; /* Violet 300 */
   --supporting-dark: #6D28D9; /* Violet 700 */
   
+  /* Responsive Design Variables */
+  --container-max-width: min(100vw - 2rem, 1200px);
+  --container-padding: 1rem;
+  --grid-gap: 1rem;
+  
+  /* Typography Scale */
+  --font-size-xs: clamp(0.75rem, 1.5vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 2vw, 1rem);
+  --font-size-base: clamp(1rem, 2.5vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 3vw, 1.25rem);
+  --font-size-xl: clamp(1.25rem, 3.5vw, 1.5rem);
+  --font-size-2xl: clamp(1.5rem, 4vw, 2rem);
+  --font-size-3xl: clamp(1.875rem, 5vw, 2.5rem);
+  --font-size-4xl: clamp(2.25rem, 6vw, 3rem);
+  --font-size-5xl: clamp(3rem, 8vw, 4rem);
+  
+  /* Spacing Scale */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  
   /* Grayscale System */
   --white: #FFFFFF;
   --gray-50: #F9FAFB;
@@ -61,25 +91,429 @@
   --text-secondary: var(--gray-300);
   --text-tertiary: var(--gray-500);
   --text-disabled: var(--gray-600);
+  
+  /* Fluid Typography Scale */
+  --fluid-min-width: 320px;
+  --fluid-max-width: 1440px;
+  --fluid-min-font: 16px;
+  --fluid-max-font: 20px;
 }
 
+/* ========================================
+   TYPOGRAPHY & SIZING CONSISTENCY
+   ======================================== */
+
+/* Fluid Typography with clamp() */
+.fluid-heading-1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.fluid-heading-2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.fluid-heading-3 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+.fluid-body-large {
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  line-height: 1.6;
+}
+
+.fluid-body {
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.7;
+}
+
+.fluid-body-small {
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  line-height: 1.6;
+}
+
+/* Readable Text Classes */
+.readable-text-narrow {
+  max-width: 45ch;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+}
+
+.readable-text-standard {
+  max-width: 65ch;
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+}
+
+.readable-text-wide {
+  max-width: 85ch;
+  line-height: 1.75;
+}
+
+/* Font Feature Settings */
+.text-optimize-legibility {
+  font-feature-settings: "liga" 1, "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ========================================
+   UI TRANSITIONS & ANIMATIONS
+   ======================================== */
+
+/* Enhanced Transition Classes */
+.ease-smooth {
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.ease-bounce {
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.ease-elastic {
+  transition-timing-function: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+.ease-spring {
+  transition-timing-function: cubic-bezier(0.5, 0.05, 0.2, 1);
+}
+
+.ease-quick {
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Delayed Transitions */
+.transition-delay-100 { transition-delay: 100ms; }
+.transition-delay-200 { transition-delay: 200ms; }
+.transition-delay-300 { transition-delay: 300ms; }
+.transition-delay-500 { transition-delay: 500ms; }
+
+/* Duration Variants */
+.duration-300 { transition-duration: 300ms; }
+.duration-500 { transition-duration: 500ms; }
+.duration-700 { transition-duration: 700ms; }
+.duration-1000 { transition-duration: 1000ms; }
+
+/* ========================================
+   RESPONSIVE BEHAVIOR
+   ======================================== */
+
+/* Responsive Breakpoints */
+@media (max-width: 767px) {
+  .mobile-only { display: block; }
+  .tablet-up { display: none; }
+  .desktop-only { display: none; }
+  
+  .scale-mobile { transform: scale(0.95); }
+  .spacing-mobile { margin: 0.5rem; padding: 1rem; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .mobile-only { display: none; }
+  .tablet-up { display: block; }
+  .desktop-only { display: none; }
+  
+  .scale-tablet { transform: scale(1); }
+  .spacing-tablet { margin: 1rem; padding: 1.5rem; }
+}
+
+@media (min-width: 1024px) {
+  .mobile-only { display: none; }
+  .tablet-up { display: block; }
+  .desktop-only { display: block; }
+  
+  .scale-desktop { transform: scale(1.05); }
+  .spacing-desktop { margin: 1.5rem; padding: 2rem; }
+}
+
+/* Adaptive Sizing */
+.adaptive-large {
+  width: clamp(280px, 90vw, 600px);
+  height: clamp(200px, 60vh, 400px);
+}
+
+.adaptive-medium {
+  width: clamp(200px, 70vw, 400px);
+  height: clamp(150px, 40vh, 300px);
+}
+
+.adaptive-small {
+  width: clamp(150px, 50vw, 250px);
+  height: clamp(100px, 30vh, 200px);
+}
+
+/* ========================================
+   VISUAL EFFECTS & BACKGROUND ANIMATIONS
+   ======================================== */
+
+/* Aurora Effect */
+.aurora-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.aurora-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(6, 182, 212, 0.12) 25%,
+    rgba(245, 158, 11, 0.08) 50%,
+    rgba(139, 92, 246, 0.1) 75%,
+    rgba(16, 185, 129, 0.1) 100%);
+  animation: auroraFlow 8s ease-in-out infinite;
+  opacity: 0.7;
+  z-index: -1;
+}
+
+@keyframes auroraFlow {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+/* Gradient Mesh Enhancement */
+.gradient-mesh {
+  background: radial-gradient(ellipse at 30% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 70%, rgba(245, 158, 11, 0.12) 0%, transparent 50%);
+  background-blend-mode: overlay;
+}
+
+/* Noise Overlay Animation */
+.noise-overlay {
+  position: relative;
+}
+
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  animation: noiseShift 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes noiseShift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(100px, 100px); }
+}
+
+/* Visual Depth Utilities */
+.visual-depth-1 {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateZ(0);
+}
+
+.visual-depth-2 {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateZ(0);
+}
+
+.visual-depth-3 {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateZ(0);
+}
+
+/* Enhanced Glow Effects */
+.glow-pulse-subtle {
+  animation: glowPulse 3s ease-in-out infinite alternate;
+}
+
+.glow-pulse-strong {
+  animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6), 0 0 30px rgba(16, 185, 129, 0.4);
+  }
+}
+
+/* ========================================
+   COMPONENT UPDATES
+   ======================================== */
+
+/* Enhanced Services Grid */
+.services-grid-enhanced {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding: clamp(2rem, 4vw, 4rem);
+}
+
+.service-card-enhanced {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  backdrop-filter: blur(10px);
+  will-change: transform, box-shadow;
+}
+
+.service-card-enhanced:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* Enhanced Navigation */
+.nav-enhanced {
+  backdrop-filter: blur(12px);
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease-out;
+  will-change: transform;
+}
+
+.nav-enhanced:hover {
+  background: rgba(17, 24, 39, 0.9);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.nav-link-enhanced {
+  position: relative;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.nav-link-enhanced::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link-enhanced:hover::after {
+  width: 80%;
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* Will-change Properties */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-all {
+  will-change: transform, opacity;
+}
+
+/* GPU Acceleration */
+.gpu-accelerate {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  font-size: 100%; /* Base font size */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Responsive base styles */
+@media (max-width: 767px) {
+  html {
+    font-size: 90%; /* Slightly smaller base font on mobile */
+  }
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 110%; /* Slightly larger base font on desktop */
+  }
+}
+
+/* Base Styles */
 .content-wrapper {
   background-color: transparent;
   overflow: visible;
   padding: 0;
   margin: 0 auto;
   position: relative;
+  max-width: var(--container-max-width);
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
 }
+
+/* Responsive Container Classes */
+.container-responsive {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+.grid-responsive {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+}
+
+.flex-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+}
+
+@media (min-width: 768px) {
+  .flex-responsive {
+    flex-direction: row;
+  }
+}
+
+/* Fluid Typography */
+.fluid-text {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+
+.fluid-text-sm { font-size: var(--font-size-sm); }
+.fluid-text-lg { font-size: var(--font-size-lg); }
+.fluid-text-xl { font-size: var(--font-size-xl); }
+.fluid-text-2xl { font-size: var(--font-size-2xl); }
+.fluid-text-3xl { font-size: var(--font-size-3xl); }
+.fluid-text-4xl { font-size: var(--font-size-4xl); }
+.fluid-text-5xl { font-size: var(--font-size-5xl); }
 
 .content-wrapper > section {
   width: 100%;
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 80px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -93,6 +527,22 @@ body {
   font-feature-settings: "liga" 1, "kern" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  font-size: var(--font-size-base);
+}
+
+/* Responsive body adjustments */
+@media (max-width: 767px) {
+  body {
+    line-height: 1.5;
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (min-width: 1200px) {
+  body {
+    line-height: 1.7;
+  }
 }
 
 /* Existing styles from original file */

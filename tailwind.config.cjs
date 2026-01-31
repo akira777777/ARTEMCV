@@ -10,6 +10,14 @@ module.exports = {
     './*.{ts,tsx,js,jsx}',
   ],
   theme: {
+    screens: {
+      'xs': '320px',
+      'sm': '768px',
+      'md': '1024px',
+      'lg': '1200px',
+      'xl': '1440px',
+      '2xl': '1920px',
+    },
     extend: {
       fontFamily: {
         display: ['Clash Display', 'Inter', 'system-ui', 'sans-serif'],

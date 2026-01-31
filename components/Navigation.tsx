@@ -135,6 +135,8 @@ export const Navigation: React.FC = React.memo(() => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, type: 'spring', stiffness: 100 }}
+      role="banner"
+      aria-label="Main website header"
     >
       <div className="mx-4 mt-4 md:mx-8 md:mt-6">
         <motion.nav 
@@ -142,17 +144,22 @@ export const Navigation: React.FC = React.memo(() => {
           whileHover={{
             boxShadow: '0 8px 48px rgba(168, 85, 247, 0.15)',
           }}
+          role="navigation"
+          aria-label="Primary navigation"
         >
           {/* Logo */}
           <motion.a 
             href="#home" 
             onClick={(e) => handleLinkClick(e, '#home')}
-            className="flex items-center gap-2 group"
-            aria-label={`${t('brand.vision')} - ${t('nav.home')}`}
+            className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg"
+            aria-label={`${t('brand.vision')} - Navigate to homepage`}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-purple-400 transition-colors">
+            <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-purple-400 transition-colors sr-only">
+              ARTEM.DEV
+            </span>
+            <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-purple-400 transition-colors" aria-hidden="true">
               ARTEM.DEV
             </span>
             <motion.span 
@@ -166,16 +173,19 @@ export const Navigation: React.FC = React.memo(() => {
                 ],
               }}
               transition={{ duration: 2, repeat: Infinity }}
+              aria-hidden="true"
             />
           </motion.a>
 
           {/* Desktop Nav */}
           <div className="flex items-center gap-4 md:gap-8">
-            <ul className="flex items-center gap-1 md:gap-2">
+            <ul className="flex items-center gap-1 md:gap-2" role="menubar">
               {navLinks}
             </ul>
-            <div className="hidden sm:block h-4 w-px bg-white/10" />
-            <LanguageSwitcher />
+            <div className="hidden sm:block h-4 w-px bg-white/10" aria-hidden="true" />
+            <div className="focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-offset-2 focus-within:ring-offset-transparent rounded-lg">
+              <LanguageSwitcher />
+            </div>
           </div>
         </motion.nav>
       </div>
