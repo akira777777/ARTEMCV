@@ -361,8 +361,6 @@ button {
   animation: sheenSweep 1.2s ease;
 }
 
-<<<<<<< Updated upstream
-=======
 @keyframes fadeUp {
   from {
     opacity: 0;
