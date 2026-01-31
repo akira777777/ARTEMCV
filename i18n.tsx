@@ -340,6 +340,11 @@ const translations: Record<Lang, Dict> = {
     'contact.error.timeout': 'Síťový timeout. Zkuste to prosím znovu později.',
     'contact.reach_out': 'Nebo mě kontaktujte přes:',
 
+    'cta.title': 'Pojďme stavět něco skvělého',
+    'cta.subtitle': 'Jste připraveni oživit svůj projekt? Specializu se na vytváření vysoce výkonných interaktivních webových prostředí přizpůsobených vašim potřebám.',
+    'cta.button': 'Zahájit spolupráci',
+    'cta.secondary': 'Zobrazit GitHub',
+
     'project.1.title': 'Barber Shop',
     'project.1.desc': 'AI dispečer pro holičství: online rezervace, anti-overbooking, CRM klientů a platební analytika. Optimalizováno pro vícekřeslové salony.',
     'project.2.title': 'Dental Clinic Vakalova',
