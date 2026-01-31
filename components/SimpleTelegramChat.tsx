@@ -10,7 +10,7 @@ interface Message {
 
 const createId = () => globalThis.crypto?.randomUUID?.() ?? `msg-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
-export const SimpleTelegramChat: React.FC = () => {
+export const SimpleTelegramChat: React.FC = React.memo(() => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -272,4 +272,6 @@ export const SimpleTelegramChat: React.FC = () => {
       </div>
     </>
   );
-};
+});
+
+SimpleTelegramChat.displayName = 'SimpleTelegramChat';
