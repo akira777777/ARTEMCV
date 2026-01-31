@@ -15,37 +15,15 @@ import { IconGallery } from './components/Icons';
 import FramerIntegration from './components/FramerIntegration';
 import FramerLayout from './components/FramerLayout';
 
-// Strategic component loading based on priority
-
-// Critical components (loaded immediately)
-const Navigation = React.lazy(() => import('./components/Navigation'));
-const Footer = React.lazy(() => import('./components/Footer'));
-
-// High-priority components (loaded after critical)
-const FramerLayout = React.lazy(() => import('./components/FramerLayout'));
-const FramerIntegration = React.lazy(() => import('./components/FramerIntegration'));
-const IconGallery = React.lazy(() => import('./components/Icons').then(m => ({ default: m.IconGallery })));
-const CardStack = React.lazy(() => import('./components/CardStack'));
-
-// Medium-priority components (loaded with intersection observer)
+// Lazy load heavy components
 const SpotlightGallery = React.lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
-const InteractiveGallery = React.lazy(() => import('./components/InteractiveGallery'));
-const GradientShaderCard = React.lazy(() => import('./components/GradientShaderCard'));
-
-// Low-priority components (loaded last)
 const About = React.lazy(() => import('./components/About').then(m => ({ default: m.About })));
-const InteractiveShowcase = React.lazy(() => import('./components/InteractiveShowcase'));
 const CTASection = React.lazy(() => import('./components/CTASection').then(m => ({ default: m.CTASection })));
 const ContactSectionSecure = React.lazy(() => import('./components/ContactSectionSecure'));
 const SimpleTelegramChat = React.lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
-
-// Utility components (always loaded)
-const { ScrollToTop } = require('./components/ScrollToTop');
-const ScrollProgress = require('./components/ScrollProgress').default;
-const ErrorBoundary = require('./components/ErrorBoundary').default;
-const CursorTrail = require('./components/CursorTrail').default;
-const SkipLink = require('./components/SkipLink').default;
-const { SectionDivider } = require('./components/SectionDivider');
+const InteractiveShowcase = React.lazy(() => import('./components/InteractiveShowcase'));
+const InteractiveGallery = React.lazy(() => import('./components/InteractiveGallery'));
+const GradientShaderCard = React.lazy(() => import('./components/GradientShaderCard'));
 
 const App: React.FC = () => {
   return (
