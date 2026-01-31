@@ -26,28 +26,37 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="apple-touch-icon" href="/vite.svg" />
     
-    <!-- Critical Resource Preloading -->
+    <!-- Enhanced Resource Preloading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Preload critical fonts with higher priority -->
+    <!-- Early Hints for Critical Resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
     
-    <!-- Preload critical above-the-fold images -->
-    <link rel="preload" href="/barber.webp" as="image" type="image/webp" importance="high">
-    <link rel="preload" href="/dental.webp" as="image" type="image/webp" importance="high">
+    <!-- Preload critical above-the-fold images with WebP priority -->
     <link rel="preload" href="/marketplace.webp" as="image" type="image/webp" importance="high">
     <link rel="preload" href="/detailing.webp" as="image" type="image/webp" importance="high">
+    <link rel="preload" href="/barber.webp" as="image" type="image/webp" importance="high">
+    <link rel="preload" href="/dental.webp" as="image" type="image/webp" importance="high">
+    
+    <!-- Preload critical JavaScript chunks -->
+    <link rel="preload" href="/assets/react-" as="script" importance="high">
+    <link rel="preload" href="/assets/motion-" as="script" importance="high">
+    <link rel="preload" href="/assets/icons-" as="script" importance="high">
     
     <!-- DNS prefetch for external domains -->
     <link rel="dns-prefetch" href="https://picsum.photos">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.telegram.org">
     
     <!-- Preconnect to critical third-party services -->
     <link rel="preconnect" href="https://api.telegram.org" crossorigin>
+    
+    <!-- Module preloading for faster script execution -->
+    <link rel="modulepreload" href="/index.tsx">
 
     <!-- Critical Above-the-Fold CSS -->
     <style>
@@ -156,8 +165,7 @@
     
     <title>JULES.ENGINEER — Full Stack Developer & Designer</title>
     
-    <!-- Preload critical JavaScript bundles -->
-    <link rel="modulepreload" href="/index.tsx">
+
   </head>
   <body>
     <div id="root"></div>

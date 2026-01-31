@@ -3,9 +3,9 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Box, TorusKnot, Environment, ContactShadows, OrbitControls } from '@react-three/drei';
 
 function Model() {
-  const meshRef = useRef<any>();
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime();
+  const meshRef = useRef<any>(null);
+  useFrame((_, delta) => {
+    const t = Date.now() / 1000; // Using Date.now() instead of state.clock.getElapsedTime()
     if (meshRef.current) {
       meshRef.current.rotation.y = Math.sin(t / 2) / 2;
       meshRef.current.position.y = Math.sin(t) / 4;

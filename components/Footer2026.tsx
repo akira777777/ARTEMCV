@@ -14,33 +14,33 @@ export const Footer2026: React.FC = () => {
         <div className="relative group cursor-pointer">
           <div className="absolute inset-0 bg-indigo-500 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
           <button className="relative bg-white text-black px-12 py-6 rounded-full font-display text-2xl font-bold hover:scale-105 active:scale-95 transition-all">
-            START A PROJECT
+            {t('footer.start_project')}
           </button>
         </div>
 
         <div className="mt-32 w-full grid grid-cols-2 md:grid-cols-4 gap-12 text-left opacity-40 text-sm border-t border-white/5 pt-12 text-white">
           <div className="flex flex-col gap-4">
-            <span className="font-bold text-white uppercase tracking-widest text-[10px]">Social</span>
+            <span className="font-bold text-white uppercase tracking-widest text-[10px]">{t('footer.social')}</span>
             <a href="https://twitter.com" className="hover:text-white transition-colors">Twitter (X)</a>
             <a href="https://linkedin.com" className="hover:text-white transition-colors">LinkedIn</a>
             <a href="https://github.com/akira777777" className="hover:text-white transition-colors">GitHub</a>
           </div>
           <div className="flex flex-col gap-4">
-            <span className="font-bold text-white uppercase tracking-widest text-[10px]">Status</span>
+            <span className="font-bold text-white uppercase tracking-widest text-[10px]">{t('footer.status')}</span>
             <span className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-              Available Q4 2026
+              {t('footer.available')}
             </span>
-            <span>London / Remote</span>
+            <span>{t('footer.location')}</span>
           </div>
           <div className="flex flex-col gap-4">
-            <span className="font-bold text-white uppercase tracking-widest text-[10px]">Version</span>
+            <span className="font-bold text-white uppercase tracking-widest text-[10px]">{t('footer.version')}</span>
             <span>2026.04.12</span>
             <span>Build: #AM-0922</span>
           </div>
           <div className="flex flex-col gap-4 text-right">
             <div className="text-white font-display font-bold text-lg">Artem Mikhailov</div>
-            <p>© All rights reserved 2026</p>
+            <p>{t('footer.rights')}</p>
           </div>
         </div>
       </div>
