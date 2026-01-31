@@ -12,6 +12,7 @@ import SkipLink from './components/SkipLink';
 import { SectionDivider } from './components/SectionDivider';
 import { CardStack } from './components/CardStack';
 import { IconGallery } from './components/Icons';
+import FramerIntegration from './components/FramerIntegration';
 
 // Lazy load heavy components
 const SpotlightGallery = React.lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
@@ -32,7 +33,10 @@ const App: React.FC = () => {
         <Navigation />
         <main id="main-content" className="content-wrapper">
           <Hero />
-<<<<<<< Local
+          
+          {/* Framer Integration Section - Showcases adapted Framer styles with user's preferred color scheme */}
+          <SectionDivider variant="gradient" />
+          <FramerIntegration />
           
           {/* Icon Gallery Section */}
           <SectionDivider variant="dots" />
@@ -59,35 +63,32 @@ const App: React.FC = () => {
           <SectionDivider variant="lines" />
           <CardStack />
           
-          <SectionDivider variant="gradient" />
-          <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading showcase..." />}>
-            <InteractiveShowcase />
-=======
           <SectionDivider variant="wave" />
           <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading gallery..." />}>
             <SpotlightGallery />
->>>>>>> Remote
           </React.Suspense>
-<<<<<<< Local
-=======
+          
           <SectionDivider variant="particles" />
           <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading interactive gallery..." />}>
             <InteractiveGallery />
           </React.Suspense>
+          
           <SectionDivider variant="diamond" />
           <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading about section..." />}>
             <About />
           </React.Suspense>
+          
           <SectionDivider variant="pulse" />
           <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading interactive showcase..." />}>
             <InteractiveShowcase />
           </React.Suspense>
+          
           <SectionDivider variant="glitch" />
           <React.Suspense fallback={<div className="h-72 w-full" aria-label="Loading CTA..." />}>
             <CTASection />
           </React.Suspense>
+          
           <SectionDivider variant="lines" />
->>>>>>> Remote
           <ErrorBoundary>
             <ContactSectionSecure id="contact" />
           </ErrorBoundary>
