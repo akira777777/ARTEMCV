@@ -71,7 +71,9 @@ const BackgroundPaths: React.FC<BackgroundPathsProps> = ({
   onButtonClick,
   className = ""
 }) => {
-  const words = title.split(" ");
+  // Handle null/undefined values gracefully
+  const safeTitle = title ?? "Background Paths";
+  const words = safeTitle.split(" ");
 
   return (
     <div className={`relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-neutral-950 ${className}`}>

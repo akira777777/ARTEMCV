@@ -57,15 +57,19 @@ describe('BackgroundPaths Component', () => {
       const customTitle = "Custom Hero Title";
       render(<BackgroundPaths title={customTitle} />);
       
-      // Check if title text exists in the DOM (split across spans)
-      expect(document.body.textContent).toContain(customTitle);
+      // Check if title text exists in the DOM (avoid SVG title text)
+      const titleElement = document.querySelector('h1');
+      expect(titleElement).toBeInTheDocument();
+      expect(titleElement?.textContent).toContain(customTitle);
     });
 
     it('should render with subtitle when provided', () => {
       const subtitle = "This is a custom subtitle";
       render(<BackgroundPaths subtitle={subtitle} />);
       
-      expect(document.body.textContent).toContain(subtitle);
+      const subtitleElement = document.querySelector('p');
+      expect(subtitleElement).toBeInTheDocument();
+      expect(subtitleElement?.textContent).toContain(subtitle);
     });
 
     it('should render without subtitle when not provided', () => {
@@ -91,10 +95,14 @@ describe('BackgroundPaths Component', () => {
       render(<BackgroundPaths />);
       
       // Check default title
-      expect(document.body.textContent).toContain("Background Paths");
+      const titleElement = document.querySelector('h1');
+      expect(titleElement).toBeInTheDocument();
+      expect(titleElement?.textContent).toContain("Background Paths");
       
       // Check default button text
-      expect(document.body.textContent).toContain("Discover Excellence");
+      const button = screen.getByTestId('magnetic-button');
+      expect(button).toBeInTheDocument();
+      expect(button.textContent).toContain("Discover Excellence");
     });
 
     it('should handle empty title gracefully', () => {
@@ -117,8 +125,13 @@ describe('BackgroundPaths Component', () => {
       render(<BackgroundPaths title={undefined} subtitle={undefined} buttonText={undefined} />);
       
       // Should use defaults
-      expect(document.body.textContent).toContain("Background Paths");
-      expect(document.body.textContent).toContain("Discover Excellence");
+      const titleElement = document.querySelector('h1');
+      expect(titleElement).toBeInTheDocument();
+      expect(titleElement?.textContent).toContain("Background Paths");
+      
+      const button = screen.getByTestId('magnetic-button');
+      expect(button).toBeInTheDocument();
+      expect(button.textContent).toContain("Discover Excellence");
     });
 
     it('should handle null props gracefully', () => {
@@ -296,6 +309,10 @@ describe('BackgroundPaths Component', () => {
       // Should not crash
       const container = document.querySelector('.relative.min-h-screen');
       expect(container).toBeInTheDocument();
+      
+      // Should render subtitle element
+      const subtitleElement = document.querySelector('p');
+      expect(subtitleElement).toBeInTheDocument();
     });
   });
 

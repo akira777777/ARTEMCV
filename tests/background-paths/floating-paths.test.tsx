@@ -345,9 +345,9 @@ describe('FloatingPaths Subcomponent', () => {
       const svg = screen.getByTestId('floating-paths-svg');
       expect(svg).toHaveAttribute('aria-hidden', 'true');
       
-      // SVG elements don't need focusable attribute in modern browsers
-      // Background decorative elements should be hidden from screen readers
-      expect(svg).toHaveClass('pointer-events-none');
+      // Check the container div has pointer-events-none
+      const container = svg.parentElement;
+      expect(container).toHaveClass('pointer-events-none');
     });
 
     it('should have descriptive title element', () => {
