@@ -47,9 +47,11 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
   const primaryTag = project.techStack[0] || 'PROJECT';
 
   return (
-    <div 
+    <button
+      type="button"
       onClick={onClick}
-      className="flex-none w-[85vw] md:w-[400px] lg:w-[500px] group snap-start cursor-pointer animate-fade-up"
+      aria-label={`Open ${project.title} details`}
+      className="flex-none w-[85vw] md:w-[400px] lg:w-[500px] group snap-start cursor-pointer animate-fade-up text-left bg-transparent border-0"
     >
       <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-sm mb-6 bg-neutral-900">
          
@@ -63,10 +65,8 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
               alt={project.title} 
               loading="lazy"
               onLoad={() => setIsLoaded(true)}
-              // Initial scale to match the JS-applied scale, preventing a jump on load
-              style={{ transform: 'scale(1.2)' }} 
               className={`
-                w-full h-full object-cover 
+                w-full h-full object-cover scale-[1.2]
                 will-change-transform
                 transition-opacity duration-700
                 ${isLoaded ? 'opacity-80 group-hover:opacity-100' : 'opacity-0'}
@@ -88,11 +88,6 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
           <h3 className="text-2xl font-bold font-display tracking-wide group-hover:text-neutral-300 transition-colors">{project.title}</h3>
           <p className="text-neutral-500 text-sm mt-1">{primaryTag}</p>
         </div>
-<<<<<<< Updated upstream
-        <span className="text-xs font-mono border border-white/10 px-2 py-1 rounded text-neutral-400">
-          {project.techStack[1] || 'BUILD'}
-        </span>
-=======
         <div className="flex gap-2">
           {project.techStack.slice(1, 3).map((tech) => (
             <span key={tech} className="text-xs font-mono border border-white/10 px-2 py-1 rounded text-neutral-400 hover:border-white/20 transition-colors">
@@ -100,9 +95,8 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
             </span>
           ))}
         </div>
->>>>>>> Stashed changes
       </div>
-    </div>
+    </button>
   );
 };
 
@@ -161,10 +155,18 @@ export const WorkGallery: React.FC = () => {
           
           {/* Navigation Controls */}
           <div className="flex gap-4 mt-8 md:mt-0">
-            <button onClick={() => scroll('left')} className="p-4 rounded-full border border-white/10 hover:bg-white hover:text-black transition-colors">
+            <button
+              onClick={() => scroll('left')}
+              aria-label="Scroll projects left"
+              className="p-4 rounded-full border border-white/10 hover:bg-white hover:text-black transition-colors"
+            >
               ←
             </button>
-            <button onClick={() => scroll('right')} className="p-4 rounded-full border border-white/10 hover:bg-white hover:text-black transition-colors">
+            <button
+              onClick={() => scroll('right')}
+              aria-label="Scroll projects right"
+              className="p-4 rounded-full border border-white/10 hover:bg-white hover:text-black transition-colors"
+            >
               →
             </button>
           </div>
@@ -191,8 +193,7 @@ export const WorkGallery: React.FC = () => {
 
       <div 
         ref={scrollRef}
-        className="flex overflow-x-auto gap-8 px-6 md:px-12 pb-12 no-scrollbar snap-x snap-mandatory min-h-[500px]"
-        style={{ scrollPaddingLeft: '24px' }}
+        className="flex overflow-x-auto gap-8 px-6 md:px-12 pb-12 no-scrollbar snap-x snap-mandatory min-h-[500px] scroll-pl-6"
       >
         {filteredProjects.map((project) => (
           <ProjectCard 
@@ -209,7 +210,9 @@ export const WorkGallery: React.FC = () => {
       {selectedProject && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8">
            {/* Backdrop */}
-           <div 
+           <button
+             type="button"
+             aria-label="Close project details"
              className={`absolute inset-0 bg-black/90 backdrop-blur-md transition-opacity duration-400 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
              onClick={handleCloseOverlay}
            />
@@ -224,7 +227,8 @@ export const WorkGallery: React.FC = () => {
            >
               {/* Close Button */}
               <button 
-                onClick={handleCloseOverlay} 
+                onClick={handleCloseOverlay}
+                aria-label="Close project details"
                 className="absolute top-4 right-4 z-20 p-2 bg-black/50 backdrop-blur rounded-full text-white border border-white/10 hover:bg-white hover:text-black transition-colors"
               >
                 <X size={20} />

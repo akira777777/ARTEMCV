@@ -1,28 +1,29 @@
 import React, { useRef, useEffect, useMemo } from 'react';
-<<<<<<< Updated upstream
-import { ArrowRight } from 'lucide-react';
-=======
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
->>>>>>> Stashed changes
 
 export const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const rafRef = useRef<number | null>(null);
 
-  const cards = useMemo(() => (
-    [
+  const cards = useMemo(
+    () => [
       { src: 'https://picsum.photos/400/600?random=1', rotate: -15, z: 10, label: 'BRAND' },
       { src: 'https://picsum.photos/400/600?random=2', rotate: -5, z: 20, label: 'WEB' },
       { src: 'https://picsum.photos/400/600?random=3', rotate: 5, z: 30, label: 'MOTION' },
       { src: 'https://picsum.photos/400/600?random=4', rotate: 15, z: 10, label: 'DESIGN' },
-    ]
-  ), []);
+    ],
+    []
+  );
 
-  const zClassByValue = useMemo(() => ({
-    10: 'z-10',
-    20: 'z-20',
-    30: 'z-30'
-  }), []);
+  const zClassByValue = useMemo(
+    () => ({
+      10: 'z-10',
+      20: 'z-20',
+      30: 'z-30',
+    }),
+    []
+  );
 
   useEffect(() => {
     const applyTransforms = (x: number, y: number) => {
@@ -30,23 +31,36 @@ export const Hero: React.FC = () => {
         const card = cards[index];
         if (!el || !card) return;
         const translateX = index * 10 - 15;
-        const rotate = card.rotate + (x * (index + 1) * 0.1);
+        const rotate = card.rotate + x * (index + 1) * 0.1;
         const translateY = y * (index + 1) * 0.2;
         el.style.transform = `translateX(${translateX}px) rotate(${rotate}deg) translateY(${translateY}px)`;
       });
     };
 
+    let latestX = 0;
+    let latestY = 0;
+
+    const run = () => {
+      applyTransforms(latestX, latestY);
+      rafRef.current = null;
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
       const { innerWidth, innerHeight } = globalThis;
-      const x = (e.clientX / innerWidth - 0.5) * 20; // -10 to 10
-      const y = (e.clientY / innerHeight - 0.5) * 20; // -10 to 10
-      applyTransforms(x, y);
+      latestX = (e.clientX / innerWidth - 0.5) * 20; // -10 to 10
+      latestY = (e.clientY / innerHeight - 0.5) * 20; // -10 to 10
+      rafRef.current ??= globalThis.requestAnimationFrame(run);
     };
 
     applyTransforms(0, 0);
-    globalThis.addEventListener('mousemove', handleMouseMove);
-    return () => globalThis.removeEventListener('mousemove', handleMouseMove);
+    globalThis.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      globalThis.removeEventListener('mousemove', handleMouseMove);
+      if (rafRef.current !== null) {
+        globalThis.cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, [cards]);
 
   const scrollToWorks = () => {
@@ -54,26 +68,20 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <section 
-      id="home" 
+    <section
+      id="home"
       ref={containerRef}
       className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden pt-20"
     >
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_70%)] pointer-events-none" />
-      
+
       {/* Main Typography */}
       <div className="z-10 text-center mb-12 relative">
         <div className="flex items-center justify-center mb-4">
-           <span className="text-4xl md:text-6xl font-display font-bold mr-4 animate-pulse">∞</span>
+          <span className="text-4xl md:text-6xl font-display font-bold mr-4 animate-pulse">∞</span>
         </div>
         <h1 className="text-[12vw] leading-[0.85] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 select-none">
-<<<<<<< Updated upstream
-          STUDIO
-        </h1>
-        <p className="mt-8 text-neutral-400 max-w-md mx-auto text-sm md:text-base font-light tracking-wide leading-relaxed">
-          The forefront of innovation &gt; Seamlessly blending creativity with technology to deliver stunning visual experiences.
-=======
           ARTEM
         </h1>
         <p className="mt-4 text-lg md:text-xl text-white font-medium tracking-wide">
@@ -81,7 +89,6 @@ export const Hero: React.FC = () => {
         </p>
         <p className="mt-4 text-neutral-400 max-w-lg mx-auto text-sm md:text-base font-light tracking-wide leading-relaxed">
           Crafting high-performance web applications with modern technologies. Specialized in React, TypeScript, and creating exceptional user experiences.
->>>>>>> Stashed changes
         </p>
       </div>
 
@@ -91,14 +98,16 @@ export const Hero: React.FC = () => {
           {cards.map((card, index) => (
             <div
               key={card.label}
-              ref={(el) => { cardRefs.current[index] = el; }}
+              ref={(el) => {
+                cardRefs.current[index] = el;
+              }}
               className={`absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden border border-white/5 transition-transform duration-700 ease-out group shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] ${zClassByValue[card.z] ?? 'z-10'}`}
             >
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
-              <img 
-                src={card.src} 
-                alt="Studio Work" 
-                className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-700 scale-105 group-hover:scale-110" 
+              <img
+                src={card.src}
+                alt="Studio Work"
+                className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-700 scale-105 group-hover:scale-110"
               />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                 <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-xs font-bold tracking-widest uppercase border border-white/20">
@@ -107,18 +116,9 @@ export const Hero: React.FC = () => {
               </div>
             </div>
           ))}
-<<<<<<< Updated upstream
         </div>
       </div>
-      
-      <button
-        type="button"
-        onClick={scrollToWorks}
-        className="absolute bottom-10 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group"
-=======
-        </div>
-      </div>
-      
+
       {/* Stats Section */}
       <div className="absolute bottom-24 left-1/2 -translate-x-1/2 w-full max-w-4xl px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
@@ -149,7 +149,6 @@ export const Hero: React.FC = () => {
         type="button"
         onClick={scrollToWorks}
         className="absolute bottom-4 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group"
->>>>>>> Stashed changes
       >
         SCROLL TO EXPLORE <ArrowRight className="w-4 h-4 animate-bounce group-hover:translate-x-1 transition-transform" />
       </button>

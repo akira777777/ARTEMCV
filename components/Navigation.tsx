@@ -1,47 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavItem } from '../types';
 
 const navItems: NavItem[] = [
   { label: 'HOME', href: '#home' },
-<<<<<<< Updated upstream
-  { label: 'STUDIO', href: '#studio' },
-  { label: 'WORKS', href: '#works' },
-=======
   { label: 'WORKS', href: '#works' },
   { label: 'SERVICES', href: '#services' },
   { label: 'ABOUT', href: '#studio' },
->>>>>>> Stashed changes
   { label: 'CONTACT', href: '#contact' },
 ];
 
 export const Navigation: React.FC = () => {
   const [active, setActive] = useState('HOME');
   const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Determine scroll direction and toggle visibility
       if (currentScrollY < 50) {
         setIsVisible(true); // Always show at top
-      } else if (currentScrollY > lastScrollY) {
+      } else if (currentScrollY > lastScrollYRef.current) {
         setIsVisible(false); // Hide when scrolling down
       } else {
         setIsVisible(true); // Show when scrolling up
       }
-      setLastScrollY(currentScrollY);
+      lastScrollYRef.current = currentScrollY;
 
       // Active Link Logic
-      const sections = navItems.map(item => item.href.substring(1));
-      for (const section of sections) {
-        const element = document.getElementById(section);
+      for (const item of navItems) {
+        const sectionId = item.href.substring(1);
+        const element = document.getElementById(sectionId);
         if (element) {
           const rect = element.getBoundingClientRect();
           // Adjust detection zone for top header
           if (rect.top >= -100 && rect.top <= 300) {
-            setActive(section.toUpperCase());
+            setActive(item.label);
           }
         }
       }
@@ -49,7 +44,7 @@ export const Navigation: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -76,15 +71,9 @@ export const Navigation: React.FC = () => {
             className="flex items-center gap-2 group"
           >
             <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-neutral-400 transition-colors">
-<<<<<<< Updated upstream
-              INFINITE
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-white group-hover:bg-purple-500 transition-colors" />
-=======
               ARTEM.DEV
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-white group-hover:bg-indigo-500 transition-colors" />
->>>>>>> Stashed changes
           </a>
 
           {/* Desktop Nav */}

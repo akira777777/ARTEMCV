@@ -29,11 +29,12 @@ const fileToBase64 = (file: File): Promise<string> => {
       const base64 = result.split(',')[1];
       resolve(base64);
     };
-    reader.onerror = error => reject(error instanceof Error ? error : new Error(String(error)));
+    reader.onerror = (error) => reject(error instanceof Error ? error : new Error('File read failed'));
   });
 };
 
 export const AIChatOverlay: React.FC = () => {
+  const apiKey = import.meta.env.VITE_API_KEY;
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('chat');
   const [isExpanded, setIsExpanded] = useState(false);
@@ -74,6 +75,10 @@ export const AIChatOverlay: React.FC = () => {
 
   const handleChatSend = async () => {
     if ((!query.trim() && !chatFile) || chatLoading) return;
+    if (!apiKey) {
+      setMessages(prev => [...prev, { id: createId(), role: 'model', text: 'Missing API key. Set VITE_API_KEY to enable chat.' }]);
+      return;
+    }
 
     const userText = query;
     const currentFile = chatFile;
@@ -91,7 +96,7 @@ export const AIChatOverlay: React.FC = () => {
     setChatLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey });
       let model = 'gemini-3-pro-preview';
       let config: any = {
         systemInstruction: "You are Infinite Studio's advanced creative assistant.",
@@ -162,7 +167,7 @@ export const AIChatOverlay: React.FC = () => {
             setMessages(prev => {
               const newArr = [...prev];
               const last = newArr.at(-1);
-              if (last && last.id === modelMessageId) {
+              if (last?.id === modelMessageId) {
                 last.text = fullText;
               }
               return newArr;
@@ -181,10 +186,14 @@ export const AIChatOverlay: React.FC = () => {
 
   const handleGenerateImage = async () => {
     if (!imgPrompt.trim() || genLoading) return;
+    if (!apiKey) {
+      alert('Missing VITE_API_KEY. Please configure your API key to generate images.');
+      return;
+    }
     setGenLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: imgPrompt }] },
@@ -215,6 +224,10 @@ export const AIChatOverlay: React.FC = () => {
 
   const handleGenerateVideo = async () => {
     if ((!videoPrompt && !videoFile) || videoLoading) return;
+    if (!apiKey) {
+      alert('Missing VITE_API_KEY. Please configure your API key to generate video.');
+      return;
+    }
     
     // API Key Check for Veo
     const aiStudio = (globalThis as any).aistudio as { hasSelectedApiKey: () => Promise<boolean>; openSelectKey: () => Promise<boolean> } | undefined;
@@ -241,7 +254,7 @@ export const AIChatOverlay: React.FC = () => {
 
     try {
       // Create new instance to ensure key is picked up
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey });
       
       let requestPayload: any = {
          model: 'veo-3.1-fast-generate-preview',
@@ -274,7 +287,7 @@ export const AIChatOverlay: React.FC = () => {
       const videoUri = operation.response?.generatedVideos?.[0]?.video?.uri;
       if (videoUri) {
         // Must append key
-        setGeneratedVideo(`${videoUri}&key=${process.env.API_KEY}`);
+        setGeneratedVideo(`${videoUri}&key=${apiKey}`);
       } else {
         alert("No video returned.");
       }
@@ -477,11 +490,12 @@ export const AIChatOverlay: React.FC = () => {
                         />
                         <div className="grid grid-cols-2 gap-4">
                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 tracking-widest">ASPECT RATIO</label>
+                              <label htmlFor="image-aspect" className="text-[10px] font-bold text-neutral-500 tracking-widest">ASPECT RATIO</label>
                               <select 
+                                 id="image-aspect"
                                  value={aspectRatio} 
                                  onChange={(e) => setAspectRatio(e.target.value)}
-                                aria-label="Image aspect ratio"
+                                 aria-label="Image aspect ratio"
                                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
                               >
                                  <option value="1:1">1:1 (Square)</option>
@@ -495,11 +509,12 @@ export const AIChatOverlay: React.FC = () => {
                               </select>
                            </div>
                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 tracking-widest">SIZE</label>
+                              <label htmlFor="image-size" className="text-[10px] font-bold text-neutral-500 tracking-widest">SIZE</label>
                               <select 
+                                 id="image-size"
                                  value={imageSize} 
                                  onChange={(e) => setImageSize(e.target.value)}
-                                aria-label="Image size"
+                                 aria-label="Image size"
                                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
                               >
                                  <option value="1K">1K</option>
@@ -578,11 +593,12 @@ export const AIChatOverlay: React.FC = () => {
                         />
 
                         <div className="space-y-1">
-                           <label className="text-[10px] font-bold text-neutral-500 tracking-widest">ASPECT RATIO</label>
+                           <label htmlFor="video-aspect" className="text-[10px] font-bold text-neutral-500 tracking-widest">ASPECT RATIO</label>
                           <select 
+                              id="video-aspect"
                               value={videoAspectRatio} 
                               onChange={(e) => setVideoAspectRatio(e.target.value)}
-                            aria-label="Video aspect ratio"
+                              aria-label="Video aspect ratio"
                               className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
                            >
                               <option value="16:9">16:9 (Landscape)</option>
@@ -607,7 +623,9 @@ export const AIChatOverlay: React.FC = () => {
                     <div className="flex-1 bg-black/40 rounded-xl border border-white/10 flex items-center justify-center overflow-hidden">
                         {generatedVideo ? (
                             <div className="w-full h-full relative group">
-                                <video src={generatedVideo} controls className="w-full h-full object-contain" />
+                                <video src={generatedVideo} controls className="w-full h-full object-contain">
+                                  <track kind="captions" src="data:text/vtt,WEBVTT" label="Captions" default />
+                                </video>
                                   <a href={generatedVideo} download aria-label="Download generated video" title="Download generated video" className="absolute top-4 right-4 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors z-10">
                                    <Download size={16} />
                                 </a>
