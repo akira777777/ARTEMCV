@@ -13,6 +13,7 @@ import { SectionDivider } from './components/SectionDivider';
 import { CardStack } from './components/CardStack';
 import { IconGallery } from './components/Icons';
 import FramerIntegration from './components/FramerIntegration';
+import FramerLayout from './components/FramerLayout';
 
 // Lazy load heavy components
 const SpotlightGallery = React.lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
@@ -34,6 +35,10 @@ const App: React.FC = () => {
         <Navigation />
         <main id="main-content" className="content-wrapper">
           <Hero />
+          
+          {/* Framer Layout Section - Integrated design from temp.html */}
+          <SectionDivider variant="gradient" />
+          <FramerLayout />
           
           {/* Framer Integration Section - Showcases adapted Framer styles with user's preferred color scheme */}
           <SectionDivider variant="gradient" />
