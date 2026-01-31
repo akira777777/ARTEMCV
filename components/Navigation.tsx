@@ -32,7 +32,7 @@ const NavLink = React.memo<{
   </li>
 ));
 
-export const Navigation: React.FC = () => {
+export const Navigation: React.FC = React.memo(() => {
   const prefersReducedMotion = useReducedMotion();
   const [active, setActive] = useState('HOME');
   const [isVisible, setIsVisible] = useState(true);
@@ -146,4 +146,4 @@ export const Navigation: React.FC = () => {
       </div>
     </header>
   );
-};
+});

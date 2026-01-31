@@ -4,6 +4,10 @@ import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import { useReducedMotion } from '../lib/hooks';
 
+// Memoized style objects to prevent recreations
+const BUTTON_STYLE = { contain: 'layout style' } as const;
+const CONTAINER_STYLE = { contain: 'strict' } as const;
+
 const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.memo(({ project, onClick }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -77,9 +81,9 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
       onClick={onClick}
       aria-label={`Open ${project.title} details`}
       className="flex-none w-[85vw] md:w-[400px] lg:w-[500px] group snap-start cursor-pointer animate-fade-up text-left bg-transparent border-0"
-      style={{ contain: 'layout style' }}
+      style={BUTTON_STYLE}
     >
-      <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-sm mb-6 bg-neutral-900" style={{ contain: 'strict' }}>
+      <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-sm mb-6 bg-neutral-900" style={CONTAINER_STYLE}>
          
          {/* Wrapper for Hover Animations (Scale & Brightness) 
              Separating this allows the inner image to handle Parallax transform independently.
