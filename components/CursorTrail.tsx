@@ -15,7 +15,7 @@ const CursorTrail: React.FC = () => {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const trailRef = useRef<TrailPoint[]>([]);
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number>(undefined);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const mouseX = useMotionValue(0);

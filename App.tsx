@@ -17,33 +17,19 @@ const App: React.FC = () => {
       <div className="bg-black min-h-screen text-white selection:bg-white selection:text-black">
         <ScrollProgress />
         <Navigation />
-        <main>
+        <main id="main-content">
           <Hero />
           <WorkGallery />
           <About />
           <ErrorBoundary>
             <ContactSectionSecure id="contact" />
           </ErrorBoundary>
-          <Footer />
         </main>
+        <Footer />
         <SimpleTelegramChat />
         <ScrollToTop />
       </div>
     </I18nProvider>
-    <div className="bg-black min-h-screen text-white selection:bg-white selection:text-black">
-      <Navigation />
-      <main>
-        <Hero />
-        <WorkGallery />
-        <About />
-        <ErrorBoundary>
-          <ContactSectionSecure id="contact" />
-        </ErrorBoundary>
-        <Footer />
-      </main>
-      <SimpleTelegramChat />
-      <ScrollToTop />
-    </div>
   );
 };
 

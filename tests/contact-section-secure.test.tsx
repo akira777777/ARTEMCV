@@ -2,7 +2,16 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ContactSectionSecure from '../components/ContactSectionSecure';
+import { I18nProvider } from '../i18n';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+
+const renderWithI18n = (ui: React.ReactElement) => {
+  return render(
+    <I18nProvider>
+      {ui}
+    </I18nProvider>
+  );
+};
 
 describe('ContactSectionSecure', () => {
   beforeEach(() => {
@@ -14,7 +23,7 @@ describe('ContactSectionSecure', () => {
   });
 
   it('shows validation errors for empty required fields', async () => {
-    render(<ContactSectionSecure />);
+    renderWithI18n(<ContactSectionSecure />);
 
     const submit = screen.getByRole('button', { name: /send message/i });
     await userEvent.click(submit);
@@ -28,7 +37,7 @@ describe('ContactSectionSecure', () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200 });
     vi.stubGlobal('fetch', fetchMock);
 
-    render(<ContactSectionSecure />);
+    renderWithI18n(<ContactSectionSecure />);
 
     await userEvent.type(screen.getByLabelText(/name/i), 'Artem');
     await userEvent.type(screen.getByLabelText(/email/i), 'artem@example.com');
@@ -43,7 +52,7 @@ describe('ContactSectionSecure', () => {
   });
 
   it('displays error when email format is invalid', async () => {
-    render(<ContactSectionSecure />);
+    renderWithI18n(<ContactSectionSecure />);
 
     await userEvent.type(screen.getByLabelText(/name/i), 'Artem');
     await userEvent.type(screen.getByLabelText(/email/i), 'invalid-email');

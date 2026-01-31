@@ -4,8 +4,8 @@ import { Project } from './types';
 export const PROJECTS: Project[] = [
   {
     id: '1',
-    title: 'Barber Shop',
-    description: 'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',
+    title: 'project.1.title',
+    description: 'project.1.desc',
     techStack: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS'],
     liveLink: 'https://barber-am.vercel.app/',
     githubLink: 'https://github.com/akira777777',
@@ -13,8 +13,8 @@ export const PROJECTS: Project[] = [
   },
   {
     id: '2',
-    title: 'Dental Clinic Vakalova',
-    description: 'Лендинг и запись к врачу: каталог услуг, интерактивные планы лечения, отзывы пациентов. Уделено внимание доступности и скорости загрузки.',
+    title: 'project.2.title',
+    description: 'project.2.desc',
     techStack: ['Next.js', 'Framer Motion', 'Tailwind', 'Supabase'],
     liveLink: 'https://dental-clinic-vakalova.vercel.app/',
     githubLink: 'https://github.com/akira777777',
@@ -22,8 +22,8 @@ export const PROJECTS: Project[] = [
   },
   {
     id: '3',
-    title: 'Game Marketplace',
-    description: 'Современный маркетплейс игр с каталогом, корзиной покупок, системой фильтрации и адаптивным интерфейсом. Реализованы анимации и плавные переходы.',
+    title: 'project.3.title',
+    description: 'project.3.desc',
     techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'],
     liveLink: 'https://game-marketplace-seven.vercel.app/',
     githubLink: 'https://github.com/akira777777',
@@ -31,8 +31,8 @@ export const PROJECTS: Project[] = [
   },
   {
     id: '4',
-    title: 'Detailing Service',
-    description: 'Лендинг для детейлинг-сервиса с галереей работ, формой записи, калькулятором услуг и интерактивными элементами. Оптимизирован для мобильных устройств.',
+    title: 'project.4.title',
+    description: 'project.4.desc',
     techStack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Vercel'],
     liveLink: 'https://detailing-mu.vercel.app/',
     githubLink: 'https://github.com/akira777777',
