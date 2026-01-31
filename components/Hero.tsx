@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
@@ -464,9 +464,7 @@ const Hero: React.FC = React.memo(() => {
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.8 }}
       >
-        <Suspense fallback={<div className="h-24 w-full" aria-label="Loading interactive text..." />}>
-          <ParticleText text="INTERACTIVE EXPERIENCE" />
-        </Suspense>
+        <ParticleText text="INTERACTIVE EXPERIENCE" />
         <ServicesGrid />
       </motion.div>
 
