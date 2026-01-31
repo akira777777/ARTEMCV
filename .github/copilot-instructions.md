@@ -83,3 +83,31 @@
 - Scroll-driven effects use `requestAnimationFrame` (e.g., [Hero.tsx](../components/Hero.tsx) mouse parallax)
 - Avoid re-renders: `useCallback`, `useMemo`, `React.memo()` for expensive sections
 - Serverless function optimized: reduced cognitive complexity, extracted helper functions, optimized request handling
+
+## Neon PostgreSQL Integration
+
+**Optional but recommended:** Store contact submissions and analytics in Neon PostgreSQL (serverless, free tier available).
+
+**Setup:**
+1. Create account at [neon.tech](https://neon.tech)
+2. Set `DATABASE_URL` environment variable
+3. Run `npm run db:migrate` to create tables
+4. Submissions auto-stored; query via `/api/analytics` endpoint
+
+**Key Files:**
+- [lib/db.ts](../lib/db.ts) - Connection pool & query execution
+- [lib/contact-db.ts](../lib/contact-db.ts) - High-level database operations
+- [api/analytics.ts](../api/analytics.ts) - Protected analytics endpoint
+- [scripts/migrate.ts](../scripts/migrate.ts) - Schema initialization
+- [NEON_SETUP.md](../NEON_SETUP.md) - Comprehensive setup guide
+
+**Database Schema:**
+- `contact_submissions` - Form submissions with metadata
+- `contact_analytics` - Daily statistics (honeypot catches, rate limits)
+- `contact_audit_log` - Status change audit trail
+
+**Security:**
+- Input validation & HTML escaping
+- Rate limiting (5 req/60s per IP)
+- Honeypot bot detection
+- Protected analytics endpoint with API key
