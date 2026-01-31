@@ -26,8 +26,8 @@ const App: React.FC = () => {
           <ErrorBoundary>
             <ContactSectionSecure id="contact" />
           </ErrorBoundary>
-          <Footer />
         </main>
+        <Footer />
         <SimpleTelegramChat />
         <ScrollToTop />
       </div>

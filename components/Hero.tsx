@@ -86,8 +86,8 @@ export const Hero: React.FC = React.memo(() => {
         <h1 className="text-[12vw] leading-[0.85] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 select-none uppercase">
           JULES
         </h1>
-        <p className="mt-4 text-lg md:text-xl text-white font-medium tracking-wide uppercase">
-          {t('hero.title.line1')} & {t('hero.title.line2')}
+        <p className="mt-4 text-lg md:text-xl text-white font-medium tracking-wide">
+          {t('hero.title.line1')} & {t('hero.stat.uiux')}
         </p>
         <p className="mt-4 text-neutral-400 max-w-lg mx-auto text-sm md:text-base font-light tracking-wide leading-relaxed">
           {t('hero.desc')}
@@ -127,22 +127,22 @@ export const Hero: React.FC = React.memo(() => {
           <div className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all group">
             <Code2 className="w-6 h-6 mx-auto mb-2 text-indigo-400 group-hover:scale-110 transition-transform" />
             <div className="text-2xl md:text-3xl font-black text-white">50+</div>
-            <div className="text-[10px] text-neutral-500 tracking-wider uppercase font-bold">{t('hero.stat.works')}</div>
+            <div className="text-xs text-neutral-500 tracking-wider">{t('hero.stat.projects')}</div>
           </div>
           <div className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all group">
             <Users className="w-6 h-6 mx-auto mb-2 text-emerald-400 group-hover:scale-110 transition-transform" />
             <div className="text-2xl md:text-3xl font-black text-white">30+</div>
-            <div className="text-[10px] text-neutral-500 tracking-wider uppercase font-bold">{t('hero.stat.clients')}</div>
+            <div className="text-xs text-neutral-500 tracking-wider">{t('hero.stat.clients')}</div>
           </div>
           <div className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all group">
             <Zap className="w-6 h-6 mx-auto mb-2 text-yellow-400 group-hover:scale-110 transition-transform" />
             <div className="text-2xl md:text-3xl font-black text-white">3+</div>
-            <div className="text-[10px] text-neutral-500 tracking-wider uppercase font-bold">{t('hero.stat.experience')}</div>
+            <div className="text-xs text-neutral-500 tracking-wider">{t('hero.stat.experience')}</div>
           </div>
           <div className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all group">
             <Palette className="w-6 h-6 mx-auto mb-2 text-pink-400 group-hover:scale-110 transition-transform" />
             <div className="text-2xl md:text-3xl font-black text-white">100%</div>
-            <div className="text-[10px] text-neutral-500 tracking-wider uppercase font-bold">{t('hero.stat.performance')}</div>
+            <div className="text-xs text-neutral-500 tracking-wider">{t('hero.stat.satisfaction')}</div>
           </div>
         </div>
       </div>
@@ -152,7 +152,7 @@ export const Hero: React.FC = React.memo(() => {
         onClick={scrollToWorks}
         className="absolute bottom-4 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group"
       >
-        {t('hero.scroll')} <ArrowRight className="w-4 h-4 animate-bounce group-hover:translate-x-1 transition-transform" />
+        {t('hero.cta.scroll')} <ArrowRight className="w-4 h-4 animate-bounce group-hover:translate-x-1 transition-transform" />
       </button>
     </section>
   );

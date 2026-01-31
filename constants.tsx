@@ -6,7 +6,7 @@ export const PROJECTS: Project[] = [
     id: '1',
     title: 'project.1.title',
     description: 'project.1.desc',
-    techStack: ['React 19', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS'],
+    techStack: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS'],
     liveLink: 'https://barber-am.vercel.app/',
     githubLink: 'https://github.com/akira777777',
     image: '/barber.png'

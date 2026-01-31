@@ -1,5 +1,5 @@
 import React from 'react';
-import { SKILLS, SERVICES } from '../constants';
+import { SKILLS } from '../constants';
 import { useI18n } from '../i18n';
 
 export const About: React.FC = React.memo(() => {
@@ -15,12 +15,9 @@ export const About: React.FC = React.memo(() => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full floating-badge accent-pill text-zinc-400">
-              <span className="w-2 h-2 rounded-full bg-indigo-400" />
-              {t('about.badge')}
-            </div>
-            <h2 className="text-4xl md:text-6xl font-display font-bold leading-tight">
-              {t('about.title')}
+            <h2 className="text-4xl md:text-6xl font-display font-bold leading-tight uppercase">
+              {t('footer.ready.title.main')} <br />
+              <span className="text-neutral-500">{t('footer.ready.title.sub')}</span>
             </h2>
             <p className="text-lg md:text-xl text-neutral-400 leading-relaxed max-w-lg">
               {t('about.desc')}
@@ -30,14 +27,14 @@ export const About: React.FC = React.memo(() => {
                 onClick={scrollToContact}
                 className="relative px-8 py-4 bg-white text-black text-xs font-bold tracking-widest rounded-full hover:bg-neutral-200 transition-colors transform hover:scale-105 duration-300 cta-button sheen-sweep glow-pulse-soft"
               >
-                {t('hero.cta.contact')}
+                {t('about.cta.collaborate')}
               </button>
             </div>
           </div>
 
           {/* Skills Grid */}
           <div className="space-y-6">
-            <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-4 border-b border-white/10 pb-4 uppercase">{t('about.badge')}</h3>
+            <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-4 border-b border-white/10 pb-4">{t('about.expertise')}</h3>
             {SKILLS.map((category) => (
               <div key={category.name} className="space-y-3">
                 <h4 className="text-sm font-bold text-white">{t(category.name)}</h4>
@@ -58,9 +55,16 @@ export const About: React.FC = React.memo(() => {
 
         {/* Services List */}
         <div id="services" className="mt-32 scroll-mt-24">
-          <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-8 border-b border-white/10 pb-4 uppercase">{t('header.services')}</h3>
+          <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-8 border-b border-white/10 pb-4">{t('about.offer')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {SERVICES.map((service, index) => (
+            {[
+              { name: t('service.1.name'), desc: t('service.1.desc') },
+              { name: t('service.2.name'), desc: t('service.2.desc') },
+              { name: t('service.3.name'), desc: t('service.3.desc') },
+              { name: t('service.4.name'), desc: t('service.4.desc') },
+              { name: t('service.5.name'), desc: t('service.5.desc') },
+              { name: t('service.6.name'), desc: t('service.6.desc') },
+            ].map((service, index) => (
               <div key={service.name} className="service-card rounded-2xl px-6 py-5 group cursor-pointer transition-transform duration-500 hover:-translate-y-1">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xl font-display font-medium group-hover:text-neutral-300 transition-colors">
