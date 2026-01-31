@@ -198,3 +198,151 @@ export const easing = {
   bounce: [0.68, -0.55, 0.265, 1.55],
   sharp: [0.4, 0, 0.6, 1],
 };
+
+// Blur animation
+export const blurIn: Variants = {
+  initial: { opacity: 0, filter: 'blur(10px)' },
+  animate: { opacity: 1, filter: 'blur(0px)' },
+  exit: { opacity: 0, filter: 'blur(10px)' },
+};
+
+// Rotate animations
+export const rotateIn: Variants = {
+  initial: { opacity: 0, rotate: -180, scale: 0 },
+  animate: { 
+    opacity: 1, 
+    rotate: 0, 
+    scale: 1,
+    transition: SPRING_BOUNCY,
+  },
+  exit: { opacity: 0, rotate: 180, scale: 0 },
+};
+
+// Flip animation
+export const flipX: Variants = {
+  initial: { opacity: 0, rotateX: 90 },
+  animate: { 
+    opacity: 1, 
+    rotateX: 0,
+    transition: SPRING_SMOOTH,
+  },
+  exit: { opacity: 0, rotateX: -90 },
+};
+
+export const flipY: Variants = {
+  initial: { opacity: 0, rotateY: 90 },
+  animate: { 
+    opacity: 1, 
+    rotateY: 0,
+    transition: SPRING_SMOOTH,
+  },
+  exit: { opacity: 0, rotateY: -90 },
+};
+
+// Elastic scale
+export const elasticScale: Variants = {
+  initial: { scale: 0 },
+  animate: { 
+    scale: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 300,
+      damping: 10,
+    },
+  },
+  exit: { scale: 0 },
+};
+
+// Slide animations
+export const slideInFromBottom: Variants = {
+  initial: { y: '100%', opacity: 0 },
+  animate: { y: 0, opacity: 1 },
+  exit: { y: '100%', opacity: 0 },
+};
+
+export const slideInFromTop: Variants = {
+  initial: { y: '-100%', opacity: 0 },
+  animate: { y: 0, opacity: 1 },
+  exit: { y: '-100%', opacity: 0 },
+};
+
+// Morph animation for SVG paths
+export const morphPath: Variants = {
+  initial: { pathLength: 0 },
+  animate: { 
+    pathLength: 1,
+    transition: {
+      duration: 1.5,
+      ease: 'easeInOut',
+    },
+  },
+};
+
+// Pulse glow animation
+export const pulseGlow: Variants = {
+  initial: { 
+    boxShadow: '0 0 0 0 rgba(99, 102, 241, 0)',
+  },
+  animate: {
+    boxShadow: [
+      '0 0 0 0 rgba(99, 102, 241, 0.4)',
+      '0 0 0 15px rgba(99, 102, 241, 0)',
+    ],
+    transition: {
+      duration: 1.5,
+      repeat: Infinity,
+      ease: 'easeOut',
+    },
+  },
+};
+
+// Rainbow border animation
+export const rainbowBorder: Variants = {
+  initial: { backgroundPosition: '0% 50%' },
+  animate: {
+    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: 'linear',
+    },
+  },
+};
+
+// Hover lift effect
+export const hoverLift: Variants = {
+  initial: { y: 0, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' },
+  hover: { 
+    y: -8, 
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)',
+    transition: SPRING_SMOOTH,
+  },
+};
+
+// Card tilt on hover
+export const cardTilt: Variants = {
+  initial: { 
+    rotateX: 0, 
+    rotateY: 0,
+    transformPerspective: 1000,
+  },
+  hover: (custom: { x: number; y: number }) => ({
+    rotateX: custom?.y || 0,
+    rotateY: custom?.x || 0,
+    transition: { duration: 0.3 },
+  }),
+};
+
+// Text reveal character by character
+export const charReveal: Variants = {
+  initial: { opacity: 0, y: 50 },
+  animate: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.03,
+      duration: 0.5,
+      ease: [0.2, 0.65, 0.3, 0.9],
+    },
+  }),
+};
