@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { I18nProvider } from './i18n';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
@@ -9,6 +9,8 @@ import ErrorBoundary from './components/ErrorBoundary';
 import CursorTrail from './components/CursorTrail';
 import SkipLink from './components/SkipLink';
 import { SectionDivider } from './components/SectionDivider';
+import { ThreeDGallery } from './components/ThreeDGallery';
+import { CardStack } from './components/CardStack';
 
 // Lazy load heavy components
 const SpotlightGallery = React.lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
@@ -28,17 +30,17 @@ const App: React.FC = () => {
         <Navigation />
         <main id="main-content" className="content-wrapper">
           <Hero />
+          
+          {/* New Interactive Sections */}
           <SectionDivider variant="dots" />
-          <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading gallery..." />}>
-            <SpotlightGallery />
-          </React.Suspense>
+          <ThreeDGallery />
+          
           <SectionDivider variant="lines" />
-          <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading about section..." />}>
-            <About />
-          </React.Suspense>
+          <CardStack />
+          
           <SectionDivider variant="gradient" />
-          <React.Suspense fallback={<div className="h-72 w-full" aria-label="Loading CTA..." />}>
-            <CTASection />
+          <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading showcase..." />}>
+            <InteractiveShowcase />
           </React.Suspense>
           <ErrorBoundary>
             <ContactSectionSecure id="contact" />

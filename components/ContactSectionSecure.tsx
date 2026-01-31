@@ -110,60 +110,146 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
 
   return (
     <section id={id} className="py-32 px-6 lg:px-12 relative overflow-hidden">
-      <div className="absolute -top-20 right-0 w-96 h-96 rounded-full bg-indigo-500/20 blur-3xl" aria-hidden="true" />
-      <div className="absolute -bottom-20 left-0 w-96 h-96 rounded-full bg-purple-500/20 blur-3xl" aria-hidden="true" />
+      {/* Background Elements */}
+      <div className="absolute -top-20 right-0 w-96 h-96 rounded-full bg-emerald-500/20 blur-3xl" aria-hidden="true" />
+      <div className="absolute -bottom-20 left-0 w-96 h-96 rounded-full bg-cyan-500/20 blur-3xl" aria-hidden="true" />
+      
+      {/* Decorative Border Elements */}
+      <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-emerald-500 via-cyan-500 to-orange-500 shadow-[0_0_20px_rgba(16,185,129,0.5)]" aria-hidden="true" />
+      <div className="absolute right-0 top-0 bottom-0 w-2 bg-gradient-to-b from-orange-500 via-cyan-500 to-emerald-500 shadow-[0_0_20px_rgba(245,158,11,0.5)]" aria-hidden="true" />
+      
       <div className="max-w-3xl mx-auto relative z-10">
         <div className="mb-16 text-center">
-          <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter">{t('contact.title')}</h2>
-          <p className="text-lg text-zinc-400">{t('contact.subtitle')}</p>
+          <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter gradient-text">{t('contact.title')}</h2>
+          <p className="text-lg text-neutral-400">{t('contact.subtitle')}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 backdrop-blur-sm bg-gradient-to-br from-white/5 to-transparent p-8 md:p-10 rounded-3xl border border-indigo-400/20 shadow-[0_0_40px_rgba(99,102,241,0.1)]" noValidate>
+        <form onSubmit={handleSubmit} className="space-y-6 glass-card-modern p-8 md:p-10 rounded-3xl border border-emerald-500/30 shadow-[0_0_40px_rgba(16,185,129,0.2)] relative overflow-hidden" noValidate>
+          {/* Inner decorative borders */}
+          <div className="absolute inset-0 border border-emerald-500/20 rounded-3xl pointer-events-none" 
+               style={{
+                 boxShadow: 'inset 0 0 30px rgba(16, 185, 129, 0.1), inset 0 0 60px rgba(6, 182, 212, 0.05)'
+               }} />
+          
           <input type="text" name="hp" value={formData.hp || ''} onChange={handleChange} className="hidden" aria-hidden="true" tabIndex={-1} autoComplete="off" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-bold text-white mb-2">{t('contact.label.name')}</label>
-              <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} placeholder={t('contact.placeholder.name')} required className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all" />
+              <label htmlFor="name" className="block text-sm font-bold text-emerald-300 mb-2">{t('contact.label.name')}</label>
+              <input 
+                id="name" 
+                type="text" 
+                name="name" 
+                value={formData.name} 
+                onChange={handleChange} 
+                placeholder={t('contact.placeholder.name')} 
+                required 
+                className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all" 
+              />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-bold text-white mb-2">{t('contact.label.email')}</label>
-              <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder={t('contact.placeholder.email')} required className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all" />
+              <label htmlFor="email" className="block text-sm font-bold text-emerald-300 mb-2">{t('contact.label.email')}</label>
+              <input 
+                id="email" 
+                type="email" 
+                name="email" 
+                value={formData.email} 
+                onChange={handleChange} 
+                placeholder={t('contact.placeholder.email')} 
+                required 
+                className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all" 
+              />
             </div>
           </div>
 
           <div>
-            <label htmlFor="subject" className="block text-sm font-bold text-white mb-2">{t('contact.label.subject')}</label>
-            <input id="subject" type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder={t('contact.placeholder.subject')} className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all" />
+            <label htmlFor="subject" className="block text-sm font-bold text-emerald-300 mb-2">{t('contact.label.subject')}</label>
+            <input 
+              id="subject" 
+              type="text" 
+              name="subject" 
+              value={formData.subject} 
+              onChange={handleChange} 
+              placeholder={t('contact.placeholder.subject')} 
+              className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all" 
+            />
           </div>
 
           <div>
-            <label htmlFor="message" className="block text-sm font-bold text-white mb-2">{t('contact.label.message')}</label>
-            <textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder={t('contact.placeholder.message')} rows={6} required className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all resize-none" />
+            <label htmlFor="message" className="block text-sm font-bold text-emerald-300 mb-2">{t('contact.label.message')}</label>
+            <textarea 
+              id="message" 
+              name="message" 
+              value={formData.message} 
+              onChange={handleChange} 
+              placeholder={t('contact.placeholder.message')} 
+              rows={6} 
+              required 
+              className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all resize-none" 
+            />
           </div>
 
-          <button type="submit" disabled={loading} aria-label={t('contact.button.send')} className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
-            {loading ? (<span className="flex items-center justify-center gap-3"><div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />{t('contact.button.sending')}</span>) : t('contact.button.send')}
+          <button 
+            type="submit" 
+            disabled={loading} 
+            aria-label={t('contact.button.send')} 
+            className="neon-button w-full py-4 text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-3">
+                <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                {t('contact.button.sending')}
+              </span>
+            ) : t('contact.button.send')}
           </button>
 
           {submitted && (
-            <output aria-live="polite" className="p-4 bg-green-500/10 border border-green-500/50 rounded-xl text-green-400 text-center font-bold animate-in fade-in block">
+            <output 
+              aria-live="polite" 
+              className="p-4 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border border-emerald-500/50 rounded-xl text-emerald-400 text-center font-bold animate-in fade-in block"
+            >
               {t('contact.success')}
             </output>
           )}
           {error && (
-            <div role="alert" aria-live="assertive" className="p-5 bg-gradient-to-r from-red-500/20 to-red-600/10 border border-red-500/50 rounded-2xl text-red-300 text-center font-bold animate-in fade-in shadow-[0_0_20px_rgba(239,68,68,0.2)]">
+            <div 
+              role="alert" 
+              aria-live="assertive" 
+              className="p-5 bg-gradient-to-r from-orange-500/20 to-red-600/10 border border-orange-500/50 rounded-2xl text-orange-300 text-center font-bold animate-in fade-in shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+            >
               ❌ {error}
             </div>
           )}
         </form>
 
-        <div className="mt-16 pt-16 border-t border-white/10">
-          <p className="text-center text-zinc-400 mb-8">{t('contact.reach_out')}</p>
+        <div className="mt-16 pt-16 border-t border-emerald-500/20">
+          <p className="text-center text-neutral-400 mb-8">{t('contact.reach_out')}</p>
           <div className="flex justify-center gap-6 flex-wrap">
-            <a href="mailto:fear75412@gmail.com" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="Send email">📧 Email</a>
-            <a href="https://t.me/younghustle45" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="Message on Telegram">💬 Telegram</a>
-            <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="View GitHub profile">💻 GitHub</a>
+            <a 
+              href="mailto:fear75412@gmail.com" 
+              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all"
+              title="Send email"
+            >
+              📧 Email
+            </a>
+            <a 
+              href="https://t.me/younghustle45" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all"
+              title="Message on Telegram"
+            >
+              💬 Telegram
+            </a>
+            <a 
+              href="https://github.com/akira777777" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all"
+              title="View GitHub profile"
+            >
+              💻 GitHub
+            </a>
           </div>
         </div>
       </div>
