@@ -16,19 +16,19 @@ const ScrollProgress: React.FC = () => {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-[3px] z-[100] origin-left"
+      className="fixed top-0 left-0 right-0 h-1 z-[100] origin-left"
       style={{
         scaleX,
-        background: 'linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6, #ec4899)',
+        background: 'linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899, #f59e0b)',
         backgroundSize: '200% 100%',
       }}
     >
       {/* Glow effect */}
       <div 
-        className="absolute inset-0 blur-sm"
+        className="absolute inset-0 blur-md"
         style={{
           background: 'inherit',
-          opacity: 0.6,
+          opacity: 0.8,
         }}
       />
       
@@ -36,14 +36,14 @@ const ScrollProgress: React.FC = () => {
       <motion.div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
           backgroundSize: '50% 100%',
         }}
         animate={{
           backgroundPosition: ['0% 0%', '200% 0%'],
         }}
         transition={{
-          duration: 2,
+          duration: 1.5,
           repeat: Infinity,
           ease: 'linear',
         }}
