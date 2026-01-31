@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             react: ['react', 'react-dom'],
             icons: ['lucide-react'],
+            motion: ['framer-motion'],
           },
           // Optimize chunk file names
           chunkFileNames: isProd ? 'assets/[hash].js' : 'assets/[name]-[hash].js',

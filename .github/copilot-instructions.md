@@ -1,5 +1,4 @@
 # JULESCV: AI Agent Instructions
-
 ## Architecture Overview
 
 **Vite SPA + Vercel Serverless Hybrid**
@@ -12,7 +11,6 @@
 1. User language preference → [i18n.tsx](../i18n.tsx) context → all components use `useI18n().t(key)`
 2. Form submissions (contact) → [ContactSectionSecure.tsx](../components/ContactSectionSecure.tsx) → Telegram serverless endpoint [api/send-telegram.ts](../api/send-telegram.ts) on Vercel
 3. Scroll detection → [Navigation.tsx](../components/Navigation.tsx) auto-detects active section based on viewport position
-
 ## Conventions & Patterns
 
 **Styling:** Tailwind only (no CSS-in-JS); dark theme (`bg-black`, `text-white`), high contrast, rounded corners, subtle gradients and glows. Reference: [components/Hero.tsx](../components/Hero.tsx) for gradient text, [components/About.tsx](../components/About.tsx) for service card hover states.

@@ -1,10 +1,12 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useI18n } from '../i18n';
 
 const SPRING_CONFIG = { stiffness: 120, damping: 12, mass: 0.4 };
 const ROTATION_RANGE = 50;
 
 const InteractiveShowcase: React.FC = () => {
+  const { t } = useI18n();
   const cardRef = useRef<HTMLDivElement>(null);
   const rectRef = useRef<DOMRect | null>(null);
 
@@ -49,7 +51,7 @@ const InteractiveShowcase: React.FC = () => {
           <motion.div
             ref={cardRef}
             role="region"
-            aria-label="Interactive 3D Card"
+            aria-label={t('lab.tilt.title')}
             tabIndex={0}
             className="relative w-full lg:w-1/2 aspect-[5/4] rounded-[32px] overflow-hidden glass-card border border-white/10 cursor-pointer focus-visible:ring-2 focus-visible:ring-indigo-500 outline-none"
             style={{ perspective: 1200, willChange: 'transform' }}
@@ -74,7 +76,7 @@ const InteractiveShowcase: React.FC = () => {
                 animate={{ y: [0, -6, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
               >
-                3D Tilt Card
+                {t('lab.tilt.title')}
               </motion.div>
               
               <motion.div
@@ -82,7 +84,7 @@ const InteractiveShowcase: React.FC = () => {
                 animate={{ y: [0, 6, 0] }}
                 transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
               >
-                Hover to explore
+                {t('lab.tilt.hint')}
               </motion.div>
               
               <div className="absolute inset-0 flex items-center justify-center">
@@ -102,20 +104,20 @@ const InteractiveShowcase: React.FC = () => {
             
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full floating-badge accent-pill text-zinc-400">
               <span className="w-2 h-2 rounded-full bg-fuchsia-400" />
-              <span>Interactive Lab</span>
+              <span>{t('lab.badge')}</span>
             </div>
             
             <h3 id="lab-heading" className="text-3xl md:text-4xl font-serif leading-tight">
-              Живые 3D-акценты для вау-эффекта.
+              {t('lab.title')}
             </h3>
             
             <p className="text-zinc-400 text-lg">
-              Добавил интерактивную tilt-карту и голографический шар — оба работают без тяжёлых библиотек, только CSS 3D и Framer Motion. Поведение похоже на веб-темплейты из Figma-комьюнити: мягкие параллаксы, стеклянные поверхности, живые подсказки.
+              {t('lab.desc')}
             </p>
             
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="rounded-3xl glass-card p-6 border border-white/10 space-y-4">
-                <h4 className="text-xs uppercase tracking-[0.2em] text-zinc-500">Holo Orb</h4>
+                <h4 className="text-xs uppercase tracking-[0.2em] text-zinc-500">{t('lab.orb')}</h4>
                 <div className="relative flex items-center justify-center h-48">
                   <div className="holo-orb" aria-hidden="true" />
                   <span className="sr-only">Decorative holographic orb</span>
@@ -124,7 +126,7 @@ const InteractiveShowcase: React.FC = () => {
               </div>
               
               <div className="rounded-3xl glass-card p-6 border border-white/10 space-y-4">
-                <h4 className="text-xs uppercase tracking-[0.2em] text-zinc-500">Depth Tokens</h4>
+                <h4 className="text-xs uppercase tracking-[0.2em] text-zinc-500">{t('lab.tokens')}</h4>
                 <div className="flex flex-wrap gap-3">
                   {tags.map(tag => (
                     <span key={tag} className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs inline-flex items-center gap-2">
@@ -133,7 +135,7 @@ const InteractiveShowcase: React.FC = () => {
                     </span>
                   ))}
                 </div>
-                <p className="text-zinc-500 text-sm">Адаптируй под любые секции: карточки, CTA, превью кейсов или аватары.</p>
+                <p className="text-zinc-500 text-sm">{t('lab.tokens.desc')}</p>
               </div>
             </div>
           </div>
