@@ -1,20 +1,25 @@
 @import "tailwindcss";
 
+/* Professional Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap');
+
 :root {
-  /* Primary Color Palette */
-  --primary: #0EA5E9; /* Sky Blue 500 - Vibrant primary */
-  --primary-light: #7DD3FC; /* Sky 300 */
-  --primary-dark: #0369A1; /* Sky 700 */
+  /* Primary Color Palette - User Preferred Colors */
+  --primary: #10B981; /* Emerald 500 - Green primary */
+  --primary-light: #6EE7B7; /* Emerald 300 */
+  --primary-dark: #047857; /* Emerald 700 */
   
-  --secondary: #10B981; /* Emerald 500 - Brand continuity */
-  --secondary-light: #6EE7B7; /* Emerald 300 */
-  --secondary-dark: #047857; /* Emerald 700 */
+  --secondary: #06B6D4; /* Cyan 500 - Teal/Cyan secondary */
+  --secondary-light: #99F6E4; /* Cyan 300 */
+  --secondary-dark: #0891B2; /* Cyan 700 */
   
-  --accent: #F59E0B; /* Amber 500 - Warm accent */
+  --accent: #F59E0B; /* Amber 500 - Orange accent */
   --accent-light: #FDE68A; /* Amber 300 */
   --accent-dark: #B45309; /* Amber 700 */
   
-  --supporting: #8B5CF6; /* Violet 500 - Depth and richness */
+  --supporting: #8B5CF6; /* Violet 500 - Supporting color */
   --supporting-light: #C4B5FD; /* Violet 300 */
   --supporting-dark: #6D28D9; /* Violet 700 */
   
