@@ -1,5 +1,5 @@
-// service-worker.js
-const CACHE_NAME = 'artemcv-v1';
+// Enhanced service-worker.js with improved caching strategies
+const CACHE_NAME = 'artemcv-v2';
 const STATIC_CACHE = [
   '/',
   '/index.html',
@@ -7,10 +7,25 @@ const STATIC_CACHE = [
   '/favicon.ico',
   '/logo192.png',
   '/logo512.png',
-  // Critical CSS
+];
+
+// Cache versioning for better cache management
+const DYNAMIC_CACHE = 'artemcv-dynamic-v1';
+const IMAGE_CACHE = 'artemcv-images-v1';
+
+// Critical assets that should be precached
+const PRECACHE_ASSETS = [
   '/index.css',
-  // Font files (if any)
-  // Add specific paths to your font files here
+  '/assets/index-', // Main JS bundle
+  '/assets/react-', // React chunk
+  '/assets/motion-', // Framer Motion chunk
+  '/assets/icons-', // Icons chunk
+  // Image assets
+  '/marketplace.webp',
+  '/detailing.webp',
+  '/barber.webp',
+  '/dental.webp',
+  '/game.webp',
 ];
 
 // Precache critical assets
@@ -18,18 +33,41 @@ self.addEventListener('install', (event) => {
   console.log('[Service Worker] Installing...');
   
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('[Service Worker] Pre-caching static assets');
-        return cache.addAll(STATIC_CACHE);
-      })
-      .then(() => {
-        console.log('[Service Worker] Installation complete');
-        self.skipWaiting(); // Activate immediately
-      })
-      .catch((error) => {
-        console.error('[Service Worker] Installation failed:', error);
-      })
+    Promise.all([
+      // Precache static assets
+      caches.open(CACHE_NAME)
+        .then((cache) => {
+          console.log('[Service Worker] Pre-caching static assets');
+          return cache.addAll(STATIC_CACHE);
+        }),
+      // Precache critical dynamic assets
+      caches.open(DYNAMIC_CACHE)
+        .then((cache) => {
+          console.log('[Service Worker] Pre-caching dynamic assets');
+          // Add wildcard matching for dynamic assets
+          return Promise.all(
+            PRECACHE_ASSETS.map(asset => {
+              if (asset.endsWith('-')) {
+                // Handle versioned assets with wildcards
+                return fetch('/').then(response => response.text()).then(html => {
+                  // Parse HTML to find actual asset URLs
+                  const matches = html.match(new RegExp(asset + '[a-zA-Z0-9_-]+\.js', 'g'));
+                  if (matches) {
+                    return cache.addAll(matches);
+                  }
+                }).catch(() => {});
+              } else {
+                return cache.add(asset).catch(() => {});
+              }
+            })
+          );
+        })
+    ]).then(() => {
+      console.log('[Service Worker] Installation complete');
+      self.skipWaiting(); // Activate immediately
+    }).catch((error) => {
+      console.error('[Service Worker] Installation failed:', error);
+    })
   );
 });
 
@@ -37,11 +75,13 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   console.log('[Service Worker] Activating...');
   
+  const currentCaches = [CACHE_NAME, DYNAMIC_CACHE, IMAGE_CACHE];
+  
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
+          if (!currentCaches.includes(cacheName)) {
             console.log('[Service Worker] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
