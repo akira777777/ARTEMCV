@@ -79,7 +79,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
       className="flex-none w-[85vw] md:w-[400px] lg:w-[500px] group snap-start cursor-pointer animate-fade-up text-left bg-transparent border-0"
       style={{ contain: 'layout style' }}
     >
-      <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-sm mb-6 bg-neutral-900" style={{ contain: 'strict' }}>
+      <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-xl mb-6 bg-neutral-900 border border-indigo-400/10 group-hover:border-indigo-400/30 transition-all duration-300" style={{ contain: 'strict' }}>
          
          {/* Wrapper for Hover Animations (Scale & Brightness) 
              Separating this allows the inner image to handle Parallax transform independently.
@@ -95,28 +95,31 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
                 w-full h-full object-cover scale-[1.2]
                 will-change-transform
                 transition-opacity duration-700
-                ${isLoaded ? 'opacity-80 group-hover:opacity-100' : 'opacity-0'}
+                ${isLoaded ? 'opacity-90 group-hover:opacity-100' : 'opacity-0'}
               `}
             />
          </div>
          
          {/* Placeholder */}
-         <div className={`absolute inset-0 bg-neutral-800 animate-pulse transition-opacity duration-500 pointer-events-none z-10 ${isLoaded ? 'opacity-0' : 'opacity-100'}`} />
+         <div className={`absolute inset-0 bg-gradient-to-br from-neutral-800 to-neutral-900 animate-pulse transition-opacity duration-500 pointer-events-none z-10 ${isLoaded ? 'opacity-0' : 'opacity-100'}`} />
+         
+         {/* Gradient Overlay */}
+         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
          
          {/* Arrow Icon */}
-         <div className="absolute top-4 right-4 bg-white text-black p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-4 scale-90 group-hover:translate-y-0 group-hover:scale-100 shadow-xl z-20">
+         <div className="absolute top-4 right-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-4 scale-90 group-hover:translate-y-0 group-hover:scale-100 shadow-[0_0_20px_rgba(99,102,241,0.6)] z-20">
            <ArrowUpRight size={20} className="group-hover:animate-pulse" />
          </div>
       </div>
       
-      <div className="flex justify-between items-start border-t border-white/10 pt-4">
+      <div className="flex justify-between items-start border-t border-indigo-500/20 pt-4">
         <div>
-          <h3 className="text-2xl font-bold font-display tracking-wide group-hover:text-neutral-300 transition-colors">{project.title}</h3>
-          <p className="text-neutral-500 text-sm mt-1">{primaryTag}</p>
+          <h3 className="text-2xl font-bold font-display tracking-wide group-hover:bg-gradient-to-r group-hover:from-indigo-300 group-hover:to-purple-300 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">{project.title}</h3>
+          <p className="text-indigo-400/80 text-sm mt-1 font-medium">{primaryTag}</p>
         </div>
         <div className="flex gap-2">
           {project.techStack.slice(1, 3).map((tech) => (
-            <span key={tech} className="text-xs font-mono border border-white/10 px-2 py-1 rounded text-neutral-400 hover:border-white/20 transition-colors">
+            <span key={tech} className="text-xs font-mono border border-indigo-400/30 bg-indigo-500/10 px-3 py-1 rounded text-indigo-300 hover:border-indigo-400/60 transition-colors">
               {tech}
             </span>
           ))}
@@ -171,12 +174,12 @@ export const WorkGallery: React.FC = () => {
   }, [selectedProject]);
 
   return (
-    <section id="works" className="py-32 w-full relative border-t border-white/5 bg-black">
+    <section id="works" className="py-32 w-full relative border-t border-white/5 bg-gradient-to-b from-black to-neutral-950">
       <div className="container mx-auto px-6 mb-12">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
           <div>
-            <span className="text-neutral-500 text-xs font-bold tracking-widest mb-2 block">SELECTED WORKS (2022-2024)</span>
-            <h2 className="text-5xl md:text-7xl font-display font-bold text-white">WORKS</h2>
+            <span className="text-indigo-400 text-sm font-bold tracking-widest mb-3 block">SELECTED WORKS (2022-2024)</span>
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold bg-gradient-to-r from-white via-white to-indigo-300 bg-clip-text text-transparent">WORKS</h2>
           </div>
           
           {/* Navigation Controls */}
@@ -184,14 +187,14 @@ export const WorkGallery: React.FC = () => {
             <button
               onClick={() => scroll('left')}
               aria-label="Scroll projects left"
-              className="p-4 rounded-full border border-white/10 hover:bg-white hover:text-black transition-colors"
+              className="p-4 rounded-full border-2 border-indigo-400/30 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:border-transparent hover:text-white text-neutral-300 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
             >
               ←
             </button>
             <button
               onClick={() => scroll('right')}
               aria-label="Scroll projects right"
-              className="p-4 rounded-full border border-white/10 hover:bg-white hover:text-black transition-colors"
+              className="p-4 rounded-full border-2 border-indigo-400/30 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:border-transparent hover:text-white text-neutral-300 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
             >
               →
             </button>
@@ -199,16 +202,16 @@ export const WorkGallery: React.FC = () => {
         </div>
 
         {/* Filter Bar */}
-        <div className="flex flex-wrap gap-2 mb-12 border-b border-white/10 pb-4">
+        <div className="flex flex-wrap gap-3 mb-12 border-b border-indigo-500/20 pb-6">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={`
-                px-4 py-2 rounded-full text-xs tracking-widest transition-all duration-300 border
+                px-6 py-2.5 rounded-full text-xs tracking-widest transition-all duration-300 border font-bold
                 ${activeCategory === cat 
-                  ? 'bg-white text-black border-white scale-110 font-black shadow-[0_0_15px_rgba(255,255,255,0.3)]' 
-                  : 'text-neutral-500 border-transparent font-bold hover:text-white hover:bg-white/5'}
+                  ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent scale-110 shadow-[0_0_25px_rgba(99,102,241,0.5)]' 
+                  : 'text-neutral-400 border-indigo-400/20 hover:text-white hover:bg-indigo-500/10 hover:border-indigo-400/50'}
               `}
             >
               {cat.toUpperCase()}

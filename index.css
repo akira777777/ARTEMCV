@@ -29,12 +29,12 @@ body::before {
   inset: 0;
   z-index: -2;
   background: 
-    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15), transparent 35%),
-    radial-gradient(circle at 80% 10%, rgba(34, 197, 235, 0.12), transparent 40%),
-    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.15), transparent 35%),
-    radial-gradient(circle at 90% 70%, rgba(236, 72, 153, 0.1), transparent 30%);
+    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.25), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(139, 92, 246, 0.2), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.2), transparent 40%),
+    radial-gradient(circle at 90% 70%, rgba(236, 72, 153, 0.18), transparent 35%);
   background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-  animation: gradientMesh 20s ease-in-out infinite;
+  animation: gradientMesh 25s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -60,15 +60,15 @@ body::after {
   inset: 0;
   z-index: -1;
   background: linear-gradient(
-    125deg,
+    135deg,
     transparent 0%,
-    rgba(99, 102, 241, 0.03) 25%,
-    rgba(16, 185, 129, 0.05) 50%,
-    rgba(236, 72, 153, 0.03) 75%,
+    rgba(99, 102, 241, 0.08) 25%,
+    rgba(139, 92, 246, 0.1) 50%,
+    rgba(236, 72, 153, 0.08) 75%,
     transparent 100%
   );
   background-size: 400% 400%;
-  animation: auroraShift 15s ease-in-out infinite;
+  animation: auroraShift 20s ease-in-out infinite;
   pointer-events: none;
   mix-blend-mode: screen;
 }
@@ -145,15 +145,16 @@ button {
 }
 
 .service-card {
-  background: #111111;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%);
+  border: 1px solid rgba(99, 102, 241, 0.15);
   contain: layout style paint;
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .service-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: #161616;
+  border-color: rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, #161616 0%, #0f0f0f 100%);
+  transform: translateY(-4px);
 }
 
 .glass-card {
