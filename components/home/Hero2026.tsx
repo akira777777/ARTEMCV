@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
-import { Canvas } from '@react-three/fiber';
 import { useI18n } from '../../i18n';
 import { motion } from 'framer-motion';
-import ParticleField from './ParticleField'; // Import the optimized component
+import OptimizedParticleCanvas from '../../components/OptimizedParticleCanvas'; // Import the optimized component
 
 // Extracted style objects to constants to reduce object allocations
 const DECORATIVE_BLOB_BASE_STYLE = "absolute rounded-full blur-[120px] animate-pulse";
@@ -47,17 +46,7 @@ const Hero2026: React.FC = () => {
     <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
       {/* Background Canvas - Using performance optimization */}
       <div className="absolute inset-0 z-0 opacity-60">
-        <Canvas 
-          camera={{ position: [0, 0, 3] }}
-          gl={{ 
-            alpha: true,
-            antialias: false, // Disable antialiasing for better performance
-            powerPreference: "high-performance" // Prioritize performance over quality
-          }}
-          dpr={[1, 1.5]} // Limit device pixel ratio to improve performance
-        >
-          <ParticleField />
-        </Canvas>
+        <OptimizedParticleCanvas />
       </div>
 
       {/* Decorative Blobs from CSS - Using memoized classes */}
