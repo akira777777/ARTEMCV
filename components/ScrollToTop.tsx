@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUp } from 'lucide-react';
 
-export const ScrollToTop: React.FC = () => {
+export const ScrollToTop: React.FC = React.memo(() => {
   const [isVisible, setIsVisible] = useState(false);
   const rafRef = useRef<number | null>(null);
 
@@ -49,4 +49,6 @@ export const ScrollToTop: React.FC = () => {
       </button>
     </div>
   );
-};
+});
+
+ScrollToTop.displayName = 'ScrollToTop';

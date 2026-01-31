@@ -159,7 +159,7 @@ export function useIsMobile(breakpoint = 768) {
  */
 export function useThrottle<T extends (...args: unknown[]) => void>(callback: T, delay: number): T {
   const lastRan = useRef(Date.now());
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   return useCallback((...args: Parameters<T>) => {
     const now = Date.now();
