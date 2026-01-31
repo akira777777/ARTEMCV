@@ -6,6 +6,7 @@
  * - DATABASE_URL: Connection string from Neon (format: postgresql://user:password@host/database)
  */
 
+import 'dotenv/config';
 import { Pool, QueryResult } from 'pg';
 
 // Load environment variables from .env.local
@@ -23,7 +24,7 @@ function getPool(): Pool {
   }
 
   if (!databaseUrl) {
-    throw new Error('DATABASE_URL environment variable is required');
+    throw new Error('DATABASE_URL environment variable is required. Check .env.local file.');
   }
 
   pool = new Pool({
