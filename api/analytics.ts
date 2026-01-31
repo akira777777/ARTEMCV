@@ -13,6 +13,14 @@ import {
   getTodayStatistics,
 } from '../lib/contact-db';
 
+interface AnalyticsDay {
+  date: string;
+  total_submissions: number;
+  unique_visitors: number;
+  honeypot_catches: number;
+  rate_limit_hits: number;
+}
+
 function setCorsHeaders(res: VercelResponse, origin: string | undefined): void {
   const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS?.split(',') || [];
   const isAllowed = !origin || ALLOWED_ORIGINS.length === 0 || ALLOWED_ORIGINS.includes(origin);
@@ -97,9 +105,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({
       today: today || { total_submissions: 0, honeypot_catches: 0, rate_limit_hits: 0 },
       weekSummary: {
-        total_submissions: recentWeekAnalytics.reduce((sum, day: any) => sum + (day.total_submissions || 0), 0),
-        unique_visitors: recentWeekAnalytics.reduce((sum, day: any) => sum + (day.unique_visitors || 0), 0),
-        honeypot_catches: recentWeekAnalytics.reduce((sum, day: any) => sum + (day.honeypot_catches || 0), 0),
+        total_submissions: recentWeekAnalytics.reduce((sum: number, day: AnalyticsDay) => sum + (day.total_submissions || 0), 0),
+        unique_visitors: recentWeekAnalytics.reduce((sum: number, day: AnalyticsDay) => sum + (day.unique_visitors || 0), 0),
+        honeypot_catches: recentWeekAnalytics.reduce((sum: number, day: AnalyticsDay) => sum + (day.honeypot_catches || 0), 0),
       },
       totalSubmissions: total,
       recentSubmissions: submissions.slice(0, 5),

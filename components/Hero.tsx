@@ -1,6 +1,11 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 
+// Extract long className for better readability
+const CARD_BASE_CLASSES = 
+  'absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden border border-white/5 ' +
+  'transition-transform duration-700 ease-out group shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)]';
+
 export const Hero: React.FC = React.memo(() => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -101,7 +106,7 @@ export const Hero: React.FC = React.memo(() => {
               ref={(el) => {
                 cardRefs.current[index] = el;
               }}
-              className={`absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden border border-white/5 transition-transform duration-700 ease-out group shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] ${zClassByValue[card.z as keyof typeof zClassByValue] ?? 'z-10'}`}
+              className={`${CARD_BASE_CLASSES} ${zClassByValue[card.z as keyof typeof zClassByValue] ?? 'z-10'}`}
             >
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
               <img

@@ -32,6 +32,8 @@ const NavLink = React.memo<{
   </li>
 ));
 
+NavLink.displayName = 'NavLink';
+
 export const Navigation: React.FC = () => {
   const prefersReducedMotion = useReducedMotion();
   const [active, setActive] = useState('HOME');

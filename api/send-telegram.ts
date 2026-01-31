@@ -199,7 +199,7 @@ function buildTelegramMessage(
     '',
     '---',
     '<i>From portfolio contact form</i>',
-    `<i>Time: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}</i>`
+    `<i>Time: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC</i>`
   ]
     .filter(Boolean)
     .join('\n');

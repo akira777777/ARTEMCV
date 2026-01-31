@@ -126,6 +126,8 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
   );
 });
 
+ProjectCard.displayName = 'ProjectCard';
+
 export const WorkGallery: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeCategory, setActiveCategory] = useState('All');

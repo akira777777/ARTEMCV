@@ -169,15 +169,23 @@ export async function recordSecurityEvent(
   eventType: 'honeypot' | 'rate_limit',
   ipAddress: string | null
 ): Promise<void> {
-  const columnName = eventType === 'honeypot' ? 'honeypot_catches' : 'rate_limit_hits';
-
-  await query(
-    `INSERT INTO contact_analytics (date, ${columnName})
-     VALUES (CURRENT_DATE, 1)
-     ON CONFLICT (date) DO UPDATE SET
-       ${columnName} = ${columnName} + 1`,
-    []
-  );
+  if (eventType === 'honeypot') {
+    await query(
+      `INSERT INTO contact_analytics (date, honeypot_catches)
+       VALUES (CURRENT_DATE, 1)
+       ON CONFLICT (date) DO UPDATE SET
+         honeypot_catches = contact_analytics.honeypot_catches + 1`,
+      []
+    );
+  } else {
+    await query(
+      `INSERT INTO contact_analytics (date, rate_limit_hits)
+       VALUES (CURRENT_DATE, 1)
+       ON CONFLICT (date) DO UPDATE SET
+         rate_limit_hits = contact_analytics.rate_limit_hits + 1`,
+      []
+    );
+  }
 }
 
 /**

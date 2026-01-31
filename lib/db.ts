@@ -27,12 +27,20 @@ function getPool(): Pool {
     throw new Error('DATABASE_URL environment variable is required. Check .env.local file.');
   }
 
+  // SSL configuration: strict in production, flexible in development
+  const sslConfig =
+    process.env.DATABASE_SSL_CA
+      ? {
+          rejectUnauthorized: true,
+          ca: process.env.DATABASE_SSL_CA,
+        }
+      : process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: true }
+      : { rejectUnauthorized: false };
+
   pool = new Pool({
     connectionString: databaseUrl,
-    // Neon-specific SSL configuration
-    ssl: {
-      rejectUnauthorized: false,
-    },
+    ssl: sslConfig,
     // Connection pooling settings for serverless
     max: 10,
     idleTimeoutMillis: 30000,
