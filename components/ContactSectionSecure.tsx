@@ -110,8 +110,8 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
 
   return (
     <section id={id} className="py-32 px-6 lg:px-12 relative overflow-hidden">
-      <div className="absolute -top-20 right-0 w-96 h-96 rounded-full bg-indigo-500/20 blur-3xl" aria-hidden />
-      <div className="absolute -bottom-20 left-0 w-96 h-96 rounded-full bg-purple-500/20 blur-3xl" aria-hidden />
+      <div className="absolute -top-20 right-0 w-96 h-96 rounded-full bg-indigo-500/20 blur-3xl" aria-hidden="true" />
+      <div className="absolute -bottom-20 left-0 w-96 h-96 rounded-full bg-purple-500/20 blur-3xl" aria-hidden="true" />
       <div className="max-w-3xl mx-auto relative z-10">
         <div className="mb-16 text-center">
           <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter">{t('contact.title')}</h2>

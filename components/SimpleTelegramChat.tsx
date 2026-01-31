@@ -12,25 +12,32 @@ interface Message {
 
 const createId = () => globalThis.crypto?.randomUUID?.() ?? `msg-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
+// Store initial message ID to track it across language changes
+const INITIAL_MESSAGE_ID = 'initial-welcome';
+
 export const SimpleTelegramChat: React.FC = React.memo(() => {
   const { t, lang } = useI18n();
   const fetchWithTimeout = useFetchWithTimeout(12_000);
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<Message[]>(() => [
     { 
-      id: createId(), 
+      id: INITIAL_MESSAGE_ID, 
       role: 'bot', 
-      text: t('chat.bot.welcome'),
+      text: '', // Will be set by useEffect
       timestamp: new Date() 
     }
   ]);
 
-  // Update initial message when language changes if it's the only one
+  // Update welcome message text when language changes (only for initial message)
   useEffect(() => {
-    if (messages.length === 1 && messages[0].role === 'bot') {
-       setMessages([{ ...messages[0], text: t('chat.bot.welcome') }]);
-    }
+    setMessages(prev => {
+      const firstMsg = prev[0];
+      if (firstMsg?.id === INITIAL_MESSAGE_ID && prev.length === 1) {
+        return [{ ...firstMsg, text: t('chat.bot.welcome') }];
+      }
+      return prev;
+    });
   }, [lang, t]);
 
   const [inputValue, setInputValue] = useState('');

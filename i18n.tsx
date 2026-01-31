@@ -115,11 +115,6 @@ const translations: Record<Lang, Dict> = {
     'footer.build': "LET'S BUILD",
     'footer.ready.desc': "Ready to bring your project to life? Let's create something exceptional together.",
 
-    'cta.title': 'Ready to Start Your Next Project?',
-    'cta.subtitle': "Let's collaborate and bring your vision to life. I'm ready to start immediately.",
-    'cta.button': 'Start Collaboration',
-    'cta.secondary': 'View GitHub',
-
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
     'contacts.phone': 'Phone: +420 737 500 587',
@@ -275,11 +270,6 @@ const translations: Record<Lang, Dict> = {
     'footer.build': 'ПОСТРОИМ ВМЕСТЕ',
     'footer.ready.desc': 'Готовы воплотить проект в жизнь? Давайте создадим что-то исключительное вместе.',
 
-    'cta.title': 'Готовы начать следующий проект?',
-    'cta.subtitle': 'Давайте сотрудничать и воплотим вашу идею в жизнь. Я готов начать немедленно.',
-    'cta.button': 'Начать сотрудничество',
-    'cta.secondary': 'GitHub',
-
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
     'contacts.phone': 'Телефон: +420 737 500 587',
@@ -431,11 +421,6 @@ const translations: Record<Lang, Dict> = {
     'footer.copyright': 'Full Stack vývojář',
     'footer.build': 'POSTAVME TO',
     'footer.ready.desc': 'Jste připraveni oživit svůj projekt? Pojďme společně vytvořit něco výjimečného.',
-
-    'cta.title': 'Připraveni začít další projekt?',
-    'cta.subtitle': 'Pojďme spolupracovat a oživit vaši vizi. Jsem připraven začít okamžitě.',
-    'cta.button': 'Začít spolupráci',
-    'cta.secondary': 'GitHub',
 
     'contacts.telegram': 'Telegram: @younghustle45',
     'contacts.email': 'Email: fear75412@gmail.com',
