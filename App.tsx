@@ -10,10 +10,8 @@ import ErrorBoundary from './components/ErrorBoundary';
 import CursorTrail from './components/CursorTrail';
 import SkipLink from './components/SkipLink';
 import { SectionDivider } from './components/SectionDivider';
-import { ThreeDGallery } from './components/ThreeDGallery';
 import { CardStack } from './components/CardStack';
 import { IconGallery } from './components/Icons';
-import { Interactive3DGallery, Mobile3DViewer } from './components/ThreeDGallery';
 
 // Lazy load heavy components
 const SpotlightGallery = React.lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
@@ -55,15 +53,6 @@ const App: React.FC = () => {
               <IconGallery />
             </div>
           </section>
-          
-          {/* New Interactive Sections */}
-          <SectionDivider variant="dots" />
-          <div className="hidden md:block">
-            <Interactive3DGallery />
-          </div>
-          <div className="md:hidden">
-            <Mobile3DViewer />
-          </div>
           
           <SectionDivider variant="lines" />
           <CardStack />

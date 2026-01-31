@@ -14,14 +14,12 @@
     "images:optimize": "node scripts/optimize-images-robust.mjs"
   },
   "dependencies": {
-    "@types/three": "^0.182.0",
     "dotenv": "^17.2.3",
     "framer-motion": "^12.29.2",
     "lucide-react": "^0.563.0",
     "pg": "^8.13.1",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "three": "^0.182.0"
+    "react-dom": "^19.2.4"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.1",
