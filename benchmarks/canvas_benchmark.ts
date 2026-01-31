@@ -179,6 +179,5 @@ runOptimized(ctx3);
 const end3 = performance.now();
 console.log(`Optimized (Hoisted Math): ${(end3 - start3).toFixed(2)}ms, Calls: ${ctx3.callCount}`);
 
-const improvement = (end2 - start2) - (end3 - start3);
-const percent = (improvement / (end2 - start2)) * 100;
+const improvement = (end2 - start2) - (end3 - start3);const percent = (improvement / (end2 - start2)) * 100;
 console.log(`Improvement: ${improvement.toFixed(2)}ms (${percent.toFixed(2)}%)`);

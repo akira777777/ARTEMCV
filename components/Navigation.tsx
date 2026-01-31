@@ -2,40 +2,46 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { NavItem } from '../types';
 import { useReducedMotion } from '../lib/hooks';
 import LanguageSwitcher from './LanguageSwitcher';
+import { useI18n } from '../i18n';
 
-const navItems: NavItem[] = [
-  { label: 'HOME', href: '#home' },
-  { label: 'WORKS', href: '#works' },
-  { label: 'SERVICES', href: '#services' },
-  { label: 'ABOUT', href: '#studio' },
-  { label: 'CONTACT', href: '#contact' },
+const navItems: { key: string; href: string }[] = [
+  { key: 'nav.home', href: '#home' },
+  { key: 'nav.works', href: '#works' },
+  { key: 'nav.lab', href: '#lab' },
+  { key: 'nav.services', href: '#services' },
+  { key: 'nav.about', href: '#studio' },
+  { key: 'nav.contact', href: '#contact' },
 ];
 
 // Memoized nav item component
 const NavLink = React.memo<{
-  item: NavItem;
+  item: { key: string; href: string };
   isActive: boolean;
   onClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
-}>(({ item, isActive, onClick }) => (
-  <li key={item.label}>
-    <a
-      href={item.href}
-      onClick={(e) => onClick(e, item.href)}
-      className={`
-        px-4 py-2 rounded-xl text-xs font-bold tracking-widest transition-all duration-300
-        ${isActive 
-          ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]' 
-          : 'text-neutral-400 hover:text-white hover:bg-white/10 hover:scale-105'}
-      `}
-    >
-      {item.label}
-    </a>
-  </li>
-));
+}>(({ item, isActive, onClick }) => {
+  const { t } = useI18n();
+  return (
+    <li key={item.key}>
+      <a
+        href={item.href}
+        onClick={(e) => onClick(e, item.href)}
+        className={`
+          px-4 py-2 rounded-xl text-xs font-bold tracking-widest transition-all duration-300
+          ${isActive
+            ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]'
+            : 'text-neutral-400 hover:text-white hover:bg-white/10 hover:scale-105'}
+        `}
+      >
+        {t(item.key)}
+      </a>
+    </li>
+  );
+});
 
 export const Navigation: React.FC = React.memo(() => {
+  const { t } = useI18n();
   const prefersReducedMotion = useReducedMotion();
-  const [active, setActive] = useState('HOME');
+  const [active, setActive] = useState('nav.home');
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollYRef = useRef(0);
   const rafRef = useRef<number | null>(null);
@@ -56,7 +62,7 @@ export const Navigation: React.FC = React.memo(() => {
       
       const rect = element.getBoundingClientRect();
       if (rect.top >= -100 && rect.top <= 300) {
-        setActive(item.label);
+        setActive(item.key);
         break;
       }
     }
@@ -99,7 +105,7 @@ export const Navigation: React.FC = React.memo(() => {
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
-      setActive(navItems.find(item => item.href === href)?.label || '');
+      setActive(navItems.find(item => item.href === href)?.key || '');
     }
   }, []);
 
@@ -107,9 +113,9 @@ export const Navigation: React.FC = React.memo(() => {
   const navLinks = useMemo(() => 
     navItems.map(item => (
       <NavLink 
-        key={item.label}
+        key={item.key}
         item={item}
-        isActive={active === item.label}
+        isActive={active === item.key}
         onClick={handleLinkClick}
       />
     )),
@@ -132,7 +138,7 @@ export const Navigation: React.FC = React.memo(() => {
             href="#home" 
             onClick={(e) => handleLinkClick(e, '#home')}
             className="flex items-center gap-2 group"
-            aria-label="ARTEM.DEV - Home"
+            aria-label={`${t('brand.vision')} - ${t('nav.home')}`}
           >
             <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-neutral-400 transition-colors">
               JULES.ENGINEER

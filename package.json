@@ -9,11 +9,15 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "images:optimize": "node scripts/optimize-images-robust.mjs"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "framer-motion": "^12.29.2",
     "lucide-react": "^0.563.0",
+    "pg": "^8.13.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
@@ -23,6 +27,7 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.14.0",
+    "@types/pg": "^8.11.6",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vercel/node": "^5.5.28",
@@ -30,7 +35,9 @@
     "autoprefixer": "^10.4.24",
     "jsdom": "^27.4.0",
     "postcss": "^8.5.6",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.1.18",
+    "tsx": "^4.7.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
     "vitest": "^4.0.18"

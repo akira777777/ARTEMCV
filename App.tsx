@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { I18nProvider } from './i18n';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
@@ -12,6 +12,13 @@ import ScrollProgress from './components/ScrollProgress';
 import ErrorBoundary from './components/ErrorBoundary';
 import CursorTrail from './components/CursorTrail';
 import SkipLink from './components/SkipLink';
+
+// Lazy load heavy components
+const WorkGallery = lazy(() => import('./components/WorkGallery').then(m => ({ default: m.WorkGallery })));
+const SimpleTelegramChat = lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
+const GradientShaderCard = lazy(() => import('./components/GradientShaderCard'));
+const InteractiveShowcase = lazy(() => import('./components/InteractiveShowcase'));
+const SpinningCube = lazy(() => import('./components/SpinningCube'));
 
 const App: React.FC = () => {
   return (

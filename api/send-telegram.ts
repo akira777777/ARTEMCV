@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { escapeHtml, EMAIL_PATTERN, fetchWithTimeout } from '../lib/utils.js';
+import { storeContactSubmission, recordSecurityEvent } from '../lib/contact-db.js';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -313,7 +314,7 @@ function buildTelegramMessage(
     '',
     '---',
     '<i>From portfolio contact form</i>',
-    `<i>Time: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}</i>`
+    `<i>Time: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC</i>`
   ]
     .filter(Boolean)
     .join('\n');
@@ -350,6 +351,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const clientIp = getClientIp(req);
   if (isRateLimited(clientIp)) {
     logRequest(req, 'rate_limited', { ip: clientIp });
+    // Record rate limit hit for analytics (if DATABASE_URL is set)
+    if (process.env.DATABASE_URL) {
+      try {
+        await recordSecurityEvent('rate_limit', clientIp);
+      } catch (dbError) {
+        console.error('Failed to record rate limit event:', dbError);
+      }
+    }
     return res.status(429).json({ error: 'Too many requests. Please try again later.' });
   }
 
@@ -369,6 +378,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     }
 
     const { cleanName, cleanEmail, cleanSubject, cleanMessage } = fieldResult;
+
+    // Store submission in PostgreSQL (if DATABASE_URL is set)
+    if (process.env.DATABASE_URL) {
+      try {
+        const userAgent = req.headers['user-agent'] as string | undefined;
+        await storeContactSubmission(
+          cleanName,
+          cleanEmail,
+          cleanSubject,
+          cleanMessage,
+          clientIp,
+          userAgent || null
+        );
+      } catch (dbError) {
+        console.error('Failed to store submission in database:', dbError);
+        // Don't fail the request if database storage fails
+      }
+    }
 
     // Send to Telegram
     const tgResp = await sendToTelegram(cleanName, cleanEmail, cleanSubject, cleanMessage);

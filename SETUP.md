@@ -1,7 +1,6 @@
 # AstraDev Portfolio
 
 Full Stack developer portfolio featuring Jules Engineer's work and expertise.
-
 ## 🚀 Quick Start
 
 ### Install Dependencies
@@ -35,7 +34,6 @@ npm run preview
 - **Responsive**: Mobile-first, fully responsive design
 - **Fast**: Optimized builds, production-ready
 - **Personalized**: Content in Russian (Jules Engineer's portfolio)
-
 ## 📊 Performance
 
 - **Bundle Size**: 325.73 KB (103.29 KB gzipped)

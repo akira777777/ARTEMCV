@@ -99,9 +99,9 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
     } catch (err: any) {
       console.error('Error sending message:', err);
       if (err?.name === 'AbortError') {
-        setError('Network timeout. Please try again later.');
+        setError(t('contact.error.timeout'));
       } else {
-        setError(err?.message || 'Failed to send message. Please try again.');
+        setError(err?.message || t('contact.error.sending'));
       }
     } finally {
       setLoading(false);
