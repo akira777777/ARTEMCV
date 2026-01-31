@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 
-export const Hero: React.FC = () => {
+export const Hero: React.FC = React.memo(() => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
   const rafRef = useRef<number | null>(null);
@@ -154,4 +154,4 @@ export const Hero: React.FC = () => {
       </button>
     </section>
   );
-};
+});
