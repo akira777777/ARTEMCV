@@ -3,8 +3,10 @@ import { ArrowUpRight, X } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import { useReducedMotion } from '../lib/hooks';
+import { useI18n } from '../i18n';
 
 const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.memo(({ project, onClick }) => {
+  const { t } = useI18n();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -69,13 +71,13 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
     };
   }, [isInView, prefersReducedMotion]);
 
-  const primaryTag = project.techStack[0] || 'PROJECT';
+  const primaryTag = project.techStack[0] || t('works.fallback.tag');
 
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-label={`Open ${project.title} details`}
+      aria-label={`${t('works.open_details')} ${t(project.title)}`}
       className="flex-none w-[85vw] md:w-[400px] lg:w-[500px] group snap-start cursor-pointer animate-fade-up text-left bg-transparent border-0"
       style={{ contain: 'layout style' }}
     >
@@ -111,7 +113,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
       
       <div className="flex justify-between items-start border-t border-white/10 pt-4">
         <div>
-          <h3 className="text-2xl font-bold font-display tracking-wide group-hover:text-neutral-300 transition-colors">{project.title}</h3>
+          <h3 className="text-2xl font-bold font-display tracking-wide group-hover:text-neutral-300 transition-colors">{t(project.title)}</h3>
           <p className="text-neutral-500 text-sm mt-1">{primaryTag}</p>
         </div>
         <div className="flex gap-2">
@@ -127,6 +129,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
 });
 
 export const WorkGallery: React.FC = () => {
+  const { t } = useI18n();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -175,8 +178,8 @@ export const WorkGallery: React.FC = () => {
       <div className="container mx-auto px-6 mb-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
           <div>
-            <span className="text-neutral-500 text-xs font-bold tracking-widest mb-2 block">SELECTED WORKS (2022-2024)</span>
-            <h2 className="text-5xl md:text-7xl font-display font-bold text-white">WORKS</h2>
+            <span className="text-neutral-500 text-xs font-bold tracking-widest mb-2 block">{t('works.badge')}</span>
+            <h2 className="text-5xl md:text-7xl font-display font-bold text-white">{t('works.title')}</h2>
           </div>
           
           {/* Navigation Controls */}
@@ -287,13 +290,13 @@ export const WorkGallery: React.FC = () => {
                     </div>
                     
                     <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 text-white leading-tight">
-                      {selectedProject.title}
+                      {t(selectedProject.title)}
                     </h2>
                     
                     <div className="w-12 h-0.5 bg-white/20 mb-8" />
                     
                     <p className="text-neutral-400 leading-relaxed text-base md:text-lg font-light">
-                      {selectedProject.description || "Project description unavailable."}
+                      {t(selectedProject.description) || t('works.no.desc')}
                     </p>
                  </div>
                  
@@ -304,7 +307,7 @@ export const WorkGallery: React.FC = () => {
                        rel="noopener noreferrer"
                        className="group flex items-center justify-center gap-3 w-full py-4 bg-white text-black text-xs font-bold tracking-widest rounded hover:bg-neutral-200 transition-all duration-300"
                      >
-                        VIEW CASE STUDY
+                        {t('works.cta.view')}
                         <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                      </a>
                  </div>

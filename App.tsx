@@ -19,15 +19,15 @@ const App: React.FC = () => {
         <SkipLink />
         <ScrollProgress />
         <Navigation />
-        <main id="main-content" tabIndex={-1} className="outline-none">
+        <main id="main-content">
           <Hero />
           <WorkGallery />
           <About />
           <ErrorBoundary>
             <ContactSectionSecure id="contact" />
           </ErrorBoundary>
-          <Footer />
         </main>
+        <Footer />
         <SimpleTelegramChat />
         <ScrollToTop />
       </div>

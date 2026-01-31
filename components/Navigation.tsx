@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { NavItem } from '../types';
 import { useReducedMotion } from '../lib/hooks';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const navItems: NavItem[] = [
   { label: 'HOME', href: '#home' },
@@ -134,15 +135,19 @@ export const Navigation: React.FC = () => {
             aria-label="ARTEM.DEV - Home"
           >
             <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-neutral-400 transition-colors">
-              ARTEM.DEV
+              JULES.ENGINEER
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-white group-hover:bg-indigo-500 transition-colors" />
           </a>
 
           {/* Desktop Nav */}
-          <ul className="flex items-center gap-1 md:gap-2">
-            {navLinks}
-          </ul>
+          <div className="flex items-center gap-4 md:gap-8">
+            <ul className="flex items-center gap-1 md:gap-2">
+              {navLinks}
+            </ul>
+            <div className="hidden sm:block h-4 w-px bg-white/10" />
+            <LanguageSwitcher />
+          </div>
         </nav>
       </div>
     </header>
