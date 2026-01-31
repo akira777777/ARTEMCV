@@ -83,8 +83,8 @@ export const Hero: React.FC = React.memo(() => {
         <div className="flex items-center justify-center mb-4">
           <span className="text-4xl md:text-6xl font-display font-bold mr-4 animate-pulse">∞</span>
         </div>
-        <h1 className="text-[12vw] leading-[0.85] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 select-none">
-          ARTEM
+        <h1 className="text-[12vw] leading-[0.85] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 select-none uppercase">
+          JULES
         </h1>
         <p className="mt-4 text-lg md:text-xl text-white font-medium tracking-wide">
           {t('hero.title.line1')} & {t('hero.stat.uiux')}
@@ -113,7 +113,7 @@ export const Hero: React.FC = React.memo(() => {
               />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                 <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-xs font-bold tracking-widest uppercase border border-white/20">
-                  Drag
+                  {t('hero.drag')}
                 </div>
               </div>
             </div>

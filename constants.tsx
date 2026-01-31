@@ -41,8 +41,17 @@ export const PROJECTS: Project[] = [
 ];
 
 export const SKILLS = [
-  { name: 'Frontend', items: ['React 19', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'Redux Toolkit'] },
-  { name: 'Backend', items: ['Node.js', 'Python (FastAPI, Django)', 'Java (Spring Boot)', 'PostgreSQL queries'] },
-  { name: 'Database', items: ['PostgreSQL', 'MongoDB', 'Redis', 'Supabase', 'Query optimization'] },
-  { name: 'Tools', items: ['Docker', 'Git', 'Vite', 'AWS/Vercel', 'Google Gemini API'] }
+  { name: 'skill.frontend', items: ['React 19', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'Canvas API', 'Three.js'] },
+  { name: 'skill.backend', items: ['Node.js (Fastify/Express)', 'Python (FastAPI)', 'Java (Spring Boot)', 'PostgreSQL / Prisma'] },
+  { name: 'skill.architecture', items: ['Microservices', 'Event-driven', 'Serverless', 'WebSockets', 'Query optimization'] },
+  { name: 'skill.tools', items: ['Docker', 'Git', 'Vite', 'AWS/Vercel', 'Google Gemini AI', 'Claude API'] }
+];
+
+export const SERVICES = [
+  { name: 'service.web.title', desc: 'service.web.desc' },
+  { name: 'service.uiux.title', desc: 'service.uiux.desc' },
+  { name: 'service.api.title', desc: 'service.api.desc' },
+  { name: 'service.db.title', desc: 'service.db.desc' },
+  { name: 'service.perf.title', desc: 'service.perf.desc' },
+  { name: 'service.cloud.title', desc: 'service.cloud.desc' },
 ];

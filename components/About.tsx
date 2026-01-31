@@ -37,7 +37,7 @@ export const About: React.FC = React.memo(() => {
             <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-4 border-b border-white/10 pb-4">{t('about.expertise')}</h3>
             {SKILLS.map((category) => (
               <div key={category.name} className="space-y-3">
-                <h4 className="text-sm font-bold text-white">{category.name}</h4>
+                <h4 className="text-sm font-bold text-white">{t(category.name)}</h4>
                 <div className="flex flex-wrap gap-2">
                   {category.items.map((skill) => (
                     <span
@@ -68,11 +68,11 @@ export const About: React.FC = React.memo(() => {
               <div key={service.name} className="service-card rounded-2xl px-6 py-5 group cursor-pointer transition-transform duration-500 hover:-translate-y-1">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xl font-display font-medium group-hover:text-neutral-300 transition-colors">
-                    {service.name}
+                    {t(service.name)}
                   </h4>
                   <span className="text-xs text-neutral-500">0{index + 1}</span>
                 </div>
-                <p className="text-sm text-neutral-500 mt-2">{service.desc}</p>
+                <p className="text-sm text-neutral-500 mt-2">{t(service.desc)}</p>
                 <div className="mt-4 h-px bg-white/5 group-hover:bg-white/15 transition-colors" />
               </div>
             ))}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useI18n } from '../i18n';
 
+import { useI18n } from '../i18n';
+
 export const Footer: React.FC = React.memo(() => {
   const { t } = useI18n();
   return (
