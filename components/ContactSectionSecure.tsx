@@ -123,11 +123,11 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="name" className="block text-sm font-bold text-white mb-2">Name</label>
-              <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all" />
+              <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required aria-required="true" className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all" />
             </div>
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-white mb-2">Email</label>
-              <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" required className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all" />
+              <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" required aria-required="true" className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all" />
             </div>
           </div>
 
@@ -138,7 +138,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
 
           <div>
             <label htmlFor="message" className="block text-sm font-bold text-white mb-2">Message</label>
-            <textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Tell me about your project..." rows={6} required className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all resize-none" />
+            <textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Tell me about your project..." rows={6} required aria-required="true" className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all resize-none" />
           </div>
 
           <button type="submit" disabled={loading} aria-label="Send message" className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all">

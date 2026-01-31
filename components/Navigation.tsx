@@ -131,6 +131,7 @@ export const Navigation: React.FC = () => {
             href="#home" 
             onClick={(e) => handleLinkClick(e, '#home')}
             className="flex items-center gap-2 group"
+            aria-label="ARTEM.DEV - Home"
           >
             <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-neutral-400 transition-colors">
               ARTEM.DEV
