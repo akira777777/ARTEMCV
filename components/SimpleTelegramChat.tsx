@@ -195,7 +195,7 @@ export const SimpleTelegramChat: React.FC = () => {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50">
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50" style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' }}>
           {messages.map((msg) => (
             <div 
               key={msg.id} 
