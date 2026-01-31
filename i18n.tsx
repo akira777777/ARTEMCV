@@ -32,6 +32,8 @@ const translations: Record<Lang, Dict> = {
     'contact.label.subject': 'Subject (Optional)',
     'contact.label.message': 'Message',
     'contact.placeholder.name': 'Your name',
+    'contact.help.optional': 'Optional',
+    'contact.help.message_min': 'Minimum 10 characters',
     'contact.placeholder.email': 'your@email.com',
     'contact.placeholder.subject': 'Project subject',
     'contact.placeholder.message': 'Tell me about your project...',
@@ -200,6 +202,8 @@ const translations: Record<Lang, Dict> = {
     'contact.error.sending': 'Ошибка при отправке сообщения. Пожалуйста, попробуйте еще раз.',
     'contact.error.timeout': 'Таймаут сети. Пожалуйста, попробуйте позже.',
     'contact.reach_out': 'Или свяжитесь через:',
+    'contact.help.optional': 'Необязательно',
+    'contact.help.message_min': 'Минимум 10 символов',
 
     'cta.title': 'Давайте создадим что-то классное вместе',
     'cta.subtitle': 'Готовы воплотить ваше видение в жизнь? Я специализируюсь на создании высокопроизводительных интерактивных веб-приложений, адаптированных под ваши потребности.',
@@ -355,6 +359,8 @@ const translations: Record<Lang, Dict> = {
     'contact.error.sending': 'Chyba při odesílání zprávy. Zkuste to prosím znovu.',
     'contact.error.timeout': 'Síťový timeout. Zkuste to prosím znovu později.',
     'contact.reach_out': 'Nebo mě kontaktujte přes:',
+    'contact.help.optional': 'Volitelné',
+    'contact.help.message_min': 'Minimálně 10 znaků',
 
     'cta.title': 'Pojďme stavět něco skvělého',
     'cta.subtitle': 'Jste připraveni oživit svůj projekt? Specializu se na vytváření vysoce výkonných interaktivních webových prostředí přizpůsobených vašim potřebám.',

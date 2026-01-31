@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 
-const SimpleTelegramChat = lazy(() => import('./SimpleTelegramChat'));
+const SimpleTelegramChat = lazy(() => import('./SimpleTelegramChat').then(module => ({ default: module.SimpleTelegramChat })));
 
 interface LazySimpleTelegramChatProps {
   fallback?: React.ReactNode;
