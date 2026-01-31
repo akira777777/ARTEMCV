@@ -1,13 +1,9 @@
-import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
 import { ArrowUpRight, X } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import { useReducedMotion } from '../lib/hooks';
 import { useI18n } from '../i18n';
-
-// Memoized style objects to prevent recreations
-const BUTTON_STYLE = { contain: 'layout style' } as const;
-const CONTAINER_STYLE = { contain: 'strict' } as const;
 
 const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.memo(({ project, onClick }) => {
   const { t } = useI18n();
@@ -78,14 +74,16 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
   const primaryTag = project.techStack[0] || t('works.fallback.tag');
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={`${t('works.open_details')} ${t(project.title)}`}
-      className="flex-none w-[85vw] md:w-[400px] lg:w-[500px] group snap-start cursor-pointer animate-fade-up text-left bg-transparent border-0"
-      style={BUTTON_STYLE}
+    <article
+      className="relative flex-none w-[85vw] md:w-[400px] lg:w-[500px] group snap-start cursor-pointer animate-fade-up text-left bg-transparent border-0 project-card-button"
     >
-      <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-sm mb-6 bg-neutral-900" style={CONTAINER_STYLE}>
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={`${t('works.open_details')} ${t(project.title)}`}
+        className="absolute inset-0 z-10 rounded-sm"
+      />
+      <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-sm mb-6 bg-neutral-900 project-card-container">
          
          {/* Wrapper for Hover Animations (Scale & Brightness) 
              Separating this allows the inner image to handle Parallax transform independently.
@@ -127,7 +125,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
          </div>
       </div>
       
-      <div className="flex justify-between items-start border-t border-indigo-500/20 pt-4">
+      <div className="relative z-10 flex justify-between items-start border-t border-indigo-500/20 pt-4">
         <div>
           <h3 className="text-2xl font-bold font-display tracking-wide group-hover:text-neutral-300 transition-colors">{t(project.title)}</h3>
           <p className="text-neutral-500 text-sm mt-1">{primaryTag}</p>
@@ -140,7 +138,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
           ))}
         </div>
       </div>
-    </button>
+    </article>
   );
 });
 
@@ -225,7 +223,6 @@ export const WorkGallery: React.FC = React.memo(() => {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              aria-pressed={activeCategory === cat}
               className={`
                 px-6 py-2.5 rounded-full text-xs tracking-widest transition-all duration-300 border font-bold
                 ${activeCategory === cat 

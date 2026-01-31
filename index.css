@@ -16,11 +16,16 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  background-color: #000000;
+  background-color: transparent;
   overflow: visible;
   padding: 0;
   margin: 0 auto;
   position: relative;
+}
+
+/* Inner sections should take full width of wrapper */
+.content-wrapper > section {
+  width: 100%;
 }
 
 html {
@@ -38,6 +43,31 @@ body {
   min-height: 100vh;
   will-change: transform;
   overflow-x: hidden;
+}
+
+/* Decorative elements */
+.hero-purple-star {
+  position: absolute;
+  pointer-events: none;
+  width: 1275px;
+  height: 1275px;
+  aspect-ratio: 1 / 1;
+  background-image: url('/purple-star1.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  top: -400px;
+  right: -400px;
+  opacity: 0.4;
+}
+
+/* Work gallery containment helpers */
+.project-card-button {
+  contain: layout style;
+}
+
+.project-card-container {
+  contain: strict;
 }
 
 /* Animated gradient mesh background */
@@ -142,7 +172,6 @@ textarea:focus-visible {
   /* Optimize images on mobile */
   img {
     image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
   }
 }
 
@@ -446,7 +475,12 @@ textarea:focus-visible {
 /* Hide scrollbar for horizontal scroll */
 .no-scrollbar {
   -ms-overflow-style: none;
-  scrollbar-width: none;
+}
+
+@supports (scrollbar-width: none) {
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
 }
 
 .no-scrollbar::-webkit-scrollbar {

@@ -23,21 +23,21 @@ const App: React.FC = () => {
     <I18nProvider>
       <SkipLink />
       <CursorTrail />
-      <div className="bg-[#0a0a0a] min-h-screen text-white selection:bg-white/10 selection:text-white">
+      <div className="bg-[#0a0a0a] min-h-screen text-white selection:bg-white/10 selection:text-white flex flex-col items-center">
         <ScrollProgress />
         <Navigation />
-        <main id="main-content">
+        <main id="main-content" className="content-wrapper">
           <Hero />
           <SectionDivider variant="dots" />
-          <React.Suspense fallback={<div className="h-96" />}>
+          <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading gallery..." />}>
             <SpotlightGallery />
           </React.Suspense>
           <SectionDivider variant="lines" />
-          <React.Suspense fallback={<div className="h-96" />}>
+          <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading about section..." />}>
             <About />
           </React.Suspense>
           <SectionDivider variant="gradient" />
-          <React.Suspense fallback={<div className="h-72" />}>
+          <React.Suspense fallback={<div className="h-72 w-full" aria-label="Loading CTA..." />}>
             <CTASection />
           </React.Suspense>
           <ErrorBoundary>
