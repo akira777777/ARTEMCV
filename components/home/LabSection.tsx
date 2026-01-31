@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useI18n } from '../../i18n';
+
+const GradientShaderCard = React.lazy(() => import('../GradientShaderCard'));
 
 const LabSection: React.FC = () => {
   const { t } = useI18n();
@@ -16,15 +18,14 @@ const LabSection: React.FC = () => {
           <p className="max-w-md opacity-50 text-right text-white">Exploring the boundaries of fluid dynamics, spatial UI, and AI-driven frontend architectures.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="group cursor-pointer">
-            <div className="aspect-video glass rounded-3xl mb-6 overflow-hidden relative border border-white/10">
-              <div className="absolute inset-0 bg-indigo-500/5 group-hover:bg-indigo-500/20 transition-colors"></div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <span className="material-symbols-outlined text-6xl opacity-20 group-hover:scale-125 group-hover:opacity-100 transition-all duration-500 text-white">blur_on</span>
+          <div className="group cursor-pointer md:col-span-2">
+            <Suspense fallback={
+              <div className="w-full h-[360px] lg:h-[440px] rounded-[2.7rem] bg-[#0f172a] animate-pulse flex items-center justify-center">
+                <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
               </div>
-            </div>
-            <h5 className="font-bold text-xl mb-2 text-white">Fluid Cursor Physics</h5>
-            <p className="text-sm opacity-40 text-white">Interactive particle system reacting to high-frequency motion data.</p>
+            }>
+              <GradientShaderCard />
+            </Suspense>
           </div>
           <div className="group cursor-pointer">
             <div className="aspect-video glass rounded-3xl mb-6 overflow-hidden relative border border-white/10">

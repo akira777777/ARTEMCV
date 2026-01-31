@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { PROJECTS } from '../../constants';
 import { useI18n } from '../../i18n';
 import { Link } from 'react-router-dom';
+import OptimizedImage from '../OptimizedImage';
 
 const BentoGrid: React.FC = () => {
   const { t } = useI18n();
@@ -22,10 +23,11 @@ const BentoGrid: React.FC = () => {
         >
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 to-transparent"></div>
           <div className="absolute inset-0 opacity-40 mix-blend-overlay group-hover:scale-105 transition-transform duration-1000">
-            <img
+            <OptimizedImage
               alt={t(mainProject.title)}
-              className="w-full h-full object-cover"
+              className="w-full h-full"
               src={mainProject.image}
+              priority={true}
             />
           </div>
           <div className="relative h-full p-10 flex flex-col justify-between z-10">
@@ -107,9 +109,9 @@ const BentoGrid: React.FC = () => {
           transition={{ delay: 0.2 }}
           className="md:col-span-6 md:row-span-1 relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0a0a0a] group cursor-pointer"
         >
-          <img
+          <OptimizedImage
             alt={t(secondaryProject.title)}
-            className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            className="absolute inset-0 w-full h-full opacity-60 group-hover:scale-105 transition-transform duration-700"
             src={secondaryProject.image}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>

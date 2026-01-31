@@ -13,7 +13,6 @@ interface Particle {
 
 const GradientShaderCard: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -76,27 +75,38 @@ const GradientShaderCard: React.FC = () => {
     const lineDispX = new Float32Array(xValues.length);
     const lineDispY = new Float32Array(yValues.length);
 
-    // Create initial particle emitter
-    const createParticles = (x: number, y: number, count: number = 3) => {
-      const colors = [
-        'rgba(14, 165, 233',  // Sky Blue
-        'rgba(16, 185, 129',  // Emerald
-        'rgba(245, 158, 11',  // Amber
-        'rgba(139, 92, 246'   // Violet
-      ];
-      for (let i = 0; i < count; i++) {
-        const angle = (Math.random() * Math.PI * 2);
-        const speed = 1 + Math.random() * 2;
-        particlesRef.current.push({
-          x,
-          y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          radius: 1 + Math.random() * 3,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          life: 100,
-          maxLife: 100,
-        });
+    // Pre-allocate particle pool to avoid GC
+    const MAX_PARTICLES = 150;
+    const COLORS = [
+      'rgba(14, 165, 233',  // Sky Blue
+      'rgba(16, 185, 129',  // Emerald
+      'rgba(245, 158, 11',  // Amber
+      'rgba(139, 92, 246'   // Violet
+    ];
+
+    const pool = new Array(MAX_PARTICLES).fill(null).map(() => ({
+      active: false,
+      x: 0, y: 0, vx: 0, vy: 0, radius: 0, colorIdx: 0, life: 0, maxLife: 0
+    }));
+
+    const createParticles = (x: number, y: number, count: number = 2) => {
+      let created = 0;
+      for (let i = 0; i < MAX_PARTICLES && created < count; i++) {
+        const p = pool[i];
+        if (!p.active) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 1 + Math.random() * 2;
+          p.active = true;
+          p.x = x;
+          p.y = y;
+          p.vx = Math.cos(angle) * speed;
+          p.vy = Math.sin(angle) * speed;
+          p.radius = 1 + Math.random() * 3;
+          p.colorIdx = Math.floor(Math.random() * COLORS.length);
+          p.life = 100;
+          p.maxLife = 100;
+          created++;
+        }
       }
     };
 
@@ -186,37 +196,63 @@ const GradientShaderCard: React.FC = () => {
     };
 
     const drawParticles = () => {
-      const particles = particlesRef.current;
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
+      // Group by color and quantized alpha for batched drawing
+      // Quantizing alpha into 4 steps: 0.2, 0.4, 0.6, 0.8
+      const ALPHA_STEPS = 4;
+      const batches: number[][][] = COLORS.map(() =>
+        new Array(ALPHA_STEPS).fill(null).map(() => [])
+      );
+
+      for (let i = 0; i < MAX_PARTICLES; i++) {
+        const p = pool[i];
+        if (!p.active) continue;
         
         p.vy += 0.05;
         p.vx *= 0.99;
         p.vy *= 0.99;
-        
         p.x += p.vx;
         p.y += p.vy;
         p.life -= 1;
 
         if (p.life <= 0) {
-          particles.splice(i, 1);
+          p.active = false;
           continue;
         }
 
-        const alpha = (p.life / p.maxLife) * 0.8;
-        // Faster color formatting
-        ctx.fillStyle = `${p.color}, ${alpha})`;
-        
-        // shadowBlur is extremely expensive, replaced with a glow arc
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color}, ${alpha * 0.3})`;
-        ctx.fill();
+        const alphaNorm = p.life / p.maxLife;
+        const alphaIdx = Math.min(Math.floor(alphaNorm * ALPHA_STEPS), ALPHA_STEPS - 1);
+        batches[p.colorIdx][alphaIdx].push(i);
+      }
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color}, ${alpha})`;
-        ctx.fill();
+      // Draw batched particles
+      for (let c = 0; c < COLORS.length; c++) {
+        const baseColor = COLORS[c];
+        for (let a = 0; a < ALPHA_STEPS; a++) {
+          const indices = batches[c][a];
+          if (indices.length === 0) continue;
+
+          const alpha = (a + 1) / ALPHA_STEPS * 0.8;
+
+          // Draw Glow Layer (combined)
+          ctx.beginPath();
+          ctx.fillStyle = `${baseColor}, ${alpha * 0.3})`;
+          for (const idx of indices) {
+            const p = pool[idx];
+            ctx.moveTo(p.x + p.radius * 2, p.y);
+            ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
+          }
+          ctx.fill();
+
+          // Draw Core Layer (combined)
+          ctx.beginPath();
+          ctx.fillStyle = `${baseColor}, ${alpha})`;
+          for (const idx of indices) {
+            const p = pool[idx];
+            ctx.moveTo(p.x + p.radius, p.y);
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          }
+          ctx.fill();
+        }
       }
     };
 

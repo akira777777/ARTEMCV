@@ -173,9 +173,13 @@ Run benchmarks to verify optimizations:
 npx tsx benchmarks/i18n_perf.ts
 # Expected: ~3.89x improvement
 
-# Canvas optimization
+# Canvas optimization (Grid)
 npx tsx benchmarks/canvas_benchmark.ts
 # Expected: ~39.52% improvement
+
+# Particle system (Pooling & Batching)
+npx tsx benchmarks/particle_perf.ts
+# Expected: ~53% improvement
 
 # CursorTrail object reuse
 npx tsx benchmarks/cursortrail_benchmark.ts
@@ -199,38 +203,36 @@ When adding new components:
 
 ## Additional Performance Optimizations
 
-### 11. Code Splitting Enhancement
-- **Dynamic Imports**: Heavy components like `GradientShaderCard` are now lazy-loaded using `React.lazy()` to reduce initial bundle size
-- **Benefits**: Improved initial load time and better resource allocation
+### 11. Bundle Optimization & Manual Chunking
+- **Manual Chunks**: Configured Rollup to separate heavy libraries like `three.js` and `framer-motion` into independent chunks.
+- **Impact**: Reduced initial main bundle size from **1.2MB** to **~93KB** (gzip: ~30KB).
+- **Benefit**: Faster First Contentful Paint (FCP) and Time to Interactive (TTI) by only loading essential code first.
 
-### 12. Image Optimization
-- **OptimizedImage Component**: Created a new component that provides:
-  - WebP format support with fallback to original format
-  - Responsive loading with `sizes` attribute
-  - Lazy loading using Intersection Observer
-  - Loading states and error handling
-  - Asynchronous decoding for smoother loading
-  - Priority loading for critical images
-  - Placeholder visuals during loading
-- **Implementation**: Applied to `SpotlightGallery` and `WorkGallery` components
-- **Performance gain**: Reduced initial bundle size and improved loading performance
+### 12. Component-Level Code Splitting
+- **Lazy Loading**: Implemented `React.lazy()` for heavy below-the-fold components:
+  - `SimpleTelegramChat`: Floating chat widget (split into separate chunk).
+  - `GradientShaderCard`: Complex canvas-based interactive card (split into separate chunk).
+- **Benefit**: Decreased initial load time by deferring heavy component loading until they are needed.
 
-### 13. Advanced Mouse Movement Throttling
-- **Enhanced Throttling**: Updated `GradientShaderCard` to use `requestAnimationFrame`-based throttling instead of time-based
-- **Performance gain**: Reduced mouse event processing overhead while maintaining smooth interaction
-- **Implementation**: Used animation frame scheduling to process only the latest mouse position per frame
+### 13. Advanced Canvas & Particle Optimization
+- **Particle Pooling**: Implemented an object pool for particles in `GradientShaderCard`, reusing objects from a fixed-size array (150 particles) to eliminate garbage collection pressure.
+- **Batched Drawing**: Quantized alpha levels and grouped particles by color to draw multiple arcs in a single `fill()` call.
+- **Performance gain**: **53% faster** particle updates and **44% reduction** in draw calls (verified with `benchmarks/particle_perf.ts`).
+- **GPU Acceleration**: Used `desynchronized: true` and optimized path drawing to reduce CPU overhead.
 
-### 14. Service Worker Caching
-- **Offline Support**: Implemented service worker for caching static assets
-- **Strategy**: Network-first with cache fallback for optimal freshness and performance
-- **Cache Management**: Automatic cleanup of old caches to prevent storage bloat
-- **Files Cached**: HTML, CSS, JavaScript, images, and other critical assets
-- **Performance gain**: Faster subsequent loads, offline functionality, reduced bandwidth usage
+### 14. Advanced Image Optimization & Local Hosting
+- **Local WebP Assets**: Switched from external Google Photos URLs to local optimized WebP assets for all projects in `constants.tsx`.
+- **Impact**: Eliminated external DNS lookups, TCP/TLS handshakes, and improved reliability.
+- **OptimizedImage Integration**: Applied the `OptimizedImage` component to `BentoGrid` and other sections for:
+  - Automatic WebP fallback.
+  - Native lazy loading with Intersection Observer.
+  - Smooth fade-in transitions.
+  - `fetchpriority="high"` for critical above-the-fold content.
 
-### 15. Resource Preloading
-- **Critical Assets**: Added preload directives for important images and fonts in `index.html`
-- **DNS Prefetching**: Added DNS prefetch hints for external domains
-- **Priority Loading**: Fonts and hero images are now preloaded for faster rendering
+### 15. Enhanced Caching & Preloading
+- **Service Worker (sw.js)**: Implemented a **Cache-First** strategy for hashed assets in `/assets/`, ensuring zero-latency subsequent loads.
+- **Fetch Priority**: Optimized `index.html` preloads with `fetchpriority` hints to guide the browser in prioritizing the most important assets (e.g., Hero project image).
+- **DNS Prefetch & Preconnect**: Added hints for Google Fonts and Telegram API to minimize connection overhead.
 
 ## Monitoring Performance
 

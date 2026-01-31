@@ -61,6 +61,30 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
+  // Cache-first strategy for hashed assets (they never change)
+  const isHashedAsset = event.request.url.includes('/assets/') &&
+                        /\.[a-f0-9]{8,10}\./.test(event.request.url);
+
+  if (isHashedAsset) {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        return fetch(event.request).then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return networkResponse;
+        });
+      })
+    );
+    return;
+  }
+
   // Skip navigation requests for specific routes that shouldn't be cached
   if (event.request.destination === 'document') {
     return;

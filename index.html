@@ -35,10 +35,9 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
     
     <!-- Preload critical above-the-fold images -->
-    <link rel="preload" href="/barber.webp" as="image" type="image/webp" importance="high">
-    <link rel="preload" href="/dental.webp" as="image" type="image/webp" importance="high">
-    <link rel="preload" href="/marketplace.webp" as="image" type="image/webp" importance="high">
-    <link rel="preload" href="/detailing.webp" as="image" type="image/webp" importance="high">
+    <link rel="preload" href="/detailing.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="/dental.webp" as="image" type="image/webp" fetchpriority="low">
+    <link rel="preload" href="/barber.webp" as="image" type="image/webp" fetchpriority="low">
     
     <!-- DNS prefetch for external domains -->
     <link rel="dns-prefetch" href="https://picsum.photos">
