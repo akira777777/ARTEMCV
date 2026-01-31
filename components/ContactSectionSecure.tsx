@@ -110,7 +110,13 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
   }, [formData, validate, TELEGRAM_CHAT_ID, fetchWithTimeout]);
 
   return (
-    <section id={id} className="py-32 px-6 lg:px-12 relative overflow-hidden">
+    <section 
+      id={id} 
+      className="py-32 px-6 lg:px-12 relative overflow-hidden"
+      role="region"
+      aria-labelledby="contact-heading"
+      tabIndex={-1}
+    >
       {/* Background Elements */}
       <div className="absolute -top-20 right-0 w-96 h-96 rounded-full bg-emerald-500/20 blur-3xl" aria-hidden="true" />
       <div className="absolute -bottom-20 left-0 w-96 h-96 rounded-full bg-cyan-500/20 blur-3xl" aria-hidden="true" />
@@ -121,22 +127,47 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
       
       <div className="max-w-3xl mx-auto relative z-10">
         <div className="mb-16 text-center">
-          <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter gradient-text">{t('contact.title')}</h2>
+          <h2 
+            id="contact-heading"
+            className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter gradient-text"
+          >
+            {t('contact.title')}
+          </h2>
           <p className="text-lg text-neutral-400">{t('contact.subtitle')}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 glass-card-modern p-8 md:p-10 rounded-3xl border border-emerald-500/30 shadow-[0_0_40px_rgba(16,185,129,0.2)] relative overflow-hidden" noValidate>
+        <form 
+          onSubmit={handleSubmit} 
+          className="space-y-6 glass-card-modern p-8 md:p-10 rounded-3xl border border-emerald-500/30 shadow-[0_0_40px_rgba(16,185,129,0.2)] relative overflow-hidden" 
+          noValidate
+          aria-describedby="form-description"
+        >
           {/* Inner decorative borders */}
           <div className="absolute inset-0 border border-emerald-500/20 rounded-3xl pointer-events-none" 
                style={{
                  boxShadow: 'inset 0 0 30px rgba(16, 185, 129, 0.1), inset 0 0 60px rgba(6, 182, 212, 0.05)'
                }} />
           
-          <input type="text" name="hp" value={formData.hp || ''} onChange={handleChange} className="hidden" aria-hidden="true" tabIndex={-1} autoComplete="off" />
+          <input 
+            type="text" 
+            name="hp" 
+            value={formData.hp || ''} 
+            onChange={handleChange} 
+            className="hidden" 
+            aria-hidden="true" 
+            tabIndex={-1} 
+            autoComplete="off" 
+            aria-label="Anti-spam honeypot field"
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-bold text-emerald-300 mb-2">{t('contact.label.name')}</label>
+              <label 
+                htmlFor="name" 
+                className="block text-sm font-bold text-emerald-300 mb-2"
+              >
+                {t('contact.label.name')} <span className="text-red-400" aria-label="required">*</span>
+              </label>
               <input 
                 id="name" 
                 type="text" 
@@ -145,11 +176,18 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
                 onChange={handleChange} 
                 placeholder={t('contact.placeholder.name')} 
                 required 
+                aria-required="true"
+                aria-invalid={error && !formData.name.trim() ? 'true' : 'false'}
                 className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all" 
               />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-bold text-emerald-300 mb-2">{t('contact.label.email')}</label>
+              <label 
+                htmlFor="email" 
+                className="block text-sm font-bold text-emerald-300 mb-2"
+              >
+                {t('contact.label.email')} <span className="text-red-400" aria-label="required">*</span>
+              </label>
               <input 
                 id="email" 
                 type="email" 
@@ -158,13 +196,20 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
                 onChange={handleChange} 
                 placeholder={t('contact.placeholder.email')} 
                 required 
+                aria-required="true"
+                aria-invalid={error && (!formData.email.trim() || !EMAIL_PATTERN.test(formData.email.trim())) ? 'true' : 'false'}
                 className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all" 
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="subject" className="block text-sm font-bold text-emerald-300 mb-2">{t('contact.label.subject')}</label>
+            <label 
+              htmlFor="subject" 
+              className="block text-sm font-bold text-emerald-300 mb-2"
+            >
+              {t('contact.label.subject')}
+            </label>
             <input 
               id="subject" 
               type="text" 
@@ -172,12 +217,19 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
               value={formData.subject} 
               onChange={handleChange} 
               placeholder={t('contact.placeholder.subject')} 
+              aria-describedby="subject-help"
               className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all" 
             />
+            <p id="subject-help" className="text-xs text-emerald-400/70 mt-1">{t('contact.help.optional')}</p>
           </div>
 
           <div>
-            <label htmlFor="message" className="block text-sm font-bold text-emerald-300 mb-2">{t('contact.label.message')}</label>
+            <label 
+              htmlFor="message" 
+              className="block text-sm font-bold text-emerald-300 mb-2"
+            >
+              {t('contact.label.message')} <span className="text-red-400" aria-label="required">*</span>
+            </label>
             <textarea 
               id="message" 
               name="message" 
@@ -186,15 +238,19 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
               placeholder={t('contact.placeholder.message')} 
               rows={6} 
               required 
+              aria-required="true"
+              aria-invalid={error && (!formData.message.trim() || formData.message.trim().length < 10) ? 'true' : 'false'}
+              aria-describedby="message-help"
               className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all resize-none" 
             />
+            <p id="message-help" className="text-xs text-emerald-400/70 mt-1">{t('contact.help.message_min')}</p>
           </div>
 
           <button 
             type="submit" 
             disabled={loading} 
             aria-label={t('contact.button.send')} 
-            className="neon-button w-full py-4 text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="neon-button w-full py-4 text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all focus:outline-none focus:ring-4 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-3">
@@ -207,7 +263,10 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
           {submitted && (
             <output 
               aria-live="polite" 
+              aria-atomic="true"
               className="p-4 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border border-emerald-500/50 rounded-xl text-emerald-400 text-center font-bold animate-in fade-in block"
+              tabIndex={-1}
+              role="status"
             >
               {t('contact.success')}
             </output>
@@ -216,43 +275,49 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
             <div 
               role="alert" 
               aria-live="assertive" 
+              aria-atomic="true"
               className="p-5 bg-gradient-to-r from-orange-500/20 to-red-600/10 border border-orange-500/50 rounded-2xl text-orange-300 text-center font-bold animate-in fade-in shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+              tabIndex={-1}
+              id="form-error-message"
             >
-              ❌ {error}
+              <span className="sr-only">Error:</span> {error}
             </div>
           )}
         </form>
 
         <div className="mt-16 pt-16 border-t border-primary/20">
           <p className="text-center text-gray-400 mb-8">{t('contact.reach_out')}</p>
-          <div className="flex justify-center gap-6 flex-wrap">
+          <div className="flex justify-center gap-6 flex-wrap" role="list">
             <a 
               href="mailto:fear75412@gmail.com" 
-              className="px-6 py-3 border border-primary/30 text-primary-300 rounded-xl hover:bg-primary/10 hover:border-secondary/50 hover:text-secondary-300 transition-all flex items-center gap-2"
-              title="Send email"
+              className="px-6 py-3 border border-primary/30 text-primary-300 rounded-xl hover:bg-primary/10 hover:border-secondary/50 hover:text-secondary-300 transition-all flex items-center gap-2 focus:outline-none focus:ring-4 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
+              aria-label="Send email to fear75412@gmail.com"
+              role="listitem"
             >
-              <MailIcon className="w-5 h-5" />
-              Email
+              <MailIcon className="w-5 h-5" aria-hidden="true" />
+              <span>Email</span>
             </a>
             <a 
               href="https://t.me/younghustle45" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="px-6 py-3 border border-primary/30 text-primary-300 rounded-xl hover:bg-primary/10 hover:border-secondary/50 hover:text-secondary-300 transition-all flex items-center gap-2"
-              title="Message on Telegram"
+              className="px-6 py-3 border border-primary/30 text-primary-300 rounded-xl hover:bg-primary/10 hover:border-secondary/50 hover:text-secondary-300 transition-all flex items-center gap-2 focus:outline-none focus:ring-4 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
+              aria-label="Message on Telegram (opens in new tab)"
+              role="listitem"
             >
-              <MessageCircleIcon className="w-5 h-5" />
-              Telegram
+              <MessageCircleIcon className="w-5 h-5" aria-hidden="true" />
+              <span>Telegram</span>
             </a>
             <a 
               href="https://github.com/akira777777" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="px-6 py-3 border border-primary/30 text-primary-300 rounded-xl hover:bg-primary/10 hover:border-secondary/50 hover:text-secondary-300 transition-all flex items-center gap-2"
-              title="View GitHub profile"
+              className="px-6 py-3 border border-primary/30 text-primary-300 rounded-xl hover:bg-primary/10 hover:border-secondary/50 hover:text-secondary-300 transition-all flex items-center gap-2 focus:outline-none focus:ring-4 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-transparent"
+              aria-label="View GitHub profile (opens in new tab)"
+              role="listitem"
             >
-              <GithubIcon className="w-5 h-5" />
-              GitHub
+              <GithubIcon className="w-5 h-5" aria-hidden="true" />
+              <span>GitHub</span>
             </a>
           </div>
         </div>
