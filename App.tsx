@@ -5,7 +5,7 @@ import { WorkGallery } from './components/WorkGallery';
 import { About } from './components/About';
 import ContactSectionSecure from './components/ContactSectionSecure';
 import { Footer } from './components/Footer';
-import { AIChatOverlay } from './components/AIChatOverlay';
+import { SimpleTelegramChat } from './components/SimpleTelegramChat';
 import { ScrollToTop } from './components/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -22,7 +22,7 @@ const App: React.FC = () => {
         </ErrorBoundary>
         <Footer />
       </main>
-      <AIChatOverlay />
+      <SimpleTelegramChat />
       <ScrollToTop />
     </div>
   );
