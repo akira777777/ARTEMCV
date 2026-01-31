@@ -16,17 +16,8 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     
     build: {
-      // Optimize bundle size
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: mode === 'production',
-          drop_debugger: true,
-        },
-        output: {
-          comments: false,
-        },
-      },
+      // Use esbuild for minification (faster, built-in)
+      minify: 'esbuild',
       
       // Code splitting for better caching
       rollupOptions: {
