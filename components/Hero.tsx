@@ -5,6 +5,7 @@ import { Eyes, ParticleText, InteractiveDotGrid } from './InteractiveElements';
 
 export const Hero: React.FC = React.memo(() => {
   const { t } = useI18n();
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   const scrollToWorks = () => {
     document.getElementById('works')?.scrollIntoView({ behavior: 'smooth' });
