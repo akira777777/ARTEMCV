@@ -30,6 +30,20 @@ const App: React.FC = () => {
         <ScrollToTop />
       </div>
     </I18nProvider>
+    <div className="bg-black min-h-screen text-white selection:bg-white selection:text-black">
+      <Navigation />
+      <main>
+        <Hero />
+        <WorkGallery />
+        <About />
+        <ErrorBoundary>
+          <ContactSectionSecure id="contact" />
+        </ErrorBoundary>
+        <Footer />
+      </main>
+      <SimpleTelegramChat />
+      <ScrollToTop />
+    </div>
   );
 };
 
