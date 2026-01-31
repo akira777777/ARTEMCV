@@ -1,12 +1,10 @@
 import React from 'react';
 import { SKILLS, SERVICES } from '../constants';
 import { useI18n } from '../i18n';
+import { scrollToSection } from '../lib/utils';
 
 export const About: React.FC = React.memo(() => {
   const { t } = useI18n();
-  const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   return (
     <section id="studio" className="py-24 md:py-40 border-t border-white/5 bg-neutral-950 relative overflow-hidden">
@@ -24,7 +22,7 @@ export const About: React.FC = React.memo(() => {
             </p>
             <div className="pt-8">
               <button
-                onClick={scrollToContact}
+                onClick={() => scrollToSection('contact')}
                 aria-label="Navigate to contact section"
                 className="relative px-8 py-4 bg-white text-black text-xs font-bold tracking-widest rounded-full hover:bg-neutral-200 transition-colors transform hover:scale-105 duration-300 cta-button sheen-sweep glow-pulse-soft"
               >
@@ -59,14 +57,7 @@ export const About: React.FC = React.memo(() => {
         <div id="services" className="mt-32 scroll-mt-24">
           <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-8 border-b border-white/10 pb-4">{t('about.offer')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8" role="list">
-            {[
-              { name: 'service.1.name', desc: 'service.1.desc' },
-              { name: 'service.2.name', desc: 'service.2.desc' },
-              { name: 'service.3.name', desc: 'service.3.desc' },
-              { name: 'service.4.name', desc: 'service.4.desc' },
-              { name: 'service.5.name', desc: 'service.5.desc' },
-              { name: 'service.6.name', desc: 'service.6.desc' },
-            ].map((service, index) => (
+            {SERVICES.map((service, index) => (
               <article key={service.name} className="service-card rounded-2xl px-6 py-5 group cursor-pointer transition-transform duration-500 hover:-translate-y-1">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xl font-display font-medium group-hover:text-neutral-300 transition-colors">

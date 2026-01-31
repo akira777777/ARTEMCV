@@ -3,14 +3,11 @@ import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { ParticleText } from './InteractiveElements';
 import { ServicesGrid } from './ServicesGrid';
+import { scrollToSection } from '../lib/utils';
 
 export const Hero: React.FC = React.memo(() => {
   const { t } = useI18n();
   const containerRef = React.useRef<HTMLDivElement>(null);
-
-  const scrollToWorks = () => {
-    document.getElementById('works')?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   return (
     <section
@@ -72,7 +69,7 @@ export const Hero: React.FC = React.memo(() => {
 
       <button
         type="button"
-        onClick={scrollToWorks}
+        onClick={() => scrollToSection('works')}
         aria-label="Scroll down to explore projects"
         className="absolute bottom-4 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group"
       >

@@ -1,3 +1,7 @@
+/**
+ * @deprecated This component is lazy-loaded but never rendered in App.tsx.
+ * TODO: Consider integrating into UI or remove in next cleanup.
+ */
 import React, { useRef, useEffect, useState } from 'react';
 
 interface Particle {

@@ -437,11 +437,20 @@ textarea:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  body::before,
+  body::after {
+    animation: none !important;
+  }
+  .noise-overlay {
+    animation: none !important;
   }
 }
 
@@ -583,21 +592,4 @@ textarea:focus-visible {
   opacity: 0.3;
   filter: blur(4px);
   pointer-events: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  body::before,
-  body::after {
-    animation: none !important;
-  }
-  .noise-overlay {
-    animation: none !important;
-  }
 }

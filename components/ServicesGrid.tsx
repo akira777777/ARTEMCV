@@ -48,10 +48,10 @@ export const ServicesGrid: React.FC = React.memo(() => {
       {/* Заголовок секции */}
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-          {t('about.offer')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-600">специализации</span>
+          {t('about.offer')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-600">{t('services.grid.title')}</span>
         </h2>
         <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-          Превращаю идеи в работающие цифровые продукты высокого качества.
+          {t('services.grid.subtitle')}
         </p>
       </div>
 

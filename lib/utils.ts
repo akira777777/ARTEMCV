@@ -3,6 +3,14 @@
  */
 
 /**
+ * Smooth scroll to a section by ID
+ * @param sectionId - The ID of the section to scroll to (without #)
+ */
+export function scrollToSection(sectionId: string): void {
+  document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+}
+
+/**
  * HTML escaping for safe Telegram HTML parse mode
  * Escapes special characters to prevent HTML injection
  */

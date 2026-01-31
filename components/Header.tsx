@@ -1,3 +1,7 @@
+/**
+ * @deprecated This component is not used. Use Navigation.tsx instead.
+ * TODO: Remove this file in next cleanup.
+ */
 
 import React, { useState } from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
