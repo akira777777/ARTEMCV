@@ -10,13 +10,15 @@ import { Footer } from './components/Footer';
 import { ScrollToTop } from './components/ScrollToTop';
 import ScrollProgress from './components/ScrollProgress';
 import ErrorBoundary from './components/ErrorBoundary';
+import CursorTrail from './components/CursorTrail';
 import SkipLink from './components/SkipLink';
 
 const App: React.FC = () => {
   return (
     <I18nProvider>
-      <div className="bg-black min-h-screen text-white selection:bg-white selection:text-black">
-        <SkipLink />
+      <SkipLink />
+      <CursorTrail />
+      <div className="bg-[#0a0a0a] min-h-screen text-white selection:bg-white/10 selection:text-white">
         <ScrollProgress />
         <Navigation />
         <main id="main-content">

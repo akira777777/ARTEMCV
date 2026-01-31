@@ -21,6 +21,7 @@ const LanguageSwitcher: React.FC = () => {
             lang === l.code ? 'bg-white text-black border-white' : 'text-zinc-500 hover:text-white border-white/10'
           }`}
           aria-pressed={lang === l.code ? 'true' : 'false'}
+          aria-label={`Switch to ${l.label}`}
           title={`Switch to ${l.label}`}
         >
           {l.label}

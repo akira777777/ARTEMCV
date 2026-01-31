@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { EMAIL_PATTERN, escapeHtml } from '../lib/utils';
+import { useFetchWithTimeout } from '../lib/hooks';
+import { FORM_INPUT_CLASS, FORM_TEXTAREA_CLASS, FORM_BUTTON_PRIMARY_CLASS, FORM_BUTTON_SECONDARY_CLASS } from '../constants';
 
 interface ContactFormData {
   name: string;
@@ -12,19 +13,11 @@ interface ContactFormData {
 
 type ValidationResult = { type: 'honeypot' } | { type: 'error'; message: string } | null;
 
-// HTML escaping for safe Telegram HTML parse mode
-const escapeHtml = (value: string) =>
-  value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
-
 const ContactSection: React.FC = () => {
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID; // optional; backend may override
   const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN; // prefer server-side in production
   const lastSubmitRef = useRef<number>(0);
+  const fetchWithTimeout = useFetchWithTimeout(12_000);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -80,10 +73,8 @@ const ContactSection: React.FC = () => {
       throw new Error('Missing Telegram chat ID');
     }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12_000);
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    const res = await fetch(url, {
+    const res = await fetchWithTimeout(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -91,10 +82,8 @@ const ContactSection: React.FC = () => {
         text: buildTelegramMessage(),
         parse_mode: 'HTML',
         disable_web_page_preview: true,
-      }),
-      signal: controller.signal,
+      })
     });
-    clearTimeout(timeout);
 
     if (!res.ok) {
       const err = await res.text().catch(() => '');
@@ -103,9 +92,7 @@ const ContactSection: React.FC = () => {
   };
 
   const sendViaApi = async () => {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12_000);
-    const res = await fetch('/api/send-telegram', {
+    const res = await fetchWithTimeout('/api/send-telegram', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -114,10 +101,8 @@ const ContactSection: React.FC = () => {
         subject: formData.subject?.trim() || '',
         message: formData.message.trim(),
         chatId: TELEGRAM_CHAT_ID,
-      }),
-      signal: controller.signal,
+      })
     });
-    clearTimeout(timeout);
 
     if (!res.ok) {
       const err = await res.text().catch(() => '');
@@ -204,6 +189,7 @@ const ContactSection: React.FC = () => {
                 onChange={handleChange}
                 placeholder="Your name"
                 required
+                aria-required="true"
                 className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all"
               />
             </div>
@@ -220,6 +206,7 @@ const ContactSection: React.FC = () => {
                 onChange={handleChange}
                 placeholder="your@email.com"
                 required
+                aria-required="true"
                 className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all"
               />
             </div>
@@ -236,7 +223,7 @@ const ContactSection: React.FC = () => {
               value={formData.subject}
               onChange={handleChange}
               placeholder="Project subject"
-              className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all"
+              className={FORM_INPUT_CLASS}
             />
           </div>
 
@@ -252,6 +239,7 @@ const ContactSection: React.FC = () => {
               placeholder="Tell me about your project..."
               rows={6}
               required
+              aria-required="true"
               className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all resize-none"
             />
           </div>
@@ -272,13 +260,19 @@ const ContactSection: React.FC = () => {
           </button>
 
           {submitted && (
-            <div className="p-4 bg-green-500/10 border border-green-500/50 rounded-xl text-green-400 text-center font-bold animate-in fade-in">
+            <div
+              role="alert"
+              className="p-4 bg-green-500/10 border border-green-500/50 rounded-xl text-green-400 text-center font-bold animate-in fade-in"
+            >
               ✓ Message sent! I'll get back to you soon.
             </div>
           )}
 
           {error && (
-            <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-center font-bold animate-in fade-in">
+            <div
+              role="alert"
+              className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-center font-bold animate-in fade-in"
+            >
               ❌ {error}
             </div>
           )}

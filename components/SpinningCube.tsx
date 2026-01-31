@@ -1,28 +1,90 @@
 import React from 'react';
 
-const SpinningCube: React.FC = () => {
+// Memoize constant style objects
+const containerStyle = {
+  minHeight: '220px',
+  width: '220px',
+  perspective: '1100px'
+} as const;
+
+const labelStyle = {
+  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  fontSize: '12px',
+  fontWeight: 500,
+  letterSpacing: '0.06em'
+} as const;
+
+const cubeStyle = {
+  width: '180px',
+  height: '180px',
+  position: 'relative' as const,
+  transformStyle: 'preserve-3d' as const,
+  animation: 'spin 10s infinite linear'
+} as const;
+
+const faceBaseStyle = {
+  position: 'absolute' as const,
+  width: '180px',
+  height: '180px',
+  backgroundSize: '400% 400%',
+  border: '1px solid rgba(255, 255, 255, 0.25)'
+} as const;
+
+const frontFaceStyle = {
+  ...faceBaseStyle,
+  background: 'linear-gradient(45deg, #7af2a1, #6bd8ff, #c58bff, #ffd38d)',
+  animation: 'waveColors 4s ease-in-out infinite',
+  transform: 'rotateY(0deg) translateZ(90px)'
+} as const;
+
+const backFaceStyle = {
+  ...faceBaseStyle,
+  background: 'linear-gradient(45deg, #6bd8ff, #ffd38d, #7af2a1, #c58bff)',
+  animation: 'waveColors 4s ease-in-out infinite 1s',
+  transform: 'rotateY(180deg) translateZ(90px)'
+} as const;
+
+const rightFaceStyle = {
+  ...faceBaseStyle,
+  background: 'linear-gradient(45deg, #c58bff, #7af2a1, #6bd8ff, #ffd38d)',
+  animation: 'waveColors 4s ease-in-out infinite 2s',
+  transform: 'rotateY(90deg) translateZ(90px)'
+} as const;
+
+const leftFaceStyle = {
+  ...faceBaseStyle,
+  background: 'linear-gradient(45deg, #ffd38d, #c58bff, #7af2a1, #6bd8ff)',
+  animation: 'waveColors 4s ease-in-out infinite 3s',
+  transform: 'rotateY(-90deg) translateZ(90px)'
+} as const;
+
+const topFaceStyle = {
+  ...faceBaseStyle,
+  background: 'linear-gradient(45deg, #6bd8ff, #7af2a1, #ffd38d, #c58bff)',
+  animation: 'waveColors 4s ease-in-out infinite 0.5s',
+  transform: 'rotateX(90deg) translateZ(90px)'
+} as const;
+
+const bottomFaceStyle = {
+  ...faceBaseStyle,
+  background: 'linear-gradient(45deg, #ffd38d, #6bd8ff, #c58bff, #7af2a1)',
+  animation: 'waveColors 4s ease-in-out infinite 2.5s',
+  transform: 'rotateX(-90deg) translateZ(90px)'
+} as const;
+
+const SpinningCube: React.FC = React.memo(() => {
   return (
     <section className="py-10">
       <div className="max-w-4xl mx-auto px-6 lg:px-12 flex justify-center">
         <div
           className="relative"
-          style={{
-            minHeight: '220px',
-            width: '220px',
-            perspective: '1100px'
-          }}
+          style={containerStyle}
         >
           {/* скрытая подпись сбоку */}
           <div
             className="absolute -left-64 top-4 text-white/60 select-none"
             aria-hidden
-            style={{
-              fontFamily:
-                'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-              fontSize: '12px',
-              fontWeight: 500,
-              letterSpacing: '0.06em'
-            }}
+            style={labelStyle}
           >
             Cube 00112
           </div>
@@ -30,96 +92,36 @@ const SpinningCube: React.FC = () => {
           <div className="w-full h-full flex items-center justify-center">
             <div
               className="cube"
-              style={{
-                width: '180px',
-                height: '180px',
-                position: 'relative',
-                transformStyle: 'preserve-3d',
-                animation: 'spin 10s infinite linear'
-              }}
+              style={cubeStyle}
             >
                 <div
                   className="cube-face front"
-                  style={{
-                    position: 'absolute',
-                    width: '180px',
-                    height: '180px',
-                    background: 'linear-gradient(45deg, #7af2a1, #6bd8ff, #c58bff, #ffd38d)',
-                    backgroundSize: '400% 400%',
-                    animation: 'waveColors 4s ease-in-out infinite',
-                    transform: 'rotateY(0deg) translateZ(90px)',
-                    border: '1px solid rgba(255, 255, 255, 0.25)'
-                  }}
+                  style={frontFaceStyle}
                 />
 
                 <div
                   className="cube-face back"
-                  style={{
-                    position: 'absolute',
-                    width: '180px',
-                    height: '180px',
-                    background: 'linear-gradient(45deg, #6bd8ff, #ffd38d, #7af2a1, #c58bff)',
-                    backgroundSize: '400% 400%',
-                    animation: 'waveColors 4s ease-in-out infinite 1s',
-                    transform: 'rotateY(180deg) translateZ(90px)',
-                    border: '1px solid rgba(255, 255, 255, 0.25)'
-                  }}
+                  style={backFaceStyle}
                 />
 
                 <div
                   className="cube-face right"
-                  style={{
-                    position: 'absolute',
-                    width: '180px',
-                    height: '180px',
-                    background: 'linear-gradient(45deg, #c58bff, #7af2a1, #6bd8ff, #ffd38d)',
-                    backgroundSize: '400% 400%',
-                    animation: 'waveColors 4s ease-in-out infinite 2s',
-                    transform: 'rotateY(90deg) translateZ(90px)',
-                    border: '1px solid rgba(255, 255, 255, 0.25)'
-                  }}
+                  style={rightFaceStyle}
                 />
 
                 <div
                   className="cube-face left"
-                  style={{
-                    position: 'absolute',
-                    width: '180px',
-                    height: '180px',
-                    background: 'linear-gradient(45deg, #ffd38d, #c58bff, #7af2a1, #6bd8ff)',
-                    backgroundSize: '400% 400%',
-                    animation: 'waveColors 4s ease-in-out infinite 3s',
-                    transform: 'rotateY(-90deg) translateZ(90px)',
-                    border: '1px solid rgba(255, 255, 255, 0.25)'
-                  }}
+                  style={leftFaceStyle}
                 />
 
                 <div
                   className="cube-face top"
-                  style={{
-                    position: 'absolute',
-                    width: '180px',
-                    height: '180px',
-                    background: 'linear-gradient(45deg, #6bd8ff, #7af2a1, #ffd38d, #c58bff)',
-                    backgroundSize: '400% 400%',
-                    animation: 'waveColors 4s ease-in-out infinite 0.5s',
-                    transform: 'rotateX(90deg) translateZ(90px)',
-                    border: '1px solid rgba(255, 255, 255, 0.25)'
-                  }}
+                  style={topFaceStyle}
                 />
 
                 <div
                   className="cube-face bottom"
-                  style={{
-                    position: 'absolute',
-                    width: '180px',
-                    height: '180px',
-                    background: 'linear-gradient(45deg, #ffd38d, #6bd8ff, #c58bff, #7af2a1)',
-                    backgroundSize: '400% 400%',
-                    animation: 'waveColors 4s ease-in-out infinite 2.5s',
-                    transform: 'rotateX(-90deg) translateZ(90px)',
-                    border: '1px solid rgba(255, 255, 255, 0.25)'
-                  }}
+                  style={bottomFaceStyle}
                 />
               </div>
             </div>
@@ -185,6 +187,8 @@ const SpinningCube: React.FC = () => {
       </div>
     </section>
   );
-};
+});
+
+SpinningCube.displayName = 'SpinningCube';
 
 export default SpinningCube;

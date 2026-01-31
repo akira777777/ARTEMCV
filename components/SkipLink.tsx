@@ -1,7 +1,7 @@
 import React from 'react';
 import { useI18n } from '../i18n';
 
-const SkipLink: React.FC = () => {
+const SkipLink: React.FC = React.memo(() => {
   const { t } = useI18n();
   return (
     <a
@@ -11,6 +11,8 @@ const SkipLink: React.FC = () => {
       {t('skip.content')}
     </a>
   );
-};
+});
+
+SkipLink.displayName = 'SkipLink';
 
 export default SkipLink;
