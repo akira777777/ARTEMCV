@@ -2,12 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ARTEM.DEV — Full Stack Developer & Designer</title>
+    <meta name="description" content="Full Stack Developer & Designer specializing in React, TypeScript, and modern web architecture. Building high-performance applications with exceptional user experiences." />
+    <meta name="theme-color" content="#000000" />
+    
+    <!-- SEO & Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ARTEM.DEV — Full Stack Developer & Designer" />
+    <meta property="og:description" content="Full Stack Developer specializing in React, TypeScript, Node.js, and modern architecture. Based in Prague." />
+    <meta property="og:url" content="https://artem.dev" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    
+    <!-- Font Optimization -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Critical Inline Styles -->
     <style>
       :root {
         color-scheme: dark;
@@ -17,34 +31,29 @@
         margin: 0;
         padding: 0;
         background: #000;
-        font-family: 'Syne', sans-serif;
-      }
-
-      /* Hide Scrollbar but keep functionality (cross-browser compatible) */
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox 64+ */
-      }
-
-      /* Custom cursor styles */
-      .custom-cursor-hover {
-        cursor: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="19" stroke="white" stroke-width="1.5"/></svg>') 20 20, auto;
-      }
-      
-      /* Markdown styles for chat */
-      .prose p {
-        margin-bottom: 0.5em;
-      }
-
-      /* Ensure smooth font rendering */
-      * {
+        font-family: 'Syne', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
+
+      /* Hide Scrollbar (cross-browser) */
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Reduce motion for accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
     </style>
+    
+    <title>ARTEM.DEV — Full Stack Developer & Designer</title>
   </head>
   <body>
     <div id="root"></div>
