@@ -1,10 +1,18 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ContactSectionSecure from '../components/ContactSectionSecure';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 describe('ContactSectionSecure', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('shows validation errors for empty required fields', async () => {
     render(<ContactSectionSecure />);
 
@@ -24,11 +32,27 @@ describe('ContactSectionSecure', () => {
 
     await userEvent.type(screen.getByLabelText(/name/i), 'Artem');
     await userEvent.type(screen.getByLabelText(/email/i), 'artem@example.com');
-    await userEvent.type(screen.getByLabelText(/^message$/i), 'Hello, I need a website.');
+    await userEvent.type(screen.getByLabelText(/^message$/i), 'Hello, I need a website built for me.');
 
     await userEvent.click(screen.getByRole('button', { name: /send message/i }));
 
-    expect(await screen.findByRole('status')).toHaveTextContent(/message sent/i);
+    await waitFor(() => {
+      expect(screen.getByText(/message sent/i)).toBeInTheDocument();
+    });
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('displays error when email format is invalid', async () => {
+    render(<ContactSectionSecure />);
+
+    await userEvent.type(screen.getByLabelText(/name/i), 'Artem');
+    await userEvent.type(screen.getByLabelText(/email/i), 'invalid-email');
+    await userEvent.type(screen.getByLabelText(/^message$/i), 'Hello, I need a website built.');
+
+    await userEvent.click(screen.getByRole('button', { name: /send message/i }));
+
+    expect(
+      await screen.findByText(/please enter a valid email/i)
+    ).toBeInTheDocument();
   });
 });

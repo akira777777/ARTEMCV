@@ -5,12 +5,12 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   const apiKey = env.VITE_API_KEY || env.GEMINI_API_KEY || env.API_KEY;
+  const isProd = mode === 'production';
   
   return {
     server: {
       port: 3000,
       host: '0.0.0.0',
-      middlewareMode: false,
     },
     
     plugins: [react()],
@@ -19,13 +19,23 @@ export default defineConfig(({ mode }) => {
       // Use esbuild for minification (faster, built-in)
       minify: 'esbuild',
       
+      // esbuild options for production
+      esbuildOptions: isProd ? {
+        drop: ['console', 'debugger'],
+        legalComments: 'none',
+      } : undefined,
+      
       // Code splitting for better caching
       rollupOptions: {
         output: {
           manualChunks: {
             react: ['react', 'react-dom'],
-            vendor: ['lucide-react'],
+            icons: ['lucide-react'],
           },
+          // Optimize chunk file names
+          chunkFileNames: isProd ? 'assets/[hash].js' : 'assets/[name]-[hash].js',
+          entryFileNames: isProd ? 'assets/[hash].js' : 'assets/[name]-[hash].js',
+          assetFileNames: isProd ? 'assets/[hash].[ext]' : 'assets/[name]-[hash].[ext]',
         },
       },
       
@@ -35,6 +45,17 @@ export default defineConfig(({ mode }) => {
       
       // Optimize for modern browsers
       target: 'ES2020',
+      
+      // CSS code splitting
+      cssCodeSplit: true,
+      
+      // Chunk size warnings
+      chunkSizeWarningLimit: 500,
+    },
+    
+    // Optimize dependencies
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'lucide-react'],
     },
     
     test: {
@@ -46,6 +67,8 @@ export default defineConfig(({ mode }) => {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
       },
+      // Include test files
+      include: ['tests/**/*.{test,spec}.{ts,tsx}'],
     },
     
     define: {
