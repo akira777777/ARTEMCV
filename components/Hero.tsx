@@ -17,7 +17,7 @@ export const Hero: React.FC = React.memo(() => {
   );
 
   const zClassByValue = useMemo(
-    () => ({
+    (): Record<number, string> => ({
       10: 'z-10',
       20: 'z-20',
       30: 'z-30',
