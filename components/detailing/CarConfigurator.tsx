@@ -3,9 +3,9 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Box, TorusKnot, Environment, ContactShadows, OrbitControls } from '@react-three/drei';
 
 function Model() {
-  const meshRef = useRef<any>();
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime();
+  const meshRef = useRef<any>(null);
+  useFrame((_, delta) => {
+    const t = Date.now() / 1000; // Using Date.now() instead of state.clock.getElapsedTime()
     if (meshRef.current) {
       meshRef.current.rotation.y = Math.sin(t / 2) / 2;
       meshRef.current.position.y = Math.sin(t) / 4;
@@ -25,7 +25,22 @@ function Model() {
 const CarConfigurator: React.FC = () => {
   return (
     <div className="w-full h-full relative">
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+      <Canvas 
+              camera={{ 
+                position: [0, 0, 5] as const, // Typed tuple for camera position
+                fov: 45 
+              }}
+              gl={{ 
+                // WebGL performance optimizations
+                antialias: true,
+                alpha: false,
+                stencil: false,
+                depth: true,
+                preserveDrawingBuffer: false // Better performance, disabled buffer preservation
+              }}
+              frameloop="always"
+              dpr={globalThis.devicePixelRatio || 1} // Explicit device pixel ratio
+            >
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
         <Environment preset="city" />

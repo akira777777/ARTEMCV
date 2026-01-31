@@ -4,6 +4,7 @@ import { PROJECTS } from '../../constants';
 import { useI18n } from '../../i18n';
 import { Link } from 'react-router-dom';
 import OptimizedImage from '../OptimizedImage';
+import LazyGradientShaderCard from '../LazyGradientShaderCard';
 
 const BentoGrid: React.FC = () => {
   const { t } = useI18n();
@@ -27,7 +28,7 @@ const BentoGrid: React.FC = () => {
               alt={t(mainProject.title)}
               className="w-full h-full"
               src={mainProject.image}
-              priority={true}
+              priority={true} // Priority loading for above-the-fold content
             />
           </div>
           <div className="relative h-full p-10 flex flex-col justify-between z-10">
@@ -96,6 +97,10 @@ const BentoGrid: React.FC = () => {
               </div>
             </div>
           </div>
+          {/* Gradient Shader Card for visual enhancement */}
+          <div className="mt-8">
+            <LazyGradientShaderCard />
+          </div>
           <div className="mt-8 pt-8 border-t border-white/10 text-center">
             <p className="text-[10px] opacity-30 uppercase tracking-[0.4em] text-white">High Performance Only</p>
           </div>
@@ -113,6 +118,7 @@ const BentoGrid: React.FC = () => {
             alt={t(secondaryProject.title)}
             className="absolute inset-0 w-full h-full opacity-60 group-hover:scale-105 transition-transform duration-700"
             src={secondaryProject.image}
+            priority={false} // Lazy loading for below-the-fold content
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
           <div className="relative h-full p-8 flex flex-col justify-end z-10">

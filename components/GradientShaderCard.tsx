@@ -20,14 +20,19 @@ const GradientShaderCard: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
+    // Canvas 2D context with performance optimizations
+    const ctx = canvas.getContext('2d', { 
+      alpha: false, // Disable transparency for better performance
+      desynchronized: true, // Enable async rendering for smoother animation
+      willReadFrequently: false // We don't read pixels back, better for GPU acceleration
+    });
     if (!ctx) return;
 
     // Set canvas size
     const rect = canvas.parentElement?.getBoundingClientRect();
     if (!rect) return;
 
-    const dpr = globalThis.devicePixelRatio || 1;
+    const dpr: number = globalThis.devicePixelRatio || 1; // Explicit type annotation
     canvas.width = Math.floor(rect.width * dpr);
     canvas.height = Math.floor(rect.height * dpr);
     ctx.scale(dpr, dpr);
@@ -51,7 +56,12 @@ const GradientShaderCard: React.FC = () => {
     const scanlineCanvas = document.createElement('canvas');
     scanlineCanvas.width = canvas.width;
     scanlineCanvas.height = canvas.height;
-    const sCtx = scanlineCanvas.getContext('2d');
+    // Scanline canvas with performance optimizations
+    const sCtx = scanlineCanvas.getContext('2d', { 
+      alpha: false, // Disable transparency for better performance
+      desynchronized: true, // Enable async rendering
+      willReadFrequently: false // No pixel reading needed
+    });
     if (sCtx) {
       sCtx.scale(dpr, dpr);
       sCtx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
@@ -75,71 +85,92 @@ const GradientShaderCard: React.FC = () => {
     const lineDispX = new Float32Array(xValues.length);
     const lineDispY = new Float32Array(yValues.length);
 
-    // Pre-allocate particle pool to avoid GC
-    const MAX_PARTICLES = 150;
-    const COLORS = [
-      'rgba(14, 165, 233',  // Sky Blue
-      'rgba(16, 185, 129',  // Emerald
-      'rgba(245, 158, 11',  // Amber
-      'rgba(139, 92, 246'   // Violet
-    ];
-
-    const pool = new Array(MAX_PARTICLES).fill(null).map(() => ({
-      active: false,
-      x: 0, y: 0, vx: 0, vy: 0, radius: 0, colorIdx: 0, life: 0, maxLife: 0
-    }));
-
-    const createParticles = (x: number, y: number, count: number = 2) => {
-      let created = 0;
-      for (let i = 0; i < MAX_PARTICLES && created < count; i++) {
-        const p = pool[i];
-        if (!p.active) {
-          const angle = Math.random() * Math.PI * 2;
+    // Create initial particle emitter with optimized particle management
+    const PARTICLE_POOL_SIZE = 100; // Limit total particles for better performance
+    const particlePool: Particle[] = [];
+    let activeParticleCount = 0;
+    
+    // Pre-create particle objects to avoid GC pressure
+    for (let i = 0; i < PARTICLE_POOL_SIZE; i++) {
+      particlePool.push({
+        x: 0, y: 0, vx: 0, vy: 0, radius: 0, color: '', life: 0, maxLife: 0
+      });
+    }
+    
+    const createParticles = (x: number, y: number, count: number = 1) => {
+      const colors = [
+        'rgba(14, 165, 233',  // Sky Blue
+        'rgba(16, 185, 129',  // Emerald
+        'rgba(245, 158, 11',  // Amber
+        'rgba(139, 92, 246'   // Violet
+      ];
+      
+      for (let i = 0; i < count; i++) {
+        // Find inactive particle in pool
+        if (activeParticleCount < PARTICLE_POOL_SIZE) {
+          const p = particlePool[activeParticleCount++];
+          const angle = (Math.random() * Math.PI * 2);
           const speed = 1 + Math.random() * 2;
-          p.active = true;
+          
+          // Reset particle properties
           p.x = x;
           p.y = y;
           p.vx = Math.cos(angle) * speed;
           p.vy = Math.sin(angle) * speed;
           p.radius = 1 + Math.random() * 3;
-          p.colorIdx = Math.floor(Math.random() * COLORS.length);
+          p.color = colors[Math.floor(Math.random() * colors.length)];
           p.life = 100;
           p.maxLife = 100;
-          created++;
         }
       }
     };
 
-    // Throttle mouse movement using requestAnimationFrame for better performance
-    let mouseX = 0;
-    let mouseY = 0;
-    let mouseUpdated = false;
+    // Enhanced mouse throttling with timestamp-based approach for better performance
+    let lastMouseMoveTime = 0;
+    const MOUSE_THROTTLE_DELAY = 16; // ~60fps limit
+    let pendingMouseMove = false;
     let mouseAnimationId: number | null = null;
     
-    const updateMousePosition = (e: MouseEvent) => {
+    const updateMousePosition = (clientX: number, clientY: number) => {
       const rect = canvas.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
-      mouseUpdated = true;
+      mouseRef.current = { 
+        x: clientX - rect.left, 
+        y: clientY - rect.top 
+      };
     };
     
     const handleMouseMove = (e: MouseEvent) => {
-      // Update mouse position immediately but don't process it until next frame
-      updateMousePosition(e);
+      const currentTime = performance.now();
       
-      // Only schedule animation frame if not already scheduled
-      if (!mouseAnimationId) {
-        mouseAnimationId = requestAnimationFrame(() => {
-          // Process the latest mouse position
-          mouseRef.current = { x: mouseX, y: mouseY };
-          
-          if (isHovered) {
-            createParticles(mouseX, mouseY, 2);
-          }
-          
-          mouseAnimationId = null;
-          mouseUpdated = false;
-        });
+      // Throttle mouse events to prevent excessive processing
+      if (currentTime - lastMouseMoveTime < MOUSE_THROTTLE_DELAY) {
+        // Store the latest mouse position for next frame processing
+        if (!pendingMouseMove) {
+          pendingMouseMove = true;
+          // Use microtask to ensure we process the latest position
+          queueMicrotask(() => {
+            if (pendingMouseMove && mouseAnimationId === null) {
+              mouseAnimationId = requestAnimationFrame(() => {
+                updateMousePosition(e.clientX, e.clientY);
+                if (isHovered) {
+                  createParticles(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top, 1);
+                }
+                mouseAnimationId = null;
+                pendingMouseMove = false;
+                lastMouseMoveTime = performance.now();
+              });
+            }
+          });
+        }
+        return;
+      }
+      
+      // Process mouse move immediately if enough time has passed
+      lastMouseMoveTime = currentTime;
+      updateMousePosition(e.clientX, e.clientY);
+      
+      if (isHovered) {
+        createParticles(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top, 1);
       }
     };
 
@@ -196,16 +227,9 @@ const GradientShaderCard: React.FC = () => {
     };
 
     const drawParticles = () => {
-      // Group by color and quantized alpha for batched drawing
-      // Quantizing alpha into 4 steps: 0.2, 0.4, 0.6, 0.8
-      const ALPHA_STEPS = 4;
-      const batches: number[][][] = COLORS.map(() =>
-        new Array(ALPHA_STEPS).fill(null).map(() => [])
-      );
-
-      for (let i = 0; i < MAX_PARTICLES; i++) {
-        const p = pool[i];
-        if (!p.active) continue;
+      // Use particle pool instead of dynamic array for better performance
+      for (let i = activeParticleCount - 1; i >= 0; i--) {
+        const p = particlePool[i];
         
         p.vy += 0.05;
         p.vx *= 0.99;
@@ -215,7 +239,11 @@ const GradientShaderCard: React.FC = () => {
         p.life -= 1;
 
         if (p.life <= 0) {
-          p.active = false;
+          // Move last active particle to current position and decrease count
+          if (i < activeParticleCount - 1) {
+            particlePool[i] = particlePool[activeParticleCount - 1];
+          }
+          activeParticleCount--;
           continue;
         }
 
@@ -300,6 +328,8 @@ const GradientShaderCard: React.FC = () => {
         cancelAnimationFrame(mouseAnimationId);
       }
       cancelAnimationFrame(animationId);
+      // Reset particle pool
+      activeParticleCount = 0;
     };
   }, [isHovered]);
 

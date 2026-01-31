@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import Hero2026 from '../components/home/Hero2026';
-import BentoGrid from '../components/home/BentoGrid';
-import LabSection from '../components/home/LabSection';
+// Lazy load heavy components to reduce initial bundle size
+const BentoGrid = lazy(() => import('../components/home/BentoGrid'));
+const LabSection = lazy(() => import('../components/home/LabSection'));
 import { Footer2026 } from '../components/Footer2026';
 import { Navigation } from '../components/Navigation';
+
+// Loading fallback component
+const SectionLoader = () => (
+  <div className="py-32 flex items-center justify-center">
+    <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+  </div>
+);
 
 const Home2026: React.FC = () => {
   return (
@@ -11,8 +19,12 @@ const Home2026: React.FC = () => {
       <Navigation />
       <main>
         <Hero2026 />
-        <BentoGrid />
-        <LabSection />
+        <Suspense fallback={<SectionLoader />}>  
+          <BentoGrid />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>  
+          <LabSection />
+        </Suspense>
       </main>
       <Footer2026 />
     </div>
