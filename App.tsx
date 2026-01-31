@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { I18nProvider } from './i18n';
 import { Navigation } from './components/Navigation';
-import { Hero } from './components/Hero';
+import Hero from './components/Hero';
 import { Footer } from './components/Footer';
 import { ScrollToTop } from './components/ScrollToTop';
 import ScrollProgress from './components/ScrollProgress';
@@ -22,6 +22,7 @@ const ContactSectionSecure = React.lazy(() => import('./components/ContactSectio
 const SimpleTelegramChat = React.lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
 const InteractiveShowcase = React.lazy(() => import('./components/InteractiveShowcase'));
 const InteractiveGallery = React.lazy(() => import('./components/InteractiveGallery'));
+const GradientShaderCard = React.lazy(() => import('./components/GradientShaderCard'));
 
 const App: React.FC = () => {
   return (
@@ -62,6 +63,11 @@ const App: React.FC = () => {
           
           <SectionDivider variant="lines" />
           <CardStack />
+          
+          <SectionDivider variant="gradient" />
+          <React.Suspense fallback={<div className="h-96 w-full bg-gradient-to-br from-indigo-900/20 to-purple-900/20 rounded-3xl" aria-label="Loading interactive card..." />}>
+            <GradientShaderCard />
+          </React.Suspense>
           
           <SectionDivider variant="wave" />
           <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading gallery..." />}>

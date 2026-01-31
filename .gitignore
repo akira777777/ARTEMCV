@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Windows reserved names
+nul
+prn
+con
+lpt[1-9]
+com[1-9]

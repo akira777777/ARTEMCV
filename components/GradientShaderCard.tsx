@@ -100,20 +100,36 @@ const GradientShaderCard: React.FC = () => {
       }
     };
 
-    // Throttle mouse movement for better performance
-    let lastMouseTime = 0;
-    const handleMouseMove = (e: MouseEvent) => {
-      const now = performance.now();
-      if (now - lastMouseTime < 16) return; // ~60fps throttle
-      lastMouseTime = now;
-      
+    // Throttle mouse movement using requestAnimationFrame for better performance
+    let mouseX = 0;
+    let mouseY = 0;
+    let mouseUpdated = false;
+    let mouseAnimationId: number | null = null;
+    
+    const updateMousePosition = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
-      if (isHovered) {
-        createParticles(mouseRef.current.x, mouseRef.current.y, 2);
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      mouseUpdated = true;
+    };
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      // Update mouse position immediately but don't process it until next frame
+      updateMousePosition(e);
+      
+      // Only schedule animation frame if not already scheduled
+      if (!mouseAnimationId) {
+        mouseAnimationId = requestAnimationFrame(() => {
+          // Process the latest mouse position
+          mouseRef.current = { x: mouseX, y: mouseY };
+          
+          if (isHovered) {
+            createParticles(mouseX, mouseY, 2);
+          }
+          
+          mouseAnimationId = null;
+          mouseUpdated = false;
+        });
       }
     };
 
@@ -244,6 +260,9 @@ const GradientShaderCard: React.FC = () => {
 
     return () => {
       canvas.removeEventListener('mousemove', handleMouseMove);
+      if (mouseAnimationId) {
+        cancelAnimationFrame(mouseAnimationId);
+      }
       cancelAnimationFrame(animationId);
     };
   }, [isHovered]);

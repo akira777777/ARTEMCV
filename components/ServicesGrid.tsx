@@ -60,21 +60,25 @@ export const ServicesGrid: React.FC = React.memo(() => {
         {services.map((item, idx) => (
           <div
             key={idx}
-            className="group relative p-8 rounded-2xl bg-[#0a0a0a] border border-white/5 hover:border-supporting-500/30 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+            className="group relative p-8 rounded-2xl bg-[#0a0a0a] border border-white/5 hover:border-supporting-500/30 ease-smooth hover:-translate-y-1 overflow-hidden visual-depth-2 interactive-element"
+            style={{ 
+              transformStyle: 'preserve-3d',
+              willChange: 'transform'
+            }}
           >
             {/* Gradient background highlight on hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-supporting-500/5 to-primary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-br from-supporting-500/5 to-primary-500/5 opacity-0 group-hover:opacity-100 ease-smooth" />
 
             <div className="relative z-10">
-              <div className="mb-6 p-3 bg-white/5 w-fit rounded-xl group-hover:bg-white/10 transition-colors">
+              <div className="mb-6 p-3 bg-white/5 w-fit rounded-xl group-hover:bg-white/10 ease-smooth visual-depth-1">
                 {item.icon}
               </div>
 
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-supporting-200 transition-colors">
+              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-supporting-200 ease-smooth">
                 {t(item.titleKey)}
               </h3>
 
-              <p className="text-gray-400 leading-relaxed text-sm md:text-base">
+              <p className="text-gray-400 leading-relaxed text-sm md:text-base readable-text-sm">
                 {t(item.descriptionKey)}
               </p>
             </div>

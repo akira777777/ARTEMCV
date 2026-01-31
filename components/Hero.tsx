@@ -1,68 +1,231 @@
-<<<<<<< Local
 import React, { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
-=======
-import React, { useState, useCallback, Suspense } from 'react';
-import { motion, useSpring, AnimatePresence } from 'framer-motion';
->>>>>>> Remote
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { ServicesGrid } from './ServicesGrid';
-import { CodeIcon, LightningIcon, GlobeIcon, PackageIcon } from './Icons';
 
-// Lazy load ParticleText to prevent chunk duplication
-const ParticleText = React.lazy(() => import('./InteractiveElements').then(m => ({ default: m.ParticleText })));
+interface MousePosition {
+  x: number;
+  y: number;
+}
 
-// Floating orbs that follow cursor
-const FloatingOrb: React.FC<{
-  delay: number;
-  size: number;
-  color: string;
-  mouseX: number;
-  mouseY: number;
-}> = ({ delay, size, color, mouseX, mouseY }) => {
-  const springConfig = { stiffness: 100 - delay * 10, damping: 20 };
-  const x = useSpring(mouseX * (0.3 - delay * 0.05), springConfig);
-  const y = useSpring(mouseY * (0.3 - delay * 0.05), springConfig);
+const Hero: React.FC = () => {
+  const { t } = useI18n();
+  const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  // Spring physics for smooth cursor tracking
+  const springConfig = { damping: 25, stiffness: 300 };
+  const cursorX = useSpring(0, springConfig);
+  const cursorY = useSpring(0, springConfig);
+  
+  // Transform cursor position for parallax effect
+  const parallaxX = useTransform(cursorX, [-100, 100], [-20, 20]);
+  const parallaxY = useTransform(cursorY, [-100, 100], [-20, 20]);
 
-  React.useEffect(() => {
-    x.set(mouseX * (0.3 - delay * 0.05));
-    y.set(mouseY * (0.3 - delay * 0.05));
-  }, [mouseX, mouseY, x, y, delay]);
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    
+    // Normalize mouse position to -100 to 100 range
+    const x = ((clientX / innerWidth) * 200) - 100;
+    const y = ((clientY / innerHeight) * 200) - 100;
+    
+    cursorX.set(x);
+    cursorY.set(y);
+  }, [cursorX, cursorY]);
+
+  const scrollToServices = () => {
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <motion.div
-      className="absolute rounded-full pointer-events-none"
-      style={{
-        width: size,
-        height: size,
-        background: color,
-        x,
-        y,
-        filter: 'blur(1px)',
-      }}
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{
-        opacity: [0.6, 1, 0.6],
-        scale: [1, 1.2, 1],
-      }}
-      transition={{
-        opacity: { duration: 2, repeat: Infinity, delay: delay * 0.3 },
-        scale: { duration: 3, repeat: Infinity, delay: delay * 0.3 },
-      }}
-    />
+    <section 
+      id="home"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden py-20 px-6"
+      onMouseMove={handleMouseMove}
+    >
+      {/* Animated background elements */}
+      <div className="absolute inset-0">
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-gradient-radial from-green-500/20 to-transparent blur-3xl"
+          style={{
+            x: parallaxX,
+            y: parallaxY,
+          }}
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        <motion.div 
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-gradient-radial from-teal-500/20 to-transparent blur-3xl"
+          style={{
+            x: parallaxX,
+            y: parallaxY,
+          }}
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        />
+        
+        <motion.div 
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-gradient-radial from-orange-500/15 to-transparent blur-2xl"
+          animate={{
+            rotate: 360,
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+      </div>
+
+      {/* Main content */}
+      <div className="relative z-10 max-w-6xl mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-8"
+        >
+          <motion.h1 
+            className="text-5xl md:text-7xl lg:text-8xl font-display font-black mb-6 bg-gradient-to-r from-green-400 via-teal-400 to-orange-400 bg-clip-text text-transparent"
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            JULES ENGINEER
+          </motion.h1>
+          
+          <motion.p 
+            className="text-xl md:text-2xl lg:text-3xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            Full Stack Developer & Designer
+          </motion.p>
+          
+          <motion.p 
+            className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            Engineering high-performance web applications where motion meets scalability. 
+            Focused on React 19 and resilient architecture.
+          </motion.p>
+        </motion.div>
+
+        <motion.div 
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.0 }}
+        >
+          <motion.button
+            onClick={scrollToServices}
+            className="px-8 py-4 bg-gradient-to-r from-green-500 to-teal-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2 neon-button"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {t('hero.cta.primary')}
+            <ArrowRight className="w-5 h-5" />
+          </motion.button>
+          
+          <motion.a
+            href="https://github.com/akira777777"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-8 py-4 border-2 border-teal-400 text-teal-400 font-semibold rounded-full hover:bg-teal-400 hover:text-gray-900 transition-all duration-300 hover:scale-105 flex items-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Code2 className="w-5 h-5" />
+            View GitHub
+          </motion.a>
+        </motion.div>
+
+        {/* Stats section */}
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
+        >
+          {[
+            { value: '3+', label: 'Years Experience', icon: <Zap className="w-6 h-6" /> },
+            { value: '50+', label: 'Projects Completed', icon: <Palette className="w-6 h-6" /> },
+            { value: '20+', label: 'Happy Clients', icon: <Users className="w-6 h-6" /> }
+          ].map((stat, index) => (
+            <motion.div
+              key={index}
+              className="glass-card-modern p-6 text-center border border-green-500/30"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.4 + index * 0.1 }}
+              whileHover={{ y: -10, scale: 1.05 }}
+            >
+              <div className="text-3xl font-bold mb-2 text-green-400 flex justify-center">
+                {stat.icon}
+              </div>
+              <div className="text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent">
+                {stat.value}
+              </div>
+              <p className="text-gray-400">{stat.label}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div 
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.6 }}
+      >
+        <motion.div
+          className="w-8 h-12 border-2 border-gray-400 rounded-full flex justify-center"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <motion.div 
+            className="w-1 h-3 bg-gray-400 rounded-full mt-2"
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        </motion.div>
+      </motion.div>
+    </section>
   );
 };
 
-<<<<<<< Local
-// Letter animation component for ARTEM
-const AnimatedLetter: React.FC<{
-  letter: string;
-=======
 // Letter animation component for name
 const AnimatedLetter: React.FC<{ 
   letter: string; 
->>>>>>> Remote
   index: number;
 }> = ({ letter, index }) => {
   const baseDelay = index * 0.1;
@@ -210,7 +373,6 @@ export const Hero: React.FC = React.memo(() => {
         style={{ width: `${Math.min(scrollY / (document.body.scrollHeight - window.innerHeight) * 100, 100)}%` }}
       />
   
-<<<<<<< Local
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
         {/* Gradient Mesh */}
@@ -253,45 +415,12 @@ export const Hero: React.FC = React.memo(() => {
         {/* Blob Background Elements */}
         <motion.div
           className="blob-bg"
-=======
-  return (
-    <motion.span
-      className="inline-block relative"
-      initial={{ opacity: 0, y: 100, rotateX: -90 }}
-      animate={{ opacity: 1, y: 0, rotateX: 0 }}
-      transition={{
-        duration: 0.8,
-        delay: baseDelay,
-        type: 'spring',
-        stiffness: 100,
-      }}
-      whileHover={{
-        scale: 1.1,
-        color: '#a855f7',
-        textShadow: '0 0 40px rgba(168, 85, 247, 0.8)',
-        transition: { duration: 0.2 },
-      }}
-      style={{
-        transformStyle: 'preserve-3d',
-      }}
-    >
-      {letter}
-      {/* Dot decoration for specific letters */}
-      {(letter === 'U' || letter === 'E') && (
-        <motion.span
-          className="absolute -top-2 -right-1 w-3 h-3 rounded-full"
->>>>>>> Remote
           style={{
-<<<<<<< Local
             width: '400px',
             height: '400px',
             background: 'linear-gradient(45deg, #0EA5E9, #10B981)',
             top: '10%',
             left: '5%',
-=======
-            background: letter === 'U' ? '#ec4899' : '#22d3ee',
-            boxShadow: `0 0 15px ${letter === 'U' ? 'rgba(236, 72, 153, 0.8)' : 'rgba(34, 211, 238, 0.8)'}`,
->>>>>>> Remote
           }}
           animate={{
             x: [0, 50, 0],
@@ -400,7 +529,7 @@ export const Hero: React.FC = React.memo(() => {
               <motion.button
                 type="button"
                 onClick={scrollToWorks}
-                className="neon-button px-7 py-3 rounded-full text-xs font-bold tracking-widest"
+                className="neon-button px-7 py-3 rounded-full text-xs font-bold tracking-widest interactive-element"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label={t('hero.cta.portfolio')}
@@ -410,7 +539,7 @@ export const Hero: React.FC = React.memo(() => {
               <motion.button
                 type="button"
                 onClick={scrollToContact}
-                className="px-7 py-3 rounded-full border border-primary/30 text-primary-300 text-xs font-bold tracking-widest hover:bg-primary/10 transition-colors"
+                className="px-7 py-3 rounded-full border border-primary/30 text-primary-300 text-xs font-bold tracking-widest hover:bg-primary/10 ease-smooth interactive-element"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label={t('hero.cta.contact')}
@@ -577,57 +706,7 @@ export const Hero: React.FC = React.memo(() => {
 });
 
 Hero.displayName = 'Hero';
-
-<<<<<<< Local
-=======
-  return (
-    <>
-      {/* Outer ring */}
-      <motion.div
-        className="fixed pointer-events-none z-[9999] mix-blend-difference"
-        style={{
-          x: cursorX,
-          y: cursorY,
-          width: 40,
-          height: 40,
-          borderRadius: '50%',
-          border: '2px solid rgba(168, 85, 247, 0.8)',
-          transform: 'translate(-50%, -50%)',
-        }}
-        animate={{
-          scale: [1, 1.1, 1],
-        }}
-        transition={{ duration: 1.5, repeat: Infinity }}
-      />
-      {/* Inner dot */}
-      <motion.div
-        className="fixed pointer-events-none z-[9999]"
-        style={{
-          x: cursorX,
-          y: cursorY,
-          width: 8,
-          height: 8,
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #a855f7, #ec4899)',
-          transform: 'translate(-50%, -50%)',
-          boxShadow: '0 0 20px rgba(168, 85, 247, 0.8)',
-        }}
-      />
-    </>
-  );
-};
-
-export const Hero: React.FC = React.memo(() => {
-  const { t } = useI18n();
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    setMousePosition({
-      x: e.clientX - rect.left - rect.width / 2,
+export default Hero;
       y: e.clientY - rect.top - rect.height / 2,
     });
   }, []);
@@ -894,5 +973,4 @@ export const Hero: React.FC = React.memo(() => {
 });
 
 Hero.displayName = 'Hero';
-
->>>>>>> Remote
+export default Hero;

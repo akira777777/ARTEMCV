@@ -520,6 +520,62 @@ textarea:focus-visible {
   line-height: 1.4;
 }
 
+/* Responsive typography scaling */
+@media (max-width: 768px) {
+  .typography-display {
+    font-size: clamp(2rem, 6vw, 3rem);
+  }
+  
+  .typography-heading {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
+  
+  .typography-body {
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    line-height: 1.65;
+  }
+  
+  .typography-caption {
+    font-size: clamp(0.75rem, 3vw, 0.9rem);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .typography-display {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+  }
+  
+  .typography-heading {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+  }
+  
+  .typography-body {
+    font-size: clamp(1rem, 3.2vw, 1.2rem);
+  }
+  
+  .typography-caption {
+    font-size: clamp(0.8rem, 2.8vw, 1rem);
+  }
+}
+
+@media (min-width: 1025px) {
+  .typography-display {
+    font-size: clamp(3rem, 4vw, 5rem);
+  }
+  
+  .typography-heading {
+    font-size: clamp(2rem, 3.5vw, 3.5rem);
+  }
+  
+  .typography-body {
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+  }
+  
+  .typography-caption {
+    font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+  }
+}
+
 /* Advanced Text Effects */
 .text-glow {
   color: hsl(var(--color-white));
@@ -610,6 +666,24 @@ textarea:focus-visible {
   text-align: justify;
   hyphens: auto;
   hanging-punctuation: first last;
+  font-feature-settings: "kern", "liga", "clig", "calt";
+  font-variant-ligatures: common-ligatures;
+}
+
+/* Enhanced readability for different contexts */
+.readable-text-sm {
+  max-width: 50ch;
+  line-height: 1.65;
+}
+
+.readable-text-lg {
+  max-width: 70ch;
+  line-height: 1.7;
+}
+
+.readable-text-xl {
+  max-width: 75ch;
+  line-height: 1.75;
 }
 
 .readable-text p {
@@ -893,6 +967,54 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:la
   animation: breatheZoom 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   transform-style: preserve-3d;
   will-change: transform;
+}
+
+/* Consistent spacing and sizing utilities */
+.spacing-xs { margin: 0.25rem; }
+.spacing-sm { margin: 0.5rem; }
+.spacing-md { margin: 1rem; }
+.spacing-lg { margin: 1.5rem; }
+.spacing-xl { margin: 2rem; }
+.spacing-2xl { margin: 3rem; }
+
+.padding-xs { padding: 0.25rem; }
+.padding-sm { padding: 0.5rem; }
+.padding-md { padding: 1rem; }
+.padding-lg { padding: 1.5rem; }
+.padding-xl { padding: 2rem; }
+.padding-2xl { padding: 3rem; }
+
+/* Responsive spacing that scales smoothly */
+@media (max-width: 768px) {
+  .spacing-xs { margin: 0.15rem; }
+  .spacing-sm { margin: 0.35rem; }
+  .spacing-md { margin: 0.75rem; }
+  .spacing-lg { margin: 1.25rem; }
+  .spacing-xl { margin: 1.75rem; }
+  .spacing-2xl { margin: 2.5rem; }
+  
+  .padding-xs { padding: 0.15rem; }
+  .padding-sm { padding: 0.35rem; }
+  .padding-md { padding: 0.75rem; }
+  .padding-lg { padding: 1.25rem; }
+  .padding-xl { padding: 1.75rem; }
+  .padding-2xl { padding: 2.5rem; }
+}
+
+@media (min-width: 1024px) {
+  .spacing-xs { margin: 0.3rem; }
+  .spacing-sm { margin: 0.6rem; }
+  .spacing-md { margin: 1.2rem; }
+  .spacing-lg { margin: 1.8rem; }
+  .spacing-xl { margin: 2.4rem; }
+  .spacing-2xl { margin: 3.6rem; }
+  
+  .padding-xs { padding: 0.3rem; }
+  .padding-sm { padding: 0.6rem; }
+  .padding-md { padding: 1.2rem; }
+  .padding-lg { padding: 1.8rem; }
+  .padding-xl { padding: 2.4rem; }
+  .padding-2xl { padding: 3.6rem; }
 }
 
 /* Hide scrollbar for horizontal scroll */
@@ -1243,7 +1365,7 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:la
     var(--primary)
   );
   opacity: 0.7;
-  animation: float 20s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  animation: float 20s infinite cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: none;
   box-shadow: 
     0 0 20px var(--primary),
@@ -1266,6 +1388,30 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:la
   }
   100% { 
     transform: translateY(-100vh) translateX(30px) scale(0.7); 
+    opacity: 0; 
+  }
+}
+
+/* Smoother float animation with bouncier easing */
+@keyframes float-smooth {
+  0% { 
+    transform: translateY(0) translateX(0) scale(0.8); 
+    opacity: 0; 
+  }
+  10% { 
+    opacity: 0.7; 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: translateY(-10px) translateX(10px) scale(1.05); 
+    opacity: 0.8; 
+  }
+  90% { 
+    opacity: 0.7; 
+    transform: scale(1.05); 
+  }
+  100% { 
+    transform: translateY(-100vh) translateX(20px) scale(0.7); 
     opacity: 0; 
   }
 }
@@ -1585,6 +1731,69 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:la
   color: var(--text-primary);
 }
 
+/* Enhanced visual depth and layering */
+.visual-depth-1 {
+  transform: translateZ(0px);
+  filter: blur(0px);
+  opacity: 1;
+}
+
+.visual-depth-2 {
+  transform: translateZ(10px);
+  filter: blur(0.5px);
+  opacity: 0.95;
+}
+
+.visual-depth-3 {
+  transform: translateZ(20px);
+  filter: blur(1px);
+  opacity: 0.9;
+}
+
+.visual-depth-4 {
+  transform: translateZ(30px);
+  filter: blur(1.5px);
+  opacity: 0.85;
+}
+
+.visual-depth-5 {
+  transform: translateZ(40px);
+  filter: blur(2px);
+  opacity: 0.8;
+}
+
+/* Smooth parallax effect */
+.parallax-smooth {
+  transform: translateZ(0) scale(1);
+  transition: transform 0.2s ease-out;
+}
+
+.parallax-smooth:hover {
+  transform: translateZ(-20px) scale(1.02);
+}
+
+/* Enhanced glow effects */
+.glow-soft {
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+}
+
+.glow-medium {
+  box-shadow: 0 0 25px rgba(14, 165, 233, 0.3);
+}
+
+.glow-strong {
+  box-shadow: 0 0 40px rgba(14, 165, 233, 0.4);
+}
+
+.glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  from { box-shadow: 0 0 15px rgba(14, 165, 233, 0.2); }
+  to { box-shadow: 0 0 30px rgba(14, 165, 233, 0.4); }
+}
+
 .contact-input:focus {
   border-color: rgba(14, 165, 233, 0.6);
   outline: none;
@@ -1630,7 +1839,7 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:la
   box-shadow: 0 8px 20px rgba(14, 165, 233, 0.2);
 }
 
-/* Responsive adjustments for decorative borders */
+/* Improved responsive adjustments for better scaling */
 @media (max-width: 768px) {
   .decorative-border-left,
   .decorative-border-right {
@@ -1644,6 +1853,57 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:la
   .decorative-border-right {
     box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
   }
+  
+  /* Additional mobile optimizations */
+  .text-4xl { font-size: clamp(1.5rem, 5vw, 2.5rem); }
+  .text-5xl { font-size: clamp(1.8rem, 6vw, 3rem); }
+  .text-6xl { font-size: clamp(2rem, 7vw, 3.5rem); }
+  
+  /* Scale down large elements */
+  .holo-abstract-sphere {
+    height: 500px;
+    width: 500px;
+    opacity: 0.4;
+  }
+  
+  /* Adjust spacing for mobile */
+  .py-20 { padding-top: 3rem; padding-bottom: 3rem; }
+  .py-16 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+  .py-12 { padding-top: 2rem; padding-bottom: 2rem; }
+  .py-8 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+}
+
+/* Tablet-specific optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .text-5xl { font-size: clamp(2rem, 5.5vw, 3.5rem); }
+  .text-6xl { font-size: clamp(2.5rem, 6.5vw, 4rem); }
+  
+  /* Adjust for medium screens */
+  .holo-abstract-sphere {
+    height: 700px;
+    width: 700px;
+    opacity: 0.5;
+  }
+  
+  .py-20 { padding-top: 4rem; padding-bottom: 4rem; }
+  .py-16 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1025px) {
+  .text-5xl { font-size: clamp(2.5rem, 4vw, 4rem); }
+  .text-6xl { font-size: clamp(3rem, 4.5vw, 5rem); }
+  
+  .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+  .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+}
+
+/* Extra-large screen optimizations */
+@media (min-width: 1400px) {
+  .text-5xl { font-size: 3.5rem; }
+  .text-6xl { font-size: 4.5rem; }
+  
+  .py-20 { padding-top: 6rem; padding-bottom: 6rem; }
 }
 
 /* ====================
@@ -2043,6 +2303,69 @@ corner-enhanced:hover::after {
 }
 
 /* ====================
+   Visual Effects & Background Optimizations
+   ==================== */
+
+/* Enhanced Aurora effect with smoother transitions */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: 
+    linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(14, 165, 233, 0.12) 25%,
+      rgba(16, 185, 129, 0.15) 50%,
+      rgba(245, 158, 11, 0.1) 75%,
+      rgba(139, 92, 246, 0.08) 100%
+    ),
+    radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.08), transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.06), transparent 35%);
+  background-size: 400% 400%, 200% 200%, 180% 180%;
+  animation: 
+    auroraShift 25s cubic-bezier(0.4, 0, 0.2, 1) infinite,
+    auroraPulse 15s ease-in-out infinite alternate;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  will-change: background-position, opacity;
+}
+
+/* Enhanced gradient mesh with smoother movement */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: 
+    radial-gradient(ellipse at 15% 15%, rgba(14, 165, 233, 0.3), transparent 50%),
+    radial-gradient(ellipse at 85% 10%, rgba(16, 185, 129, 0.25), transparent 55%),
+    radial-gradient(ellipse at 50% 85%, rgba(245, 158, 11, 0.22), transparent 45%),
+    radial-gradient(ellipse at 90% 70%, rgba(139, 92, 246, 0.18), transparent 40%),
+    radial-gradient(circle at 30% 40%, rgba(14, 165, 233, 0.1), transparent 60%);
+  background-size: 120% 120%, 110% 110%, 130% 130%, 100% 100%, 140% 140%;
+  animation: gradientMesh 30s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+  filter: blur(2px);
+  will-change: background-position;
+}
+
+/* Smoother noise overlay animation */
+.noise-overlay {
+  position: fixed;
+  will-change: transform, opacity;
+  contain: layout style;
+  inset: -10%;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+  z-index: 5;
+  animation: grain 8s linear infinite;
+}
+
+/* ====================
    Interactive Elements & Micro-Animations
    ==================== */
 
@@ -2219,6 +2542,53 @@ corner-enhanced:hover::after {
 .smooth-transition-slow {
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Enhanced smooth transitions with different easing functions */
+.ease-smooth {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.ease-bounce {
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.ease-elastic {
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.ease-spring {
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ease-anticipation {
+  transition: all 0.4s cubic-bezier(0.38, 0.1, 0.36, 0.9);
+}
+
+.ease-cosmic {
+  transition: all 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Hover and interaction states with enhanced timing */
+.interactive-element {
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.interactive-element:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Delayed transitions for staggered animations */
+.delay-100 { transition-delay: 0.1s; }
+.delay-200 { transition-delay: 0.2s; }
+.delay-300 { transition-delay: 0.3s; }
+.delay-400 { transition-delay: 0.4s; }
+.delay-500 { transition-delay: 0.5s; }
+.delay-600 { transition-delay: 0.6s; }
+.delay-700 { transition-delay: 0.7s; }
+.delay-800 { transition-delay: 0.8s; }
+.delay-900 { transition-delay: 0.9s; }
+.delay-1000 { transition-delay: 1.0s; }
 
 /* Interactive Feedback States */
 .feedback-success {

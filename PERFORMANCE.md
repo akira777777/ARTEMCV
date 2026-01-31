@@ -197,6 +197,41 @@ When adding new components:
 - [ ] Prefer CSS animations over JavaScript when possible
 - [ ] Use `will-change` CSS property sparingly (only for actively animating elements)
 
+## Additional Performance Optimizations
+
+### 11. Code Splitting Enhancement
+- **Dynamic Imports**: Heavy components like `GradientShaderCard` are now lazy-loaded using `React.lazy()` to reduce initial bundle size
+- **Benefits**: Improved initial load time and better resource allocation
+
+### 12. Image Optimization
+- **OptimizedImage Component**: Created a new component that provides:
+  - WebP format support with fallback to original format
+  - Responsive loading with `sizes` attribute
+  - Lazy loading using Intersection Observer
+  - Loading states and error handling
+  - Asynchronous decoding for smoother loading
+  - Priority loading for critical images
+  - Placeholder visuals during loading
+- **Implementation**: Applied to `SpotlightGallery` and `WorkGallery` components
+- **Performance gain**: Reduced initial bundle size and improved loading performance
+
+### 13. Advanced Mouse Movement Throttling
+- **Enhanced Throttling**: Updated `GradientShaderCard` to use `requestAnimationFrame`-based throttling instead of time-based
+- **Performance gain**: Reduced mouse event processing overhead while maintaining smooth interaction
+- **Implementation**: Used animation frame scheduling to process only the latest mouse position per frame
+
+### 14. Service Worker Caching
+- **Offline Support**: Implemented service worker for caching static assets
+- **Strategy**: Network-first with cache fallback for optimal freshness and performance
+- **Cache Management**: Automatic cleanup of old caches to prevent storage bloat
+- **Files Cached**: HTML, CSS, JavaScript, images, and other critical assets
+- **Performance gain**: Faster subsequent loads, offline functionality, reduced bandwidth usage
+
+### 15. Resource Preloading
+- **Critical Assets**: Added preload directives for important images and fonts in `index.html`
+- **DNS Prefetching**: Added DNS prefetch hints for external domains
+- **Priority Loading**: Fonts and hero images are now preloaded for faster rendering
+
 ## Monitoring Performance
 
 Use React DevTools Profiler to identify slow renders:

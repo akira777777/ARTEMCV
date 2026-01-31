@@ -138,7 +138,7 @@ export const Navigation: React.FC = React.memo(() => {
     >
       <div className="mx-4 mt-4 md:mx-8 md:mt-6">
         <motion.nav 
-          className="bg-transparent backdrop-blur-md border border-white/10 rounded-3xl px-6 py-4 flex justify-between items-center hover:border-purple-500/30 transition-all duration-500"
+          className="bg-transparent backdrop-blur-md border border-white/10 rounded-3xl px-6 py-4 flex justify-between items-center hover:border-purple-500/30 ease-smooth"
           whileHover={{
             boxShadow: '0 8px 48px rgba(168, 85, 247, 0.15)',
           }}

@@ -4,6 +4,7 @@ import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import { useReducedMotion } from '../lib/hooks';
 import { useI18n } from '../i18n';
+import OptimizedImage from './OptimizedImage';
 
 const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.memo(({ project, onClick }) => {
   const { t } = useI18n();
@@ -89,11 +90,10 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
              Separating this allows the inner image to handle Parallax transform independently.
          */}
          <div className="w-full h-full transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-110">
-            <img 
-              ref={imgRef}
+            <OptimizedImage 
+              ref={imgRef as React.RefObject<HTMLImageElement>}
               src={project.image} 
               alt={t(project.title)}
-              loading="lazy"
               onLoad={() => setIsLoaded(true)}
               className={`
                 w-full h-full object-cover scale-[1.2]
@@ -281,11 +281,11 @@ export const WorkGallery: React.FC = React.memo(() => {
 
               {/* Image Side */}
               <div className="w-full md:w-1/2 h-64 md:h-auto relative overflow-hidden bg-neutral-800">
-                 <img 
+                 <OptimizedImage 
                    src={selectedProject.image} 
                    alt={t(selectedProject.title)}
                    className="w-full h-full object-cover animate-breathe-zoom" 
-                   loading="lazy"
+                   priority={true}
                  />
                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent md:bg-gradient-to-r" />
               </div>
