@@ -485,8 +485,6 @@ const Hero: React.FC = React.memo(() => {
   );
 });
 
-<<<<<<< Local
-=======
 // Custom cursor component
 const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = ({ mouseX, mouseY }) => {
   const springConfig = { stiffness: 500, damping: 28 };
@@ -632,35 +630,88 @@ export const Hero: React.FC = React.memo(() => {
         {/* Blob Background Elements */}
         <motion.div
           className="blob-bg"
-=======
-  return (
-    <motion.span
-      className="inline-block relative"
-      initial={{ opacity: 0, y: 100, rotateX: -90 }}
-      animate={{ opacity: 1, y: 0, rotateX: 0 }}
-      transition={{
-        duration: 0.8,
-        delay: baseDelay,
-        type: 'spring',
-        stiffness: 100,
-      }}
-      whileHover={{
-        scale: 1.1,
-        color: '#a855f7',
-        textShadow: '0 0 40px rgba(168, 85, 247, 0.8)',
-        transition: { duration: 0.2 },
-      }}
-      style={{
-        transformStyle: 'preserve-3d',
-      }}
-    >
-      {letter}
-      {/* Dot decoration for specific letters */}
-      {(letter === 'U' || letter === 'E') && (
-        <motion.span
-          className="absolute -top-2 -right-1 w-3 h-3 rounded-full"
->>>>>>> Remote
           style={{
+            width: '400px',
+            height: '400px',
+            background: 'linear-gradient(45deg, #0EA5E9, #10B981)',
+            top: '10%',
+            left: '5%',
+          }}
+          animate={{
+            x: [0, 50, 0],
+            y: [0, -30, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        <motion.div
+          className="blob-bg"
+          style={{
+            width: '300px',
+            height: '300px',
+            background: 'linear-gradient(45deg, #F59E0B, #8B5CF6)',
+            bottom: '15%',
+            right: '8%',
+          }}
+          animate={{
+            x: [0, -40, 0],
+            y: [0, 20, 0],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+      </div>
+  
+      {/* Holographic Abstract Sphere with Parallax */}
+      <motion.div
+        className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"
+        aria-hidden="true"
+        style={{
+          y: scrollY * 0.3
+        }}
+      />
+  
+      {/* Main Typography with 3D Tilt Effect */}
+      <div className="z-10 relative w-full max-w-6xl px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-16 items-center">
+          <div className="text-center lg:text-left">
+            <motion.div 
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-primary/20 bg-primary/10 text-xs tracking-widest font-bold text-primary-300 mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <motion.span 
+                className="text-primary-400"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              >
+                ✦
+              </motion.span>
+              {t('hero.badge')}
+            </motion.div>
+              
+            <motion.div 
+              className="flex items-center justify-center lg:justify-start mb-4"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <span className="text-4xl md:text-6xl font-display font-bold mr-4 gradient-text" aria-hidden="true">∞</span>
+            </motion.div>
+              
+            <motion.h1 
+              className="text-[11vw] sm:text-[9vw] lg:text-[6.5rem] leading-[0.9] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-primary-300 select-none uppercase"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
 <<<<<<< Local
             width: '400px',
             height: '400px',

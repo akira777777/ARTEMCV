@@ -106,7 +106,4 @@ export default defineConfig(({ mode }) => {
       },
     },
   };
-<<<<<<< Local
 });
-=======
->>>>>>> Remote
