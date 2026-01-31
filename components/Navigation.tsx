@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { NavItem } from '../types';
 
 const navItems: NavItem[] = [
@@ -9,50 +9,71 @@ const navItems: NavItem[] = [
   { label: 'CONTACT', href: '#contact' },
 ];
 
+// Memoized nav item component
+const NavLink = React.memo<{
+  item: NavItem;
+  isActive: boolean;
+  onClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
+}>(({ item, isActive, onClick }) => (
+  <li key={item.label}>
+    <a
+      href={item.href}
+      onClick={(e) => onClick(e, item.href)}
+      className={`
+        px-4 py-2 rounded-lg text-xs font-bold tracking-widest transition-all duration-300
+        ${isActive 
+          ? 'bg-white text-black' 
+          : 'text-neutral-400 hover:text-white hover:bg-white/10'}
+      `}
+    >
+      {item.label}
+    </a>
+  </li>
+));
+
 export const Navigation: React.FC = () => {
   const [active, setActive] = useState('HOME');
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollYRef = useRef(0);
   const rafRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // Cancel any pending animation frame to prevent multiple updates
-      if (rafRef.current !== null) {
-        return;
+  // Optimize scroll detection with debouncing
+  const updateActiveSection = useCallback(() => {
+    for (const item of navItems) {
+      const element = document.getElementById(item.href.substring(1));
+      if (!element) continue;
+      
+      const rect = element.getBoundingClientRect();
+      if (rect.top >= -100 && rect.top <= 300) {
+        setActive(item.label);
+        break;
       }
+    }
+  }, []);
 
-      rafRef.current = requestAnimationFrame(() => {
-        const currentScrollY = window.scrollY;
+  const handleScroll = useCallback(() => {
+    if (rafRef.current !== null) return;
 
-        // Determine scroll direction and toggle visibility
-        if (currentScrollY < 50) {
-          setIsVisible(true); // Always show at top
-        } else if (currentScrollY > lastScrollYRef.current) {
-          setIsVisible(false); // Hide when scrolling down
-        } else {
-          setIsVisible(true); // Show when scrolling up
-        }
-        lastScrollYRef.current = currentScrollY;
+    rafRef.current = requestAnimationFrame(() => {
+      const currentScrollY = window.scrollY;
 
-        // Active Link Logic
-        for (const item of navItems) {
-          const sectionId = item.href.substring(1);
-          const element = document.getElementById(sectionId);
-          if (element) {
-            const rect = element.getBoundingClientRect();
-            // Adjust detection zone for top header
-            if (rect.top >= -100 && rect.top <= 300) {
-              setActive(item.label);
-              break; // Exit early once active section is found
-            }
-          }
-        }
+      // Update visibility
+      if (currentScrollY < 50) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollYRef.current) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      lastScrollYRef.current = currentScrollY;
 
-        rafRef.current = null;
-      });
-    };
+      // Update active section
+      updateActiveSection();
+      rafRef.current = null;
+    });
+  }, [updateActiveSection]);
 
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -60,16 +81,29 @@ export const Navigation: React.FC = () => {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, []);
+  }, [handleScroll]);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       setActive(navItems.find(item => item.href === href)?.label || '');
     }
-  };
+  }, []);
+
+  // Memoize nav items to prevent unnecessary re-renders
+  const navLinks = useMemo(() => 
+    navItems.map(item => (
+      <NavLink 
+        key={item.label}
+        item={item}
+        isActive={active === item.label}
+        onClick={handleLinkClick}
+      />
+    )),
+    [active, handleLinkClick]
+  );
 
   return (
     <header 
@@ -94,22 +128,7 @@ export const Navigation: React.FC = () => {
 
           {/* Desktop Nav */}
           <ul className="flex items-center gap-1 md:gap-2">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                <a
-                  href={item.href}
-                  onClick={(e) => handleLinkClick(e, item.href)}
-                  className={`
-                    px-4 py-2 rounded-lg text-xs font-bold tracking-widest transition-all duration-300
-                    ${active === item.label 
-                      ? 'bg-white text-black' 
-                      : 'text-neutral-400 hover:text-white hover:bg-white/10'}
-                  `}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+            {navLinks}
           </ul>
         </nav>
       </div>
