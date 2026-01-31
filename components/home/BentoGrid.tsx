@@ -4,6 +4,7 @@ import { PROJECTS } from '../../constants';
 import { useI18n } from '../../i18n';
 import { Link } from 'react-router-dom';
 import OptimizedImage from '../OptimizedImage';
+import LazyGradientShaderCard from '../LazyGradientShaderCard';
 
 const BentoGrid: React.FC = () => {
   const { t } = useI18n();
