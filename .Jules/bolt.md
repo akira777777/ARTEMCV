@@ -9,3 +9,7 @@
 ## 2025-01-31 - [Centralized Content for i18n Efficiency]
 **Learning:** Moving hardcoded UI strings to a centralized `constants.tsx` and using translation keys directly in the data structure allows for cleaner components and prevents redundant translation calls in loops.
 **Action:** Prefer passing translation keys in data objects over pre-translating them at the component level.
+
+## 2025-05-15 - [Route-based Code Splitting]
+**Learning:** Heavy 3D components like the car configurator in Detailing Hub significantly bloat the main entry bundle (~10.5% of total size). Moving them to lazy-loaded routes improves the Time to Interactive (TTI) and initial load speed of the landing page.
+**Action:** Use `React.lazy` for complex sub-pages to defer the loading of heavy dependencies like Three.js and specialized models until they are actually needed.
