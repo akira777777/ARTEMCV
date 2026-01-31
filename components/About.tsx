@@ -34,6 +34,8 @@ export const About: React.FC = React.memo(() => {
           </button>
         </div>
 
+        {/* Right column - Skills and Services */}
+        <div className="space-y-12">
           {/* Skills Grid */}
           <div className="space-y-6" role="complementary" aria-label="Technical skills">
             <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-4 border-b border-white/10 pb-4">{t('about.expertise')}</h3>
@@ -54,24 +56,24 @@ export const About: React.FC = React.memo(() => {
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Services List */}
-        <div id="services" className="mt-32 scroll-mt-24">
-          <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-8 border-b border-white/10 pb-4">{t('about.offer')}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8" role="list">
-            {SERVICES.map((service, index) => (
-              <article key={service.name} className="service-card rounded-2xl px-6 py-5 group cursor-pointer transition-transform duration-500 hover:-translate-y-1">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xl font-display font-medium group-hover:text-neutral-300 transition-colors">
-                    {t(service.name)}
-                  </h4>
-                  <span className="text-xs text-neutral-500" aria-label={`Service number ${index + 1}`}>0{index + 1}</span>
-                </div>
-                <p className="text-sm text-neutral-500 mt-2">{t(service.desc)}</p>
-                <div className="mt-4 h-px bg-white/5 group-hover:bg-white/15 transition-colors" aria-hidden="true" />
-              </article>
-            ))}
+          {/* Services List */}
+          <div id="services" className="scroll-mt-24">
+            <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-8 border-b border-white/10 pb-4">{t('about.offer')}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8" role="list">
+              {SERVICES.map((service, index) => (
+                <article key={service.name} className="service-card rounded-2xl px-6 py-5 group cursor-pointer transition-transform duration-500 hover:-translate-y-1">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xl font-display font-medium group-hover:text-neutral-300 transition-colors">
+                      {t(service.name)}
+                    </h4>
+                    <span className="text-xs text-neutral-500" aria-label={`Service number ${index + 1}`}>0{index + 1}</span>
+                  </div>
+                  <p className="text-sm text-neutral-500 mt-2">{t(service.desc)}</p>
+                  <div className="mt-4 h-px bg-white/5 group-hover:bg-white/15 transition-colors" aria-hidden="true" />
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </div>
