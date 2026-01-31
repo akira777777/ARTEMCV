@@ -194,8 +194,13 @@ export const Hero: React.FC = React.memo(() => {
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_70%)] pointer-events-none" aria-hidden="true" />
       
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       {/* Decorative Purple Star */}
       <div className="hero-purple-star" aria-hidden="true" />
+=======
+      {/* Holographic Abstract Sphere */}
+      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
+>>>>>>> Stashed changes
 
       {/* Main Typography */}
       <div className="z-10 relative w-full max-w-6xl px-6">

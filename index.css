@@ -17,7 +17,11 @@
   justify-content: flex-start;
   align-items: center;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   background-color: transparent;
+=======
+  background-color: #000000;
+>>>>>>> Stashed changes
 =======
   background-color: #000000;
 >>>>>>> Stashed changes
@@ -26,11 +30,14 @@
   margin: 0 auto;
   position: relative;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 }
 
 /* Inner sections should take full width of wrapper */
 .content-wrapper > section {
   width: 100%;
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 }
@@ -645,6 +652,10 @@ textarea:focus-visible {
 
 .holo-abstract-sphere {
   height: 1275px;
+<<<<<<< Updated upstream
+=======
+  width: 1275px;
+>>>>>>> Stashed changes
   display: block;
   overflow: visible;
   aspect-ratio: 1 / 1;
@@ -655,4 +666,46 @@ textarea:focus-visible {
   position: absolute;
   border-radius: 0;
   pointer-events: none;
+<<<<<<< Updated upstream
+=======
+  opacity: 0.6;
+  animation: sphereFloat 20s ease-in-out infinite, sphereGlow 8s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+
+@keyframes sphereFloat {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -52%) scale(1.02);
+  }
+}
+
+@keyframes sphereGlow {
+  0%, 100% {
+    opacity: 0.5;
+    filter: blur(0.5px) brightness(1);
+  }
+  50% {
+    opacity: 0.7;
+    filter: blur(0px) brightness(1.1);
+  }
+}
+
+/* Responsive sphere sizing */
+@media (max-width: 1024px) {
+  .holo-abstract-sphere {
+    height: 800px;
+    width: 800px;
+  }
+}
+
+@media (max-width: 640px) {
+  .holo-abstract-sphere {
+    height: 500px;
+    width: 500px;
+    opacity: 0.4;
+  }
+>>>>>>> Stashed changes
 }
