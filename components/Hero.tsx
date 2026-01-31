@@ -82,13 +82,17 @@ export const Hero: React.FC = React.memo(() => {
         <div className="flex items-center justify-center mb-4">
           <span className="text-4xl md:text-6xl font-display font-bold mr-4 animate-pulse" aria-hidden="true">∞</span>
         </div>
-        <h1 className="text-[12vw] leading-[0.85] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 select-none">
+        <h1 className="text-[12vw] leading-[0.85] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-indigo-300 select-none">
           ARTEM
         </h1>
-        <p className="mt-4 text-lg md:text-xl text-white font-medium tracking-wide">
-          Full-Stack Developer & UI/UX Designer
-        </p>
-        <p className="mt-4 text-neutral-400 max-w-lg mx-auto text-sm md:text-base font-light tracking-wide leading-relaxed">
+        <div className="mt-6 mb-4 flex items-center justify-center gap-3">
+          <div className="h-px w-12 bg-gradient-to-r from-transparent via-indigo-400 to-transparent"></div>
+          <p className="text-lg md:text-2xl text-white font-semibold tracking-wide bg-gradient-to-r from-white to-neutral-300 bg-clip-text text-transparent">
+            Full-Stack Developer & UI/UX Designer
+          </p>
+          <div className="h-px w-12 bg-gradient-to-r from-transparent via-indigo-400 to-transparent"></div>
+        </div>
+        <p className="mt-6 text-neutral-400 max-w-2xl mx-auto text-base md:text-lg font-light tracking-wide leading-relaxed">
           Crafting high-performance web applications with modern technologies. Specialized in React, TypeScript, and creating exceptional user experiences.
         </p>
       </div>

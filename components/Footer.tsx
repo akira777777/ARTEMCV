@@ -5,10 +5,10 @@ export const Footer: React.FC = React.memo(() => {
     <footer id="footer" className="py-20 bg-black border-t border-white/10 pb-40 relative overflow-hidden">
       <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[32rem] h-[32rem] rounded-full bg-indigo-500/10 blur-3xl float-slower" aria-hidden="true" />
       <div className="container mx-auto px-6 text-center relative z-10">
-        <h2 className="text-[10vw] font-display font-black tracking-tighter leading-none mb-8 text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer bg-[length:200%_200%] motion-safe:animate-[subtlePan_12s_ease-in-out_infinite]">
+        <h2 className="text-[10vw] md:text-[8vw] font-display font-black tracking-tighter leading-none mb-8 bg-gradient-to-br from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent hover:from-indigo-300 hover:via-purple-300 hover:to-pink-300 transition-all duration-500 cursor-pointer">
           LET'S BUILD
         </h2>
-        <p className="text-lg text-neutral-400 mb-12 max-w-md mx-auto">
+        <p className="text-lg md:text-xl text-neutral-300 mb-12 max-w-2xl mx-auto leading-relaxed">
           Ready to bring your project to life? Let's create something exceptional together.
         </p>
         <nav aria-label="Social media links">

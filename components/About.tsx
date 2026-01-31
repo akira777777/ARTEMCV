@@ -11,14 +11,14 @@ export const About: React.FC = React.memo(() => {
       <div className="absolute -top-32 left-0 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl float-slow" aria-hidden="true" />
       <div className="absolute -bottom-40 right-0 w-[28rem] h-[28rem] rounded-full bg-emerald-400/10 blur-3xl float-slower" aria-hidden="true" />
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           <div className="space-y-8">
-            <h2 className="text-4xl md:text-6xl font-display font-bold leading-tight">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-tight">
               BUILDING DIGITAL <br />
-              <span className="text-neutral-500">PRODUCTS THAT</span> <br />
+              <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">PRODUCTS THAT</span> <br />
               DRIVE RESULTS.
             </h2>
-            <p className="text-lg md:text-xl text-neutral-400 leading-relaxed max-w-lg">
+            <p className="text-lg md:text-xl text-neutral-300 leading-relaxed max-w-lg">
               I'm a full-stack developer passionate about creating scalable, high-performance web applications. With expertise in modern frameworks and a keen eye for design, I deliver solutions that exceed expectations.
             </p>
             <div className="pt-8">
@@ -59,12 +59,12 @@ export const About: React.FC = React.memo(() => {
           <h3 className="text-xs font-bold tracking-widest text-neutral-500 mb-8 border-b border-white/10 pb-4">WHAT I OFFER</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8" role="list">
             {[
-              { name: 'Web Development', desc: 'Full-stack applications with React, Next.js, Node.js' },
-              { name: 'UI/UX Design', desc: 'Modern, accessible interfaces with Figma & Tailwind' },
-              { name: 'API Integration', desc: 'RESTful APIs, GraphQL, third-party services' },
-              { name: 'Database Design', desc: 'PostgreSQL, MongoDB, Redis optimization' },
-              { name: 'Performance', desc: 'Core Web Vitals, SEO, loading optimization' },
-              { name: 'Deployment', desc: 'CI/CD, Docker, AWS, Vercel cloud hosting' },
+              { name: 'Web Development', desc: 'Full-stack applications with React, Next.js, Node.js', icon: '💻' },
+              { name: 'UI/UX Design', desc: 'Modern, accessible interfaces with Figma & Tailwind', icon: '🎨' },
+              { name: 'API Integration', desc: 'RESTful APIs, GraphQL, third-party services', icon: '🔌' },
+              { name: 'Database Design', desc: 'PostgreSQL, MongoDB, Redis optimization', icon: '🗄️' },
+              { name: 'Performance', desc: 'Core Web Vitals, SEO, loading optimization', icon: '⚡' },
+              { name: 'Deployment', desc: 'CI/CD, Docker, AWS, Vercel cloud hosting', icon: '🚀' },
             ].map((service, index) => (
               <article key={service.name} className="service-card rounded-2xl px-6 py-5 group cursor-pointer transition-transform duration-500 hover:-translate-y-1">
                 <div className="flex items-center justify-between">

@@ -107,14 +107,16 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
   }, [formData, validate, TELEGRAM_CHAT_ID, fetchWithTimeout]);
 
   return (
-    <section id={id} className="py-32 px-6 lg:px-12">
-      <div className="max-w-3xl mx-auto">
+    <section id={id} className="py-32 px-6 lg:px-12 relative overflow-hidden">
+      <div className="absolute -top-20 right-0 w-96 h-96 rounded-full bg-indigo-500/20 blur-3xl" aria-hidden />
+      <div className="absolute -bottom-20 left-0 w-96 h-96 rounded-full bg-purple-500/20 blur-3xl" aria-hidden />
+      <div className="max-w-3xl mx-auto relative z-10">
         <div className="mb-16 text-center">
-          <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter">Get In Touch</h2>
-          <p className="text-lg text-zinc-400">Have a project in mind? Let's work together to create something amazing.</p>
+          <h2 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent mb-6 tracking-tighter">Get In Touch</h2>
+          <p className="text-lg md:text-xl text-neutral-300 max-w-2xl mx-auto leading-relaxed">Have a project in mind? Let's work together to create something amazing.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+        <form onSubmit={handleSubmit} className="space-y-6 backdrop-blur-sm bg-gradient-to-br from-white/5 to-transparent p-8 md:p-10 rounded-3xl border border-indigo-400/20 shadow-[0_0_40px_rgba(99,102,241,0.1)]" noValidate>
           <input type="text" name="hp" value={formData.hp || ''} onChange={handleChange} className="hidden" aria-hidden="true" tabIndex={-1} autoComplete="off" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -138,28 +140,34 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
             <textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Tell me about your project..." rows={6} required className={FORM_TEXTAREA_CLASS} />
           </div>
 
-          <button type="submit" disabled={loading} aria-label="Send message" className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
-            {loading ? (<span className="flex items-center justify-center gap-3"><div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />Sending...</span>) : 'Send Message'}
+          <button type="submit" disabled={loading} aria-label="Send message" className="w-full py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg rounded-2xl hover:shadow-[0_0_40px_rgba(99,102,241,0.6)] hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-300">
+            {loading ? (<span className="flex items-center justify-center gap-3"><div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />Sending...</span>) : 'Send Message'}
           </button>
 
           {submitted && (
-            <output aria-live="polite" className="p-4 bg-green-500/10 border border-green-500/50 rounded-xl text-green-400 text-center font-bold animate-in fade-in block">
+            <output aria-live="polite" className="p-5 bg-gradient-to-r from-emerald-500/20 to-emerald-600/10 border border-emerald-500/50 rounded-2xl text-emerald-300 text-center font-bold animate-in fade-in block shadow-[0_0_20px_rgba(16,185,129,0.2)]">
               ✓ Message sent! I'll get back to you soon.
             </output>
           )}
           {error && (
-            <div role="alert" aria-live="assertive" className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-center font-bold animate-in fade-in">
+            <div role="alert" aria-live="assertive" className="p-5 bg-gradient-to-r from-red-500/20 to-red-600/10 border border-red-500/50 rounded-2xl text-red-300 text-center font-bold animate-in fade-in shadow-[0_0_20px_rgba(239,68,68,0.2)]">
               ❌ {error}
             </div>
           )}
         </form>
 
-        <div className="mt-16 pt-16 border-t border-white/10">
-          <p className="text-center text-zinc-400 mb-8">Or reach out through:</p>
-          <div className="flex justify-center gap-6 flex-wrap">
-            <a href="mailto:fear75412@gmail.com" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="Send email">📧 Email</a>
-            <a href="https://t.me/younghustle45" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="Message on Telegram">💬 Telegram</a>
-            <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="View GitHub profile">💻 GitHub</a>
+        <div className="mt-16 pt-12 border-t border-indigo-500/20">
+          <p className="text-center text-neutral-400 mb-8 text-lg">Or reach out through:</p>
+          <div className="flex justify-center gap-4 flex-wrap">
+            <a href="mailto:fear75412@gmail.com" className="px-8 py-4 border-2 border-indigo-400/30 bg-gradient-to-br from-indigo-500/10 to-transparent text-white rounded-2xl hover:bg-indigo-500/20 hover:border-indigo-400/60 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all duration-300 flex items-center gap-2 font-semibold" title="Send email">
+              <span className="text-xl">📧</span> Email
+            </a>
+            <a href="https://t.me/younghustle45" target="_blank" rel="noopener noreferrer" className="px-8 py-4 border-2 border-purple-400/30 bg-gradient-to-br from-purple-500/10 to-transparent text-white rounded-2xl hover:bg-purple-500/20 hover:border-purple-400/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-300 flex items-center gap-2 font-semibold" title="Message on Telegram">
+              <span className="text-xl">💬</span> Telegram
+            </a>
+            <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" className="px-8 py-4 border-2 border-pink-400/30 bg-gradient-to-br from-pink-500/10 to-transparent text-white rounded-2xl hover:bg-pink-500/20 hover:border-pink-400/60 hover:shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all duration-300 flex items-center gap-2 font-semibold" title="View GitHub profile">
+              <span className="text-xl">💻</span> GitHub
+            </a>
           </div>
         </div>
       </div>

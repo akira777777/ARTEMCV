@@ -21,10 +21,10 @@ const NavLink = React.memo<{
       href={item.href}
       onClick={(e) => onClick(e, item.href)}
       className={`
-        px-4 py-2 rounded-lg text-xs font-bold tracking-widest transition-all duration-300
+        px-4 py-2 rounded-xl text-xs font-bold tracking-widest transition-all duration-300
         ${isActive 
-          ? 'bg-white text-black' 
-          : 'text-neutral-400 hover:text-white hover:bg-white/10'}
+          ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]' 
+          : 'text-neutral-400 hover:text-white hover:bg-white/10 hover:scale-105'}
       `}
     >
       {item.label}
@@ -125,17 +125,17 @@ export const Navigation: React.FC = React.memo(() => {
       `}
     >
       <div className="mx-4 mt-4 md:mx-8 md:mt-6">
-        <nav className="bg-neutral-900/80 backdrop-blur-xl border border-white/10 rounded-2xl px-6 py-4 flex justify-between items-center shadow-2xl">
+        <nav className="bg-gradient-to-r from-neutral-900/90 via-neutral-900/95 to-neutral-900/90 backdrop-blur-xl border border-white/20 rounded-3xl px-6 py-4 flex justify-between items-center shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_48px_rgba(99,102,241,0.2)] transition-shadow duration-300">
           {/* Logo */}
           <a 
             href="#home" 
             onClick={(e) => handleLinkClick(e, '#home')}
             className="flex items-center gap-2 group"
           >
-            <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-neutral-400 transition-colors">
+            <span className="text-xl font-display font-black tracking-tighter bg-gradient-to-r from-white to-indigo-300 bg-clip-text text-transparent group-hover:from-indigo-400 group-hover:to-purple-400 transition-all duration-300">
               ARTEM.DEV
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-white group-hover:bg-indigo-500 transition-colors" />
+            <span className="w-2 h-2 rounded-full bg-gradient-to-r from-indigo-400 to-purple-500 group-hover:scale-125 group-hover:shadow-[0_0_12px_rgba(99,102,241,0.8)] transition-all duration-300 animate-pulse" />
           </a>
 
           {/* Desktop Nav */}
