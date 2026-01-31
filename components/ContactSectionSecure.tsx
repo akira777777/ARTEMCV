@@ -1,6 +1,7 @@
 import React, { useRef, useState, useCallback } from 'react';
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { EMAIL_PATTERN } from '../lib/utils';
+import { useFetchWithTimeout } from '../lib/hooks';
+import { FORM_INPUT_CLASS, FORM_TEXTAREA_CLASS, FORM_BUTTON_PRIMARY_CLASS } from '../constants';
 
 interface ContactFormData {
   name: string;
@@ -17,6 +18,7 @@ interface ContactSectionSecureProps {
 const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'contact' }) => {
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
   const lastSubmitRef = useRef<number>(0);
+  const fetchWithTimeout = useFetchWithTimeout(12_000);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -73,16 +75,11 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
         chatId: TELEGRAM_CHAT_ID
       };
 
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 12_000);
-
-      const res = await fetch('/api/send-telegram', {
+      const res = await fetchWithTimeout('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: controller.signal
+        body: JSON.stringify(payload)
       });
-      clearTimeout(timeout);
 
       if (!res.ok) {
         if (res.status === 404 && globalThis.location.hostname === 'localhost') {
@@ -107,7 +104,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
     } finally {
       setLoading(false);
     }
-  }, [formData, validate, TELEGRAM_CHAT_ID]);
+  }, [formData, validate, TELEGRAM_CHAT_ID, fetchWithTimeout]);
 
   return (
     <section id={id} className="py-32 px-6 lg:px-12 relative overflow-hidden">
@@ -124,23 +121,23 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-bold text-indigo-300 mb-3">Name *</label>
-              <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required className="w-full px-6 py-4 bg-white/5 border border-indigo-400/20 rounded-2xl text-white placeholder:text-neutral-600 focus:border-indigo-400/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all" />
+              <label htmlFor="name" className="block text-sm font-bold text-white mb-2">Name</label>
+              <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required className={FORM_INPUT_CLASS} />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-bold text-indigo-300 mb-3">Email *</label>
-              <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" required className="w-full px-6 py-4 bg-white/5 border border-indigo-400/20 rounded-2xl text-white placeholder:text-neutral-600 focus:border-indigo-400/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all" />
+              <label htmlFor="email" className="block text-sm font-bold text-white mb-2">Email</label>
+              <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" required className={FORM_INPUT_CLASS} />
             </div>
           </div>
 
           <div>
-            <label htmlFor="subject" className="block text-sm font-bold text-indigo-300 mb-3">Subject (Optional)</label>
-            <input id="subject" type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Project subject" className="w-full px-6 py-4 bg-white/5 border border-indigo-400/20 rounded-2xl text-white placeholder:text-neutral-600 focus:border-indigo-400/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all" />
+            <label htmlFor="subject" className="block text-sm font-bold text-white mb-2">Subject (Optional)</label>
+            <input id="subject" type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Project subject" className={FORM_INPUT_CLASS} />
           </div>
 
           <div>
-            <label htmlFor="message" className="block text-sm font-bold text-indigo-300 mb-3">Message *</label>
-            <textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Tell me about your project..." rows={6} required className="w-full px-6 py-4 bg-white/5 border border-indigo-400/20 rounded-2xl text-white placeholder:text-neutral-600 focus:border-indigo-400/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none" />
+            <label htmlFor="message" className="block text-sm font-bold text-white mb-2">Message</label>
+            <textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Tell me about your project..." rows={6} required className={FORM_TEXTAREA_CLASS} />
           </div>
 
           <button type="submit" disabled={loading} aria-label="Send message" className="w-full py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg rounded-2xl hover:shadow-[0_0_40px_rgba(99,102,241,0.6)] hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-300">
