@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { ServicesGrid } from './ServicesGrid';
+import { CodeIcon, LightningIcon, GlobeIcon, PackageIcon } from './Icons';
 
 // Lazy load ParticleText to prevent chunk duplication
 const ParticleText = React.lazy(() => import('./InteractiveElements').then(m => ({ default: m.ParticleText })));
@@ -70,8 +71,8 @@ const AnimatedLetter: React.FC<{
       }}
       whileHover={{
         scale: 1.1,
-        color: '#a855f7',
-        textShadow: '0 0 40px rgba(168, 85, 247, 0.8)',
+        color: '#8b5cf6',
+        textShadow: '0 0 40px rgba(139, 92, 246, 0.8)',
         transition: { duration: 0.2 },
       }}
       style={{
@@ -84,8 +85,8 @@ const AnimatedLetter: React.FC<{
         <motion.span
           className="absolute -top-2 -right-1 w-3 h-3 rounded-full"
           style={{
-            background: letter === 'R' ? '#ec4899' : '#22d3ee',
-            boxShadow: `0 0 15px ${letter === 'R' ? 'rgba(236, 72, 153, 0.8)' : 'rgba(34, 211, 238, 0.8)'}`,
+            background: letter === 'R' ? '#f59e0b' : '#0ea5e9',
+            boxShadow: `0 0 15px ${letter === 'R' ? 'rgba(245, 158, 11, 0.8)' : 'rgba(14, 165, 233, 0.8)'}`,
           }}
           animate={{
             scale: [1, 1.3, 1],
@@ -115,7 +116,7 @@ const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = ({ mouseX, mo
           width: 40,
           height: 40,
           borderRadius: '50%',
-          border: '2px solid rgba(168, 85, 247, 0.8)',
+          border: '2px solid rgba(139, 92, 246, 0.8)',
           transform: 'translate(-50%, -50%)',
         }}
         animate={{
@@ -203,9 +204,10 @@ export const Hero: React.FC = React.memo(() => {
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
         {/* Gradient Mesh */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(16,185,129,0.15)_0%,transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(6,182,212,0.12)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(14,165,233,0.15)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(16,185,129,0.12)_0%,transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(245,158,11,0.1)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_70%,rgba(139,92,246,0.1)_0%,transparent_50%)]" />
           
         {/* Interactive Grid */}
         <div className="interactive-grid" />
@@ -221,7 +223,7 @@ export const Hero: React.FC = React.memo(() => {
               width: particle.size,
               height: particle.size,
               background: `radial-gradient(circle, 
-                ${particle.id % 3 === 0 ? '#10B981' : particle.id % 3 === 1 ? '#06B6D4' : '#F59E0B'}, 
+                ${particle.id % 4 === 0 ? '#0EA5E9' : particle.id % 4 === 1 ? '#10B981' : particle.id % 4 === 2 ? '#F59E0B' : '#8B5CF6'}, 
                 transparent)`
             }}
             initial={{ opacity: 0, y: 20 }}
@@ -244,7 +246,7 @@ export const Hero: React.FC = React.memo(() => {
           style={{
             width: '400px',
             height: '400px',
-            background: 'linear-gradient(45deg, #10B981, #06B6D4)',
+            background: 'linear-gradient(45deg, #0EA5E9, #10B981)',
             top: '10%',
             left: '5%',
           }}
@@ -264,7 +266,7 @@ export const Hero: React.FC = React.memo(() => {
           style={{
             width: '300px',
             height: '300px',
-            background: 'linear-gradient(45deg, #F59E0B, #10B981)',
+            background: 'linear-gradient(45deg, #F59E0B, #8B5CF6)',
             bottom: '15%',
             right: '8%',
           }}
@@ -295,13 +297,13 @@ export const Hero: React.FC = React.memo(() => {
         <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-16 items-center">
           <div className="text-center lg:text-left">
             <motion.div 
-              className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-xs tracking-widest font-bold text-emerald-300 mb-6"
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-primary/20 bg-primary/10 text-xs tracking-widest font-bold text-primary-300 mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
               <motion.span 
-                className="text-emerald-400"
+                className="text-primary-400"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
               >
@@ -320,7 +322,7 @@ export const Hero: React.FC = React.memo(() => {
             </motion.div>
               
             <motion.h1 
-              className="text-[11vw] sm:text-[9vw] lg:text-[6.5rem] leading-[0.9] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-emerald-300 select-none uppercase"
+              className="text-[11vw] sm:text-[9vw] lg:text-[6.5rem] leading-[0.9] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-primary-300 select-none uppercase"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
@@ -338,7 +340,7 @@ export const Hero: React.FC = React.memo(() => {
             </motion.p>
               
             <motion.p 
-              className="mt-3 text-sm md:text-base text-neutral-400 max-w-2xl mx-auto lg:mx-0 font-light tracking-wide leading-relaxed"
+              className="mt-3 text-sm md:text-base text-gray-400 max-w-2xl mx-auto lg:mx-0 font-light tracking-wide leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1 }}
@@ -365,7 +367,7 @@ export const Hero: React.FC = React.memo(() => {
               <motion.button
                 type="button"
                 onClick={scrollToContact}
-                className="px-7 py-3 rounded-full border border-emerald-500/30 text-emerald-300 text-xs font-bold tracking-widest hover:bg-emerald-500/10 transition-colors"
+                className="px-7 py-3 rounded-full border border-primary/30 text-primary-300 text-xs font-bold tracking-widest hover:bg-primary/10 transition-colors"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label={t('hero.cta.contact')}
@@ -383,7 +385,7 @@ export const Hero: React.FC = React.memo(() => {
               {[t('hero.label.brand'), t('hero.label.web'), t('hero.label.motion'), t('hero.label.design')].map((label, index) => (
                 <motion.span 
                   key={label} 
-                  className="text-[10px] font-bold tracking-widest px-3 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-300"
+                  className="text-[10px] font-bold tracking-widest px-3 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary-300"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 1.4 + index * 0.1 }}
@@ -404,18 +406,18 @@ export const Hero: React.FC = React.memo(() => {
           >
             <div className="card-3d-inner glass-card-modern rounded-3xl p-6 md:p-8">
               <div className="flex items-center justify-between mb-6">
-                <div className="text-xs uppercase tracking-widest text-emerald-400">{t('hero.stat.backend')}</div>
-                <div className="text-xs text-emerald-500">{t('hero.stat.ai')}</div>
+                <div className="text-xs uppercase tracking-widest text-primary-400">{t('hero.stat.backend')}</div>
+                <div className="text-xs text-primary-500">{t('hero.stat.ai')}</div>
               </div>
               <div className="space-y-4">
                 <motion.div 
-                  className="flex items-center justify-between rounded-2xl border border-emerald-500/20 bg-black/40 px-4 py-3"
+                  className="flex items-center justify-between rounded-2xl border border-primary/20 bg-black/40 px-4 py-3"
                   whileHover={{ scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 400 }}
                 >
-                  <span className="text-xs text-emerald-300">{t('hero.stat.projects')}</span>
+                  <span className="text-xs text-primary-300">{t('hero.stat.projects')}</span>
                   <motion.span 
-                    className="text-lg font-black text-emerald-400"
+                    className="text-lg font-black text-primary-400"
                     initial={{ scale: 1 }}
                     whileHover={{ scale: 1.2 }}
                   >
@@ -423,13 +425,13 @@ export const Hero: React.FC = React.memo(() => {
                   </motion.span>
                 </motion.div>
                 <motion.div 
-                  className="flex items-center justify-between rounded-2xl border border-cyan-500/20 bg-black/40 px-4 py-3"
+                  className="flex items-center justify-between rounded-2xl border border-secondary/20 bg-black/40 px-4 py-3"
                   whileHover={{ scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 400 }}
                 >
-                  <span className="text-xs text-cyan-300">{t('hero.stat.clients')}</span>
+                  <span className="text-xs text-secondary-300">{t('hero.stat.clients')}</span>
                   <motion.span 
-                    className="text-lg font-black text-cyan-400"
+                    className="text-lg font-black text-secondary-400"
                     initial={{ scale: 1 }}
                     whileHover={{ scale: 1.2 }}
                   >
@@ -437,13 +439,13 @@ export const Hero: React.FC = React.memo(() => {
                   </motion.span>
                 </motion.div>
                 <motion.div 
-                  className="flex items-center justify-between rounded-2xl border border-orange-500/20 bg-black/40 px-4 py-3"
+                  className="flex items-center justify-between rounded-2xl border border-accent/20 bg-black/40 px-4 py-3"
                   whileHover={{ scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 400 }}
                 >
-                  <span className="text-xs text-orange-300">{t('hero.stat.experience')}</span>
+                  <span className="text-xs text-accent-300">{t('hero.stat.experience')}</span>
                   <motion.span 
-                    className="text-lg font-black text-orange-400"
+                    className="text-lg font-black text-accent-400"
                     initial={{ scale: 1 }}
                     whileHover={{ scale: 1.2 }}
                   >
@@ -452,12 +454,12 @@ export const Hero: React.FC = React.memo(() => {
                 </motion.div>
               </div>
               <motion.div 
-                className="mt-6 text-xs text-emerald-500"
+                className="mt-6 text-xs text-primary-500"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 2 }}
               >
-                {t('hero.stat.nps')}: <span className="text-emerald-400 font-bold">98</span>
+                {t('hero.stat.nps')}: <span className="text-primary-400 font-bold">98</span>
               </motion.div>
             </div>
           </motion.div>
@@ -468,26 +470,26 @@ export const Hero: React.FC = React.memo(() => {
       <aside className="w-full max-w-4xl px-6 mb-16 mt-16" aria-label="Statistics">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {[
-            { icon: Code2, value: '50+', label: t('hero.stat.projects'), color: 'text-indigo-400', delay: 0 },
-            { icon: Users, value: '30+', label: t('hero.stat.clients'), color: 'text-emerald-400', delay: 0.1 },
-            { icon: Zap, value: '3+', label: t('hero.stat.experience'), color: 'text-yellow-400', delay: 0.2 },
-            { icon: Palette, value: '100%', label: t('hero.stat.satisfaction'), color: 'text-pink-400', delay: 0.3 },
+            { icon: CodeIcon, value: '50+', label: t('hero.stat.projects'), color: 'text-primary-400', delay: 0 },
+            { icon: Users, value: '30+', label: t('hero.stat.clients'), color: 'text-secondary-400', delay: 0.1 },
+            { icon: LightningIcon, value: '3+', label: t('hero.stat.experience'), color: 'text-accent-400', delay: 0.2 },
+            { icon: GlobeIcon, value: '100%', label: t('hero.stat.satisfaction'), color: 'text-supporting-400', delay: 0.3 },
           ].map((stat, index) => (
             <motion.div
               key={index}
-              className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-purple-500/50 transition-all group cursor-pointer"
+              className="text-center p-4 rounded-xl glass-card-modern border border-primary/20 hover:border-secondary/50 transition-all group cursor-pointer"
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 1.5 + stat.delay, duration: 0.5 }}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: '0 0 30px rgba(168, 85, 247, 0.3)',
-                borderColor: 'rgba(168, 85, 247, 0.5)',
+              whileHover={{ 
+                scale: 1.05, 
+                boxShadow: '0 0 30px rgba(14, 165, 233, 0.3)',
+                borderColor: 'rgba(16, 185, 129, 0.5)',
               }}
               whileTap={{ scale: 0.95 }}
             >
               <stat.icon className={`w-6 h-6 mx-auto mb-2 ${stat.color} group-hover:scale-110 transition-transform`} aria-hidden="true" />
-              <motion.div
+              <motion.div 
                 className="text-2xl md:text-3xl font-black text-white"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -495,7 +497,7 @@ export const Hero: React.FC = React.memo(() => {
               >
                 {stat.value}
               </motion.div>
-              <div className="text-xs text-neutral-500 tracking-wider">{stat.label}</div>
+              <div className="text-xs text-gray-500 tracking-wider">{stat.label}</div>
             </motion.div>
           ))}
         </div>
@@ -518,7 +520,7 @@ export const Hero: React.FC = React.memo(() => {
         type="button"
         onClick={scrollToWorks}
         aria-label="Scroll down to explore projects"
-        className="fixed bottom-8 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 hover:text-white transition-colors group z-40"
+        className="fixed bottom-8 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-gray-500 hover:text-white transition-colors group z-40"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2.5, duration: 0.6 }}

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { useI18n } from '../i18n';
 import { useFetchWithTimeout } from '../lib/hooks';
+import { MailIcon, MessageCircleIcon, GithubIcon } from 'lucide-react';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -227,28 +228,31 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
           <div className="flex justify-center gap-6 flex-wrap">
             <a 
               href="mailto:fear75412@gmail.com" 
-              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all"
+              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all flex items-center gap-2"
               title="Send email"
             >
-              📧 Email
+              <MailIcon className="w-5 h-5" />
+              Email
             </a>
             <a 
               href="https://t.me/younghustle45" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all"
+              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all flex items-center gap-2"
               title="Message on Telegram"
             >
-              💬 Telegram
+              <MessageCircleIcon className="w-5 h-5" />
+              Telegram
             </a>
             <a 
               href="https://github.com/akira777777" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all"
+              className="px-6 py-3 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/10 hover:border-cyan-500/50 hover:text-cyan-300 transition-all flex items-center gap-2"
               title="View GitHub profile"
             >
-              💻 GitHub
+              <GithubIcon className="w-5 h-5" />
+              GitHub
             </a>
           </div>
         </div>

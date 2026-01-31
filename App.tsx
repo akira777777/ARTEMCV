@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { motion } from 'framer-motion';
 import { I18nProvider } from './i18n';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
@@ -11,6 +12,8 @@ import SkipLink from './components/SkipLink';
 import { SectionDivider } from './components/SectionDivider';
 import { ThreeDGallery } from './components/ThreeDGallery';
 import { CardStack } from './components/CardStack';
+import { IconGallery } from './components/Icons';
+import { Interactive3DGallery, Mobile3DViewer } from './components/ThreeDGallery';
 
 // Lazy load heavy components
 const SpotlightGallery = React.lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
@@ -31,9 +34,36 @@ const App: React.FC = () => {
         <main id="main-content" className="content-wrapper">
           <Hero />
           
+          {/* Icon Gallery Section */}
+          <SectionDivider variant="dots" />
+          <section className="py-20 px-6">
+            <div className="max-w-6xl mx-auto">
+              <motion.div 
+                className="text-center mb-16"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
+                <h2 className="text-4xl md:text-5xl font-display font-black mb-6 gradient-text">
+                  Design System Icons
+                </h2>
+                <p className="text-xl text-neutral-400 max-w-2xl mx-auto">
+                  Custom icon set designed for modern interfaces
+                </p>
+              </motion.div>
+              <IconGallery />
+            </div>
+          </section>
+          
           {/* New Interactive Sections */}
           <SectionDivider variant="dots" />
-          <ThreeDGallery />
+          <div className="hidden md:block">
+            <Interactive3DGallery />
+          </div>
+          <div className="md:hidden">
+            <Mobile3DViewer />
+          </div>
           
           <SectionDivider variant="lines" />
           <CardStack />
