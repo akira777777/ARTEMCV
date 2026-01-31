@@ -16,7 +16,7 @@ export const Hero: React.FC = React.memo(() => {
     <section
       id="home"
       ref={containerRef}
-      className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden pt-20"
+      className="relative min-h-screen w-full flex flex-col items-center justify-start overflow-hidden pt-28 pb-40"
       aria-label="Hero section"
     >
       {/* Background Elements */}
@@ -38,14 +38,8 @@ export const Hero: React.FC = React.memo(() => {
         </p>
       </div>
 
-      {/* Interactive Elements Section */}
-      <div className="relative w-full max-w-6xl py-20 space-y-12">
-        <ParticleText text="INTERACTIVE EXPERIENCE" />
-        <ServicesGrid />
-      </div>
-
       {/* Stats Section */}
-      <div className="absolute bottom-24 left-1/2 -translate-x-1/2 w-full max-w-4xl px-6" role="complementary" aria-label="Statistics">
+      <div className="w-full max-w-4xl px-6 mb-16" role="complementary" aria-label="Statistics">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           <div className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all group">
             <Code2 className="w-6 h-6 mx-auto mb-2 text-indigo-400 group-hover:scale-110 transition-transform" aria-hidden="true" />
@@ -70,14 +64,22 @@ export const Hero: React.FC = React.memo(() => {
         </div>
       </div>
 
+      {/* Interactive Elements Section */}
+      <div className="relative w-full max-w-6xl py-12 space-y-12">
+        <ParticleText text="INTERACTIVE EXPERIENCE" />
+        <ServicesGrid />
+      </div>
+
       <button
         type="button"
         onClick={scrollToWorks}
         aria-label="Scroll down to explore projects"
-        className="absolute bottom-4 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group"
+        className="fixed bottom-8 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group z-40"
       >
         {t('hero.cta.scroll')} <ArrowRight className="w-4 h-4 animate-bounce group-hover:translate-x-1 transition-transform" aria-hidden="true" />
       </button>
     </section>
   );
 });
+
+Hero.displayName = 'Hero';

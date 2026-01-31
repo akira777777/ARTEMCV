@@ -584,20 +584,3 @@ textarea:focus-visible {
   filter: blur(4px);
   pointer-events: none;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  body::before,
-  body::after {
-    animation: none !important;
-  }
-  .noise-overlay {
-    animation: none !important;
-  }
-}

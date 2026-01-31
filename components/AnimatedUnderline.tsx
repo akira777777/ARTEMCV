@@ -24,7 +24,6 @@ export const AnimatedUnderline: React.FC<AnimatedUnderlineProps> = React.memo(
     underlineColor = 'currentColor',
   }) => {
     const [isHovered, setIsHovered] = React.useState(false);
-    const underlineRef = React.useRef<SVGPathElement>(null);
 
     return (
       <motion.a
@@ -45,7 +44,6 @@ export const AnimatedUnderline: React.FC<AnimatedUnderlineProps> = React.memo(
           preserveAspectRatio="none"
         >
           <motion.path
-            ref={underlineRef}
             d="M0,4 Q25,0 50,4 T100,4"
             stroke={underlineColor}
             strokeWidth="2"

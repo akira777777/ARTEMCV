@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { NavItem } from '../types';
 import { useReducedMotion } from '../lib/hooks';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useI18n } from '../i18n';
@@ -37,6 +36,8 @@ const NavLink = React.memo<{
     </li>
   );
 });
+
+NavLink.displayName = 'NavLink';
 
 export const Navigation: React.FC = React.memo(() => {
   const { t } = useI18n();
