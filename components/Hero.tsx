@@ -1,74 +1,10 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React from 'react';
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
-
-// Extract long className for better readability
-const CARD_BASE_CLASSES =
-  'absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden border border-white/5 ' +
-  'transition-transform duration-700 ease-out group shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)]';
+import { Eyes, ParticleText } from './InteractiveElements';
 
 export const Hero: React.FC = React.memo(() => {
   const { t } = useI18n();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const rafRef = useRef<number | null>(null);
-
-  const cards = useMemo(
-    () => [
-      { src: 'https://picsum.photos/400/600?random=1', rotate: -15, z: 10, label: 'BRAND', key: 'hero.label.brand' },
-      { src: 'https://picsum.photos/400/600?random=2', rotate: -5, z: 20, label: 'WEB', key: 'hero.label.web' },
-      { src: 'https://picsum.photos/400/600?random=3', rotate: 5, z: 30, label: 'MOTION', key: 'hero.label.motion' },
-      { src: 'https://picsum.photos/400/600?random=4', rotate: 15, z: 10, label: 'DESIGN', key: 'hero.label.design' },
-    ],
-    []
-  );
-
-  const zClassByValue = useMemo(
-    () => ({
-      10: 'z-10',
-      20: 'z-20',
-      30: 'z-30',
-    } as const),
-    []
-  );
-
-  useEffect(() => {
-    const applyTransforms = (x: number, y: number) => {
-      cardRefs.current.forEach((el, index) => {
-        const card = cards[index];
-        if (!el || !card) return;
-        const translateX = index * 10 - 15;
-        const rotate = card.rotate + x * (index + 1) * 0.1;
-        const translateY = y * (index + 1) * 0.2;
-        el.style.transform = `translateX(${translateX}px) rotate(${rotate}deg) translateY(${translateY}px)`;
-      });
-    };
-
-    let latestX = 0;
-    let latestY = 0;
-
-    const run = () => {
-      applyTransforms(latestX, latestY);
-      rafRef.current = null;
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const { innerWidth, innerHeight } = globalThis;
-      latestX = (e.clientX / innerWidth - 0.5) * 20; // -10 to 10
-      latestY = (e.clientY / innerHeight - 0.5) * 20; // -10 to 10
-      rafRef.current ??= globalThis.requestAnimationFrame(run);
-    };
-
-    applyTransforms(0, 0);
-    globalThis.addEventListener('mousemove', handleMouseMove, { passive: true });
-    return () => {
-      globalThis.removeEventListener('mousemove', handleMouseMove);
-      if (rafRef.current !== null) {
-        globalThis.cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [cards]);
 
   const scrollToWorks = () => {
     document.getElementById('works')?.scrollIntoView({ behavior: 'smooth' });
@@ -100,33 +36,10 @@ export const Hero: React.FC = React.memo(() => {
         </p>
       </div>
 
-      {/* 3D Card Effect */}
-      <div className="relative w-full max-w-4xl h-[400px] md:h-[500px] flex items-center justify-center perspective-1000" role="presentation">
-        <div className="relative w-64 h-96 md:w-80 md:h-[450px]">
-          {cards.map((card, index) => (
-            <div
-              key={card.key}
-              ref={(el) => {
-                cardRefs.current[index] = el;
-              }}
-              className={`${CARD_BASE_CLASSES} ${zClassByValue[card.z as keyof typeof zClassByValue] ?? 'z-10'}`}
-              role="img"
-              aria-label={`${t(card.key)} showcase image`}
-            >
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
-              <img
-                src={card.src}
-                alt={`${t(card.key)} portfolio work`}
-                className="w-full h-full object-cover filter saturate-50 group-hover:saturate-100 transition-all duration-700 scale-105 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" aria-hidden="true">
-                <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-xs font-bold tracking-widest uppercase border border-white/20">
-                  {t('hero.drag')}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* Interactive Elements Section */}
+      <div className="relative w-full max-w-4xl py-20">
+        <ParticleText text="INTERACTIVE EXPERIENCE" />
+        <Eyes />
       </div>
 
       {/* Stats Section */}
