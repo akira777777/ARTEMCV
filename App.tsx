@@ -2,10 +2,10 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { I18nProvider } from './i18n';
 import Home2026 from './pages/Home2026';
-import DetailingHub from './pages/DetailingHub';
 import { ScrollToTop } from './components/ScrollToTop';
 
 // Lazy load heavy components
+const DetailingHub = React.lazy(() => import('./pages/DetailingHub'));
 const SimpleTelegramChat = React.lazy(() =>
   import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat }))
 );
