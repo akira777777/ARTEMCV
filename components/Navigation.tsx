@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { NavItem } from '../types';
 import { useReducedMotion } from '../lib/hooks';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const navItems: NavItem[] = [
   { label: 'HOME', href: '#home' },
@@ -131,17 +132,22 @@ export const Navigation: React.FC = React.memo(() => {
             href="#home" 
             onClick={(e) => handleLinkClick(e, '#home')}
             className="flex items-center gap-2 group"
+            aria-label="ARTEM.DEV - Home"
           >
-            <span className="text-xl font-display font-black tracking-tighter bg-gradient-to-r from-white to-indigo-300 bg-clip-text text-transparent group-hover:from-indigo-400 group-hover:to-purple-400 transition-all duration-300">
-              ARTEM.DEV
+            <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-neutral-400 transition-colors">
+              JULES.ENGINEER
             </span>
             <span className="w-2 h-2 rounded-full bg-gradient-to-r from-indigo-400 to-purple-500 group-hover:scale-125 group-hover:shadow-[0_0_12px_rgba(99,102,241,0.8)] transition-all duration-300 animate-pulse" />
           </a>
 
           {/* Desktop Nav */}
-          <ul className="flex items-center gap-1 md:gap-2">
-            {navLinks}
-          </ul>
+          <div className="flex items-center gap-4 md:gap-8">
+            <ul className="flex items-center gap-1 md:gap-2">
+              {navLinks}
+            </ul>
+            <div className="hidden sm:block h-4 w-px bg-white/10" />
+            <LanguageSwitcher />
+          </div>
         </nav>
       </div>
     </header>

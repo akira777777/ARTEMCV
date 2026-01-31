@@ -189,7 +189,8 @@ const ContactSection: React.FC = () => {
                 onChange={handleChange}
                 placeholder="Your name"
                 required
-                className={FORM_INPUT_CLASS}
+                aria-required="true"
+                className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all"
               />
             </div>
 
@@ -205,7 +206,8 @@ const ContactSection: React.FC = () => {
                 onChange={handleChange}
                 placeholder="your@email.com"
                 required
-                className={FORM_INPUT_CLASS}
+                aria-required="true"
+                className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all"
               />
             </div>
           </div>
@@ -237,7 +239,8 @@ const ContactSection: React.FC = () => {
               placeholder="Tell me about your project..."
               rows={6}
               required
-              className={FORM_TEXTAREA_CLASS}
+              aria-required="true"
+              className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all resize-none"
             />
           </div>
 
@@ -257,13 +260,19 @@ const ContactSection: React.FC = () => {
           </button>
 
           {submitted && (
-            <div className="p-4 bg-green-500/10 border border-green-500/50 rounded-xl text-green-400 text-center font-bold animate-in fade-in">
+            <div
+              role="alert"
+              className="p-4 bg-green-500/10 border border-green-500/50 rounded-xl text-green-400 text-center font-bold animate-in fade-in"
+            >
               ✓ Message sent! I'll get back to you soon.
             </div>
           )}
 
           {error && (
-            <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-center font-bold animate-in fade-in">
+            <div
+              role="alert"
+              className="p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-center font-bold animate-in fade-in"
+            >
               ❌ {error}
             </div>
           )}

@@ -1,4 +1,4 @@
-# ARTEMCV: AI Agent Instructions
+# JULESCV: AI Agent Instructions
 
 ## Architecture Overview
 

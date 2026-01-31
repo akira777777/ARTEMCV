@@ -169,7 +169,7 @@ export function useThrottle<T extends (...args: unknown[]) => void>(callback: T,
       lastRan.current = now;
       callback(...args);
     } else {
-      clearTimeout(timeoutRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
         lastRan.current = Date.now();
         callback(...args);

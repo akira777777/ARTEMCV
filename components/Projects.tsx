@@ -57,7 +57,7 @@ const Projects: React.FC = () => {
                   ))}
                 </div>
                 <div className="absolute bottom-8 left-0 right-0 px-8 flex justify-between items-center">
-                  <div className="text-sm text-white/80 uppercase tracking-[0.2em]">{project.title}</div>
+                  <div className="text-sm text-white/80 uppercase tracking-[0.2em]">{t(project.title)}</div>
                   <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-all">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                   </div>
@@ -65,8 +65,8 @@ const Projects: React.FC = () => {
               </div>
               <div className="flex justify-between items-start px-1">
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold tracking-tight text-white">{project.title}</h3>
-                  <p className="text-zinc-500 text-sm max-w-sm line-clamp-2">{project.description}</p>
+                  <h3 className="text-2xl font-bold tracking-tight text-white">{t(project.title)}</h3>
+                  <p className="text-zinc-500 text-sm max-w-sm line-clamp-2">{t(project.description)}</p>
                 </div>
                 <div className="text-[11px] uppercase tracking-[0.2em] text-zinc-600">{project.techStack[0]}</div>
               </div>

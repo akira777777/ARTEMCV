@@ -1,7 +1,8 @@
 import React, { useRef, useState, useCallback } from 'react';
-import { EMAIL_PATTERN } from '../lib/utils';
+import { useI18n } from '../i18n';
 import { useFetchWithTimeout } from '../lib/hooks';
-import { FORM_INPUT_CLASS, FORM_TEXTAREA_CLASS, FORM_BUTTON_PRIMARY_CLASS } from '../constants';
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface ContactFormData {
   name: string;
@@ -16,6 +17,7 @@ interface ContactSectionSecureProps {
 }
 
 const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'contact' }) => {
+  const { t } = useI18n();
   const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
   const lastSubmitRef = useRef<number>(0);
   const fetchWithTimeout = useFetchWithTimeout(12_000);
@@ -38,23 +40,23 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
 
   const validate = useCallback((): string | null => {
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      return 'Please fill in all required fields';
+      return t('contact.error.required');
     }
     if (!EMAIL_PATTERN.test(formData.email.trim())) {
-      return 'Please enter a valid email address';
+      return t('contact.error.email');
     }
     if (formData.message.trim().length < 10) {
-      return 'Message is too short. Please provide more details.';
+      return t('contact.error.too_short');
     }
     if (formData.hp && formData.hp.trim().length > 0) {
       return null;
     }
     const now = Date.now();
     if (lastSubmitRef.current && now - lastSubmitRef.current < 10_000) {
-      return 'Please wait a moment before sending again';
+      return t('contact.error.rate_limit');
     }
     return null;
-  }, [formData]);
+  }, [formData, t]);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,8 +114,8 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
       <div className="absolute -bottom-20 left-0 w-96 h-96 rounded-full bg-purple-500/20 blur-3xl" aria-hidden />
       <div className="max-w-3xl mx-auto relative z-10">
         <div className="mb-16 text-center">
-          <h2 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent mb-6 tracking-tighter">Get In Touch</h2>
-          <p className="text-lg md:text-xl text-neutral-300 max-w-2xl mx-auto leading-relaxed">Have a project in mind? Let's work together to create something amazing.</p>
+          <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter">{t('contact.title')}</h2>
+          <p className="text-lg text-zinc-400">{t('contact.subtitle')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6 backdrop-blur-sm bg-gradient-to-br from-white/5 to-transparent p-8 md:p-10 rounded-3xl border border-indigo-400/20 shadow-[0_0_40px_rgba(99,102,241,0.1)]" noValidate>
@@ -121,32 +123,32 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-bold text-white mb-2">Name</label>
-              <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required className={FORM_INPUT_CLASS} />
+              <label htmlFor="name" className="block text-sm font-bold text-white mb-2">{t('contact.label.name')}</label>
+              <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} placeholder={t('contact.placeholder.name')} required className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all" />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-bold text-white mb-2">Email</label>
-              <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" required className={FORM_INPUT_CLASS} />
+              <label htmlFor="email" className="block text-sm font-bold text-white mb-2">{t('contact.label.email')}</label>
+              <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder={t('contact.placeholder.email')} required className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all" />
             </div>
           </div>
 
           <div>
-            <label htmlFor="subject" className="block text-sm font-bold text-white mb-2">Subject (Optional)</label>
-            <input id="subject" type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Project subject" className={FORM_INPUT_CLASS} />
+            <label htmlFor="subject" className="block text-sm font-bold text-white mb-2">{t('contact.label.subject')}</label>
+            <input id="subject" type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder={t('contact.placeholder.subject')} className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all" />
           </div>
 
           <div>
-            <label htmlFor="message" className="block text-sm font-bold text-white mb-2">Message</label>
-            <textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Tell me about your project..." rows={6} required className={FORM_TEXTAREA_CLASS} />
+            <label htmlFor="message" className="block text-sm font-bold text-white mb-2">{t('contact.label.message')}</label>
+            <textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder={t('contact.placeholder.message')} rows={6} required className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:border-white/30 focus:outline-none transition-all resize-none" />
           </div>
 
-          <button type="submit" disabled={loading} aria-label="Send message" className="w-full py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg rounded-2xl hover:shadow-[0_0_40px_rgba(99,102,241,0.6)] hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-300">
-            {loading ? (<span className="flex items-center justify-center gap-3"><div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />Sending...</span>) : 'Send Message'}
+          <button type="submit" disabled={loading} aria-label={t('contact.button.send')} className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+            {loading ? (<span className="flex items-center justify-center gap-3"><div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />{t('contact.button.sending')}</span>) : t('contact.button.send')}
           </button>
 
           {submitted && (
-            <output aria-live="polite" className="p-5 bg-gradient-to-r from-emerald-500/20 to-emerald-600/10 border border-emerald-500/50 rounded-2xl text-emerald-300 text-center font-bold animate-in fade-in block shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-              ✓ Message sent! I'll get back to you soon.
+            <output aria-live="polite" className="p-4 bg-green-500/10 border border-green-500/50 rounded-xl text-green-400 text-center font-bold animate-in fade-in block">
+              {t('contact.success')}
             </output>
           )}
           {error && (
@@ -156,18 +158,12 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
           )}
         </form>
 
-        <div className="mt-16 pt-12 border-t border-indigo-500/20">
-          <p className="text-center text-neutral-400 mb-8 text-lg">Or reach out through:</p>
-          <div className="flex justify-center gap-4 flex-wrap">
-            <a href="mailto:fear75412@gmail.com" className="px-8 py-4 border-2 border-indigo-400/30 bg-gradient-to-br from-indigo-500/10 to-transparent text-white rounded-2xl hover:bg-indigo-500/20 hover:border-indigo-400/60 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all duration-300 flex items-center gap-2 font-semibold" title="Send email">
-              <span className="text-xl">📧</span> Email
-            </a>
-            <a href="https://t.me/younghustle45" target="_blank" rel="noopener noreferrer" className="px-8 py-4 border-2 border-purple-400/30 bg-gradient-to-br from-purple-500/10 to-transparent text-white rounded-2xl hover:bg-purple-500/20 hover:border-purple-400/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-300 flex items-center gap-2 font-semibold" title="Message on Telegram">
-              <span className="text-xl">💬</span> Telegram
-            </a>
-            <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" className="px-8 py-4 border-2 border-pink-400/30 bg-gradient-to-br from-pink-500/10 to-transparent text-white rounded-2xl hover:bg-pink-500/20 hover:border-pink-400/60 hover:shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all duration-300 flex items-center gap-2 font-semibold" title="View GitHub profile">
-              <span className="text-xl">💻</span> GitHub
-            </a>
+        <div className="mt-16 pt-16 border-t border-white/10">
+          <p className="text-center text-zinc-400 mb-8">{t('contact.reach_out')}</p>
+          <div className="flex justify-center gap-6 flex-wrap">
+            <a href="mailto:fear75412@gmail.com" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="Send email">📧 Email</a>
+            <a href="https://t.me/younghustle45" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="Message on Telegram">💬 Telegram</a>
+            <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" className="px-6 py-3 border border-white/20 text-white rounded-xl hover:bg-white/5 transition-all" title="View GitHub profile">💻 GitHub</a>
           </div>
         </div>
       </div>
