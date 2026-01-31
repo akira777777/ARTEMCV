@@ -96,6 +96,10 @@ const BentoGrid: React.FC = () => {
               </div>
             </div>
           </div>
+          {/* Gradient Shader Card for visual enhancement */}
+          <div className="mt-8">
+            <LazyGradientShaderCard />
+          </div>
           <div className="mt-8 pt-8 border-t border-white/10 text-center">
             <p className="text-[10px] opacity-30 uppercase tracking-[0.4em] text-white">High Performance Only</p>
           </div>
