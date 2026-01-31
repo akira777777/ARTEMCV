@@ -22,8 +22,23 @@ export const Hero: React.FC = React.memo(() => {
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_70%)] pointer-events-none" aria-hidden="true" />
       
-      {/* Holographic Abstract Sphere */}
-      <div className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" aria-hidden="true" />
+      {/* Decorative Purple Star */}
+      <div 
+        className="absolute pointer-events-none"
+        style={{
+          width: '1275px',
+          height: '1275px',
+          aspectRatio: '1 / 1',
+          backgroundImage: 'url(/purple-star1.svg)',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          top: '-400px',
+          right: '-400px',
+          opacity: 0.4,
+        }}
+        aria-hidden="true"
+      />
 
       {/* Main Typography */}
       <div className="z-10 text-center mb-12 relative">
