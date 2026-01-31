@@ -9,6 +9,7 @@
  *   Add as a build script or run manually via Vercel CLI
  */
 
+import 'dotenv/config';
 import { query } from '../lib/db';
 
 const migrations = [
