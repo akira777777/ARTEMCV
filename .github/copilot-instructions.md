@@ -10,8 +10,11 @@
 
 **Critical data flow:**
 1. User language preference → [i18n.tsx](../i18n.tsx) context → all components use `useI18n().t(key)`
-2. Form submissions (contact) → [ContactSectionSecure.tsx](../components/ContactSectionSecure.tsx) → Telegram serverless endpoint [api/send-telegram.ts](../api/send-telegram.ts) on Vercel
-3. Scroll detection → [Navigation.tsx](../components/Navigation.tsx) auto-detects active section based on viewport position
+2. Form submissions (contact) → [ContactSectionSecure.tsx](../components/ContactSectionSecure.tsx) → [api/send-telegram.ts](../api/send-telegram.ts) on Vercel
+   - Sends to Telegram for notification
+   - Stores in Neon PostgreSQL (if DATABASE_URL set) for analytics
+3. Analytics queries → [api/analytics.ts](../api/analytics.ts) protected endpoint with ANALYTICS_API_KEY
+4. Scroll detection → [Navigation.tsx](../components/Navigation.tsx) auto-detects active section based on viewport position
 
 ## Conventions & Patterns
 
