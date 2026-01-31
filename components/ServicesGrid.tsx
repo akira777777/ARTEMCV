@@ -62,11 +62,11 @@ export const ServicesGrid: React.FC = React.memo(() => {
             key={idx}
             className="group relative p-8 rounded-2xl bg-[#0a0a0a] border border-white/5 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
           >
-<<<<<<< Updated upstream
             {/* Gradient background highlight on hover */}
-=======
-            {/* Gradient hover overlay */}
-            {/* Gradient background highlight on hover */}sName="mb-6 p-3 bg-white/5 w-fit rounded-xl group-hover:bg-white/10 transition-colors">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+            <div className="relative z-10">
+              <div className="mb-6 p-3 bg-white/5 w-fit rounded-xl group-hover:bg-white/10 transition-colors">
                 {item.icon}
               </div>
 

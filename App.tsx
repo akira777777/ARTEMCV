@@ -29,18 +29,6 @@ const App: React.FC = () => {
         <main id="main-content">
           <Hero />
           <SectionDivider variant="dots" />
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
-          <React.Suspense fallback={<div className="h-96" />}>
-            <SpotlightGallery />
-          </React.Suspense>
-          <SectionDivider variant="lines" />
-          <React.Suspense fallback={<div className="h-96" />}>
-            <About />
-          </React.Suspense>
-<<<<<<< Updated upstream
           <React.Suspense fallback={<div className="h-96" />}>
             <SpotlightGallery />
           </React.Suspense>
@@ -52,6 +40,18 @@ const App: React.FC = () => {
           <React.Suspense fallback={<div className="h-72" />}>
             <CTASection />
           </React.Suspense>
+          <ErrorBoundary>
+            <ContactSectionSecure id="contact" />
+          </ErrorBoundary>
+        </main>
+        <Footer />
+        <React.Suspense fallback={null}>
+          <SimpleTelegramChat />
+        </React.Suspense>
+        <ScrollToTop />
+      </div>
+    </I18nProvider>
+  );
 };
 
 export default App;
