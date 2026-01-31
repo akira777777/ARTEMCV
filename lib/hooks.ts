@@ -22,40 +22,67 @@ export function useReducedMotion(): boolean {
 }
 
 /**
- * Hook for mouse position tracking
+ * Hook for mouse position tracking with RAF throttling
  */
 export function useMousePosition() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
+    let latestX = 0;
+    let latestY = 0;
+
     const handler = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+      latestX = e.clientX;
+      latestY = e.clientY;
+      if (rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(() => {
+          setPosition({ x: latestX, y: latestY });
+          rafRef.current = null;
+        });
+      }
     };
 
-    window.addEventListener('mousemove', handler);
-    return () => window.removeEventListener('mousemove', handler);
+    window.addEventListener('mousemove', handler, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handler);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, []);
 
   return position;
 }
 
 /**
- * Hook for scroll progress (0 to 1)
+ * Hook for scroll progress (0 to 1) with RAF throttling
  */
 export function useScrollProgress() {
   const [progress, setProgress] = useState(0);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const handler = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollProgress = docHeight > 0 ? scrollTop / docHeight : 0;
-      setProgress(Math.min(1, Math.max(0, scrollProgress)));
+      if (rafRef.current !== null) return;
+
+      rafRef.current = requestAnimationFrame(() => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollProgress = docHeight > 0 ? scrollTop / docHeight : 0;
+        setProgress(Math.min(1, Math.max(0, scrollProgress)));
+        rafRef.current = null;
+      });
     };
 
     window.addEventListener('scroll', handler, { passive: true });
     handler();
-    return () => window.removeEventListener('scroll', handler);
+    return () => {
+      window.removeEventListener('scroll', handler);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, []);
 
   return progress;
@@ -68,6 +95,7 @@ export function useInView(options?: IntersectionObserverInit) {
   const [isInView, setIsInView] = useState(false);
   const [hasBeenInView, setHasBeenInView] = useState(false);
   const ref = useRef<HTMLElement>(null);
+  const optionsRef = useRef(options);
 
   useEffect(() => {
     const element = ref.current;
@@ -78,29 +106,38 @@ export function useInView(options?: IntersectionObserverInit) {
       if (entry.isIntersecting) {
         setHasBeenInView(true);
       }
-    }, options);
+    }, optionsRef.current);
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [options]);
+  }, []);
 
   return { ref, isInView, hasBeenInView };
 }
 
 /**
- * Hook for window size
+ * Hook for window size with debounced updates
  */
 export function useWindowSize() {
   const [size, setSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    
     const handler = () => {
-      setSize({ width: window.innerWidth, height: window.innerHeight });
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setSize({ width: window.innerWidth, height: window.innerHeight });
+      }, 100);
     };
 
-    handler();
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
+    // Set initial size immediately
+    setSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener('resize', handler, { passive: true });
+    return () => {
+      window.removeEventListener('resize', handler);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   return size;
@@ -112,6 +149,30 @@ export function useWindowSize() {
 export function useIsMobile(breakpoint = 768) {
   const { width } = useWindowSize();
   return width > 0 && width < breakpoint;
+}
+
+/**
+ * Hook for throttled callback
+ */
+export function useThrottle<T extends (...args: unknown[]) => void>(callback: T, delay: number): T {
+  const lastRan = useRef(Date.now());
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  return useCallback((...args: Parameters<T>) => {
+    const now = Date.now();
+    const remaining = delay - (now - lastRan.current);
+
+    if (remaining <= 0) {
+      lastRan.current = now;
+      callback(...args);
+    } else {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        lastRan.current = Date.now();
+        callback(...args);
+      }, remaining);
+    }
+  }, [callback, delay]) as T;
 }
 
 /**

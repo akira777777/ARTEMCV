@@ -1,7 +1,7 @@
 import React from 'react';
 import { SKILLS } from '../constants';
 
-export const About: React.FC = () => {
+export const About: React.FC = React.memo(() => {
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -80,4 +80,4 @@ export const About: React.FC = () => {
       </div>
     </section>
   );
-};
+});

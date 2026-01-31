@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Footer: React.FC = () => {
+export const Footer: React.FC = React.memo(() => {
   return (
     <footer id="footer" className="py-20 bg-black border-t border-white/10 pb-40 relative overflow-hidden">
       <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[32rem] h-[32rem] rounded-full bg-indigo-500/10 blur-3xl float-slower" aria-hidden />
@@ -23,4 +23,4 @@ export const Footer: React.FC = () => {
       </div>
     </footer>
   );
-};
+});
