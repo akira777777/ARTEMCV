@@ -30,7 +30,7 @@
     "@types/pg": "^8.11.6",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@vercel/node": "^4.0.0",
+    "@vercel/node": "^5.5.28",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.24",
     "jsdom": "^27.4.0",

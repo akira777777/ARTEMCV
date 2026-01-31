@@ -1,5 +1,6 @@
 import React from 'react';
 import { useI18n } from '../i18n';
+import { AnimatedUnderline } from './AnimatedUnderline';
 
 export const Footer: React.FC = React.memo(() => {
   const { t } = useI18n();
@@ -16,16 +17,24 @@ export const Footer: React.FC = React.memo(() => {
         <nav aria-label="Social media links">
           <ul className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16 text-sm tracking-widest font-bold">
             <li>
-              <a href="mailto:fear75412@gmail.com" aria-label="Send email to fear75412@gmail.com" className="relative hover:text-neutral-400 transition-colors after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">FEAR75412@GMAIL.COM</a>
+              <AnimatedUnderline href="mailto:fear75412@gmail.com" underlineColor="rgba(255,255,255,0.6)">
+                FEAR75412@GMAIL.COM
+              </AnimatedUnderline>
             </li>
             <li>
-              <a href="https://t.me/younghustle45" target="_blank" rel="noopener noreferrer" aria-label="Contact via Telegram (opens in new tab)" className="relative hover:text-neutral-400 transition-colors after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">{t('footer.contacts').toUpperCase()} — TELEGRAM</a>
+              <AnimatedUnderline href="https://t.me/younghustle45" target="_blank" rel="noopener noreferrer" underlineColor="rgba(255,255,255,0.6)">
+                {t('footer.contacts').toUpperCase()} — TELEGRAM
+              </AnimatedUnderline>
             </li>
             <li>
-              <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" aria-label="Visit GitHub profile (opens in new tab)" className="relative hover:text-neutral-400 transition-colors after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">GITHUB</a>
+              <AnimatedUnderline href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" underlineColor="rgba(255,255,255,0.6)">
+                GITHUB
+              </AnimatedUnderline>
             </li>
             <li>
-              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="Visit LinkedIn profile (opens in new tab)" className="relative hover:text-neutral-400 transition-colors after:absolute after:left-0 after:-bottom-2 after:h-px after:w-0 after:bg-white/60 after:transition-all after:duration-300 hover:after:w-full">LINKEDIN</a>
+              <AnimatedUnderline href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" underlineColor="rgba(255,255,255,0.6)">
+                LINKEDIN
+              </AnimatedUnderline>
             </li>
           </ul>
         </nav>

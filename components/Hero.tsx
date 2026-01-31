@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
-import { Eyes, ParticleText } from './InteractiveElements';
+import { Eyes, ParticleText, InteractiveDotGrid } from './InteractiveElements';
 
 export const Hero: React.FC = React.memo(() => {
   const { t } = useI18n();
@@ -37,9 +37,10 @@ export const Hero: React.FC = React.memo(() => {
       </div>
 
       {/* Interactive Elements Section */}
-      <div className="relative w-full max-w-4xl py-20">
+      <div className="relative w-full max-w-4xl py-20 space-y-12">
         <ParticleText text="INTERACTIVE EXPERIENCE" />
         <Eyes />
+        <InteractiveDotGrid />
       </div>
 
       {/* Stats Section */}
