@@ -185,6 +185,7 @@ const Hero: React.FC = React.memo(() => {
       <div 
         className="scroll-progress" 
         style={{ width: `${Math.min(scrollY / (document.body.scrollHeight - window.innerHeight) * 100, 100)}%` }}
+        aria-hidden="true"
       />
 
       {/* Animated Background Elements */}
@@ -292,6 +293,7 @@ const Hero: React.FC = React.memo(() => {
                 className="text-primary-400"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                aria-hidden="true"
               >
                 ✦
               </motion.span>
@@ -312,7 +314,7 @@ const Hero: React.FC = React.memo(() => {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              {t('hero.title').split('').map((letter, index) => (
+              {(t('hero.title.line1') + ' ' + t('hero.title.line2')).split('').map((letter, index) => (
                 <AnimatedLetter key={index} letter={letter} index={index} />
               ))}
             </motion.h1>
@@ -402,7 +404,7 @@ const Hero: React.FC = React.memo(() => {
       <motion.button
         type="button"
         onClick={scrollToWorks}
-        aria-label="Scroll down to explore projects"
+        aria-label={t('hero.cta.scroll')}
         className="fixed bottom-8 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-gray-500 hover:text-white transition-colors group z-40"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
