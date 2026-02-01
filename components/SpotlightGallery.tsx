@@ -45,14 +45,14 @@ export const SpotlightGallery: React.FC = React.memo(() => {
           <div className="flex gap-4 mt-8 md:mt-0">
             <button
               onClick={handlePrev}
-              aria-label="Previous project"
+              aria-label={t('works.prev')}
               className="p-4 rounded-full border-2 border-indigo-400/30 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:border-transparent hover:text-white text-neutral-300 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
             >
               <ChevronLeft size={24} />
             </button>
             <button
               onClick={handleNext}
-              aria-label="Next project"
+              aria-label={t('works.next')}
               className="p-4 rounded-full border-2 border-indigo-400/30 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:border-transparent hover:text-white text-neutral-300 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
             >
               <ChevronRight size={24} />
