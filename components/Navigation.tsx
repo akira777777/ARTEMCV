@@ -140,7 +140,7 @@ export const Navigation: React.FC = React.memo(() => {
     >
       <div className="mx-4 mt-4 md:mx-8 md:mt-6">
         <motion.nav 
-          className="bg-transparent backdrop-blur-md border border-white/10 rounded-3xl px-6 py-4 flex justify-between items-center hover:border-purple-500/30 ease-smooth"
+          className="bg-black/20 backdrop-blur-md border border-white/10 rounded-3xl px-6 py-4 flex justify-between items-center hover:border-purple-500/30 ease-smooth"
           whileHover={{
             boxShadow: '0 8px 48px rgba(168, 85, 247, 0.15)',
           }}
@@ -152,13 +152,10 @@ export const Navigation: React.FC = React.memo(() => {
             href="#home" 
             onClick={(e) => handleLinkClick(e, '#home')}
             className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg"
-            aria-label={`${t('brand.vision')} - Navigate to homepage`}
+            aria-label={t('nav.logo.label')}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-purple-400 transition-colors sr-only">
-              ARTEM.DEV
-            </span>
             <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-purple-400 transition-colors" aria-hidden="true">
               ARTEM.DEV
             </span>
