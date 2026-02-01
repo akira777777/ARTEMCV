@@ -7,7 +7,7 @@ const LabSection: React.FC = () => {
   const { t } = useI18n();
 
   return (
-    <section className="py-32 bg-[#080808] relative overflow-hidden" id="lab">
+    <section className="py-32 bg-[#050505] relative overflow-hidden" id="lab">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">

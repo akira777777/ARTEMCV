@@ -5,7 +5,7 @@ export const About: React.FC = React.memo(() => {
   const { t } = useI18n();
   
   return (
-    <section id="studio" className="py-24 md:py-40 border-t border-white/5 bg-neutral-950 relative overflow-hidden">
+    <section id="studio" className="py-24 md:py-40 border-t border-white/5 bg-[#050505] relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-6xl font-display font-bold leading-tight uppercase mb-8">
