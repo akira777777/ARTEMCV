@@ -26,7 +26,7 @@ const NavLink = React.memo<{
         href={item.href}
         onClick={(e) => onClick(e, item.href)}
         className={`
-          px-4 py-2 rounded-xl text-xs font-bold tracking-widest transition-all duration-300
+          px-4 py-2 rounded-xl text-xs font-bold tracking-widest transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-95
           ${isActive
             ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]'
             : 'text-neutral-400 hover:text-white hover:bg-white/10 hover:scale-105'}
