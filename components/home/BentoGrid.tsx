@@ -20,7 +20,7 @@ const BentoGrid: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="md:col-span-8 md:row-span-2 relative overflow-hidden rounded-[2rem] border border-white/10 transition-all duration-500 hover:border-indigo-500/50 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] bg-[#0a0a0a] group"
+          className="md:col-span-8 md:row-span-2 relative overflow-hidden rounded-[2rem] border border-white/10 transition-all duration-500 hover:border-indigo-500/50 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] bg-[#050505] group"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 to-transparent"></div>
           <div className="absolute inset-0 opacity-40 mix-blend-overlay group-hover:scale-105 transition-transform duration-1000">
@@ -112,7 +112,7 @@ const BentoGrid: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="md:col-span-6 md:row-span-1 relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0a0a0a] group cursor-pointer"
+          className="md:col-span-6 md:row-span-1 relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#050505] group cursor-pointer"
         >
           <OptimizedImage
             alt={t(secondaryProject.title)}
