@@ -7,6 +7,7 @@ interface Particle {
   vy: number;
   radius: number;
   color: string;
+  colorIdx: number;
   life: number;
   maxLife: number;
 }
@@ -85,6 +86,32 @@ const GradientShaderCard: React.FC = () => {
     const lineDispX = new Float32Array(xValues.length);
     const lineDispY = new Float32Array(yValues.length);
 
+    // Optimized rendering constants
+    const COLORS_BASE = [
+      'rgba(14, 165, 233',  // Sky Blue
+      'rgba(16, 185, 129',  // Emerald
+      'rgba(245, 158, 11',  // Amber
+      'rgba(139, 92, 246'   // Violet
+    ];
+    const ALPHA_STEPS = 10;
+
+    // Pre-calculate color strings to avoid string concatenation in the animation loop
+    const COLOR_STRINGS = COLORS_BASE.map(base => {
+      const core: string[] = [];
+      const glow: string[] = [];
+      for (let a = 1; a <= ALPHA_STEPS; a++) {
+        const alpha = (a / ALPHA_STEPS) * 0.8;
+        core.push(`${base}, ${alpha.toFixed(2)})`);
+        glow.push(`${base}, ${(alpha * 0.3).toFixed(2)})`);
+      }
+      return { core, glow };
+    });
+
+    // Pre-allocate batches for combined draw calls - store references to avoid indexing issues during swaps
+    const batches: Particle[][][] = COLORS_BASE.map(() =>
+      Array.from({ length: ALPHA_STEPS }, () => [] as Particle[])
+    );
+
     // Create initial particle emitter with optimized particle management
     const PARTICLE_POOL_SIZE = 100; // Limit total particles for better performance
     const particlePool: Particle[] = [];
@@ -93,24 +120,18 @@ const GradientShaderCard: React.FC = () => {
     // Pre-create particle objects to avoid GC pressure
     for (let i = 0; i < PARTICLE_POOL_SIZE; i++) {
       particlePool.push({
-        x: 0, y: 0, vx: 0, vy: 0, radius: 0, color: '', life: 0, maxLife: 0
+        x: 0, y: 0, vx: 0, vy: 0, radius: 0, color: '', colorIdx: 0, life: 0, maxLife: 0
       });
     }
     
     const createParticles = (x: number, y: number, count: number = 1) => {
-      const colors = [
-        'rgba(14, 165, 233',  // Sky Blue
-        'rgba(16, 185, 129',  // Emerald
-        'rgba(245, 158, 11',  // Amber
-        'rgba(139, 92, 246'   // Violet
-      ];
-      
       for (let i = 0; i < count; i++) {
         // Find inactive particle in pool
         if (activeParticleCount < PARTICLE_POOL_SIZE) {
           const p = particlePool[activeParticleCount++];
           const angle = (Math.random() * Math.PI * 2);
           const speed = 1 + Math.random() * 2;
+          const colorIdx = Math.floor(Math.random() * COLORS_BASE.length);
           
           // Reset particle properties
           p.x = x;
@@ -118,7 +139,8 @@ const GradientShaderCard: React.FC = () => {
           p.vx = Math.cos(angle) * speed;
           p.vy = Math.sin(angle) * speed;
           p.radius = 1 + Math.random() * 3;
-          p.color = colors[Math.floor(Math.random() * colors.length)];
+          p.colorIdx = colorIdx;
+          p.color = COLORS_BASE[colorIdx];
           p.life = 100;
           p.maxLife = 100;
         }
@@ -227,6 +249,13 @@ const GradientShaderCard: React.FC = () => {
     };
 
     const drawParticles = () => {
+      // Clear batches for this frame
+      for (let c = 0; c < COLORS_BASE.length; c++) {
+        for (let a = 0; a < ALPHA_STEPS; a++) {
+          batches[c][a].length = 0;
+        }
+      }
+
       // Use particle pool instead of dynamic array for better performance
       for (let i = activeParticleCount - 1; i >= 0; i--) {
         const p = particlePool[i];
@@ -241,7 +270,11 @@ const GradientShaderCard: React.FC = () => {
         if (p.life <= 0) {
           // Move last active particle to current position and decrease count
           if (i < activeParticleCount - 1) {
-            particlePool[i] = particlePool[activeParticleCount - 1];
+            // Swap current with last active to maintain pool density
+            const lastActiveIdx = activeParticleCount - 1;
+            const temp = particlePool[i];
+            particlePool[i] = particlePool[lastActiveIdx];
+            particlePool[lastActiveIdx] = temp;
           }
           activeParticleCount--;
           continue;
@@ -249,23 +282,22 @@ const GradientShaderCard: React.FC = () => {
 
         const alphaNorm = p.life / p.maxLife;
         const alphaIdx = Math.min(Math.floor(alphaNorm * ALPHA_STEPS), ALPHA_STEPS - 1);
-        batches[p.colorIdx][alphaIdx].push(i);
+        // Push object reference instead of index to avoid ghosting issues during pool swaps
+        batches[p.colorIdx][alphaIdx].push(p);
       }
 
-      // Draw batched particles
-      for (let c = 0; c < COLORS.length; c++) {
-        const baseColor = COLORS[c];
+      // Draw batched particles - minimizes fillStyle changes and draw calls
+      for (let c = 0; c < COLORS_BASE.length; c++) {
+        const colorSet = COLOR_STRINGS[c];
         for (let a = 0; a < ALPHA_STEPS; a++) {
-          const indices = batches[c][a];
-          if (indices.length === 0) continue;
-
-          const alpha = (a + 1) / ALPHA_STEPS * 0.8;
+          const activeParticles = batches[c][a];
+          if (activeParticles.length === 0) continue;
 
           // Draw Glow Layer (combined)
           ctx.beginPath();
-          ctx.fillStyle = `${baseColor}, ${alpha * 0.3})`;
-          for (const idx of indices) {
-            const p = pool[idx];
+          ctx.fillStyle = colorSet.glow[a];
+          for (let i = 0; i < activeParticles.length; i++) {
+            const p = activeParticles[i];
             ctx.moveTo(p.x + p.radius * 2, p.y);
             ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
           }
@@ -273,9 +305,9 @@ const GradientShaderCard: React.FC = () => {
 
           // Draw Core Layer (combined)
           ctx.beginPath();
-          ctx.fillStyle = `${baseColor}, ${alpha})`;
-          for (const idx of indices) {
-            const p = pool[idx];
+          ctx.fillStyle = colorSet.core[a];
+          for (let i = 0; i < activeParticles.length; i++) {
+            const p = activeParticles[i];
             ctx.moveTo(p.x + p.radius, p.y);
             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           }
