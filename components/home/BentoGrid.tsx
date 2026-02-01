@@ -127,8 +127,14 @@ const BentoGrid: React.FC = () => {
                 <h4 className="text-2xl font-display font-bold text-white">{t(secondaryProject.title)}</h4>
                 <p className="text-sm opacity-60 text-white">{t(secondaryProject.description)}</p>
               </div>
-              <a href={secondaryProject.liveLink} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300">
-                <span className="material-symbols-outlined">arrow_forward</span>
+              <a
+                href={secondaryProject.liveLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-white/40 transition-all translate-x-4 group-hover:translate-x-0 group-focus-within:translate-x-0 focus:translate-x-0 duration-300"
+                aria-label={`${t('works.open_details')} ${t(secondaryProject.title)}`}
+              >
+                <span className="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
               </a>
             </div>
           </div>
