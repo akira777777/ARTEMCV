@@ -1,0 +1,49 @@
+          queueMicrotask(() => {
+            if (pendingMouseMove && mouseAnimationId === null) {
+              mouseAnimationId = requestAnimationFrame(() => {
+                updateMousePosition(e.clientX, e.clientY);
+                if (isHovered) {
+                  createParticles(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top, 1);
+                }
+                mouseAnimationId = null;
+                pendingMouseMove = false;
+                lastMouseMoveTime = performance.now();
+              });
+            }
+          });
+        }
+        return;
+      }
+
+      // Process mouse move immediately if enough time has passed
+      lastMouseMoveTime = currentTime;
+      updateMousePosition(e.clientX, e.clientY);
+
+      if (isHovered) {
+        createParticles(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top, 1);
+      }
+    };
+
+    canvas.addEventListener('mousemove', handleMouseMove, { passive: true });
+
+    let animationId: number;
+
+    const drawGrid = () => {
+      time += 0.01;
+      ctx.strokeStyle = 'rgba(14, 165, 233, 0.15)';
+      ctx.lineWidth = 1;
+
+      const time20 = time * 20;
+      const time15 = time * 15;
+
+      for (let i = 0; i < xValues.length; i++) {
+        const x = xValues[i];
+        wavePartX[i] = Math.sin((x + time20) * 0.02) * 3;
+        lineDispX[i] = Math.cos((x + time20) * 0.02) * 3;
+      }
+
+      for (let i = 0; i < yValues.length; i++) {
+        const y = yValues[i];
+        wavePartY[i] = Math.cos((y + time15) * 0.02) * 3;
+        lineDispY[i] = Math.sin((y + time20) * 0.02) * 3;
+      }
