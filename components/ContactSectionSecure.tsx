@@ -1,6 +1,8 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { useI18n } from '../i18n';
 import { useFetchWithTimeout } from '../lib/hooks';
+import { EMAIL_PATTERN } from '../lib/utils';
+import { FORM_INPUT_CLASS, FORM_TEXTAREA_CLASS } from '../constants';
 import devLog from '../lib/logger';
 import { MailIcon, MessageCircleIcon, GithubIcon } from 'lucide-react';
 
@@ -163,6 +165,12 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
+              <label htmlFor="name" className="block text-sm font-bold text-white mb-2">{t('contact.label.name')}</label>
+              <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} placeholder={t('contact.placeholder.name')} required className={FORM_INPUT_CLASS} />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-bold text-white mb-2">{t('contact.label.email')}</label>
+              <input id="email" type="email" name="email" value={formData.email} onChange={handleChange} placeholder={t('contact.placeholder.email')} required className={FORM_INPUT_CLASS} />
               <label 
                 htmlFor="name" 
                 className="block text-sm font-bold text-emerald-300 mb-2"
@@ -205,6 +213,13 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
           </div>
 
           <div>
+            <label htmlFor="subject" className="block text-sm font-bold text-white mb-2">{t('contact.label.subject')}</label>
+            <input id="subject" type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder={t('contact.placeholder.subject')} className={FORM_INPUT_CLASS} />
+          </div>
+
+          <div>
+            <label htmlFor="message" className="block text-sm font-bold text-white mb-2">{t('contact.label.message')}</label>
+            <textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder={t('contact.placeholder.message')} rows={6} required className={FORM_TEXTAREA_CLASS} />
             <label 
               htmlFor="subject" 
               className="block text-sm font-bold text-emerald-300 mb-2"

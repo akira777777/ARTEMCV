@@ -1,3 +1,8 @@
+/**
+ * @deprecated This component is not used. Use SpotlightGallery.tsx instead.
+ * TODO: Remove this file in next cleanup.
+ */
+import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
 import React, { useRef, useState, useMemo, useEffect } from 'react';
 import { ArrowUpRight, X } from 'lucide-react';
 import { PROJECTS } from '../constants';

@@ -1,3 +1,7 @@
+/**
+ * @deprecated This component is lazy-loaded but never rendered in App.tsx.
+ * TODO: Consider integrating into UI or remove in next cleanup.
+ */
 import React, { useRef, useCallback, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useI18n } from '../i18n';

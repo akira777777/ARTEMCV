@@ -1,3 +1,7 @@
+/**
+ * @deprecated This component is not imported anywhere.
+ * TODO: Consider integrating into UI or remove in next cleanup.
+ */
 import React, { useMemo } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { useReducedMotion } from '../lib/hooks';

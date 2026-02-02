@@ -48,6 +48,10 @@ export const ServicesGrid: React.FC = React.memo(() => {
       {/* Section Header */}
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+          {t('about.offer')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-600">{t('services.grid.title')}</span>
+        </h2>
+        <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+          {t('services.grid.subtitle')}
           {t('about.offer')}
         </h2>
         <p className="text-gray-400 max-w-2xl mx-auto text-lg">
