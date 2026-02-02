@@ -51,6 +51,17 @@ const translations: Record<Lang, Dict> = {
     'contact.error.timeout': 'Network timeout. Please try again later.',
     'contact.reach_out': 'Or reach out through:',
 
+    'cta.title': "Let's Build Something Great Together",
+    'cta.subtitle': 'Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.',
+    'cta.button': 'Start Collaboration',
+    'cta.secondary': 'View GitHub',
+
+    'project.1.title': 'Barber Shop',
+    'project.1.desc': 'AI Barber Shop Dispatcher: online booking, anti-overbooking, customer CRM, and payment analytics. Optimized for multi-chair salons.',
+    'project.2.title': 'Dental Clinic Vakalova',
+    'project.2.desc': 'Landing page and doctor appointment: service catalog, interactive treatment plans, patient reviews. Focused on accessibility and loading speed.',
+    'project.3.title': 'Game Marketplace',
+    'project.3.desc': 'Modern game marketplace with catalog, shopping cart, filtering system, and responsive interface. Features animations and smooth transitions.',
     'cta.title': "Ready to Evolve?",
     'cta.subtitle': 'Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.',
     'cta.button': 'Hire Me',
@@ -166,6 +177,8 @@ const translations: Record<Lang, Dict> = {
     'skill.backend': 'Backend Systems',
     'skill.architecture': 'Architecture & Devops',
     'skill.tools': 'Workflow & Tools',
+    'services.grid.title': 'Specializations',
+    'services.grid.subtitle': 'Turning ideas into high-quality digital products.',
 
     'lab.badge': 'Interactive Lab',
     'lab.title': 'Live 3D accents for the wow effect.',
@@ -266,6 +279,18 @@ const translations: Record<Lang, Dict> = {
     'contact.error.sending': 'Ошибка при отправке сообщения. Пожалуйста, попробуйте еще раз.',
     'contact.error.timeout': 'Таймаут сети. Пожалуйста, попробуйте позже.',
     'contact.reach_out': 'Или свяжитесь через:',
+
+    'cta.title': 'Давайте создадим что-то классное вместе',
+    'cta.subtitle': 'Готовы воплотить ваше видение в жизнь? Я специализируюсь на создании высокопроизводительных интерактивных веб-приложений, адаптированных под ваши потребности.',
+    'cta.button': 'Начать сотрудничество',
+    'cta.secondary': 'Смотреть GitHub',
+
+    'project.1.title': 'Barber Shop',
+    'project.1.desc': 'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',
+    'project.2.title': 'Dental Clinic Vakalova',
+    'project.2.desc': 'Лендинг и запись к врачу: каталог услуг, интерактивные планы лечения, отзывы пациентов. Уделено внимание доступности и скорости загрузки.',
+    'project.3.title': 'Game Marketplace',
+    'project.3.desc': 'Современный маркетплейс игр с каталогом, корзиной покупок, системой фильтрации и адаптивным интерфейсом. Реализованы анимации и плавные переходы.',
     'contact.help.optional': 'Необязательно',
     'contact.help.message_min': 'Минимум 10 символов',
 
@@ -384,6 +409,8 @@ const translations: Record<Lang, Dict> = {
     'skill.backend': 'Backend системы',
     'skill.architecture': 'Архитектура и Devops',
     'skill.tools': 'Инструменты и Workflow',
+    'services.grid.title': 'специализации',
+    'services.grid.subtitle': 'Превращаю идеи в работающие цифровые продукты высокого качества.',
 
     'lab.badge': 'Интерактивная Лаборатория',
     'lab.title': 'Живые 3D-акценты для вау-эффекта.',
@@ -602,6 +629,8 @@ const translations: Record<Lang, Dict> = {
     'skill.backend': 'Backend systémy',
     'skill.architecture': 'Architektura a Devops',
     'skill.tools': 'Nástroje a Workflow',
+    'services.grid.title': 'specializace',
+    'services.grid.subtitle': 'Přeměňuji nápady na kvalitní digitální produkty.',
 
     'lab.badge': 'Interaktivní Laboratoř',
     'lab.title': 'Živé 3D akcenty pro wow efekt.',

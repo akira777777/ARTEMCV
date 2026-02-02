@@ -6,6 +6,10 @@ import { motion } from 'framer-motion';
  * Adds visual hierarchy and pacing to the design
  */
 interface SectionDividerProps {
+  variant?: 'gradient' | 'dots' | 'lines';
+  className?: string;
+}
+
   variant?: 'gradient' | 'dots' | 'lines' | 'wave' | 'particles' | 'glitch' | 'diamond' | 'pulse';
   className?: string;
 }

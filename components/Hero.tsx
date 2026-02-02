@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { ServicesGrid } from './ServicesGrid';
+import { scrollToSection } from '../lib/utils';
 import { ParticleText } from './ParticleText';
 
 // Letter animation component for name
@@ -313,11 +314,8 @@ const Hero: React.FC = React.memo(() => {
               className="text-[11vw] sm:text-[9vw] lg:text-[6.5rem] leading-[0.9] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-primary-300 select-none uppercase"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-<<<<<<< HEAD
               transition={{ delay: 0.6 }}
               style={{ fontSize: 'clamp(2rem, 10vw, 6.5rem)' }}
-=======
->>>>>>> bc87a9b51add2cc88844cb8ee85accccd04e9c43
             >
               {(t('hero.title.line1') + ' ' + t('hero.title.line2')).split('').map((letter, index) => (
                 <AnimatedLetter key={index} letter={letter} index={index} />
@@ -341,11 +339,8 @@ const Hero: React.FC = React.memo(() => {
             >
               <motion.button
                 onClick={scrollToWorks}
-<<<<<<< HEAD
                 className="neon-button px-7 py-3 rounded-full text-xs font-bold tracking-widest interactive-element touch-target"
-=======
                 className="px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-full hover:shadow-lg hover:shadow-primary/30 transition-all group"
->>>>>>> bc87a9b51add2cc88844cb8ee85accccd04e9c43
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -354,11 +349,8 @@ const Hero: React.FC = React.memo(() => {
               </motion.button>
               <motion.button
                 onClick={scrollToContact}
-<<<<<<< HEAD
                 className="px-7 py-3 rounded-full border border-primary/30 text-primary-300 text-xs font-bold tracking-widest hover:bg-primary/10 ease-smooth interactive-element touch-target"
-=======
                 className="px-8 py-4 border border-primary/30 text-primary font-semibold rounded-full hover:bg-primary/10 transition-colors"
->>>>>>> bc87a9b51add2cc88844cb8ee85accccd04e9c43
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -416,6 +408,9 @@ const Hero: React.FC = React.memo(() => {
 
       <motion.button
         type="button"
+        onClick={() => scrollToSection('works')}
+        aria-label="Scroll down to explore projects"
+        className="absolute bottom-4 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group"
         onClick={scrollToWorks}
         aria-label={t('hero.cta.scroll')}
         className="fixed bottom-8 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-gray-500 hover:text-white transition-colors group z-40"
