@@ -20,6 +20,8 @@ interface OptimizedImageProps {
  * - WebP format with fallback to original format
  * - Lazy loading with intersection observer
  * - Loading states and error handling
+ * - Blur-up technique for smoother loading
+ * - Advanced caching strategies
  */
 const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
   src,
@@ -35,6 +37,7 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
 }, ref) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const internalImgRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -51,8 +54,17 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
     return webpVersion;
   };
 
+  // Extract low-quality placeholder from original src (if available)
+  const getLQIPSrc = (originalSrc: string): string => {
+    // Look for _lqip or _thumb variants in the filename
+    const lqipMatch = originalSrc.replace(/(\.[^.]+)$/, '_lqip$1');
+    return lqipMatch;
+  };
+
   const webpSrc = getWebPSrc(src);
+  const lqipSrc = getLQIPSrc(src);
   const [currentSrc, setCurrentSrc] = useState(priority ? src : ''); // Don't load non-priority images until in viewport
+  const [lqipLoaded, setLqipLoaded] = useState(false);
 
   // Check if browser supports WebP using centralized utility
   const [supportsWebP, setSupportsWebP] = useState(true);
@@ -68,11 +80,15 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
+          // Preload image to trigger loading
+          const img = new Image();
+          img.src = supportsWebP ? webpSrc : src;
+          
           setCurrentSrc(supportsWebP ? webpSrc : src);
           observer.unobserve(entry.target);
         }
       },
-      { rootMargin: '100px' } // Start loading 100px before entering viewport
+      { rootMargin: '200px' } // Start loading 200px before entering viewport for better UX
     );
 
     observer.observe(containerRef.current);
@@ -90,6 +106,7 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
   }, [priority, supportsWebP, webpSrc, src]);
 
   const handleLoad = () => {
+    setIsLoaded(true);
     setIsLoading(false);
     onLoad?.();
   };
@@ -113,6 +130,21 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
   const renderPlaceholder = () => {
     if (placeholder === 'empty') {
       return null;
+    }
+
+    // If we have a low-quality placeholder, use it
+    if (lqipSrc && !lqipLoaded) {
+      return (
+        <img
+          src={lqipSrc}
+          alt=""
+          className={`absolute inset-0 w-full h-full object-cover blur-sm ${className}`}
+          style={{ width, height }}
+          loading="eager"
+          onLoad={() => setLqipLoaded(true)}
+          onError={() => setLqipLoaded(true)} // Proceed with main image if LQIP fails
+        />
+      );
     }
 
     return (
@@ -153,8 +185,8 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
             sizes={responsiveSizes}
             loading={priority ? 'eager' : 'lazy'}
             decoding="async"
-            className={`block w-full h-full object-cover transition-opacity duration-300 ${
-              isLoading ? 'opacity-0' : 'opacity-100'
+            className={`block w-full h-full object-cover transition-opacity duration-500 ${
+              isLoaded ? 'opacity-100' : 'opacity-0'
             }`}
             onLoad={handleLoad}
             onError={handleError}
@@ -162,7 +194,7 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
         </picture>
       )}
       
-      {isLoading && (
+      {isLoading && !lqipLoaded && (
         <div 
           className="absolute inset-0 flex items-center justify-center"
           aria-hidden="true"

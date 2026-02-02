@@ -1,10 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, Github } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import { useI18n } from '../i18n';
 import OptimizedImage from './OptimizedImage';
+import { HolographicCard } from './HolographicCard';
+import { FloatingParticleCanvas } from './FloatingParticleCanvas';
 
 /**
  * Spotlight Gallery - Modern project showcase with featured project and thumbnail carousel
@@ -12,6 +14,7 @@ import OptimizedImage from './OptimizedImage';
 export const SpotlightGallery: React.FC = React.memo(() => {
   const { t } = useI18n();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [autoPlay, setAutoPlay] = useState(true);
   const activeProject = PROJECTS[activeIndex];
 
   const handlePrev = () => {
@@ -21,6 +24,17 @@ export const SpotlightGallery: React.FC = React.memo(() => {
   const handleNext = () => {
     setActiveIndex((prev) => (prev === PROJECTS.length - 1 ? 0 : prev + 1));
   };
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (!autoPlay) return;
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [autoPlay, activeIndex]);
 
   const visibleThumbnails = useMemo(() => {
     const start = activeIndex;
@@ -32,7 +46,16 @@ export const SpotlightGallery: React.FC = React.memo(() => {
   }, [activeIndex]);
 
   return (
-    <section id="works" className="py-32 w-full relative border-t border-white/5 bg-gradient-to-b from-black to-neutral-950">
+    <section id="works" className="py-32 w-full relative border-t border-white/5 bg-gradient-to-b from-black via-neutral-950/50 to-black overflow-hidden">
+      {/* Background floating particles */}
+      <div className="absolute inset-0 -z-10">
+        <FloatingParticleCanvas 
+          particleCount={50} 
+          interactionRadius={80}
+          backgroundColor="transparent"
+        />
+      </div>
+      
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
@@ -41,8 +64,21 @@ export const SpotlightGallery: React.FC = React.memo(() => {
             <h2 className="text-5xl md:text-7xl font-display font-bold text-white">{t('works.title')}</h2>
           </div>
 
-          {/* Navigation Controls */}
+          {/* Controls */}
           <div className="flex gap-4 mt-8 md:mt-0">
+            {/* Auto-play toggle */}
+            <button
+              onClick={() => setAutoPlay(!autoPlay)}
+              className={`p-4 rounded-full border-2 ${
+                autoPlay 
+                  ? 'border-indigo-500 bg-indigo-500/20 text-indigo-300' 
+                  : 'border-white/20 text-neutral-400 hover:border-indigo-400/30'
+              } transition-all duration-300`}
+              aria-label={autoPlay ? "Pause auto-play" : "Start auto-play"}
+            >
+              {autoPlay ? '⏸️' : '▶️'}
+            </button>
+            
             <button
               onClick={handlePrev}
               aria-label={t('works.prev')}
@@ -140,16 +176,31 @@ export const SpotlightGallery: React.FC = React.memo(() => {
               </div>
             </div>
 
-            {/* CTA Button */}
-            <a
-              href={activeProject.liveLink || activeProject.githubLink || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group/btn w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm font-bold rounded-xl hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] transition-all duration-300"
-            >
-              {t('works.cta.view')}
-              <ArrowUpRight size={16} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
-            </a>
+            {/* CTA Buttons */}
+            <div className="space-y-3">
+              {activeProject.liveLink && (
+                <a
+                  href={activeProject.liveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/btn w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm font-bold rounded-xl hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] transition-all duration-300"
+                >
+                  {t('works.cta.view')}
+                  <ExternalLink size={16} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                </a>
+              )}
+              {activeProject.githubLink && (
+                <a
+                  href={activeProject.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/btn w-full flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 text-white text-sm font-bold rounded-xl hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 transition-all duration-300"
+                >
+                  VIEW CODE
+                  <Github size={16} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
 
@@ -198,8 +249,9 @@ export const SpotlightGallery: React.FC = React.memo(() => {
         {/* Counter */}
         <div className="mt-16 text-center">
           <p className="text-sm text-neutral-400">
-            Viewing <span className="text-white font-bold">{activeIndex + 1}</span> of{' '}
-            <span className="text-white font-bold">{PROJECTS.length}</span> projects
+            {t('works.open_details')} <span className="text-white font-bold">{t(activeProject.title)}</span> •{' '}
+            {t('works.scroll_left')} / {t('works.scroll_right')} •{' '}
+            Auto {autoPlay ? 'PLAY' : 'PAUSED'}
           </p>
         </div>
       </div>
