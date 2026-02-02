@@ -2,7 +2,9 @@ import React from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { useReducedMotion } from '../lib/hooks';
 
-const ScrollProgress: React.FC = () => {
+interface ScrollProgressProps {}
+
+const ScrollProgress: React.FC<ScrollProgressProps> = () => {
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   

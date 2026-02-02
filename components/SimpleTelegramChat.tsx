@@ -2,6 +2,10 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, X, Send, Loader2, Maximize2, Minimize2 } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { useFetchWithTimeout } from '../lib/hooks';
+import devLog from '../lib/logger';
+
+// Memoized style objects for performance
+const SCROLLBAR_STYLE = { scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' } as const;
 
 interface Message {
   id: string;
@@ -122,7 +126,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       if (!res.ok) {
         // Local dev mode may return 404
         if (res.status === 404 && window.location.hostname === 'localhost') {
-          console.warn('API endpoint not available in dev mode.');
+          devLog.warn('API endpoint not available in dev mode.');
         } else {
           const err = await res.text().catch(() => '');
           throw new Error(err || `Failed to send (status ${res.status})`);
@@ -139,14 +143,14 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       }]);
 
       lastSubmitRef.current = now;
-    } catch (err: any) {
-      console.error('Error sending message:', err);
+    } catch (err: unknown) {
+      devLog.error('Error sending message:', err);
       
       let errorText = t('chat.error.sending') || 'Error sending message';
-      if (err?.name === 'AbortError') {
+      if ((err as Error)?.name === 'AbortError') {
         errorText = t('chat.error.timeout') || 'Timeout sending message. Please try again.';
-      } else if (err?.message) {
-        errorText = err.message;
+      } else if ((err as Error)?.message) {
+        errorText = (err as Error).message;
       }
       
       setError(errorText);
@@ -171,6 +175,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         <button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={isOpen ? t('chat.aria.close') : t('chat.aria.open')}
+          title={isOpen ? t('chat.aria.close') : t('chat.aria.open')}
           className={`
             w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500
             ${isOpen ? 'bg-white text-black rotate-90' : 'bg-neutral-900 text-white hover:scale-110 border border-white/20'}
@@ -208,7 +213,12 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50" style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' }}>
+        <div
+          className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50"
+          style={SCROLLBAR_STYLE}
+          role="log"
+          aria-live="polite"
+        >
           {messages.map((msg) => (
             <div 
               key={msg.id} 
@@ -269,6 +279,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(e as any)}
               placeholder={t('chat.placeholder')}
+              aria-label={t('chat.placeholder')}
               disabled={loading}
               className="flex-1 bg-white/5 border border-white/10 rounded-full py-3 px-4 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50"
             />

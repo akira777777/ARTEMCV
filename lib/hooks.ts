@@ -58,6 +58,37 @@ export function useMousePosition() {
 }
 
 /**
+ * Hook for scroll position with RAF throttling
+ * Returns current scrollY position
+ */
+export function useScrollPosition() {
+  const [scrollY, setScrollY] = useState(0);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const handler = () => {
+      if (rafRef.current !== null) return;
+
+      rafRef.current = requestAnimationFrame(() => {
+        setScrollY(window.scrollY);
+        rafRef.current = null;
+      });
+    };
+
+    window.addEventListener('scroll', handler, { passive: true });
+    handler(); // Initialize with current position
+    return () => {
+      window.removeEventListener('scroll', handler);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
+
+  return scrollY;
+}
+
+/**
  * Hook for scroll progress (0 to 1) with RAF throttling
  */
 export function useScrollProgress() {

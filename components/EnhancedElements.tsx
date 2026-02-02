@@ -1,6 +1,12 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 
+// Memoized style objects for performance
+const WAVE_SVG_STYLE = { height: '50%' } as const;
+const CLIP_PATH_TOP = { clipPath: 'inset(0 0 50% 0)' } as const;
+const CLIP_PATH_BOTTOM = { clipPath: 'inset(50% 0 0 0)' } as const;
+const PERSPECTIVE_CONTAINER_STYLE = { perspective: 1000 } as const;
+
 /**
  * WaveBackground - Animated wave background with floating particles
  * Uses SVG for smooth wave animations
@@ -13,7 +19,7 @@ export const WaveBackground: React.FC<{ className?: string }> = React.memo(({ cl
         className="absolute bottom-0 left-0 w-full"
         viewBox="0 0 1440 320"
         preserveAspectRatio="none"
-        style={{ height: '50%' }}
+        style={WAVE_SVG_STYLE}
       >
         <motion.path
           fill="rgba(99, 102, 241, 0.1)"
@@ -574,7 +580,7 @@ export const GlitchText: React.FC<GlitchTextProps> = React.memo(({
               }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, repeat: Infinity }}
-              style={{ clipPath: 'inset(0 0 50% 0)' }}
+              style={CLIP_PATH_TOP}
               aria-hidden="true"
             >
               {text}
@@ -588,7 +594,7 @@ export const GlitchText: React.FC<GlitchTextProps> = React.memo(({
               }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, repeat: Infinity }}
-              style={{ clipPath: 'inset(50% 0 0 0)' }}
+              style={CLIP_PATH_BOTTOM}
               aria-hidden="true"
             >
               {text}
@@ -662,7 +668,7 @@ export const OrbitingRings: React.FC<OrbitingRingsProps> = React.memo(({
   return (
     <div 
       className={`relative ${className}`} 
-      style={{ width: size, height: size, perspective: 1000 }}
+      style={{ width: size, height: size, ...PERSPECTIVE_CONTAINER_STYLE }}
       aria-hidden="true"
     >
       {[0, 1, 2].map((index) => (
@@ -749,7 +755,7 @@ export const NeonBorder: React.FC<NeonBorderProps> = React.memo(({
         transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
       />
 
-      <div className="relative bg-[#0a0a0a] rounded-2xl">
+      <div className="relative bg-[#050505] rounded-2xl">
         {children}
       </div>
     </div>

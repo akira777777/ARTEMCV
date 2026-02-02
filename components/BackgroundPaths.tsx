@@ -8,7 +8,7 @@ interface FloatingPathsProps {
   position: number;
 }
 
-function FloatingPaths({ position }: FloatingPathsProps) {
+const FloatingPaths: React.FC<FloatingPathsProps> = React.memo(({ position }) => {
   const paths = Array.from({ length: 36 }, (_, i) => ({
     id: i,
     d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
@@ -54,7 +54,7 @@ function FloatingPaths({ position }: FloatingPathsProps) {
       </svg>
     </div>
   );
-}
+});
 
 interface BackgroundPathsProps {
   title?: string;

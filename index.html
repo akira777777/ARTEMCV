@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
     <meta name="description" content="JULES.ENGINEER — Full Stack Developer & Designer specializing in React 19, TypeScript, and modern AI-driven architecture. Building high-performance, motion-led digital ecosystems." />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="theme-color" content="#050505" />
     <meta name="author" content="Jules Engineer" />
     <meta name="keywords" content="full stack developer, react developer, typescript, motion design, web architecture, AI integration, portfolio, Prague" />
     
@@ -26,28 +26,32 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="apple-touch-icon" href="/vite.svg" />
     
-    <!-- Critical Resource Preloading -->
+    <!-- Enhanced Resource Preloading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Preload critical fonts with higher priority -->
+    <!-- Early Hints for Critical Resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
     
-    <!-- Preload critical above-the-fold images -->
-    <link rel="preload" href="/barber.webp" as="image" type="image/webp" importance="high">
-    <link rel="preload" href="/dental.webp" as="image" type="image/webp" importance="high">
+    <!-- Preload critical above-the-fold images with WebP priority -->
     <link rel="preload" href="/marketplace.webp" as="image" type="image/webp" importance="high">
     <link rel="preload" href="/detailing.webp" as="image" type="image/webp" importance="high">
+    <link rel="preload" href="/barber.webp" as="image" type="image/webp" importance="high">
+    <link rel="preload" href="/dental.webp" as="image" type="image/webp" importance="high">
     
     <!-- DNS prefetch for external domains -->
     <link rel="dns-prefetch" href="https://picsum.photos">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.telegram.org">
     
     <!-- Preconnect to critical third-party services -->
     <link rel="preconnect" href="https://api.telegram.org" crossorigin>
+    
+    <!-- Module preloading for faster script execution -->
+    <link rel="modulepreload" href="/index.tsx">
 
     <!-- Critical Above-the-Fold CSS -->
     <style>
@@ -58,14 +62,14 @@
         --secondary: #06B6D4;
         --accent: #F59E0B;
         --text-primary: #FFFFFF;
-        --bg-dark: #0a0a0a;
+        --bg-dark: #050505;
       }
 
       /* Minimal critical styles for above-the-fold content */
       body {
         margin: 0;
         padding: 0;
-        background: var(--bg-dark);
+        background: #050505;
         color: var(--text-primary);
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -77,7 +81,7 @@
       /* Root element styling for immediate render */
       #root {
         min-height: 100vh;
-        background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+        background: #050505;
       }
 
       /* Navigation skeleton for immediate display */
@@ -87,7 +91,7 @@
         left: 0;
         right: 0;
         height: 80px;
-        background: rgba(10, 10, 10, 0.95);
+        background: rgba(5, 5, 5, 0.95);
         backdrop-filter: blur(10px);
         z-index: 50;
       }
@@ -156,8 +160,7 @@
     
     <title>JULES.ENGINEER — Full Stack Developer & Designer</title>
     
-    <!-- Preload critical JavaScript bundles -->
-    <link rel="modulepreload" href="/index.tsx">
+
   </head>
   <body>
     <div id="root"></div>

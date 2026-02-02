@@ -1,0 +1,50 @@
+      ctx.beginPath();
+      for (let i = 0; i < xValues.length; i++) {
+        const x = xValues[i];
+        const wx = wavePartX[i];
+        const hasNextX = (x + gridSize < w);
+
+        for (let j = 0; j < yValues.length; j++) {
+          const y = yValues[j];
+          const wy = wavePartY[j];
+          const wave = wx + wy;
+
+          ctx.moveTo(x + 2, y + wave);
+          ctx.arc(x, y + wave, 2, 0, Math.PI * 2);
+
+          if (hasNextX) {
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + gridSize, y + lineDispY[j]);
+          }
+
+          if (y + gridSize < h) {
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + lineDispX[i], y + gridSize);
+          }
+        }
+      }
+      ctx.stroke();
+    };
+
+    const drawParticles = () => {
+      // Use particle pool instead of dynamic array for better performance
+      for (let i = activeParticleCount - 1; i >= 0; i--) {
+        const p = particlePool[i];
+
+        p.vy += 0.05;
+        p.vx *= 0.99;
+        p.vy *= 0.99;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 1;
+
+        if (p.life <= 0) {
+          // Move last active particle to current position and decrease count
+          if (i < activeParticleCount - 1) {
+            particlePool[i] = particlePool[activeParticleCount - 1];
+          }
+          activeParticleCount--;
+          continue;
+        }
+
+        const alphaNorm = p.life / p.maxLife;

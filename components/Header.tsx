@@ -8,7 +8,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-gradient-to-b from-[#0a0a0a]/90 to-[#0a0a0a]/70 backdrop-blur-md border-b border-white/5">
+    <header className="fixed top-0 inset-x-0 z-50 bg-gradient-to-b from-[#050505]/90 to-[#050505]/70 backdrop-blur-md border-b border-white/5">
       <nav className="max-w-7xl mx-auto px-6 lg:px-12" role="navigation" aria-label="Main Navigation">
         <div className="flex justify-between h-20 items-center">
           <a className="flex items-center space-x-2 cursor-pointer group" href="#top" aria-label="Go to homepage">
