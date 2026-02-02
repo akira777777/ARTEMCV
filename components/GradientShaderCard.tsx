@@ -58,6 +58,7 @@ const GradientShaderCard: React.FC = () => {
 
           for (let i = 0; i < 2; i++) {
             const angle = (Math.random() * Math.PI * 2);
+            const colorIdx = Math.floor(Math.random() * colors.length);
             const speed = 1 + Math.random() * 2;
             particlesRef.current.push({
               x: mouseRef.current.x,
@@ -65,7 +66,8 @@ const GradientShaderCard: React.FC = () => {
               vx: Math.cos(angle) * speed,
               vy: Math.sin(angle) * speed,
               radius: 1 + Math.random() * 3,
-              color: colors[Math.floor(Math.random() * colors.length)],
+              color: colors[colorIdx],
+              colorIdx,
               life: 100,
               maxLife: 100,
             });
@@ -398,7 +400,6 @@ const GradientShaderCard: React.FC = () => {
       ctx.drawImage(scanlineCanvas, 0, 0, w, h);
     };
 
-    let animationId: number;
     const animate = () => {
       // Clear canvas efficiently
       ctx.fillStyle = bgGradient;
