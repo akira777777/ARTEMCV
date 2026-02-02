@@ -13,16 +13,16 @@ const BentoGrid: React.FC = () => {
   const tertiaryProject = PROJECTS[1]; // Dental Clinic
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-32" id="work">
+    <section className="max-w-7xl mx-auto px-6 py-32" id="work" aria-labelledby="work-title">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[300px]">
         {/* Main Project: Detailing Hub */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="md:col-span-8 md:row-span-2 relative overflow-hidden rounded-[2rem] border border-white/10 transition-all duration-500 hover:border-indigo-500/50 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] bg-[#0a0a0a] group"
+          className="md:col-span-8 md:row-span-2 relative overflow-hidden rounded-[2rem] border border-white/10 transition-all duration-500 hover:border-indigo-500/50 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] bg-[#050505] group"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 to-transparent" aria-hidden="true"></div>
           <div className="absolute inset-0 opacity-40 mix-blend-overlay group-hover:scale-105 transition-transform duration-1000">
             <OptimizedImage
               alt={t(mainProject.title)}
@@ -36,23 +36,24 @@ const BentoGrid: React.FC = () => {
               <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white text-[10px] font-bold tracking-widest uppercase">
                 {t('works.badge')}
               </span>
-              <h3 className="text-4xl md:text-5xl font-display font-bold mt-6 text-white">{t(mainProject.title)}</h3>
+              <h3 id="work-title" className="text-4xl md:text-5xl font-display font-bold mt-6 text-white">{t(mainProject.title)}</h3>
               <p className="mt-4 opacity-50 max-w-sm text-white">{t(mainProject.description)}</p>
             </div>
             <div className="flex items-end justify-between">
               <div className="flex gap-4">
                 <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-white">
-                  <span className="material-symbols-outlined">view_in_ar</span>
+                  <span className="material-symbols-outlined" aria-hidden="true">view_in_ar</span>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-white">
-                  <span className="material-symbols-outlined">bolt</span>
+                  <span className="material-symbols-outlined" aria-hidden="true">bolt</span>
                 </div>
               </div>
               <Link
                 to={mainProject.liveLink.startsWith('http') ? mainProject.liveLink : mainProject.liveLink}
                 className="bg-white text-black px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform flex items-center gap-2"
+                aria-label={`${t('works.cta.view')} ${t(mainProject.title)}`}
               >
-                {t('works.cta.view')} <span className="material-symbols-outlined text-sm">open_in_new</span>
+                {t('works.cta.view')} <span className="material-symbols-outlined text-sm" aria-hidden="true">open_in_new</span>
               </Link>
             </div>
           </div>
@@ -66,43 +67,44 @@ const BentoGrid: React.FC = () => {
           transition={{ delay: 0.1 }}
           className="md:col-span-4 md:row-span-2 relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-md flex flex-col p-10"
           id="stack"
+          aria-labelledby="stack-title"
         >
-          <h3 className="text-2xl font-display font-bold mb-8 text-white">{t('about.title')}</h3>
+          <h3 id="stack-title" className="text-2xl font-display font-bold mb-8 text-white">{t('about.title')}</h3>
           <div className="flex-grow flex flex-col gap-6">
             <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-4 group/item hover:bg-white/10 transition-all cursor-default">
               <div className="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400 group-hover/item:animate-pulse">
-                <span className="material-symbols-outlined text-3xl">change_history</span>
+                <span className="material-symbols-outlined text-3xl" aria-hidden="true">change_history</span>
               </div>
               <div>
-                <div className="font-bold text-sm text-white">Next.js 16</div>
-                <div className="text-[10px] opacity-40 uppercase tracking-wider text-white">SSR Framework</div>
+                <div className="font-bold text-sm text-white">{t('stack.nextjs.name')}</div>
+                <div className="text-[10px] opacity-40 uppercase tracking-wider text-white">{t('stack.nextjs.desc')}</div>
               </div>
             </div>
             <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-4 group/item hover:bg-white/10 transition-all cursor-default">
               <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 group-hover/item:rotate-180 transition-transform duration-700">
-                <span className="material-symbols-outlined text-3xl">token</span>
+                <span className="material-symbols-outlined text-3xl" aria-hidden="true">token</span>
               </div>
               <div>
-                <div className="font-bold text-sm text-white">Three.js / WebGPU</div>
-                <div className="text-[10px] opacity-40 uppercase tracking-wider text-white">Graphic Core</div>
+                <div className="font-bold text-sm text-white">{t('stack.threejs.name')}</div>
+                <div className="text-[10px] opacity-40 uppercase tracking-wider text-white">{t('stack.threejs.desc')}</div>
               </div>
             </div>
             <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-4 group/item hover:bg-white/10 transition-all cursor-default">
               <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 group-hover/item:scale-110 transition-transform">
-                <span className="material-symbols-outlined text-3xl">motion_mode</span>
+                <span className="material-symbols-outlined text-3xl" aria-hidden="true">motion_mode</span>
               </div>
               <div>
-                <div className="font-bold text-sm text-white">GSAP Motion</div>
-                <div className="text-[10px] opacity-40 uppercase tracking-wider text-white">Animation Logic</div>
+                <div className="font-bold text-sm text-white">{t('stack.gsap.name')}</div>
+                <div className="text-[10px] opacity-40 uppercase tracking-wider text-white">{t('stack.gsap.desc')}</div>
               </div>
             </div>
           </div>
           {/* Gradient Shader Card for visual enhancement */}
-          <div className="mt-8">
+          <div className="mt-8" aria-hidden="true">
             <LazyGradientShaderCard />
           </div>
           <div className="mt-8 pt-8 border-t border-white/10 text-center">
-            <p className="text-[10px] opacity-30 uppercase tracking-[0.4em] text-white">High Performance Only</p>
+            <p className="text-[10px] opacity-30 uppercase tracking-[0.4em] text-white">{t('stack.performance')}</p>
           </div>
         </motion.div>
 
@@ -112,7 +114,7 @@ const BentoGrid: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="md:col-span-6 md:row-span-1 relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0a0a0a] group cursor-pointer"
+          className="md:col-span-6 md:row-span-1 relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#050505] group cursor-pointer"
         >
           <OptimizedImage
             alt={t(secondaryProject.title)}
@@ -120,7 +122,7 @@ const BentoGrid: React.FC = () => {
             src={secondaryProject.image}
             priority={false} // Lazy loading for below-the-fold content
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" aria-hidden="true"></div>
           <div className="relative h-full p-8 flex flex-col justify-end z-10">
             <div className="flex justify-between items-end">
               <div>
@@ -151,8 +153,8 @@ const BentoGrid: React.FC = () => {
           <div className="relative h-full p-8 flex items-center gap-8">
             <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-indigo-500/50 transition-colors">
               <div className="relative w-12 h-12 flex items-center justify-center">
-                <span className="material-symbols-outlined text-5xl text-indigo-400 group-hover:scale-0 transition-all duration-500">dentistry</span>
-                <span className="material-symbols-outlined text-5xl text-white absolute scale-0 group-hover:scale-110 transition-all duration-500">sentiment_very_satisfied</span>
+                <span className="material-symbols-outlined text-5xl text-indigo-400 group-hover:scale-0 transition-all duration-500" aria-hidden="true">dentistry</span>
+                <span className="material-symbols-outlined text-5xl text-white absolute scale-0 group-hover:scale-110 transition-all duration-500" aria-hidden="true">sentiment_very_satisfied</span>
               </div>
             </div>
             <div>

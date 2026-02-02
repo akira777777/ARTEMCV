@@ -49,7 +49,7 @@ const DefaultErrorFallback: React.FC<{ error?: Error; resetError?: () => void }>
       <p className="text-lg mb-6 text-gray-300">{t('error.description')}</p>
       
       {error && (
-        <details className="mb-6 w-full max-w-2xl bg-[#0a0a0a] p-4 rounded-lg">
+        <details className="mb-6 w-full max-w-2xl bg-[#050505] p-4 rounded-lg">
           <summary className="cursor-pointer text-left text-yellow-400 font-medium">
             {t('error.details')}
           </summary>

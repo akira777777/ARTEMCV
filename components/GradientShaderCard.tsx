@@ -7,6 +7,7 @@ interface Particle {
   vy: number;
   radius: number;
   color: string;
+  colorIdx: number;
   life: number;
   maxLife: number;
 }
@@ -146,6 +147,120 @@ const GradientShaderCard: React.FC = () => {
     const lineDispX = new Float32Array(xValues.length);
     const lineDispY = new Float32Array(yValues.length);
 
+    // Optimized rendering constants
+    const COLORS_BASE = [
+      'rgba(14, 165, 233',  // Sky Blue
+      'rgba(16, 185, 129',  // Emerald
+      'rgba(245, 158, 11',  // Amber
+      'rgba(139, 92, 246'   // Violet
+    ];
+    const ALPHA_STEPS = 10;
+
+    // Pre-calculate color strings to avoid string concatenation in the animation loop
+    const COLOR_STRINGS = COLORS_BASE.map(base => {
+      const core: string[] = [];
+      const glow: string[] = [];
+      for (let a = 1; a <= ALPHA_STEPS; a++) {
+        const alpha = (a / ALPHA_STEPS) * 0.8;
+        core.push(`${base}, ${alpha.toFixed(2)})`);
+        glow.push(`${base}, ${(alpha * 0.3).toFixed(2)})`);
+      }
+      return { core, glow };
+    });
+
+    // Pre-allocate batches for combined draw calls - store references to avoid indexing issues during swaps
+    const batches: Particle[][][] = COLORS_BASE.map(() =>
+      Array.from({ length: ALPHA_STEPS }, () => [] as Particle[])
+    );
+
+    // Create initial particle emitter with optimized particle management
+    const PARTICLE_POOL_SIZE = 100; // Limit total particles for better performance
+    const particlePool: Particle[] = [];
+    let activeParticleCount = 0;
+    
+    // Pre-create particle objects to avoid GC pressure
+    for (let i = 0; i < PARTICLE_POOL_SIZE; i++) {
+      particlePool.push({
+        x: 0, y: 0, vx: 0, vy: 0, radius: 0, color: '', colorIdx: 0, life: 0, maxLife: 0
+      });
+    }
+    
+    const createParticles = (x: number, y: number, count: number = 1) => {
+      for (let i = 0; i < count; i++) {
+        // Find inactive particle in pool
+        if (activeParticleCount < PARTICLE_POOL_SIZE) {
+          const p = particlePool[activeParticleCount++];
+          const angle = (Math.random() * Math.PI * 2);
+          const speed = 1 + Math.random() * 2;
+          const colorIdx = Math.floor(Math.random() * COLORS_BASE.length);
+          
+          // Reset particle properties
+          p.x = x;
+          p.y = y;
+          p.vx = Math.cos(angle) * speed;
+          p.vy = Math.sin(angle) * speed;
+          p.radius = 1 + Math.random() * 3;
+          p.colorIdx = colorIdx;
+          p.color = COLORS_BASE[colorIdx];
+          p.life = 100;
+          p.maxLife = 100;
+        }
+      }
+    };
+
+    // Enhanced mouse throttling with timestamp-based approach for better performance
+    let lastMouseMoveTime = 0;
+    const MOUSE_THROTTLE_DELAY = 16; // ~60fps limit
+    let pendingMouseMove = false;
+    let mouseAnimationId: number | null = null;
+    
+    const updateMousePosition = (clientX: number, clientY: number) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = { 
+        x: clientX - rect.left, 
+        y: clientY - rect.top 
+      };
+    };
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      const currentTime = performance.now();
+      
+      // Throttle mouse events to prevent excessive processing
+      if (currentTime - lastMouseMoveTime < MOUSE_THROTTLE_DELAY) {
+        // Store the latest mouse position for next frame processing
+        if (!pendingMouseMove) {
+          pendingMouseMove = true;
+          // Use microtask to ensure we process the latest position
+          queueMicrotask(() => {
+            if (pendingMouseMove && mouseAnimationId === null) {
+              mouseAnimationId = requestAnimationFrame(() => {
+                updateMousePosition(e.clientX, e.clientY);
+                if (isHovered) {
+                  createParticles(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top, 1);
+                }
+                mouseAnimationId = null;
+                pendingMouseMove = false;
+                lastMouseMoveTime = performance.now();
+              });
+            }
+          });
+        }
+        return;
+      }
+      
+      // Process mouse move immediately if enough time has passed
+      lastMouseMoveTime = currentTime;
+      updateMousePosition(e.clientX, e.clientY);
+      
+      if (isHovered) {
+        createParticles(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top, 1);
+      }
+    };
+
+    canvas.addEventListener('mousemove', handleMouseMove, { passive: true });
+
+    let animationId: number;
+
     const drawGrid = () => {
       time += 0.01;
       ctx.strokeStyle = 'rgba(14, 165, 233, 0.15)';
@@ -195,9 +310,16 @@ const GradientShaderCard: React.FC = () => {
     };
 
     const drawParticles = () => {
-      const particles = particlesRef.current;
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
+      // Clear batches for this frame
+      for (let c = 0; c < COLORS_BASE.length; c++) {
+        for (let a = 0; a < ALPHA_STEPS; a++) {
+          batches[c][a].length = 0;
+        }
+      }
+
+      // Use particle pool instead of dynamic array for better performance
+      for (let i = activeParticleCount - 1; i >= 0; i--) {
+        const p = particlePool[i];
         
         p.vy += 0.05;
         p.vx *= 0.99;
@@ -208,23 +330,51 @@ const GradientShaderCard: React.FC = () => {
         p.life -= 1;
 
         if (p.life <= 0) {
-          particles.splice(i, 1);
+          // Move last active particle to current position and decrease count
+          if (i < activeParticleCount - 1) {
+            // Swap current with last active to maintain pool density
+            const lastActiveIdx = activeParticleCount - 1;
+            const temp = particlePool[i];
+            particlePool[i] = particlePool[lastActiveIdx];
+            particlePool[lastActiveIdx] = temp;
+          }
+          activeParticleCount--;
           continue;
         }
 
-        const alpha = (p.life / p.maxLife) * 0.8;
-        // Faster color formatting
-        ctx.fillStyle = `${p.color}, ${alpha})`;
+        const alphaNorm = p.life / p.maxLife;
+        const alphaIdx = Math.min(Math.floor(alphaNorm * ALPHA_STEPS), ALPHA_STEPS - 1);
+        // Push object reference instead of index to avoid ghosting issues during pool swaps
+        batches[p.colorIdx][alphaIdx].push(p);
+      }
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color}, ${alpha * 0.3})`;
-        ctx.fill();
+      // Draw batched particles - minimizes fillStyle changes and draw calls
+      for (let c = 0; c < COLORS_BASE.length; c++) {
+        const colorSet = COLOR_STRINGS[c];
+        for (let a = 0; a < ALPHA_STEPS; a++) {
+          const activeParticles = batches[c][a];
+          if (activeParticles.length === 0) continue;
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color}, ${alpha})`;
-        ctx.fill();
+          // Draw Glow Layer (combined)
+          ctx.beginPath();
+          ctx.fillStyle = colorSet.glow[a];
+          for (let i = 0; i < activeParticles.length; i++) {
+            const p = activeParticles[i];
+            ctx.moveTo(p.x + p.radius * 2, p.y);
+            ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
+          }
+          ctx.fill();
+
+          // Draw Core Layer (combined)
+          ctx.beginPath();
+          ctx.fillStyle = colorSet.core[a];
+          for (let i = 0; i < activeParticles.length; i++) {
+            const p = activeParticles[i];
+            ctx.moveTo(p.x + p.radius, p.y);
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          }
+          ctx.fill();
+        }
       }
     };
 

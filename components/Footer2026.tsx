@@ -5,18 +5,15 @@ export const Footer2026: React.FC = () => {
   const { t } = useI18n();
 
   return (
-    <footer className="py-32 px-6 border-t border-white/5 bg-[#050505] relative overflow-hidden">
+    <footer className="py-32 px-6 border-t border-white/5 bg-[#050505] relative overflow-hidden" aria-labelledby="footer-title">
       <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
-        <h2 className="text-5xl md:text-[7rem] font-display font-bold tracking-tighter mb-12 text-white">
+        <h2 id="footer-title" className="text-5xl md:text-[7rem] font-display font-bold tracking-tighter mb-12 text-white">
           {t('cta.title')} <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-slate-400 italic">EVOLVE?</span>
         </h2>
 
         <div className="relative group cursor-pointer">
-          <div className="absolute inset-0 bg-indigo-500 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-          <button
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="relative bg-white text-black px-12 py-6 rounded-full font-display text-2xl font-bold hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/50 focus:ring-offset-4 focus:ring-offset-[#050505]"
-          >
+          <div className="absolute inset-0 bg-indigo-500 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity" aria-hidden="true"></div>
+          <button className="relative bg-white text-black px-12 py-6 rounded-full font-display text-2xl font-bold hover:scale-105 active:scale-95 transition-all focus:ring-4 focus:ring-indigo-500/50 outline-none">
             {t('footer.start_project')}
           </button>
         </div>
@@ -24,14 +21,14 @@ export const Footer2026: React.FC = () => {
         <div className="mt-32 w-full grid grid-cols-2 md:grid-cols-4 gap-12 text-left opacity-40 text-sm border-t border-white/5 pt-12 text-white">
           <div className="flex flex-col gap-4">
             <span className="font-bold text-white uppercase tracking-widest text-[10px]">{t('footer.social')}</span>
-            <a href="https://twitter.com" aria-label="Follow on Twitter (X)" className="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500/50 rounded p-1 -m-1">Twitter (X)</a>
-            <a href="https://linkedin.com" aria-label="Follow on LinkedIn" className="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500/50 rounded p-1 -m-1">LinkedIn</a>
-            <a href="https://github.com/akira777777" aria-label="View GitHub profile" className="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500/50 rounded p-1 -m-1">GitHub</a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors focus:underline outline-none" aria-label={t('footer.twitter.label')}>Twitter (X)</a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors focus:underline outline-none" aria-label={t('footer.linkedin.label')}>LinkedIn</a>
+            <a href="https://github.com/akira777777" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors focus:underline outline-none" aria-label={t('footer.github.label')}>GitHub</a>
           </div>
           <div className="flex flex-col gap-4">
             <span className="font-bold text-white uppercase tracking-widest text-[10px]">{t('footer.status')}</span>
             <span className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500" aria-hidden="true"></span>
               {t('footer.available')}
             </span>
             <span>{t('footer.location')}</span>

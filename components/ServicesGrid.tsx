@@ -60,7 +60,7 @@ export const ServicesGrid: React.FC = React.memo(() => {
         {services.map((item, idx) => (
           <div
             key={idx}
-            className="group relative p-8 rounded-2xl bg-[#0a0a0a] border border-white/5 hover:border-supporting-500/30 ease-smooth hover:-translate-y-1 overflow-hidden visual-depth-2 interactive-element"
+            className="group relative p-8 rounded-2xl bg-[#050505] border border-white/5 hover:border-supporting-500/30 ease-smooth hover:-translate-y-1 overflow-hidden visual-depth-2 interactive-element"
             style={{ 
               transformStyle: 'preserve-3d',
               willChange: 'transform'
