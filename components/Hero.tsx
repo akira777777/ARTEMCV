@@ -280,6 +280,7 @@ const Hero: React.FC = React.memo(() => {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
+              style={{ fontSize: 'clamp(2rem, 10vw, 6.5rem)' }}
             >
               JULES
             </motion.h1>
@@ -311,7 +312,7 @@ const Hero: React.FC = React.memo(() => {
               <motion.button
                 type="button"
                 onClick={scrollToWorks}
-                className="neon-button px-7 py-3 rounded-full text-xs font-bold tracking-widest interactive-element"
+                className="neon-button px-7 py-3 rounded-full text-xs font-bold tracking-widest interactive-element touch-target"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label={t('hero.cta.portfolio')}
@@ -321,7 +322,7 @@ const Hero: React.FC = React.memo(() => {
               <motion.button
                 type="button"
                 onClick={scrollToContact}
-                className="px-7 py-3 rounded-full border border-primary/30 text-primary-300 text-xs font-bold tracking-widest hover:bg-primary/10 ease-smooth interactive-element"
+                className="px-7 py-3 rounded-full border border-primary/30 text-primary-300 text-xs font-bold tracking-widest hover:bg-primary/10 ease-smooth interactive-element touch-target"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label={t('hero.cta.contact')}

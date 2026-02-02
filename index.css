@@ -214,6 +214,22 @@
   
   .scale-mobile { transform: scale(0.95); }
   .spacing-mobile { margin: 0.5rem; padding: 1rem; }
+  
+  /* Улучшенная адаптивность для мобильных устройств */
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 12px;
+  }
+  
+  .hero-section-mobile {
+    padding-top: 80px;
+    min-height: calc(100vh - 80px);
+  }
+  
+  .mobile-nav-adjust {
+    padding-top: 70px;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -478,6 +494,30 @@ html {
   margin-right: auto;
   padding-left: var(--container-padding);
   padding-right: var(--container-padding);
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 767px) {
+  .container-responsive {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .section-padding-mobile {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  .button-mobile {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+  
+  .text-mobile-large {
+    font-size: 1.25rem;
+    line-height: 1.5;
+  }
 }
 
 .grid-responsive {

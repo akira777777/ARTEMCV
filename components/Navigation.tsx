@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useReducedMotion } from '../lib/hooks';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useI18n } from '../i18n';
+import { MobileMenu } from './MobileMenu';
 
 const navItems: { key: string; href: string }[] = [
   { key: 'nav.home', href: '#home' },
@@ -178,14 +179,19 @@ export const Navigation: React.FC = React.memo(() => {
           </motion.a>
 
           {/* Desktop Nav */}
-          <div className="flex items-center gap-4 md:gap-8">
+          <div className="hidden md:flex items-center gap-4 md:gap-8">
             <ul className="flex items-center gap-1 md:gap-2" role="menubar">
               {navLinks}
             </ul>
-            <div className="hidden sm:block h-4 w-px bg-white/10" aria-hidden="true" />
+            <div className="h-4 w-px bg-white/10" aria-hidden="true" />
             <div className="focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-offset-2 focus-within:ring-offset-transparent rounded-lg">
               <LanguageSwitcher />
             </div>
+          </div>
+          
+          {/* Mobile Menu */}
+          <div className="md:hidden flex items-center">
+            <MobileMenu />
           </div>
         </motion.nav>
       </div>

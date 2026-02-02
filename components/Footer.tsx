@@ -24,45 +24,49 @@ export const Footer: React.FC = React.memo(() => {
         </p>
         <nav aria-labelledby="social-links-heading">
           <h3 id="social-links-heading" className="sr-only">Connect with me on social media</h3>
-          <ul className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16 text-sm tracking-widest font-bold">
-            <li>
+          <ul className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16 text-sm tracking-widest font-bold">
+            <li className="mb-4 md:mb-0">
               <AnimatedUnderline 
                 href="mailto:fear75412@gmail.com" 
                 underlineColor="rgba(255,255,255,0.6)"
                 aria-label="Send email to fear75412@gmail.com"
+                className="block py-2 touch-target"
               >
                 FEAR75412@GMAIL.COM
               </AnimatedUnderline>
             </li>
-            <li>
+            <li className="mb-4 md:mb-0">
               <AnimatedUnderline 
                 href="https://t.me/younghustle45" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 underlineColor="rgba(255,255,255,0.6)"
                 aria-label="Connect on Telegram (opens in new tab)"
+                className="block py-2 touch-target"
               >
                 {t('footer.contacts').toUpperCase()} — TELEGRAM
               </AnimatedUnderline>
             </li>
-            <li>
+            <li className="mb-4 md:mb-0">
               <AnimatedUnderline 
                 href="https://github.com/akira777777" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 underlineColor="rgba(255,255,255,0.6)"
                 aria-label="View GitHub profile (opens in new tab)"
+                className="block py-2 touch-target"
               >
                 GITHUB
               </AnimatedUnderline>
             </li>
-            <li>
+            <li className="mb-4 md:mb-0">
               <AnimatedUnderline 
                 href="https://www.linkedin.com/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 underlineColor="rgba(255,255,255,0.6)"
                 aria-label="Connect on LinkedIn (opens in new tab)"
+                className="block py-2 touch-target"
               >
                 LINKEDIN
               </AnimatedUnderline>
