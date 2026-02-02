@@ -61,7 +61,14 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
 
   // Scroll to bottom of chat
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (isOpen && messagesEndRef.current) {
+      // Use a small timeout to ensure DOM is updated before scrolling
+      const timer = setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 0);
+      
+      return () => clearTimeout(timer);
+    }
   }, [messages, isOpen]);
 
   // Handle message submission

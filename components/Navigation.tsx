@@ -50,12 +50,14 @@ export const Navigation: React.FC = React.memo(() => {
   const rafRef = useRef<number | null>(null);
   const sectionCacheRef = useRef<Map<string, HTMLElement | null>>(new Map());
 
-  // Cache section elements on mount
+  // Cache section elements and update when items change
   useEffect(() => {
+    const newCache = new Map<string, HTMLElement | null>();
     navItems.forEach(item => {
-      sectionCacheRef.current.set(item.href, document.getElementById(item.href.substring(1)));
+      newCache.set(item.href, document.getElementById(item.href.substring(1)));
     });
-  }, []);
+    sectionCacheRef.current = newCache;
+  }, [navItems]); // Add navItems as dependency to refresh cache when items change
 
   // Optimize scroll detection with debouncing
   const updateActiveSection = useCallback(() => {

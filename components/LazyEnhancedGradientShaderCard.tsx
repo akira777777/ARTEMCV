@@ -1,7 +1,10 @@
 import React, { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 
-const EnhancedGradientShaderCard = lazy(() => import('./EnhancedGradientShaderCard'));
+// Fixed import with explicit typing to satisfy TypeScript
+const EnhancedGradientShaderCard = lazy(() => 
+  import('./EnhancedGradientShaderCard').then(module => ({ default: module.default }))
+);
 
 interface LazyEnhancedGradientShaderCardProps {
   fallback?: React.ReactNode;
