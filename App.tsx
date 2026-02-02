@@ -1,5 +1,4 @@
-import React, { lazy } from 'react';
-import React, { Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { I18nProvider } from './i18n';
 import Home2026 from './pages/Home2026';
@@ -9,6 +8,9 @@ import ErrorBoundary from './components/ErrorBoundary';
 import CursorTrail from './components/CursorTrail';
 import SkipLink from './components/SkipLink';
 import { SectionDivider } from './components/SectionDivider';
+import { Navigation } from './components/Navigation';
+import Hero from './components/Hero';
+import { Footer } from './components/Footer';
 
 // Lazy load heavy components
 const SpotlightGallery = React.lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
@@ -18,17 +20,9 @@ const ContactSectionSecure = React.lazy(() => import('./components/ContactSectio
 const SimpleTelegramChat = React.lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
 const InteractiveShowcase = React.lazy(() => import('./components/InteractiveShowcase'));
 const InteractiveGallery = React.lazy(() => import('./components/InteractiveGallery'));
-const SpotlightGallery = lazy(() => import('./components/SpotlightGallery').then(m => ({ default: m.SpotlightGallery })));
-const About = lazy(() => import('./components/About').then(m => ({ default: m.About })));
-const CTASection = lazy(() => import('./components/CTASection').then(m => ({ default: m.CTASection })));
-const ContactSectionSecure = lazy(() => import('./components/ContactSectionSecure'));
-const SimpleTelegramChat = lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
 
 // Lazy load heavy components
 const DetailingHub = React.lazy(() => import('./pages/DetailingHub'));
-const SimpleTelegramChat = React.lazy(() =>
-  import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat }))
-);
 
 // Loading fallback
 const PageLoader = () => (
@@ -64,17 +58,19 @@ const App: React.FC = () => {
             <InteractiveShowcase />
           </React.Suspense>
           <SectionDivider variant="glitch" />
-          <React.Suspense fallback={<div className="h-72 w-full" aria-label="Loading CTA..." />}>
-          <SectionDivider variant="dots" />
-          <React.Suspense fallback={<div className="h-96" />}>
+          <React.Suspense fallback={<div className="h-72 w-full" aria-label="Loading gallery..." />}>
             <SpotlightGallery />
           </React.Suspense>
-          <SectionDivider variant="lines" />
+          <SectionDivider variant="dots" />
           <React.Suspense fallback={<div className="h-96" />}>
             <About />
           </React.Suspense>
-          <SectionDivider variant="gradient" />
+          <SectionDivider variant="lines" />
           <React.Suspense fallback={<div className="h-72" />}>
+            <CTASection />
+          </React.Suspense>
+          <SectionDivider variant="gradient" />
+        <React.Suspense fallback={<div className="h-72" />}>
             <CTASection />
           </React.Suspense>
           <SectionDivider variant="lines" />
@@ -82,7 +78,8 @@ const App: React.FC = () => {
             <ContactSectionSecure id="contact" />
           </ErrorBoundary>
         </main>
-        <Footer />
+      </div>
+      <Footer />
         <React.Suspense fallback={null}>
           <SimpleTelegramChat />
         </React.Suspense>

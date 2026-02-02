@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import { useI18n } from '../i18n';
 import { scrollToSection } from '../lib/utils';
+import { SKILLS, SERVICES } from '../constants';
 
 export const About: React.FC = React.memo(() => {
   const { t } = useI18n();
@@ -84,7 +85,8 @@ export const About: React.FC = React.memo(() => {
           </button>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
   );
 });
 

@@ -33,15 +33,13 @@ export const CTASection: React.FC = React.memo(() => {
           </h2>
           <p className="text-lg md:text-xl text-neutral-300 mb-12 max-w-2xl mx-auto">
             {t('cta.subtitle') || 'Let\'s collaborate and bring your vision to life. I\'m ready to start immediately.'}
-            {t('cta.title')}
-          </h2>
+          </p>
           <p className="text-lg md:text-xl text-neutral-300 mb-12 max-w-2xl mx-auto">
             {t('cta.subtitle')}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <motion.button
-              onClick={() => scrollToSection('contact')}
               onClick={scrollToContact}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

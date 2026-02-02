@@ -1,15 +1,12 @@
-import React, { useState, useCallback, Suspense } from 'react';
-import { motion, useSpring, AnimatePresence } from 'framer-motion';
 import React, { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { ServicesGrid } from './ServicesGrid';
 import { scrollToSection } from '../lib/utils';
-import { ParticleText } from './ParticleText';
 
 // Lazy load ParticleText to prevent chunk duplication
-const ParticleText = React.lazy(() => import('./InteractiveElements').then(m => ({ default: m.ParticleText })));
+const LazyParticleText = React.lazy(() => import('./InteractiveElements').then(m => ({ default: m.ParticleText })));
 
 // Floating orbs that follow cursor
 const FloatingOrb: React.FC<{ 
@@ -18,7 +15,7 @@ const FloatingOrb: React.FC<{
   color: string;
   mouseX: number;
   mouseY: number;
-}> = ({ delay, size, color, mouseX, mouseY }) => {
+}> = React.memo(({ delay, size, color, mouseX, mouseY }) => {
   const springConfig = { stiffness: 100 - delay * 10, damping: 20 };
   const x = useSpring(mouseX * (0.3 - delay * 0.05), springConfig);
   const y = useSpring(mouseY * (0.3 - delay * 0.05), springConfig);
@@ -50,13 +47,13 @@ const FloatingOrb: React.FC<{
       }}
     />
   );
-};
+});
 
 // Letter animation component for name
 const AnimatedLetter: React.FC<{ 
   letter: string; 
   index: number;
-}> = ({ letter, index }) => {
+}> = React.memo(({ letter, index }) => {
   const baseDelay = index * 0.1;
 
   return (
@@ -88,8 +85,6 @@ const AnimatedLetter: React.FC<{
           style={{
             background: letter === 'U' ? '#ec4899' : '#22d3ee',
             boxShadow: `0 0 15px ${letter === 'U' ? 'rgba(236, 72, 153, 0.8)' : 'rgba(34, 211, 238, 0.8)'}`,
-            background: letter === 'R' ? '#f59e0b' : '#0ea5e9',
-            boxShadow: `0 0 15px ${letter === 'R' ? 'rgba(245, 158, 11, 0.8)' : 'rgba(14, 165, 233, 0.8)'}`,
           }}
           animate={{
             scale: [1, 1.3, 1],
@@ -100,10 +95,10 @@ const AnimatedLetter: React.FC<{
       )}
     </motion.span>
   );
-};
+});
 
 // Custom cursor component
-const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = ({ mouseX, mouseY }) => {
+const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = React.memo(({ mouseX, mouseY }) => {
   const springConfig = { stiffness: 500, damping: 28 };
   const cursorX = useSpring(mouseX, springConfig);
   const cursorY = useSpring(mouseY, springConfig);
@@ -143,7 +138,7 @@ const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = ({ mouseX, mo
       />
     </>
   );
-};
+});
 
 const Hero: React.FC = React.memo(() => {
   const { t } = useI18n();
@@ -172,10 +167,6 @@ const Hero: React.FC = React.memo(() => {
     document.getElementById('works')?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const name = 'JULES';
   const orbColors = [
     'linear-gradient(135deg, #ec4899, #f472b6)', // pink
@@ -188,8 +179,17 @@ const Hero: React.FC = React.memo(() => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
+  // Define particle type
+  type Particle = {
+    id: number;
+    delay: number;
+    size: number;
+    x: number;
+    y: number;
+  };
+
   // Generate floating particles
-  const particles = useMemo(() => 
+  const particles = useMemo((): Particle[] => 
     Array.from({ length: 15 }, (_, i) => ({
       id: i,
       delay: Math.random() * 15,
@@ -601,7 +601,6 @@ const Hero: React.FC = React.memo(() => {
             >
               <motion.button
                 onClick={scrollToWorks}
-                className="neon-button px-7 py-3 rounded-full text-xs font-bold tracking-widest interactive-element touch-target"
                 className="px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-full hover:shadow-lg hover:shadow-primary/30 transition-all group"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -611,7 +610,6 @@ const Hero: React.FC = React.memo(() => {
               </motion.button>
               <motion.button
                 onClick={scrollToContact}
-                className="px-7 py-3 rounded-full border border-primary/30 text-primary-300 text-xs font-bold tracking-widest hover:bg-primary/10 ease-smooth interactive-element touch-target"
                 className="px-8 py-4 border border-primary/30 text-primary font-semibold rounded-full hover:bg-primary/10 transition-colors"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -662,21 +660,18 @@ const Hero: React.FC = React.memo(() => {
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.8 }}
       >
-        <Suspense fallback={<div className="h-32 w-full" />}>
+        <Suspense fallback={<div className="h-32 w-full" />} />
         <Suspense fallback={<div className="h-24 w-full" aria-label="Loading interactive text..." />}>
-          <ParticleText text="INTERACTIVE EXPERIENCE" />
+          <LazyParticleText text="INTERACTIVE EXPERIENCE" />
         </Suspense>
         <ServicesGrid />
       </motion.div>
 
       <motion.button
         type="button"
-        onClick={() => scrollToSection('works')}
-        aria-label="Scroll down to explore projects"
-        className="absolute bottom-4 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group"
+        className="fixed bottom-8 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-gray-500 hover:text-white transition-colors group z-40"
         onClick={scrollToWorks}
         aria-label={t('hero.cta.scroll')}
-        className="fixed bottom-8 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-gray-500 hover:text-white transition-colors group z-40"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2.5, duration: 0.6 }}

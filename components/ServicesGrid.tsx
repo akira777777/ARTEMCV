@@ -53,7 +53,7 @@ export const ServicesGrid: React.FC = React.memo(() => {
         <p className="text-gray-400 max-w-2xl mx-auto text-lg">
           {t('services.grid.subtitle')}
           {t('about.offer')}
-        </h2>
+        </p>
         <p className="text-gray-400 max-w-2xl mx-auto text-lg">
           {t('about.desc')}
         </p>

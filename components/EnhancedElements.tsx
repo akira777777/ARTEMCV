@@ -760,8 +760,9 @@ export const NeonBorder: React.FC<NeonBorderProps> = React.memo(({
       />
 
       <div className="relative bg-[#0a0a0a] rounded-2xl">
-      <div className="relative bg-[#050505] rounded-2xl">
-        {children}
+        <div className="relative bg-[#050505] rounded-2xl">
+          {children}
+        </div>
       </div>
     </div>
   );

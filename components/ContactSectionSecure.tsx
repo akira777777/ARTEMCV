@@ -6,8 +6,6 @@ import { FORM_INPUT_CLASS, FORM_TEXTAREA_CLASS } from '../constants';
 import devLog from '../lib/logger';
 import { MailIcon, MessageCircleIcon, GithubIcon } from 'lucide-react';
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 interface ContactFormData {
   name: string;
   email: string;
