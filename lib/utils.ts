@@ -45,3 +45,24 @@ export async function fetchWithTimeout(
     clearTimeout(timeout);
   }
 }
+
+/**
+ * Centralized WebP support detection to prevent redundant DOM operations
+ */
+let supportsWebPCache: Promise<boolean> | null = null;
+
+export function checkWebPSupport(): Promise<boolean> {
+  if (typeof window === 'undefined') return Promise.resolve(false);
+
+  if (supportsWebPCache) return supportsWebPCache;
+
+  supportsWebPCache = new Promise((resolve) => {
+    const webP = new Image();
+    webP.onload = webP.onerror = () => {
+      resolve(webP.height === 2);
+    };
+    webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+  });
+
+  return supportsWebPCache;
+}
