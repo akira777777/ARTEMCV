@@ -1,8 +1,8 @@
 import React, { lazy } from 'react';
+import React, { Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { I18nProvider } from './i18n';
-import { Navigation } from './components/Navigation';
-import { Hero } from './components/Hero';
-import { Footer } from './components/Footer';
+import Home2026 from './pages/Home2026';
 import { ScrollToTop } from './components/ScrollToTop';
 import ScrollProgress from './components/ScrollProgress';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -16,6 +16,19 @@ const About = lazy(() => import('./components/About').then(m => ({ default: m.Ab
 const CTASection = lazy(() => import('./components/CTASection').then(m => ({ default: m.CTASection })));
 const ContactSectionSecure = lazy(() => import('./components/ContactSectionSecure'));
 const SimpleTelegramChat = lazy(() => import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat })));
+
+// Lazy load heavy components
+const DetailingHub = React.lazy(() => import('./pages/DetailingHub'));
+const SimpleTelegramChat = React.lazy(() =>
+  import('./components/SimpleTelegramChat').then(m => ({ default: m.SimpleTelegramChat }))
+);
+
+// Loading fallback
+const PageLoader = () => (
+  <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+    <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+  </div>
+);
 
 const App: React.FC = () => {
   return (
@@ -47,8 +60,18 @@ const App: React.FC = () => {
         <React.Suspense fallback={null}>
           <SimpleTelegramChat />
         </React.Suspense>
+      <Router>
         <ScrollToTop />
-      </div>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Home2026 />} />
+            <Route path="/project/detailing" element={<DetailingHub />} />
+            {/* Fallback for old routes or 404 could go here */}
+            <Route path="*" element={<Home2026 />} />
+          </Routes>
+          <SimpleTelegramChat />
+        </Suspense>
+      </Router>
     </I18nProvider>
   );
 };

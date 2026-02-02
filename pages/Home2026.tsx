@@ -1,0 +1,36 @@
+import React, { lazy, Suspense } from 'react';
+import Hero2026 from '../components/home/Hero2026';
+// Lazy load heavy components to reduce initial bundle size
+const BentoGrid = lazy(() => import('../components/home/BentoGrid'));
+const LabSection = lazy(() => import('../components/home/LabSection'));
+import { Footer2026 } from '../components/Footer2026';
+import { Navigation } from '../components/Navigation';
+import SkipLink from '../components/SkipLink';
+
+// Loading fallback component
+const SectionLoader = () => (
+  <div className="py-32 flex items-center justify-center">
+    <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+  </div>
+);
+
+const Home2026: React.FC = () => {
+  return (
+    <div className="bg-[#050505] text-white min-h-screen selection:bg-indigo-500/30 font-sans">
+      <SkipLink />
+      <Navigation />
+      <main id="main-content">
+        <Hero2026 />
+        <Suspense fallback={<SectionLoader />}>  
+          <BentoGrid />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>  
+          <LabSection />
+        </Suspense>
+      </main>
+      <Footer2026 />
+    </div>
+  );
+};
+
+export default Home2026;

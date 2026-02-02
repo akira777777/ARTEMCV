@@ -3,15 +3,13 @@
  * TODO: Remove this file in next cleanup.
  */
 import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
 import { ArrowUpRight, X } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import { useReducedMotion } from '../lib/hooks';
 import { useI18n } from '../i18n';
-
-// Memoized style objects to prevent recreations
-const BUTTON_STYLE = { contain: 'layout style' } as const;
-const CONTAINER_STYLE = { contain: 'strict' } as const;
+import OptimizedImage from './OptimizedImage';
 
 const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.memo(({ project, onClick }) => {
   const { t } = useI18n();
@@ -82,24 +80,25 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
   const primaryTag = project.techStack[0] || t('works.fallback.tag');
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={`${t('works.open_details')} ${t(project.title)}`}
-      className="flex-none w-[85vw] md:w-[400px] lg:w-[500px] group snap-start cursor-pointer animate-fade-up text-left bg-transparent border-0"
-      style={BUTTON_STYLE}
+    <article
+      className="relative flex-none w-[85vw] md:w-[400px] lg:w-[500px] group snap-start cursor-pointer animate-fade-up text-left bg-transparent border-0 project-card-button"
     >
-      <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-sm mb-6 bg-neutral-900" style={CONTAINER_STYLE}>
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={`${t('works.open_details')} ${t(project.title)}`}
+        className="absolute inset-0 z-10 rounded-sm"
+      />
+      <div ref={containerRef} className="relative overflow-hidden aspect-[3/4] rounded-sm mb-6 bg-neutral-900 project-card-container">
          
          {/* Wrapper for Hover Animations (Scale & Brightness) 
              Separating this allows the inner image to handle Parallax transform independently.
          */}
          <div className="w-full h-full transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-110">
-            <img 
-              ref={imgRef}
+            <OptimizedImage 
+              ref={imgRef as React.RefObject<HTMLImageElement>}
               src={project.image} 
               alt={t(project.title)}
-              loading="lazy"
               onLoad={() => setIsLoaded(true)}
               className={`
                 w-full h-full object-cover scale-[1.2]
@@ -131,7 +130,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
          </div>
       </div>
       
-      <div className="flex justify-between items-start border-t border-indigo-500/20 pt-4">
+      <div className="relative z-10 flex justify-between items-start border-t border-indigo-500/20 pt-4">
         <div>
           <h3 className="text-2xl font-bold font-display tracking-wide group-hover:text-neutral-300 transition-colors">{t(project.title)}</h3>
           <p className="text-neutral-500 text-sm mt-1">{primaryTag}</p>
@@ -144,7 +143,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = React.m
           ))}
         </div>
       </div>
-    </button>
+    </article>
   );
 });
 
@@ -208,14 +207,14 @@ export const WorkGallery: React.FC = React.memo(() => {
           <div className="flex gap-4 mt-8 md:mt-0">
             <button
               onClick={() => scroll('left')}
-              aria-label="Scroll projects left"
+              aria-label={t('works.scroll_left')}
               className="p-4 rounded-full border-2 border-indigo-400/30 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:border-transparent hover:text-white text-neutral-300 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
             >
               ←
             </button>
             <button
               onClick={() => scroll('right')}
-              aria-label="Scroll projects right"
+              aria-label={t('works.scroll_right')}
               className="p-4 rounded-full border-2 border-indigo-400/30 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:border-transparent hover:text-white text-neutral-300 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
             >
               →
@@ -229,7 +228,6 @@ export const WorkGallery: React.FC = React.memo(() => {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              aria-pressed={activeCategory === cat}
               className={`
                 px-6 py-2.5 rounded-full text-xs tracking-widest transition-all duration-300 border font-bold
                 ${activeCategory === cat 
@@ -288,11 +286,11 @@ export const WorkGallery: React.FC = React.memo(() => {
 
               {/* Image Side */}
               <div className="w-full md:w-1/2 h-64 md:h-auto relative overflow-hidden bg-neutral-800">
-                 <img 
+                 <OptimizedImage 
                    src={selectedProject.image} 
                    alt={t(selectedProject.title)}
                    className="w-full h-full object-cover animate-breathe-zoom" 
-                   loading="lazy"
+                   priority={true}
                  />
                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent md:bg-gradient-to-r" />
               </div>

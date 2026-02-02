@@ -2,6 +2,10 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, X, Send, Loader2, Maximize2, Minimize2 } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { useFetchWithTimeout } from '../lib/hooks';
+import devLog from '../lib/logger';
+
+// Memoized style objects for performance
+const SCROLLBAR_STYLE = { scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' } as const;
 
 interface Message {
   id: string;
@@ -12,25 +16,32 @@ interface Message {
 
 const createId = () => globalThis.crypto?.randomUUID?.() ?? `msg-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
+// Store initial message ID to track it across language changes
+const INITIAL_MESSAGE_ID = 'initial-welcome';
+
 export const SimpleTelegramChat: React.FC = React.memo(() => {
   const { t, lang } = useI18n();
   const fetchWithTimeout = useFetchWithTimeout(12_000);
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<Message[]>(() => [
     { 
-      id: createId(), 
+      id: INITIAL_MESSAGE_ID, 
       role: 'bot', 
-      text: t('chat.bot.welcome'),
+      text: '', // Will be set by useEffect
       timestamp: new Date() 
     }
   ]);
 
-  // Update initial message when language changes if it's the only one
+  // Update welcome message text when language changes (only for initial message)
   useEffect(() => {
-    if (messages.length === 1 && messages[0].role === 'bot') {
-       setMessages([{ ...messages[0], text: t('chat.bot.welcome') }]);
-    }
+    setMessages(prev => {
+      const firstMsg = prev[0];
+      if (firstMsg?.id === INITIAL_MESSAGE_ID && prev.length === 1) {
+        return [{ ...firstMsg, text: t('chat.bot.welcome') }];
+      }
+      return prev;
+    });
   }, [lang, t]);
 
   const [inputValue, setInputValue] = useState('');
@@ -40,7 +51,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastSubmitRef = useRef<number>(0);
 
-  // Загрузить имя из localStorage
+  // Load name from localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem('chat_user_name');
@@ -48,26 +59,26 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     } catch {}
   }, []);
 
-  // Скролл к низу чата
+  // Scroll to bottom of chat
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen]);
 
-  // Обработчик отправки сообщения
+  // Handle message submission
   const handleSendMessage = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!inputValue.trim()) return;
     if (loading) return;
 
-    // Проверка rate limit (5 секунд между сообщениями)
+    // Check rate limit (5 seconds between messages)
     const now = Date.now();
     if (lastSubmitRef.current && now - lastSubmitRef.current < 5_000) {
       setError(t('chat.error.wait'));
       return;
     }
 
-    // Запросить имя если не заполнено
+    // Prompt for name if not provided
     let name = userName.trim();
     if (!name) {
       const promptName = window.prompt(t('chat.prompt.name'));
@@ -87,7 +98,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     setInputValue('');
     setError(null);
 
-    // Добавить сообщение пользователя в UI
+    // Add user message to UI
     const userMsgId = createId();
     setMessages(prev => [...prev, {
       id: userMsgId,
@@ -99,7 +110,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     setLoading(true);
 
     try {
-      // Отправить в Telegram через /api/send-telegram
+      // Send to Telegram via /api/send-telegram
       const res = await fetchWithTimeout('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -113,16 +124,16 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       });
 
       if (!res.ok) {
-        // Локальный dev режим может вернуть 404
+        // Local dev mode may return 404
         if (res.status === 404 && window.location.hostname === 'localhost') {
-          console.warn('API endpoint not available in dev mode.');
+          devLog.warn('API endpoint not available in dev mode.');
         } else {
           const err = await res.text().catch(() => '');
           throw new Error(err || `Failed to send (status ${res.status})`);
         }
       }
 
-      // Добавить ответ бота
+      // Add bot response
       const botMsgId = createId();
       setMessages(prev => [...prev, {
         id: botMsgId,
@@ -132,19 +143,19 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       }]);
 
       lastSubmitRef.current = now;
-    } catch (err: any) {
-      console.error('Error sending message:', err);
+    } catch (err: unknown) {
+      devLog.error('Error sending message:', err);
       
       let errorText = t('chat.error.sending') || 'Error sending message';
-      if (err?.name === 'AbortError') {
+      if ((err as Error)?.name === 'AbortError') {
         errorText = t('chat.error.timeout') || 'Timeout sending message. Please try again.';
-      } else if (err?.message) {
-        errorText = err.message;
+      } else if ((err as Error)?.message) {
+        errorText = (err as Error).message;
       }
       
       setError(errorText);
       
-      // Добавить сообщение об ошибке в чат
+      // Add error message to chat
       const errorMsgId = createId();
       setMessages(prev => [...prev, {
         id: errorMsgId,
@@ -164,6 +175,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         <button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={isOpen ? t('chat.aria.close') : t('chat.aria.open')}
+          title={isOpen ? t('chat.aria.close') : t('chat.aria.open')}
           className={`
             w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500
             ${isOpen ? 'bg-white text-black rotate-90' : 'bg-neutral-900 text-white hover:scale-110 border border-white/20'}
@@ -201,7 +213,12 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50" style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' }}>
+        <div
+          className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50"
+          style={SCROLLBAR_STYLE}
+          role="log"
+          aria-live="polite"
+        >
           {messages.map((msg) => (
             <div 
               key={msg.id} 
@@ -262,6 +279,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(e as any)}
               placeholder={t('chat.placeholder')}
+              aria-label={t('chat.placeholder')}
               disabled={loading}
               className="flex-1 bg-white/5 border border-white/10 rounded-full py-3 px-4 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50"
             />

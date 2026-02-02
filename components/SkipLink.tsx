@@ -1,7 +1,9 @@
 import React from 'react';
 import { useI18n } from '../i18n';
 
-const SkipLink: React.FC = React.memo(() => {
+interface SkipLinkProps {}
+
+const SkipLink: React.FC<SkipLinkProps> = React.memo(() => {
   const { t } = useI18n();
   return (
     <a

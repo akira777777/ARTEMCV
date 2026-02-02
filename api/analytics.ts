@@ -100,14 +100,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const recentWeekAnalytics = await getContactAnalytics(
       new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       new Date().toISOString().split('T')[0]
-    );
+    ) as unknown as AnalyticsDay[];
 
     return res.status(200).json({
       today: today || { total_submissions: 0, honeypot_catches: 0, rate_limit_hits: 0 },
       weekSummary: {
-        total_submissions: recentWeekAnalytics.reduce((sum, day: AnalyticsDay) => sum + (day.total_submissions || 0), 0),
-        unique_visitors: recentWeekAnalytics.reduce((sum, day: AnalyticsDay) => sum + (day.unique_visitors || 0), 0),
-        honeypot_catches: recentWeekAnalytics.reduce((sum, day: AnalyticsDay) => sum + (day.honeypot_catches || 0), 0),
+        total_submissions: recentWeekAnalytics.reduce((sum, day) => sum + (day.total_submissions || 0), 0),
+        unique_visitors: recentWeekAnalytics.reduce((sum, day) => sum + (day.unique_visitors || 0), 0),
+        honeypot_catches: recentWeekAnalytics.reduce((sum, day) => sum + (day.honeypot_catches || 0), 0),
       },
       totalSubmissions: total,
       recentSubmissions: submissions.slice(0, 5),

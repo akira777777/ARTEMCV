@@ -6,16 +6,16 @@ export const PROJECTS: Project[] = [
     id: '1',
     title: 'project.1.title',
     description: 'project.1.desc',
-    techStack: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Tailwind CSS'],
-    liveLink: 'https://barber-am.vercel.app/',
+    techStack: ['React Three Fiber', 'Next.js 16', 'GSAP', 'WebGL', 'Tailwind CSS'],
+    liveLink: '/project/detailing', // Internal link for the deep dive
     githubLink: 'https://github.com/akira777777',
-    image: '/barber.webp'
+    image: '/detailing.webp'
   },
   {
     id: '2',
     title: 'project.2.title',
     description: 'project.2.desc',
-    techStack: ['Next.js', 'Framer Motion', 'Tailwind', 'Supabase'],
+    techStack: ['AI Orchestration', 'WebSockets', 'Real-time Sync', 'SVG Morphing'],
     liveLink: 'https://dental-clinic-vakalova.vercel.app/',
     githubLink: 'https://github.com/akira777777',
     image: '/dental.webp'
@@ -24,27 +24,18 @@ export const PROJECTS: Project[] = [
     id: '3',
     title: 'project.3.title',
     description: 'project.3.desc',
-    techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'],
-    liveLink: 'https://game-marketplace-seven.vercel.app/',
+    techStack: ['Edge Runtime', 'Scroll-driven Animation', 'React 19', 'LCP Optimization'],
+    liveLink: 'https://barber-am.vercel.app/',
     githubLink: 'https://github.com/akira777777',
-    image: '/marketplace.webp'
-  },
-  {
-    id: '4',
-    title: 'project.4.title',
-    description: 'project.4.desc',
-    techStack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Vercel'],
-    liveLink: 'https://detailing-mu.vercel.app/',
-    githubLink: 'https://github.com/akira777777',
-    image: '/detailing.webp'
+    image: '/barber.webp'
   }
 ];
 
 export const SKILLS = [
-  { name: 'skill.frontend', items: ['React 19', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'Canvas API', 'Three.js'] },
-  { name: 'skill.backend', items: ['Node.js (Fastify/Express)', 'Python (FastAPI)', 'Java (Spring Boot)', 'PostgreSQL / Prisma'] },
-  { name: 'skill.architecture', items: ['Microservices', 'Event-driven', 'Serverless', 'WebSockets', 'Query optimization'] },
-  { name: 'skill.tools', items: ['Docker', 'Git', 'Vite', 'AWS/Vercel', 'Google Gemini AI', 'Claude API'] }
+  { name: 'skill.frontend', items: ['Next.js 16', 'Three.js / R3F', 'Framer Motion', 'GSAP', 'Tailwind CSS', 'WebGPU'] },
+  { name: 'skill.backend', items: ['Go (Golang)', 'PostgreSQL', 'Edge Runtime', 'Real-time Data Sync'] },
+  { name: 'skill.architecture', items: ['AWS Lambda', 'OpenAI API (Multi-agent)', 'CI/CD', 'Vercel'] },
+  { name: 'skill.tools', items: ['TypeScript 6.0', 'Copilot Pro+', 'Figma', 'Docker'] }
 ];
 
 export const SERVICES = [

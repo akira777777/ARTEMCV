@@ -17,8 +17,8 @@ const LanguageSwitcher: React.FC = () => {
           key={l.code}
           type="button"
           onClick={() => setLang(l.code)}
-          className={`px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest transition-all ${
-            lang === l.code ? 'bg-white text-black border-white' : 'text-zinc-500 hover:text-white border-white/10'
+          className={`px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent hover:scale-110 active:scale-95 ${
+            lang === l.code ? 'bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)]' : 'text-zinc-500 hover:text-white border-white/10'
           }`}
           aria-pressed={lang === l.code ? 'true' : 'false'}
           aria-label={`${t('switch.to')} ${l.label}`}

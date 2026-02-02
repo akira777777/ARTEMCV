@@ -4,6 +4,7 @@ import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import { useI18n } from '../i18n';
+import OptimizedImage from './OptimizedImage';
 
 /**
  * Spotlight Gallery - Modern project showcase with featured project and thumbnail carousel
@@ -44,14 +45,14 @@ export const SpotlightGallery: React.FC = React.memo(() => {
           <div className="flex gap-4 mt-8 md:mt-0">
             <button
               onClick={handlePrev}
-              aria-label="Previous project"
+              aria-label={t('works.prev')}
               className="p-4 rounded-full border-2 border-indigo-400/30 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:border-transparent hover:text-white text-neutral-300 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
             >
               <ChevronLeft size={24} />
             </button>
             <button
               onClick={handleNext}
-              aria-label="Next project"
+              aria-label={t('works.next')}
               className="p-4 rounded-full border-2 border-indigo-400/30 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:border-transparent hover:text-white text-neutral-300 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
             >
               <ChevronRight size={24} />
@@ -72,10 +73,11 @@ export const SpotlightGallery: React.FC = React.memo(() => {
                 transition={{ duration: 0.5 }}
                 className="group relative overflow-hidden rounded-2xl aspect-video bg-neutral-900 border border-white/5 hover:border-indigo-400/30 transition-all duration-300"
               >
-                <img
+                <OptimizedImage
                   src={activeProject.image}
                   alt={t(activeProject.title)}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  priority={true}
                 />
                 
                 {/* Gradient Overlay */}
@@ -172,10 +174,12 @@ export const SpotlightGallery: React.FC = React.memo(() => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <img
+                    <OptimizedImage
                       src={project.image}
                       alt={t(project.title)}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      width={100}
+                      height={100}
                     />
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
                     {isActive && (

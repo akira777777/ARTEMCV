@@ -1,15 +1,13 @@
-import React from 'react';
-import { SKILLS, SERVICES } from '../constants';
+﻿import React from 'react';
 import { useI18n } from '../i18n';
 import { scrollToSection } from '../lib/utils';
 
 export const About: React.FC = React.memo(() => {
   const { t } = useI18n();
 
+  
   return (
-    <section id="studio" className="py-24 md:py-40 border-t border-white/5 bg-neutral-950 relative overflow-hidden">
-      <div className="absolute -top-32 left-0 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl float-slow" aria-hidden="true" />
-      <div className="absolute -bottom-40 right-0 w-[28rem] h-[28rem] rounded-full bg-emerald-400/10 blur-3xl float-slower" aria-hidden="true" />
+    <section id="studio" className="py-24 md:py-40 border-t border-white/5 bg-[#050505] relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           <div className="space-y-8">
@@ -70,6 +68,20 @@ export const About: React.FC = React.memo(() => {
               </article>
             ))}
           </div>
+        <div className="text-center max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-6xl font-display font-bold leading-tight uppercase mb-8">
+            {t('footer.ready.title.main')} <br />
+            <span className="text-neutral-500">{t('footer.ready.title.sub')}</span>
+          </h2>
+          <p className="text-lg md:text-xl text-neutral-400 leading-relaxed mb-8">
+            {t('about.desc')}
+          </p>
+          <button
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            className="px-8 py-4 bg-white text-black text-xs font-bold tracking-widest rounded-full hover:bg-neutral-200 transition-colors"
+          >
+            {t('about.cta.collaborate')}
+          </button>
         </div>
       </div>
     </section>

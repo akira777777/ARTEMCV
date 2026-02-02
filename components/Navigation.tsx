@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { NavItem } from '../types';
+import { motion } from 'framer-motion';
 import { useReducedMotion } from '../lib/hooks';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useI18n } from '../i18n';
+import { MobileMenu } from './MobileMenu';
 
 const navItems: { key: string; href: string }[] = [
   { key: 'nav.home', href: '#home' },
@@ -26,7 +27,7 @@ const NavLink = React.memo<{
         href={item.href}
         onClick={(e) => onClick(e, item.href)}
         className={`
-          px-4 py-2 rounded-xl text-xs font-bold tracking-widest transition-all duration-300
+          px-4 py-2 rounded-xl text-xs font-bold tracking-widest transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-95
           ${isActive
             ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]'
             : 'text-neutral-400 hover:text-white hover:bg-white/10 hover:scale-105'}
@@ -37,6 +38,8 @@ const NavLink = React.memo<{
     </li>
   );
 });
+
+NavLink.displayName = 'NavLink';
 
 export const Navigation: React.FC = React.memo(() => {
   const { t } = useI18n();
@@ -125,38 +128,71 @@ export const Navigation: React.FC = React.memo(() => {
   const transitionClass = prefersReducedMotion ? '' : 'transition-all duration-500 ease-in-out';
 
   return (
-    <header 
+    <motion.header 
       className={`
         fixed top-0 left-0 right-0 z-50 ${transitionClass}
         ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
       `}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, type: 'spring', stiffness: 100 }}
+      role="banner"
+      aria-label="Main website header"
     >
       <div className="mx-4 mt-4 md:mx-8 md:mt-6">
-        <nav className="bg-gradient-to-r from-neutral-900/90 via-neutral-900/95 to-neutral-900/90 backdrop-blur-xl border border-white/20 rounded-3xl px-6 py-4 flex justify-between items-center shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_48px_rgba(99,102,241,0.2)] transition-shadow duration-300">
+        <motion.nav 
+          className="bg-black/20 backdrop-blur-md border border-white/10 rounded-3xl px-6 py-4 flex justify-between items-center hover:border-purple-500/30 ease-smooth"
+          whileHover={{
+            boxShadow: '0 8px 48px rgba(168, 85, 247, 0.15)',
+          }}
+          role="navigation"
+          aria-label="Primary navigation"
+        >
           {/* Logo */}
-          <a 
+          <motion.a 
             href="#home" 
             onClick={(e) => handleLinkClick(e, '#home')}
-            className="flex items-center gap-2 group"
-            aria-label={`${t('brand.vision')} - ${t('nav.home')}`}
+            className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg"
+            aria-label={t('nav.logo.label')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-neutral-400 transition-colors">
-              JULES.ENGINEER
+            <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-purple-400 transition-colors" aria-hidden="true">
+              ARTEM.DEV
             </span>
-            <span className="w-2 h-2 rounded-full bg-gradient-to-r from-indigo-400 to-purple-500 group-hover:scale-125 group-hover:shadow-[0_0_12px_rgba(99,102,241,0.8)] transition-all duration-300 animate-pulse" />
-          </a>
+            <motion.span 
+              className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500"
+              animate={{
+                scale: [1, 1.3, 1],
+                boxShadow: [
+                  '0 0 8px rgba(168, 85, 247, 0.6)',
+                  '0 0 16px rgba(168, 85, 247, 0.8)',
+                  '0 0 8px rgba(168, 85, 247, 0.6)',
+                ],
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+              aria-hidden="true"
+            />
+          </motion.a>
 
           {/* Desktop Nav */}
-          <div className="flex items-center gap-4 md:gap-8">
-            <ul className="flex items-center gap-1 md:gap-2">
+          <div className="hidden md:flex items-center gap-4 md:gap-8">
+            <ul className="flex items-center gap-1 md:gap-2" role="menubar">
               {navLinks}
             </ul>
-            <div className="hidden sm:block h-4 w-px bg-white/10" />
-            <LanguageSwitcher />
+            <div className="h-4 w-px bg-white/10" aria-hidden="true" />
+            <div className="focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-offset-2 focus-within:ring-offset-transparent rounded-lg">
+              <LanguageSwitcher />
+            </div>
           </div>
-        </nav>
+          
+          {/* Mobile Menu */}
+          <div className="md:hidden flex items-center">
+            <MobileMenu />
+          </div>
+        </motion.nav>
       </div>
-    </header>
+    </motion.header>
   );
 });
 
