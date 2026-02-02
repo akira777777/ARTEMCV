@@ -5,6 +5,7 @@ const BentoGrid = lazy(() => import('../components/home/BentoGrid'));
 const LabSection = lazy(() => import('../components/home/LabSection'));
 import { Footer2026 } from '../components/Footer2026';
 import { Navigation } from '../components/Navigation';
+import SkipLink from '../components/SkipLink';
 
 // Loading fallback component
 const SectionLoader = () => (
@@ -16,8 +17,9 @@ const SectionLoader = () => (
 const Home2026: React.FC = () => {
   return (
     <div className="bg-[#050505] text-white min-h-screen selection:bg-indigo-500/30 font-sans">
+      <SkipLink />
       <Navigation />
-      <main>
+      <main id="main-content">
         <Hero2026 />
         <Suspense fallback={<SectionLoader />}>  
           <BentoGrid />

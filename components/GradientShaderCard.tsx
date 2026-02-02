@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 
 interface Particle {
   x: number;
@@ -14,14 +14,75 @@ interface Particle {
 
 const GradientShaderCard: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
+  const particlesRef = useRef<Particle[]>([]);
+  const mouseRef = useRef({ x: -100, y: -100 }); // Initialize off-screen
   const [isHovered, setIsHovered] = useState(false);
+
+  // Throttle mouse movement using requestAnimationFrame for better performance
+  const mouseThrottleRef = useRef({
+    mouseX: 0,
+    mouseY: 0,
+    mouseUpdated: false,
+    mouseAnimationId: null as number | null
+  });
+
+  const updateMousePosition = useCallback((e: MouseEvent) => {
+    if (!canvasRef.current) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    mouseThrottleRef.current.mouseX = e.clientX - rect.left;
+    mouseThrottleRef.current.mouseY = e.clientY - rect.top;
+    mouseThrottleRef.current.mouseUpdated = true;
+  }, []);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    // Update mouse position immediately but don't process it until next frame
+    updateMousePosition(e);
+
+    // Only schedule animation frame if not already scheduled
+    if (!mouseThrottleRef.current.mouseAnimationId) {
+      mouseThrottleRef.current.mouseAnimationId = requestAnimationFrame(() => {
+        // Process the latest mouse position
+        mouseRef.current = {
+          x: mouseThrottleRef.current.mouseX,
+          y: mouseThrottleRef.current.mouseY
+        };
+
+        if (isHovered) {
+          // Create particles at mouse position
+          const colors = [
+            'rgba(14, 165, 233',  // Sky Blue
+            'rgba(16, 185, 129',  // Emerald
+            'rgba(245, 158, 11',  // Amber
+            'rgba(139, 92, 246'   // Violet
+          ];
+
+          for (let i = 0; i < 2; i++) {
+            const angle = (Math.random() * Math.PI * 2);
+            const speed = 1 + Math.random() * 2;
+            particlesRef.current.push({
+              x: mouseRef.current.x,
+              y: mouseRef.current.y,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              radius: 1 + Math.random() * 3,
+              color: colors[Math.floor(Math.random() * colors.length)],
+              life: 100,
+              maxLife: 100,
+            });
+          }
+        }
+
+        mouseThrottleRef.current.mouseAnimationId = null;
+        mouseThrottleRef.current.mouseUpdated = false;
+      });
+    }
+  }, [isHovered, updateMousePosition]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Canvas 2D context with performance optimizations
+    // Optimized Canvas 2D context configuration
     const ctx = canvas.getContext('2d', { 
       alpha: false, // Disable transparency for better performance
       desynchronized: true, // Enable async rendering for smoother animation
@@ -30,16 +91,21 @@ const GradientShaderCard: React.FC = () => {
     if (!ctx) return;
 
     // Set canvas size
-    const rect = canvas.parentElement?.getBoundingClientRect();
-    if (!rect) return;
+    const resizeCanvas = () => {
+      const rect = canvas.parentElement?.getBoundingClientRect();
+      if (!rect) return;
 
-    const dpr: number = globalThis.devicePixelRatio || 1; // Explicit type annotation
-    canvas.width = Math.floor(rect.width * dpr);
-    canvas.height = Math.floor(rect.height * dpr);
-    ctx.scale(dpr, dpr);
+      const dpr: number = (typeof window !== 'undefined' ? window.devicePixelRatio : 1) || 1;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.scale(dpr, dpr);
+    };
 
-    const w = rect.width;
-    const h = rect.height;
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const w = canvas.offsetWidth;
+    const h = canvas.offsetHeight;
     let time = 0;
 
     // Cache gradients (created once, not every frame)
@@ -57,14 +123,9 @@ const GradientShaderCard: React.FC = () => {
     const scanlineCanvas = document.createElement('canvas');
     scanlineCanvas.width = canvas.width;
     scanlineCanvas.height = canvas.height;
-    // Scanline canvas with performance optimizations
-    const sCtx = scanlineCanvas.getContext('2d', { 
-      alpha: false, // Disable transparency for better performance
-      desynchronized: true, // Enable async rendering
-      willReadFrequently: false // No pixel reading needed
-    });
+    const sCtx = scanlineCanvas.getContext('2d');
     if (sCtx) {
-      sCtx.scale(dpr, dpr);
+      sCtx.scale((typeof window !== 'undefined' ? window.devicePixelRatio : 1) || 1, (typeof window !== 'undefined' ? window.devicePixelRatio : 1) || 1);
       sCtx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
       sCtx.lineWidth = 1;
       sCtx.beginPath();
@@ -263,6 +324,7 @@ const GradientShaderCard: React.FC = () => {
         p.vy += 0.05;
         p.vx *= 0.99;
         p.vy *= 0.99;
+
         p.x += p.vx;
         p.y += p.vy;
         p.life -= 1;
@@ -336,15 +398,15 @@ const GradientShaderCard: React.FC = () => {
       ctx.drawImage(scanlineCanvas, 0, 0, w, h);
     };
 
+    let animationId: number;
     const animate = () => {
+      // Clear canvas efficiently
       ctx.fillStyle = bgGradient;
       ctx.fillRect(0, 0, w, h);
 
       drawGrid();
-
       ctx.fillStyle = gradOverlay;
       ctx.fillRect(0, 0, w, h);
-
       drawParticles();
       drawHoverGlow();
       drawScanlines();
@@ -352,23 +414,25 @@ const GradientShaderCard: React.FC = () => {
       animationId = requestAnimationFrame(animate);
     };
 
+    // Add mouse event listeners
+    canvas.addEventListener('mousemove', handleMouseMove, { passive: true });
+
     animate();
 
     return () => {
       canvas.removeEventListener('mousemove', handleMouseMove);
-      if (mouseAnimationId) {
-        cancelAnimationFrame(mouseAnimationId);
+      if (mouseThrottleRef.current.mouseAnimationId) {
+        cancelAnimationFrame(mouseThrottleRef.current.mouseAnimationId);
       }
       cancelAnimationFrame(animationId);
-      // Reset particle pool
-      activeParticleCount = 0;
+      window.removeEventListener('resize', resizeCanvas);
     };
-  }, [isHovered]);
+  }, [handleMouseMove, isHovered]);
 
   const handleFocus = () => setIsHovered(true);
   const handleBlur = () => {
     setIsHovered(false);
-    mouseRef.current = { x: 0, y: 0 };
+    mouseRef.current = { x: -100, y: -100 }; // Move off-screen
   };
 
   return (
