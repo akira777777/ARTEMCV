@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { I18nProvider } from './i18n';
 import Home2026 from './pages/Home2026';
 import HomePage from './pages/HomePage';
+import { AccessibilityPanel } from './components/AccessibilityPanel';
 
 // Lazy load heavy components
 const DetailingHub = React.lazy(() => import('./pages/DetailingHub'));
@@ -18,15 +19,18 @@ const App: React.FC = () => {
   return (
     <I18nProvider>
       <Router>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/home2026" element={<Home2026 />} />
-            <Route path="/project/detailing" element={<DetailingHub />} />
-            {/* Fallback for old routes or 404 could go here */}
-            <Route path="*" element={<Home2026 />} />
-          </Routes>
-        </Suspense>
+        <div className="relative">
+          <AccessibilityPanel />
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/home2026" element={<Home2026 />} />
+              <Route path="/project/detailing" element={<DetailingHub />} />
+              {/* Fallback for old routes or 404 could go here */}
+              <Route path="*" element={<Home2026 />} />
+            </Routes>
+          </Suspense>
+        </div>
       </Router>
     </I18nProvider>
   );
