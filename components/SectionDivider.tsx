@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
  * Adds visual hierarchy and pacing to the design
  */
 interface SectionDividerProps {
-  variant?: 'gradient' | 'dots' | 'lines';
+  variant?: 'gradient' | 'dots' | 'lines' | 'wave' | 'particles' | 'glitch' | 'diamond' | 'pulse';
   className?: string;
 }
 
@@ -179,6 +179,7 @@ export const SectionDivider: React.FC<SectionDividerProps> = ({
           {/* Center element */}
           <motion.div
             className="relative w-3 h-3 bg-white/10 border border-white/20"
+            style={{ transform: 'rotate(45deg)' }}
             style={CENTER_ELEMENT_STYLE}
             animate={{
               scale: [1, 1.2, 1],
@@ -277,6 +278,7 @@ export const SectionDivider: React.FC<SectionDividerProps> = ({
           {/* Center dot */}
           <motion.div
             className="w-4 h-4 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500"
+            style={{ boxShadow: '0 0 15px rgba(99, 102, 241, 0.6)' }}
             style={CENTER_DOT_STYLE}
             animate={{
               scale: [1, 1.2, 1],
