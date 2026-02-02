@@ -175,6 +175,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         <button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={isOpen ? t('chat.aria.close') : t('chat.aria.open')}
+          title={isOpen ? t('chat.aria.close') : t('chat.aria.open')}
           className={`
             w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500
             ${isOpen ? 'bg-white text-black rotate-90' : 'bg-neutral-900 text-white hover:scale-110 border border-white/20'}
@@ -212,7 +213,12 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50" style={SCROLLBAR_STYLE}>
+        <div
+          className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4 bg-neutral-950/50"
+          style={SCROLLBAR_STYLE}
+          role="log"
+          aria-live="polite"
+        >
           {messages.map((msg) => (
             <div 
               key={msg.id} 
@@ -273,6 +279,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(e as any)}
               placeholder={t('chat.placeholder')}
+              aria-label={t('chat.placeholder')}
               disabled={loading}
               className="flex-1 bg-white/5 border border-white/10 rounded-full py-3 px-4 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50"
             />
