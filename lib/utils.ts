@@ -47,41 +47,22 @@ export async function fetchWithTimeout(
 }
 
 /**
- * WebP support detection caching
+ * Centralized WebP support detection to prevent redundant DOM operations
  */
-let isWebPSupported: boolean | null = null;
-let webPSupportPromise: Promise<boolean> | null = null;
+let supportsWebPCache: Promise<boolean> | null = null;
 
-/**
- * Detects WebP support in the browser and caches the result
- * @returns Promise resolving to boolean indicating WebP support
- */
 export function checkWebPSupport(): Promise<boolean> {
-  // Return cached result if available
-  if (isWebPSupported !== null) return Promise.resolve(isWebPSupported);
-  if (webPSupportPromise) return webPSupportPromise;
+  if (typeof window === 'undefined') return Promise.resolve(false);
 
-  // Handle SSR or non-browser environments
-  if (typeof window === 'undefined' || typeof Image === 'undefined') {
-    return Promise.resolve(true); // Assume supported or handle gracefully in SSR
-  }
+  if (supportsWebPCache) return supportsWebPCache;
 
-  webPSupportPromise = new Promise((resolve) => {
+  supportsWebPCache = new Promise((resolve) => {
     const webP = new Image();
     webP.onload = webP.onerror = () => {
-      isWebPSupported = webP.height === 2;
-      resolve(isWebPSupported);
+      resolve(webP.height === 2);
     };
     webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
   });
 
-  return webPSupportPromise;
-}
-
-/**
- * Synchronously gets the cached WebP support status
- * @returns boolean | null (null if not yet detected)
- */
-export function getCachedWebPSupport(): boolean | null {
-  return isWebPSupported;
+  return supportsWebPCache;
 }
