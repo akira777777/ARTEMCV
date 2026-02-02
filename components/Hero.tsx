@@ -345,12 +345,16 @@ const Hero: React.FC = React.memo(() => {
       {/* Scroll Progress Bar */}
       <div 
         className="scroll-progress" 
+<<<<<<< Local
         style={{ width: `${Math.min(scrollY / (document.body.scrollHeight - window.innerHeight) * 100, 100)}%` }}
         role="progressbar"
         aria-valuenow={Math.min(scrollY / (document.body.scrollHeight - window.innerHeight) * 100, 100)}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label="Scroll progress indicator"
+=======
+        style={{ width: `${Math.min(scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1) * 100, 100)}%` }}
+>>>>>>> Remote
       />
 
       {/* Animated Background Elements */}

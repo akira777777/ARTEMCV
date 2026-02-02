@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 
 interface CardStackItem {
@@ -10,35 +10,35 @@ interface CardStackItem {
   gradient: string;
 }
 
-const stackItems: CardStackItem[] = [
-  {
-    id: 1,
-    title: "Innovation First",
-    description: "Cutting-edge solutions that push boundaries and redefine possibilities",
-    image: "/innovation-icon.svg",
-    tags: ["Research", "Development", "Future"],
-    gradient: "from-emerald-500 to-cyan-500"
-  },
-  {
-    id: 2,
-    title: "User Centric",
-    description: "Designs that prioritize human experience and intuitive interaction",
-    image: "/user-icon.svg",
-    tags: ["UX", "Accessibility", "Empathy"],
-    gradient: "from-cyan-500 to-blue-500"
-  },
-  {
-    id: 3,
-    title: "Performance Driven",
-    description: "Optimized solutions that deliver exceptional speed and reliability",
-    image: "/performance-icon.svg",
-    tags: ["Optimization", "Speed", "Efficiency"],
-    gradient: "from-orange-500 to-red-500"
-  }
-];
+export const CardStack: React.FC = React.memo(() => {
+  const stackItems = useMemo<CardStackItem[]>(() => [
+    {
+      id: 1,
+      title: "Innovation First",
+      description: "Cutting-edge solutions that push boundaries and redefine possibilities",
+      image: "/innovation-icon.svg",
+      tags: ["Research", "Development", "Future"],
+      gradient: "from-emerald-500 to-cyan-500"
+    },
+    {
+      id: 2,
+      title: "User Centric",
+      description: "Designs that prioritize human experience and intuitive interaction",
+      image: "/user-icon.svg",
+      tags: ["UX", "Accessibility", "Empathy"],
+      gradient: "from-cyan-500 to-blue-500"
+    },
+    {
+      id: 3,
+      title: "Performance Driven",
+      description: "Optimized solutions that deliver exceptional speed and reliability",
+      image: "/performance-icon.svg",
+      tags: ["Optimization", "Speed", "Efficiency"],
+      gradient: "from-orange-500 to-red-500"
+    }
+  ], []);
 
-export const CardStack: React.FC = () => {
-  const [cards, setCards] = useState(stackItems);
+  const [cards, setCards] = useState<CardStackItem[]>(stackItems);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-15, 15]);
@@ -163,10 +163,37 @@ export const CardStack: React.FC = () => {
       </div>
     </section>
   );
-};
+});
 
 // Alternative vertical stack variant
-export const VerticalCardStack: React.FC = () => {
+export const VerticalCardStack: React.FC = React.memo(() => {
+  const stackItems = useMemo<CardStackItem[]>(() => [
+    {
+      id: 1,
+      title: "Innovation First",
+      description: "Cutting-edge solutions that push boundaries and redefine possibilities",
+      image: "/innovation-icon.svg",
+      tags: ["Research", "Development", "Future"],
+      gradient: "from-emerald-500 to-cyan-500"
+    },
+    {
+      id: 2,
+      title: "User Centric",
+      description: "Designs that prioritize human experience and intuitive interaction",
+      image: "/user-icon.svg",
+      tags: ["UX", "Accessibility", "Empathy"],
+      gradient: "from-cyan-500 to-blue-500"
+    },
+    {
+      id: 3,
+      title: "Performance Driven",
+      description: "Optimized solutions that deliver exceptional speed and reliability",
+      image: "/performance-icon.svg",
+      tags: ["Optimization", "Speed", "Efficiency"],
+      gradient: "from-orange-500 to-red-500"
+    }
+  ], []);
+  
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (

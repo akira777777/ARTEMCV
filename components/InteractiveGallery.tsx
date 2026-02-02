@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Zap, Code2, Palette, Layers, Cpu } from 'lucide-react';
 import { useI18n } from '../i18n';
@@ -18,15 +18,15 @@ import {
  * InteractiveGallery - Showcase of interactive UI components
  * Demonstrates advanced animations and visual effects
  */
-export const InteractiveGallery: React.FC = () => {
+export const InteractiveGallery: React.FC = React.memo(() => {
   const { t } = useI18n();
 
-  const features = [
+  const features = useMemo(() => [
     { icon: Sparkles, title: 'Motion Design', desc: 'Fluid animations & transitions', color: '#6366f1' },
     { icon: Zap, title: 'Performance', desc: 'GPU-accelerated effects', color: '#f59e0b' },
     { icon: Code2, title: 'Clean Code', desc: 'TypeScript & React patterns', color: '#10b981' },
     { icon: Palette, title: 'Visual Design', desc: 'Modern glassmorphism UI', color: '#ec4899' },
-  ];
+  ], []);
 
   return (
     <section className="py-24 relative overflow-hidden" id="gallery" aria-labelledby="gallery-heading">
