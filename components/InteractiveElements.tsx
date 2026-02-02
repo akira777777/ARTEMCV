@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+// Memoized style objects for performance
+const SVG_STYLE = { overflow: 'visible' } as const;
+
 /**
  * AnimatedLink Component - Link with animated SVG underline effect
  */
@@ -29,7 +32,7 @@ export const AnimatedLink: React.FC<{
         viewBox="0 0 100 4"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ overflow: 'visible' }}
+        style={SVG_STYLE}
       >
         <motion.path
           d="M0 2 Q25 0, 50 2 T100 2"

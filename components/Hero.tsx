@@ -1,8 +1,12 @@
 import React, { useState, useCallback, Suspense } from 'react';
 import { motion, useSpring, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { ServicesGrid } from './ServicesGrid';
+import { scrollToSection } from '../lib/utils';
+import { ParticleText } from './ParticleText';
 
 // Lazy load ParticleText to prevent chunk duplication
 const ParticleText = React.lazy(() => import('./InteractiveElements').then(m => ({ default: m.ParticleText })));
@@ -54,7 +58,7 @@ const AnimatedLetter: React.FC<{
   index: number;
 }> = ({ letter, index }) => {
   const baseDelay = index * 0.1;
-  
+
   return (
     <motion.span
       className="inline-block relative"
@@ -68,8 +72,8 @@ const AnimatedLetter: React.FC<{
       }}
       whileHover={{
         scale: 1.1,
-        color: '#a855f7',
-        textShadow: '0 0 40px rgba(168, 85, 247, 0.8)',
+        color: '#8b5cf6',
+        textShadow: '0 0 40px rgba(139, 92, 246, 0.8)',
         transition: { duration: 0.2 },
       }}
       style={{
@@ -84,6 +88,8 @@ const AnimatedLetter: React.FC<{
           style={{
             background: letter === 'U' ? '#ec4899' : '#22d3ee',
             boxShadow: `0 0 15px ${letter === 'U' ? 'rgba(236, 72, 153, 0.8)' : 'rgba(34, 211, 238, 0.8)'}`,
+            background: letter === 'R' ? '#f59e0b' : '#0ea5e9',
+            boxShadow: `0 0 15px ${letter === 'R' ? 'rgba(245, 158, 11, 0.8)' : 'rgba(14, 165, 233, 0.8)'}`,
           }}
           animate={{
             scale: [1, 1.3, 1],
@@ -113,7 +119,7 @@ const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = ({ mouseX, mo
           width: 40,
           height: 40,
           borderRadius: '50%',
-          border: '2px solid rgba(168, 85, 247, 0.8)',
+          border: '2px solid rgba(139, 92, 246, 0.8)',
           transform: 'translate(-50%, -50%)',
         }}
         animate={{
@@ -139,11 +145,19 @@ const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = ({ mouseX, mo
   );
 };
 
-export const Hero: React.FC = React.memo(() => {
+const Hero: React.FC = React.memo(() => {
   const { t } = useI18n();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  // Track scroll for parallax effects
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!containerRef.current) return;
@@ -154,9 +168,9 @@ export const Hero: React.FC = React.memo(() => {
     });
   }, []);
 
-  const scrollToWorks = () => {
+  const scrollToWorks = useCallback(() => {
     document.getElementById('works')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -170,6 +184,53 @@ export const Hero: React.FC = React.memo(() => {
     'linear-gradient(135deg, #3b82f6, #60a5fa)', // blue
     'linear-gradient(135deg, #10b981, #34d399)', // green
   ];
+  const scrollToContact = useCallback(() => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  // Generate floating particles
+  const particles = useMemo(() => 
+    Array.from({ length: 15 }, (_, i) => ({
+      id: i,
+      delay: Math.random() * 15,
+      size: Math.random() * 8 + 2,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+    })),
+    []
+  );
+
+  // Stats for the aside section
+  const stats = useMemo(() => [
+    { 
+      value: '50+', 
+      label: t('hero.stats.projects'), 
+      icon: Code2,
+      color: 'text-blue-400',
+      delay: 0.2 
+    },
+    { 
+      value: '8Y+', 
+      label: t('hero.stats.experience'), 
+      icon: Zap,
+      color: 'text-purple-400',
+      delay: 0.4 
+    },
+    { 
+      value: '30+', 
+      label: t('hero.stats.clients'), 
+      icon: Users,
+      color: 'text-pink-400',
+      delay: 0.6 
+    },
+    { 
+      value: '12', 
+      label: t('hero.stats.awards'), 
+      icon: Palette,
+      color: 'text-cyan-400',
+      delay: 0.8 
+    },
+  ], [t]);
 
   return (
     <section
@@ -178,7 +239,7 @@ export const Hero: React.FC = React.memo(() => {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      className="relative min-h-screen w-full flex flex-col items-center justify-start overflow-hidden pt-28 pb-40 cursor-none"
+      className="relative min-h-screen w-full flex flex-col items-center justify-start overflow-hidden pt-28 pb-40"
       aria-label="Hero section"
     >
       {/* Custom Cursor */}
@@ -383,15 +444,226 @@ export const Hero: React.FC = React.memo(() => {
           ))}
         </div>
       </motion.div>
+      {/* Scroll Progress Bar */}
+      <div 
+        className="scroll-progress" 
+        style={{ width: `${Math.min(scrollY / (document.body.scrollHeight - window.innerHeight) * 100, 100)}%` }}
+        aria-hidden="true"
+      />
+
+      {/* Animated Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
+        {/* Gradient Mesh */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(14,165,233,0.15)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(16,185,129,0.12)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(245,158,11,0.1)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_70%,rgba(139,92,246,0.1)_0%,transparent_50%)]" />
+        
+        {/* Interactive Grid */}
+        <div className="interactive-grid" />
+        
+        {/* Floating Particles */}
+        {particles.map(particle => (
+          <motion.div
+            key={particle.id}
+            className="particle"
+            style={{
+              left: `${particle.x}%`,
+              top: `${particle.y}%`,
+              width: particle.size,
+              height: particle.size,
+              background: `radial-gradient(circle, 
+                ${particle.id % 4 === 0 ? '#0EA5E9' : particle.id % 4 === 1 ? '#10B981' : particle.id % 4 === 2 ? '#F59E0B' : '#8B5CF6'}, 
+                transparent)`
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ 
+              opacity: [0, 0.6, 0],
+              y: [-20, -window.innerHeight - 20]
+            }}
+            transition={{
+              duration: 15,
+              delay: particle.delay,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        ))}
+        
+        {/* Blob Background Elements */}
+        <motion.div
+          className="blob-bg"
+          style={{
+            width: '400px',
+            height: '400px',
+            background: 'linear-gradient(45deg, #0EA5E9, #10B981)',
+            top: '10%',
+            left: '5%',
+          }}
+          animate={{
+            x: [0, 50, 0],
+            y: [0, -30, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        <motion.div
+          className="blob-bg"
+          style={{
+            width: '300px',
+            height: '300px',
+            background: 'linear-gradient(45deg, #F59E0B, #8B5CF6)',
+            bottom: '15%',
+            right: '8%',
+          }}
+          animate={{
+            x: [0, -40, 0],
+            y: [0, 20, 0],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+      </div>
+
+      {/* Holographic Abstract Sphere with Parallax */}
+      <motion.div
+        className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"
+        aria-hidden="true"
+        style={{
+          y: scrollY * 0.3
+        }}
+      />
+
+      {/* Main Typography with 3D Tilt Effect */}
+      <div className="z-10 relative w-full max-w-6xl px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-16 items-center">
+          <div className="text-center lg:text-left">
+            <motion.div 
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-primary/20 bg-primary/10 text-xs tracking-widest font-bold text-primary-300 mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <motion.span 
+                className="text-primary-400"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                aria-hidden="true"
+              >
+                ✦
+              </motion.span>
+              {t('hero.badge')}
+            </motion.div>
+              
+            <motion.div 
+              className="flex items-center justify-center lg:justify-start mb-4"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <span className="text-4xl md:text-6xl font-display font-bold mr-4 gradient-text" aria-hidden="true">∞</span>
+            </motion.div>
+              
+            <motion.h1 
+              className="text-[11vw] sm:text-[9vw] lg:text-[6.5rem] leading-[0.9] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-primary-300 select-none uppercase"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              style={{ fontSize: 'clamp(2rem, 10vw, 6.5rem)' }}
+            >
+              {(t('hero.title.line1') + ' ' + t('hero.title.line2')).split('').map((letter, index) => (
+                <AnimatedLetter key={index} letter={letter} index={index} />
+              ))}
+            </motion.h1>
+
+            <motion.p
+              className="mt-6 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+            >
+              {t('hero.description')}
+            </motion.p>
+
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 mt-10 justify-center lg:justify-start"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+            >
+              <motion.button
+                onClick={scrollToWorks}
+                className="neon-button px-7 py-3 rounded-full text-xs font-bold tracking-widest interactive-element touch-target"
+                className="px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-full hover:shadow-lg hover:shadow-primary/30 transition-all group"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {t('hero.cta.explore')}{" "}
+                <ArrowRight className="w-4 h-4 inline-block ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+              </motion.button>
+              <motion.button
+                onClick={scrollToContact}
+                className="px-7 py-3 rounded-full border border-primary/30 text-primary-300 text-xs font-bold tracking-widest hover:bg-primary/10 ease-smooth interactive-element touch-target"
+                className="px-8 py-4 border border-primary/30 text-primary font-semibold rounded-full hover:bg-primary/10 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {t('hero.cta.contact')}
+              </motion.button>
+            </motion.div>
+          </div>
+
+          {/* Stats Section */}
+          <aside className="hidden lg:block">
+            <div className="grid grid-cols-2 gap-6">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={index}
+                  className="text-center p-4 rounded-xl glass-card-modern border border-primary/20 hover:border-secondary/50 transition-all group cursor-pointer"
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ delay: 1.5 + stat.delay, duration: 0.5 }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    boxShadow: '0 0 30px rgba(14, 165, 233, 0.3)',
+                    borderColor: 'rgba(16, 185, 129, 0.5)',
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <stat.icon className={`w-6 h-6 mx-auto mb-2 ${stat.color} group-hover:scale-110 transition-transform`} aria-hidden="true" />
+                  <motion.div 
+                    className="text-2xl md:text-3xl font-black text-white"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.7 + stat.delay }}
+                  >
+                    {stat.value}
+                  </motion.div>
+                  <div className="text-xs text-gray-500 tracking-wider">{stat.label}</div>
+                </motion.div>
+              ))}
+            </div>
+          </aside>
+        </div>
+      </div>
 
       {/* Interactive Elements Section */}
-      <motion.div 
+      <motion.div
         className="relative w-full max-w-6xl py-12 space-y-12"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.8 }}
       >
         <Suspense fallback={<div className="h-32 w-full" />}>
+        <Suspense fallback={<div className="h-24 w-full" aria-label="Loading interactive text..." />}>
           <ParticleText text="INTERACTIVE EXPERIENCE" />
         </Suspense>
         <ServicesGrid />
@@ -399,15 +671,17 @@ export const Hero: React.FC = React.memo(() => {
 
       <motion.button
         type="button"
-        onClick={scrollToWorks}
+        onClick={() => scrollToSection('works')}
         aria-label="Scroll down to explore projects"
-        className="fixed bottom-8 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 hover:text-white transition-colors group z-40"
+        className="absolute bottom-4 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-neutral-500 cursor-pointer hover:text-white transition-colors group"
+        onClick={scrollToWorks}
+        aria-label={t('hero.cta.scroll')}
+        className="fixed bottom-8 right-10 hidden md:flex items-center gap-4 text-xs font-bold tracking-widest text-gray-500 hover:text-white transition-colors group z-40"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2.5, duration: 0.6 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        style={{ cursor: 'none' }}
       >
         {t('hero.cta.scroll')} <ArrowRight className="w-4 h-4 animate-bounce group-hover:translate-x-1 transition-transform" aria-hidden="true" />
       </motion.button>
@@ -416,3 +690,4 @@ export const Hero: React.FC = React.memo(() => {
 });
 
 Hero.displayName = 'Hero';
+export default Hero;

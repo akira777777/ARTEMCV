@@ -90,12 +90,14 @@ function runOptimized(ctx: MockCtx) {
   // x = 0, 40, 80 ... < w.
   // xIndices: 0, 1, ...
 
-  const xValues = [];
+  const xValues: number[] = [];
   for (let x = 0; x < w; x += gridSize) xValues.push(x);
 
-  const yValues = [];
+  const yValues: number[] = [];
   for (let y = 0; y < h; y += gridSize) yValues.push(y);
 
+  // Pre-allocate typed arrays to avoid GC pressure
+  // Using Float32Array for better memory layout and performance
   const wavePartX = new Float32Array(xValues.length);
   const lineDispX = new Float32Array(xValues.length);
   const wavePartY = new Float32Array(yValues.length);

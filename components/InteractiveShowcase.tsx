@@ -1,9 +1,23 @@
+/**
+ * @deprecated This component is lazy-loaded but never rendered in App.tsx.
+ * TODO: Consider integrating into UI or remove in next cleanup.
+ */
 import React, { useRef, useCallback, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useI18n } from '../i18n';
 
 const SPRING_CONFIG = { stiffness: 120, damping: 12, mass: 0.4 };
 const ROTATION_RANGE = 50;
+
+// Memoized style objects for performance
+const CARD_CONTAINER_STYLE = { 
+  perspective: 1200, 
+  willChange: 'transform' 
+} as const;
+
+const NEON_PRISM_STYLE = { 
+  willChange: 'transform' 
+} as const;
 
 const InteractiveShowcase: React.FC = () => {
   const { t } = useI18n();
@@ -54,7 +68,7 @@ const InteractiveShowcase: React.FC = () => {
             aria-label={t('lab.tilt.title')}
             tabIndex={0}
             className="relative w-full lg:w-1/2 aspect-[5/4] rounded-[32px] overflow-hidden glass-card border border-white/10 cursor-pointer focus-visible:ring-2 focus-visible:ring-indigo-500 outline-none"
-            style={{ perspective: 1200, willChange: 'transform' }}
+            style={CARD_CONTAINER_STYLE}
             onMouseEnter={handleMouseEnter}
             onMouseMove={handleMove}
             onMouseLeave={handleLeave}
@@ -92,7 +106,7 @@ const InteractiveShowcase: React.FC = () => {
                   className="w-48 h-48 rounded-[22px] neon-prism"
                   animate={{ rotate: 360 }}
                   transition={{ repeat: Infinity, duration: 16, ease: 'linear' }}
-                  style={{ willChange: 'transform' }}
+                  style={NEON_PRISM_STYLE}
                 />
               </div>
             </motion.div>

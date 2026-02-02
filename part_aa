@@ -1,0 +1,50 @@
+import React, { useRef, useEffect, useState } from 'react';
+
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  radius: number;
+  color: string;
+  life: number;
+  maxLife: number;
+}
+
+const GradientShaderCard: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Canvas 2D context with performance optimizations
+    const ctx = canvas.getContext('2d', {
+      alpha: false, // Disable transparency for better performance
+      desynchronized: true, // Enable async rendering for smoother animation
+      willReadFrequently: false // We don't read pixels back, better for GPU acceleration
+    });
+    if (!ctx) return;
+
+    // Set canvas size
+    const rect = canvas.parentElement?.getBoundingClientRect();
+    if (!rect) return;
+
+    const dpr: number = globalThis.devicePixelRatio || 1; // Explicit type annotation
+    canvas.width = Math.floor(rect.width * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+    ctx.scale(dpr, dpr);
+
+    const w = rect.width;
+    const h = rect.height;
+    let time = 0;
+
+    // Cache gradients (created once, not every frame)
+    const bgGradient = ctx.createLinearGradient(0, 0, w, h);
+    bgGradient.addColorStop(0, '#0f172a');
+    bgGradient.addColorStop(0.5, '#1e293b');
+    bgGradient.addColorStop(1, '#0c4a6e');
+
+    const gradOverlay = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.hypot(w, h) * 0.7);
