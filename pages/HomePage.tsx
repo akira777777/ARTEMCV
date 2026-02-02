@@ -21,8 +21,6 @@ const HomePage: React.FC = () => {
   return (
     <DefaultLayout>
       <CursorTrail />
-      <SkipLink />
-      <ScrollProgress />
       <main id="main-content">
         <Hero />
         <SectionDivider variant="wave" />
@@ -65,7 +63,6 @@ const HomePage: React.FC = () => {
       <React.Suspense fallback={null}>
         <SimpleTelegramChat />
       </React.Suspense>
-      <ScrollToTop />
     </DefaultLayout>
   );
 };

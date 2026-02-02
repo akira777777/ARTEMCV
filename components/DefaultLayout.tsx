@@ -6,7 +6,7 @@ interface DefaultLayoutProps {
   className?: string;
 }
 
-const DefaultLayout: React.FC<DefaultLayoutProps> = ({ 
+const DefaultLayout: React.FC<DefaultLayoutProps> = React.memo(({ 
   children, 
   className = '' 
 }) => {
@@ -22,6 +22,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
       {children}
     </BaseLayout>
   );
-};
+});
 
+DefaultLayout.displayName = 'DefaultLayout';
 export default DefaultLayout;

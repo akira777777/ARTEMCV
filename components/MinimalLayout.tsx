@@ -6,7 +6,7 @@ interface MinimalLayoutProps {
   className?: string;
 }
 
-const MinimalLayout: React.FC<MinimalLayoutProps> = ({ 
+const MinimalLayout: React.FC<MinimalLayoutProps> = React.memo(({ 
   children, 
   className = '' 
 }) => {
@@ -22,6 +22,7 @@ const MinimalLayout: React.FC<MinimalLayoutProps> = ({
       {children}
     </BaseLayout>
   );
-};
+});
 
+MinimalLayout.displayName = 'MinimalLayout';
 export default MinimalLayout;
