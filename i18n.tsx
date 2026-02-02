@@ -51,17 +51,6 @@ const translations: Record<Lang, Dict> = {
     'contact.error.timeout': 'Network timeout. Please try again later.',
     'contact.reach_out': 'Or reach out through:',
 
-    'cta.title': "Let's Build Something Great Together",
-    'cta.subtitle': 'Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.',
-    'cta.button': 'Start Collaboration',
-    'cta.secondary': 'View GitHub',
-
-    'project.1.title': 'Barber Shop',
-    'project.1.desc': 'AI Barber Shop Dispatcher: online booking, anti-overbooking, customer CRM, and payment analytics. Optimized for multi-chair salons.',
-    'project.2.title': 'Dental Clinic Vakalova',
-    'project.2.desc': 'Landing page and doctor appointment: service catalog, interactive treatment plans, patient reviews. Focused on accessibility and loading speed.',
-    'project.3.title': 'Game Marketplace',
-    'project.3.desc': 'Modern game marketplace with catalog, shopping cart, filtering system, and responsive interface. Features animations and smooth transitions.',
     'cta.title': "Ready to Evolve?",
     'cta.subtitle': 'Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.',
     'cta.button': 'Hire Me',

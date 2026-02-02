@@ -1,3 +1,8 @@
+/**
+ * @deprecated This component is not used. Use BaseLayout or DefaultLayout instead.
+ * TODO: Remove this file in next cleanup.
+ */
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Code, Zap, Users, Rocket, Shield, TrendingUp } from 'lucide-react';

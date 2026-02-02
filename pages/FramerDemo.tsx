@@ -1,17 +1,14 @@
 import React from 'react';
 import FramerIntegration from '../components/FramerIntegration';
-import Header from '../components/Header';
-import { Footer } from '../components/Footer';
+import DefaultLayout from '../components/DefaultLayout';
 
 const FramerDemo: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-900">
-      <Header />
+    <DefaultLayout>
       <main>
         <FramerIntegration />
       </main>
-      <Footer />
-    </div>
+    </DefaultLayout>
   );
 };
 

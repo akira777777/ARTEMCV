@@ -2,6 +2,7 @@ import React from 'react';
 import ProjectNavigation from '../components/detailing/ProjectNavigation';
 import CarConfigurator from '../components/detailing/CarConfigurator';
 import { useI18n } from '../i18n';
+import BaseLayout from '../components/BaseLayout';
 
 interface DetailingHubProps {}
 
@@ -9,7 +10,7 @@ const DetailingHub: React.FC<DetailingHubProps> = () => {
   const { t } = useI18n();
 
   return (
-    <div className="bg-[#050505] text-white min-h-screen selection:bg-blue-500 selection:text-white font-sans">
+    <BaseLayout showNavigation={false} showFooter={false} showScrollToTop={false} showSkipLink={false}>
       <ProjectNavigation />
 
       <main>
@@ -115,7 +116,7 @@ const DetailingHub: React.FC<DetailingHubProps> = () => {
           </div>
         </footer>
       </main>
-    </div>
+    </BaseLayout>
   );
 };
 

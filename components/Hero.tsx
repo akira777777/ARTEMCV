@@ -8,7 +8,10 @@ import { scrollToSection } from '../lib/utils';
 // Lazy load ParticleText to prevent chunk duplication
 const LazyParticleText = React.lazy(() => import('./InteractiveElements').then(m => ({ default: m.ParticleText })));
 
-// Floating orbs that follow cursor
+/**
+ * Floating orb component that follows cursor movement with physics-based animation
+ * Uses framer-motion springs for smooth, natural movement
+ */
 const FloatingOrb: React.FC<{ 
   delay: number; 
   size: number; 
@@ -49,7 +52,10 @@ const FloatingOrb: React.FC<{
   );
 });
 
-// Letter animation component for name
+/**
+ * Individual letter animation component for the hero name
+ * Applies staggered entrance animation and hover effects
+ */
 const AnimatedLetter: React.FC<{ 
   letter: string; 
   index: number;
@@ -98,6 +104,10 @@ const AnimatedLetter: React.FC<{
 });
 
 // Custom cursor component
+/**
+ * Custom animated cursor with trailing effect
+ * Uses framer-motion for smooth animations and spring physics
+ */
 const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = React.memo(({ mouseX, mouseY }) => {
   const springConfig = { stiffness: 500, damping: 28 };
   const cursorX = useSpring(mouseX, springConfig);
@@ -140,6 +150,16 @@ const CustomCursor: React.FC<{ mouseX: number; mouseY: number }> = React.memo(({
   );
 });
 
+/**
+ * Hero section component with interactive animations and 3D effects
+ * Features:
+ * - Animated typography with staggered entrance
+ * - Interactive cursor with trailing effect
+ * - Floating orbs that follow mouse movement
+ * - Parallax background effects
+ * - Scroll progress indicator
+ * - Responsive design with mobile considerations
+ */
 const Hero: React.FC = React.memo(() => {
   const { t } = useI18n();
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -147,13 +167,20 @@ const Hero: React.FC = React.memo(() => {
   const [isHovering, setIsHovering] = useState(false);
   const [scrollY, setScrollY] = useState(0);
 
-  // Track scroll for parallax effects
+  /**
+   * Track scroll position for parallax effects
+   * Uses passive scroll listener for performance
+   */
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  /**
+   * Handles mouse movement for interactive effects
+   * Calculates relative mouse position within the container
+   */
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -296,7 +323,8 @@ const Hero: React.FC = React.memo(() => {
           rotate: { duration: 120, repeat: Infinity, ease: 'linear' },
           scale: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
         }}
-        aria-hidden="true"
+        role="img"
+        aria-label="Decorative purple star background element"
       />
 
       {/* Floating Orbs */}
@@ -313,142 +341,16 @@ const Hero: React.FC = React.memo(() => {
         ))}
       </div>
 
-      {/* Main Typography */}
-      <motion.div 
-        className="z-10 text-center mb-12 relative"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
-        {/* Infinity symbol with glow */}
-        <motion.div 
-          className="flex items-center justify-center mb-4"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, type: 'spring' }}
-        >
-          <motion.span 
-            className="text-4xl md:text-6xl font-display font-bold mr-4"
-            animate={{
-              textShadow: [
-                '0 0 20px rgba(168, 85, 247, 0.5)',
-                '0 0 40px rgba(168, 85, 247, 0.8)',
-                '0 0 20px rgba(168, 85, 247, 0.5)',
-              ],
-              color: ['#a855f7', '#ec4899', '#a855f7'],
-            }}
-            transition={{ duration: 3, repeat: Infinity }}
-            aria-hidden="true"
-          >
-            &infin;
-          </motion.span>
-        </motion.div>
 
-        {/* Animated name text */}
-        <h1 
-          className="text-[12vw] leading-[0.85] font-display font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 select-none uppercase"
-          style={{ perspective: '1000px' }}
-        >
-          {name.split('').map((letter, index) => (
-            <AnimatedLetter 
-              key={index} 
-              letter={letter} 
-              index={index}
-            />
-          ))}
-        </h1>
-
-        <motion.p 
-          className="mt-6 text-lg md:text-xl text-white font-medium tracking-wide"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6 }}
-        >
-          {t('hero.title.line1')} & {t('hero.stat.uiux')}
-        </motion.p>
-        <motion.p 
-          className="mt-4 text-neutral-400 max-w-lg mx-auto text-sm md:text-base font-light tracking-wide leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-        >
-          {t('hero.desc')}
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div 
-          className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 0.6 }}
-        >
-          <button
-            type="button"
-            onClick={scrollToWorks}
-            className="px-7 py-3 rounded-full bg-white text-black text-xs font-bold tracking-widest hover:bg-neutral-200 transition-colors"
-            aria-label={t('hero.cta.portfolio')}
-          >
-            {t('hero.cta.portfolio')}
-          </button>
-          <button
-            type="button"
-            onClick={scrollToContact}
-            className="px-7 py-3 rounded-full border border-white/20 text-white text-xs font-bold tracking-widest hover:bg-white/10 transition-colors"
-            aria-label={t('hero.cta.contact')}
-          >
-            {t('hero.cta.contact')}
-          </button>
-        </motion.div>
-      </motion.div>
-
-      {/* Stats Section with staggered animation */}
-      <motion.div 
-        className="w-full max-w-4xl px-6 mb-16" 
-        role="complementary" 
-        aria-label="Statistics"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.6, duration: 0.8 }}
-      >
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-          {[
-            { icon: Code2, value: '50+', label: t('hero.stat.projects'), color: 'text-indigo-400', delay: 0 },
-            { icon: Users, value: '30+', label: t('hero.stat.clients'), color: 'text-emerald-400', delay: 0.1 },
-            { icon: Zap, value: '3+', label: t('hero.stat.experience'), color: 'text-yellow-400', delay: 0.2 },
-            { icon: Palette, value: '100%', label: t('hero.stat.satisfaction'), color: 'text-pink-400', delay: 0.3 },
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              className="text-center p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-purple-500/50 transition-all group cursor-pointer"
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 1.7 + stat.delay, duration: 0.5 }}
-              whileHover={{ 
-                scale: 1.05, 
-                boxShadow: '0 0 30px rgba(168, 85, 247, 0.3)',
-                borderColor: 'rgba(168, 85, 247, 0.5)',
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <stat.icon className={`w-6 h-6 mx-auto mb-2 ${stat.color} group-hover:scale-110 transition-transform`} aria-hidden="true" />
-              <motion.div 
-                className="text-2xl md:text-3xl font-black text-white"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.9 + stat.delay }}
-              >
-                {stat.value}
-              </motion.div>
-              <div className="text-xs text-neutral-500 tracking-wider">{stat.label}</div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
       {/* Scroll Progress Bar */}
       <div 
         className="scroll-progress" 
         style={{ width: `${Math.min(scrollY / (document.body.scrollHeight - window.innerHeight) * 100, 100)}%` }}
-        aria-hidden="true"
+        role="progressbar"
+        aria-valuenow={Math.min(scrollY / (document.body.scrollHeight - window.innerHeight) * 100, 100)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label="Scroll progress indicator"
       />
 
       {/* Animated Background Elements */}
@@ -487,6 +389,8 @@ const Hero: React.FC = React.memo(() => {
               repeat: Infinity,
               ease: "linear"
             }}
+            aria-hidden="true"
+            role="presentation"
           />
         ))}
         
@@ -509,6 +413,8 @@ const Hero: React.FC = React.memo(() => {
             repeat: Infinity,
             ease: "easeInOut"
           }}
+          aria-hidden="true"
+          role="presentation"
         />
         
         <motion.div
@@ -530,6 +436,8 @@ const Hero: React.FC = React.memo(() => {
             ease: "easeInOut",
             delay: 2
           }}
+          aria-hidden="true"
+          role="presentation"
         />
       </div>
 
