@@ -34,18 +34,20 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
   ]);
 
   // Update welcome message text when language changes (only for initial message)
+  const [inputValue, setInputValue] = useState('');
+  const [userName, setUserName] = useState('');
+
+  // Update welcome message text when language changes (only for initial message)
   useEffect(() => {
     setMessages(prev => {
       const firstMsg = prev[0];
       if (firstMsg?.id === INITIAL_MESSAGE_ID && prev.length === 1) {
-        return [{ ...firstMsg, text: t('chat.bot.welcome') }];
+        const text = !userName ? t('chat.prompt.name') : t('chat.bot.welcome');
+        return [{ ...firstMsg, text }];
       }
       return prev;
     });
-  }, [lang, t]);
-
-  const [inputValue, setInputValue] = useState('');
-  const [userName, setUserName] = useState('');
+  }, [lang, t, userName]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -85,21 +87,18 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       return;
     }
 
-    // Prompt for name if not provided
-    let name = userName.trim();
-    if (!name) {
-      const promptName = window.prompt(t('chat.prompt.name'));
-      if (!promptName) return;
-      name = promptName.trim();
-      if (!name) {
-        setError(t('chat.error.name_required'));
-        return;
-      }
+    // Handle inline name setting if not provided
+    if (!userName.trim()) {
+      const name = inputValue.trim();
       setUserName(name);
+      setInputValue('');
       try {
         localStorage.setItem('chat_user_name', name);
       } catch {}
+      return;
     }
+
+    const name = userName.trim();
 
     const userMessage = inputValue.trim();
     setInputValue('');
@@ -285,8 +284,8 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(e as any)}
-              placeholder={t('chat.placeholder')}
-              aria-label={t('chat.placeholder')}
+              placeholder={!userName ? t('chat.prompt.name') : t('chat.placeholder')}
+              aria-label={!userName ? t('chat.prompt.name') : t('chat.placeholder')}
               disabled={loading}
               className="flex-1 bg-white/5 border border-white/10 rounded-full py-3 px-4 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50"
             />

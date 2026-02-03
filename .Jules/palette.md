@@ -11,3 +11,7 @@
 ## 2024-05-23 - [Localized ARIA labels]
 **Learning:** Hardcoded ARIA labels in a multilingual app break accessibility for non-English users as screen readers will announce labels in the wrong language.
 **Action:** Always use translation keys for `aria-label`, `title`, and `alt` text to ensure a consistent accessible experience across all supported languages.
+
+## 2025-02-10 - [Conversational Onboarding]
+**Learning:** Using `window.prompt` for user data collection is jarring and breaks the immersive feel of modern chat interfaces.
+**Action:** Replace blocking browser prompts with inline, conversational UI steps within the chat flow to maintain user engagement and aesthetic consistency.
