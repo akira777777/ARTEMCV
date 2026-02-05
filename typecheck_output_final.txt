@@ -1,0 +1,24 @@
+components/CardStack.tsx(239,2): error TS1005: ')' expected.
+components/Footer2026.tsx(49,2): error TS1005: ')' expected.
+components/Hero.tsx(263,6): error TS17008: JSX element 'section' has no corresponding closing tag.
+components/Hero.tsx(331,8): error TS17008: JSX element 'div' has no corresponding closing tag.
+components/Hero.tsx(343,1): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(343,2): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(343,3): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(343,4): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(343,5): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(343,6): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(343,7): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(344,8): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(365,1): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(365,2): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(365,3): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(365,4): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(365,5): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(365,6): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(365,7): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(366,8): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+components/Hero.tsx(603,7): error TS17002: Expected corresponding JSX closing tag for 'div'.
+components/Hero.tsx(605,1): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+components/Hero.tsx(609,1): error TS1005: '</' expected.
+components/InteractiveGallery.tsx(209,2): error TS1005: ')' expected.
