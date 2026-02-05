@@ -8,7 +8,7 @@ test.describe('Final Verification - All Improvements', () => {
     // 1. Performance Test
     console.log('\n1. Testing Performance Optimization...');
     const startTime = Date.now();
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     const loadTime = Date.now() - startTime;
     
@@ -27,7 +27,7 @@ test.describe('Final Verification - All Improvements', () => {
     await page.waitForTimeout(1000);
     
     // Verify Russian content is visible
-    const ruDeveloperText = page.getByText('Full Stack разработчик', { exact: false });
+    const ruDeveloperText = page.getByText('Старший фронтенд-архитектор', { exact: false });
     await expect(ruDeveloperText.first()).toBeVisible({ timeout: 10000 });
     console.log('✓ Russian localization working correctly!');
     

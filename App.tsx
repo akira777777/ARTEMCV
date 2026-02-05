@@ -26,6 +26,7 @@ const App: React.FC = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/home2026" element={<Home2026 />} />
               <Route path="/project/detailing" element={<DetailingHub />} />
+              <Route path="/detailing" element={<DetailingHub />} />
               {/* Fallback for old routes or 404 could go here */}
               <Route path="*" element={<Home2026 />} />
             </Routes>

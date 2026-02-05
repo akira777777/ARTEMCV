@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useI18n } from '../i18n';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface MobileMenuItem {
   key: string;
@@ -167,14 +168,14 @@ export const MobileMenu: React.FC = () => {
                   <div className="mt-8 pt-6 border-t border-white/10">
                     <div className="px-4">
                       <div className="text-sm text-neutral-400 mb-4">{t('nav.language')}</div>
-                      {/* Языковой переключатель будет добавлен позже */}
+                      <LanguageSwitcher />
                     </div>
                   </div>
                 </div>
                 
                 <div className="p-6 border-t border-white/10 text-center">
                   <div className="text-xs text-neutral-500">
-                    © {new Date().getFullYear()} JULES.DEV
+                    © {new Date().getFullYear()} ARTEM.DEV
                   </div>
                 </div>
               </div>

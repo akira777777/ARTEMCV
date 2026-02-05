@@ -17,14 +17,12 @@ test.describe('Проверка имени Artem Mikhailov', () => {
     const fullNameVisible = await fullName.isVisible();
     console.log(`🔤 Полное имя: ${fullNameVisible ? 'видно' : 'не видно'}`);
     
-    // Проверяем hero заголовки (вторые вхождения)
-    const heroArtem = await page.locator('text="ARTEM"').nth(1);
-    const heroMikhailov = await page.locator('text="MIKHAILOV"').nth(1);
-    const heroArtemVisible = await heroArtem.isVisible();
-    const heroMikhailovVisible = await heroMikhailov.isVisible();
-    
-    console.log(`🔤 Hero ARTEM: ${heroArtemVisible ? 'виден' : 'не виден'}`);
-    console.log(`🔤 Hero MIKHAILOV: ${heroMikhailovVisible ? 'виден' : 'не виден'}`);
+    // Проверяем hero заголовок
+    const heroHeading = page.getByRole('heading', { level: 1 });
+    const heroVisible = await heroHeading.isVisible();
+    const heroText = await heroHeading.textContent();
+    console.log(`🔤 Hero заголовок виден: ${heroVisible ? 'виден' : 'не виден'}`);
+    console.log(`🔤 Hero текст: ${heroText}`);
     
     // Проверяем анимированные элементы
     const animatedSpans = await page.locator('span.inline-block.relative').count();
@@ -41,7 +39,9 @@ test.describe('Проверка имени Artem Mikhailov', () => {
     console.log(`📧 Email поле: ${emailVisible ? 'видно' : 'не видно'}`);
     
     // Хотя бы одно из мест должно содержать имя
-    const nameFound = logoVisible || fullNameVisible || heroArtemVisible || heroMikhailovVisible;
+    const heroHasArtem = (heroText || '').includes('ARTEM');
+    const heroHasMikhailov = (heroText || '').includes('MIKHAILOV');
+    const nameFound = logoVisible || fullNameVisible || heroHasArtem || heroHasMikhailov;
     expect(nameFound).toBeTruthy();
     
     console.log('✅ Проверка имени завершена успешно!');

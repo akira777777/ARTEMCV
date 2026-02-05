@@ -1,5 +1,17 @@
 import { test, expect } from '@playwright/test';
 
+const switchLanguage = async (page: import('@playwright/test').Page, code: 'EN' | 'RU' | 'CS') => {
+  const langButton = page.getByRole('button', { name: code, exact: true });
+  if (!(await langButton.isVisible())) {
+    const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+    if (await menuButton.isVisible()) {
+      await menuButton.click();
+    }
+  }
+  await expect(langButton).toBeVisible();
+  await langButton.click();
+};
+
 test.describe('Полное тестирование локализации', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
@@ -13,16 +25,16 @@ test.describe('Полное тестирование локализации', ()
     // Начинаем с английского
     const initialTitle = await page.title();
     console.log(`🔤 Начальный заголовок (EN): ${initialTitle}`);
-    expect(initialTitle.toLowerCase()).toContain('infinite studio');
+    expect(initialTitle.toLowerCase()).toContain('artem mikhailov');
     
     // Переключаем на русский
     console.log('🔄 Переключаемся на русский язык...');
-    await page.click('button[aria-label="Switch to Russian"]');
+    await switchLanguage(page, 'RU');
     await page.waitForTimeout(1000);
     
     const ruTitle = await page.title();
     console.log(`🔤 Заголовок на русском: ${ruTitle}`);
-    expect(ruTitle.toLowerCase()).toContain('infinite studio');
+    expect(ruTitle.toLowerCase()).toContain('artem mikhailov');
     
     // Проверяем видимость кириллического текста
     const ruHeaderText = await page.locator('h1').first().textContent();
@@ -31,12 +43,12 @@ test.describe('Полное тестирование локализации', ()
     
     // Возвращаемся к английскому
     console.log('🔄 Переключаемся обратно на английский...');
-    await page.click('button[aria-label="Switch to English"]');
+    await switchLanguage(page, 'EN');
     await page.waitForTimeout(1000);
     
     const enTitle = await page.title();
     console.log(`🔤 Финальный заголовок (EN): ${enTitle}`);
-    expect(enTitle.toLowerCase()).toContain('infinite studio');
+    expect(enTitle.toLowerCase()).toContain('artem mikhailov');
     
     console.log('✅ Переключение языков работает корректно!');
   });
@@ -45,7 +57,7 @@ test.describe('Полное тестирование локализации', ()
     console.log('🔤 Тестируем отображение русского текста...');
     
     // Переключаемся на русский
-    await page.click('button[aria-label="Switch to Russian"]');
+    await switchLanguage(page, 'RU');
     await page.waitForTimeout(1500);
     
     // Проверяем основные элементы с русским текстом
@@ -77,11 +89,11 @@ test.describe('Полное тестирование локализации', ()
     console.log('💾 Тестируем сохранение языка...');
     
     // Устанавливаем русский язык
-    await page.click('button[aria-label="Switch to Russian"]');
+    await switchLanguage(page, 'RU');
     await page.waitForTimeout(1000);
     
     // Переходим на другую страницу
-    await page.click('a[href="/detailing"]');
+    await page.goto('/detailing');
     await page.waitForURL('**/detailing');
     await page.waitForTimeout(1500);
     

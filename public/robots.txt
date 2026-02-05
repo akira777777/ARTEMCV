@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jules.engineer/sitemap.xml
+Sitemap: https://artem.dev/sitemap.xml

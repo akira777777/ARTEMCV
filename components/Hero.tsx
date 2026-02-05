@@ -194,7 +194,6 @@ const Hero: React.FC = React.memo(() => {
     document.getElementById('works')?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  const name = 'JULES';
   const orbColors = [
     'linear-gradient(135deg, #ec4899, #f472b6)', // pink
     'linear-gradient(135deg, #22d3ee, #67e8f9)', // cyan

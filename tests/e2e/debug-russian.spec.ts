@@ -5,7 +5,7 @@ test.describe('Russian Localization Debug', () => {
   test('Debug Russian content visibility', async ({ page }) => {
     console.log('=== Starting Russian localization debug ===');
     
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     console.log('Page loaded');
     

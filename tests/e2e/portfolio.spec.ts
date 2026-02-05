@@ -15,6 +15,18 @@ const VIEWPORTS: ViewportSize[] = [
 
 const LANGUAGES = ['en', 'ru', 'cs'] as const;
 
+const switchLanguage = async (page: Page, code: 'EN' | 'RU' | 'CS') => {
+  const langButton = page.getByRole('button', { name: code, exact: true });
+  if (!(await langButton.isVisible())) {
+    const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+    if (await menuButton.isVisible()) {
+      await menuButton.click();
+    }
+  }
+  await expect(langButton).toBeVisible();
+  await langButton.click();
+};
+
 test.describe('Portfolio Comprehensive Testing Suite', () => {
   
   test.beforeEach(async ({ page }) => {
@@ -31,11 +43,17 @@ test.describe('Portfolio Comprehensive Testing Suite', () => {
       await expect(page.getByRole('contentinfo')).toBeVisible();
       
       // Check skip link exists
-      const skipLink = page.getByRole('link', { name: 'Skip to content' });
+      const skipLink = page.getByRole('link', { name: 'Skip to main content' });
       await expect(skipLink).toBeVisible();
       
       // Check language switcher exists
       const langButtons = page.getByRole('button', { name: /^[A-Z]{2}$/ });
+      if ((await langButtons.count()) < 3) {
+        const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+        if (await menuButton.isVisible()) {
+          await menuButton.click();
+        }
+      }
       await expect(langButtons).toHaveCount(3);
     });
 
@@ -53,23 +71,23 @@ test.describe('Portfolio Comprehensive Testing Suite', () => {
     for (const lang of LANGUAGES) {
       test(`Should display correct content in ${lang.toUpperCase()}`, async ({ page }) => {
         // Switch to target language
-        await page.getByRole('button', { name: lang.toUpperCase(), exact: true }).click();
+        await switchLanguage(page, lang.toUpperCase() as 'EN' | 'RU' | 'CS');
         await page.waitForTimeout(500);
         
-        // Check hero section localization
-        const heroTitle = page.locator('h1').first();
-        const heroText = await heroTitle.textContent();
+        // Check hero badge localization
+        const heroBadge = page.locator('text=Senior Frontend Architect, text=Старший фронтенд-архитектор, text=Senior Frontend Architekt').first();
+        await expect(heroBadge).toBeVisible();
         
         // Verify language-specific content appears
         switch (lang) {
           case 'en':
-            expect(heroText).toContain('Full Stack Developer');
+            await expect(page.locator('text=Senior Frontend Architect').first()).toBeVisible();
             break;
           case 'ru':
-            expect(heroText).toContain('Full Stack разработчик');
+            await expect(page.locator('text=Старший фронтенд-архитектор').first()).toBeVisible();
             break;
           case 'cs':
-            expect(heroText).toContain('Full Stack vývojář');
+            await expect(page.locator('text=Senior Frontend Architekt').first()).toBeVisible();
             break;
         }
         
@@ -120,38 +138,43 @@ test.describe('Portfolio Comprehensive Testing Suite', () => {
   test.describe('4. Interactive Elements Testing', () => {
     
     test('Navigation links should work correctly', async ({ page }) => {
-      const navSections = ['#services', '#work', '#contact'];
+      const navSections = [
+        { href: '#services', label: /stack|services/i },
+        { href: '#works', label: /work/i },
+        { href: '#contact', label: /contact/i }
+      ];
       
       for (const section of navSections) {
-        const link = page.getByRole('link', { name: new RegExp(section.replace('#', ''), 'i') });
-        await link.click();
+        const link = page.getByRole('link', { name: section.label })
+          .or(page.locator(`a[href="${section.href}"]`));
+        await link.first().click();
         await page.waitForTimeout(500);
         
         // Check that we scrolled to the section
-        const sectionElement = page.locator(section);
+        const sectionElement = page.locator(section.href);
         await expect(sectionElement).toBeInViewport();
       }
     });
 
     test('Language switcher should toggle languages', async ({ page }) => {
       // Start with English
-      await page.getByRole('button', { name: 'EN', exact: true }).click();
+      await switchLanguage(page, 'EN');
       await page.waitForTimeout(300);
       
       // Switch to Russian
-      await page.getByRole('button', { name: 'RU', exact: true }).click();
+      await switchLanguage(page, 'RU');
       await page.waitForTimeout(300);
       
       // Verify Russian content
-      const ruContent = await page.getByText(/разработчик|сервисы|проекты/i).first();
+      const ruContent = await page.getByText(/фронтенд-архитектор|услуги|работы/i).first();
       await expect(ruContent).toBeVisible();
       
       // Switch to Czech
-      await page.getByRole('button', { name: 'CS', exact: true }).click();
+      await switchLanguage(page, 'CS');
       await page.waitForTimeout(300);
       
       // Verify Czech content
-      const csContent = await page.getByText(/vývojář|služby|projekty/i).first();
+      const csContent = await page.getByText(/architekt|služby|práce/i).first();
       await expect(csContent).toBeVisible();
     });
 
@@ -177,7 +200,7 @@ test.describe('Portfolio Comprehensive Testing Suite', () => {
       
       // Check key elements
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-      await expect(page.getByText(/developer|engineer|motion/i)).toBeVisible();
+      await expect(page.getByText(/Senior Frontend Architect/i)).toBeVisible();
       
       // Take hero screenshot
       await page.screenshot({ 
@@ -191,7 +214,7 @@ test.describe('Portfolio Comprehensive Testing Suite', () => {
       await page.goto('/#services');
       await page.waitForTimeout(500);
       
-      const servicesSection = page.getByText(/Services & Stack|My stack and services/i);
+      const servicesSection = page.getByText(/What I offer|Specializations/i);
       await expect(servicesSection).toBeVisible();
       
       // Check service cards exist
@@ -206,11 +229,11 @@ test.describe('Portfolio Comprehensive Testing Suite', () => {
 
     test('Work gallery should function properly', async ({ page }) => {
       // Navigate to works section
-      await page.goto('/#work');
+      await page.goto('/#works');
       await page.waitForTimeout(1000);
       
       // Check project cards exist
-      const projectCards = page.locator('[class*="project"]').or(page.getByText(/Barber Shop|Dental Clinic/i));
+      const projectCards = page.locator('[class*="project"]').or(page.getByText(/Detailing Hub|Dental Clinic|Barbershop/i));
       const cardCount = await projectCards.count();
       expect(cardCount).toBeGreaterThan(0);
       
@@ -298,12 +321,12 @@ test.describe('Portfolio Comprehensive Testing Suite', () => {
     test('Should work consistently across different browsers', async ({ page }) => {
       // Basic functionality test
       await expect(page.getByRole('main')).toBeVisible();
-      await expect(page.getByRole('button', { name: 'EN' })).toBeVisible();
+      await switchLanguage(page, 'EN');
       
       // Test language switching
-      await page.getByRole('button', { name: 'RU' }).click();
+      await switchLanguage(page, 'RU');
       await page.waitForTimeout(300);
-      await expect(page.getByText(/разработчик/i)).toBeVisible();
+      await expect(page.getByText(/фронтенд-архитектор/i)).toBeVisible();
     });
   });
 
@@ -312,21 +335,21 @@ test.describe('Portfolio Comprehensive Testing Suite', () => {
     test('Should handle rapid language switching', async ({ page }) => {
       // Rapid language switching test
       for (let i = 0; i < 5; i++) {
-        await page.getByRole('button', { name: 'EN' }).click();
+        await switchLanguage(page, 'EN');
         await page.waitForTimeout(100);
-        await page.getByRole('button', { name: 'RU' }).click();
+        await switchLanguage(page, 'RU');
         await page.waitForTimeout(100);
       }
       
       // Final state should be stable
-      await page.getByRole('button', { name: 'CS' }).click();
+      await switchLanguage(page, 'CS');
       await page.waitForTimeout(300);
-      await expect(page.getByText(/vývojář/i)).toBeVisible();
+      await expect(page.getByText(/architekt|vývojář/i)).toBeVisible();
     });
 
     test('Should maintain state during window resize', async ({ page }) => {
       // Set initial state
-      await page.getByRole('button', { name: 'RU' }).click();
+      await switchLanguage(page, 'RU');
       await page.waitForTimeout(300);
       
       // Resize window multiple times
@@ -342,7 +365,7 @@ test.describe('Portfolio Comprehensive Testing Suite', () => {
         await page.waitForTimeout(200);
         
         // Check that Russian content is still visible
-        await expect(page.getByText(/разработчик/i)).toBeVisible();
+        await expect(page.getByText(/фронтенд-архитектор|разработчик/i)).toBeVisible();
       }
     });
   });

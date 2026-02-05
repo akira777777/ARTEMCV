@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
 
 export type Lang = 'en' | 'ru' | 'cs';
 
@@ -16,6 +16,7 @@ const translations: Record<Lang, Dict> = {
     'nav.services': 'STACK',
     'nav.about': 'ABOUT',
     'nav.contact': 'CONTACT',
+    'nav.language': 'Language',
     'nav.logo.label': 'Artem Mikhailov Portfolio - Return to home',
     'skip.content': 'Skip to content',
 
@@ -246,6 +247,7 @@ const translations: Record<Lang, Dict> = {
     'nav.services': 'УСЛУГИ',
     'nav.about': 'ОБО МНЕ',
     'nav.contact': 'КОНТАКТ',
+    'nav.language': 'Язык',
     'nav.logo.label': 'Портфолио Артема Михайлова - Вернуться на главную',
     'skip.content': 'Перейти к контенту',
 
@@ -471,6 +473,7 @@ const translations: Record<Lang, Dict> = {
     'nav.services': 'SLUŽBY',
     'nav.about': 'O MNĚ',
     'nav.contact': 'KONTAKT',
+    'nav.language': 'Jazyk',
     'nav.logo.label': 'Portfolio Artema Michajlova - Návrat na domovskou stránku',
     'skip.content': 'Přejít na obsah',
 
@@ -721,6 +724,12 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLangState(l);
     try { localStorage.setItem('lang', l); } catch {}
   };
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang;
+    }
+  }, [lang]);
 
   const t = useMemo(() => (key: string) => {
     const dict = translations[lang] || translations.en;

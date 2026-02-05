@@ -25,12 +25,12 @@ const BaseLayout: React.FC<BaseLayoutProps> = React.memo(({
   showSkipLink = true,
   className = ''
 }) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   
   return (
     <div 
       className={`bg-[#0a0a0a] min-h-screen text-white selection:bg-white/10 selection:text-white ${className}`}
-      lang={document.documentElement.lang}
+      lang={lang}
     >
       {showSkipLink && <SkipLink />}
       {showNavigation && <Navigation />}

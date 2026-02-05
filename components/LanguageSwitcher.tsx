@@ -7,6 +7,12 @@ const langs: { code: Lang; label: string }[] = [
   { code: 'cs', label: 'CS' }
 ];
 
+const languageNames: Record<Lang, string> = {
+  en: 'English',
+  ru: 'Russian',
+  cs: 'Czech'
+};
+
 const LanguageSwitcher: React.FC = () => {
   const { lang, setLang, t } = useI18n();
   
@@ -21,8 +27,8 @@ const LanguageSwitcher: React.FC = () => {
             lang === l.code ? 'bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)]' : 'text-zinc-500 hover:text-white border-white/10'
           }`}
           aria-pressed={lang === l.code ? 'true' : 'false'}
-          aria-label={`${t('switch.to')} ${l.label}`}
-          title={`${t('switch.to')} ${l.label}`}
+          aria-label={`${t('switch.to')} ${languageNames[l.code]}`}
+          title={`${t('switch.to')} ${languageNames[l.code]}`}
         >
           {l.label}
         </button>

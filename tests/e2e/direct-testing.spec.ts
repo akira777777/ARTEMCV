@@ -6,7 +6,7 @@ test.describe('Direct Portfolio Testing', () => {
     console.log('Starting homepage test...');
     
     // Navigate to homepage
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     console.log('Page loaded successfully');
     
@@ -22,7 +22,7 @@ test.describe('Direct Portfolio Testing', () => {
     expect(title).toBeTruthy();
     
     // Check main content exists
-    const mainWrapper = page.locator('.content-wrapper');
+    const mainWrapper = page.getByRole('main');
     const isVisible = await mainWrapper.isVisible();
     console.log(`Main wrapper visible: ${isVisible}`);
     expect(isVisible).toBe(true);
@@ -33,7 +33,7 @@ test.describe('Direct Portfolio Testing', () => {
   test('Language switching works with specific selectors', async ({ page }) => {
     console.log('Starting language switching test...');
     
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     
     // Use more specific selectors for language buttons
@@ -65,7 +65,7 @@ test.describe('Direct Portfolio Testing', () => {
   test('Scroll and navigation functionality', async ({ page }) => {
     console.log('Starting scroll test...');
     
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     
     // Test scrolling
@@ -90,7 +90,7 @@ test.describe('Direct Portfolio Testing', () => {
   test('Interactive elements and animations', async ({ page }) => {
     console.log('Starting interactive elements test...');
     
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     
     // Mouse movements to trigger interactive effects
@@ -116,7 +116,7 @@ test.describe('Direct Portfolio Testing', () => {
   test('Component visibility verification', async ({ page }) => {
     console.log('Starting component visibility test...');
     
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     
     // Check for various component types
@@ -152,7 +152,7 @@ test.describe('Direct Portfolio Testing', () => {
   test('Text content verification across languages', async ({ page }) => {
     console.log('Starting text content test...');
     
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     
     // Check for text content in different languages
@@ -204,7 +204,7 @@ test.describe('Direct Portfolio Testing', () => {
         height: viewport.height 
       });
       
-      await page.goto('http://localhost:3002/');
+      await page.goto('/');
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(1000);
       
@@ -222,7 +222,7 @@ test.describe('Direct Portfolio Testing', () => {
     
     const startTime = Date.now();
     
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     
     const loadTime = Date.now() - startTime;
@@ -248,7 +248,7 @@ test.describe('Direct Portfolio Testing', () => {
     console.log('Starting error handling test...');
     
     // Test rapid interactions
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     
     // Rapid clicks and interactions
@@ -280,13 +280,13 @@ test.describe('Direct Portfolio Testing', () => {
   test('Final comprehensive verification', async ({ page }) => {
     console.log('Starting final verification...');
     
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     
     // Final comprehensive checks
     const checks = [
       { name: 'Title exists', check: () => page.title() },
-      { name: 'Main content visible', check: () => page.locator('.content-wrapper').isVisible() },
+      { name: 'Main content visible', check: () => page.getByRole('main').isVisible() },
       { name: 'Has interactive elements', check: () => page.locator('button, a').count() },
       { name: 'Has text content', check: () => page.locator('p, h1, h2, h3').count() }
     ];

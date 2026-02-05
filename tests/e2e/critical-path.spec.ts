@@ -9,14 +9,14 @@ test.describe('Portfolio Critical Path Testing', () => {
 
   test('Basic page load and core elements', async ({ page }) => {
     // Check that the page loads successfully
-    await expect(page).toHaveURL('http://localhost:3002/');
+    await expect(page).toHaveURL(/\/$/);
     
     // Check title contains expected text
     const title = await page.title();
     expect(title.toLowerCase()).toContain('full stack');
     
     // Check main content wrapper exists
-    const mainContent = page.locator('.content-wrapper');
+    const mainContent = page.getByRole('main');
     await expect(mainContent).toBeVisible();
     
     // Take baseline screenshot
@@ -41,21 +41,21 @@ test.describe('Portfolio Critical Path Testing', () => {
     await page.waitForTimeout(1000);
     
     // Look for Russian content (more specific selectors)
-    const ruContent = page.locator('text=разработчик').first();
+    const ruContent = page.locator('text=Старший фронтенд-архитектор').first();
     await expect(ruContent).toBeVisible({ timeout: 10000 });
     
     // Test switching to Czech
     await csButton.click();
     await page.waitForTimeout(1000);
     
-    const csContent = page.locator('text=vývojář').first();
+    const csContent = page.locator('text=Senior Frontend Architekt').first();
     await expect(csContent).toBeVisible({ timeout: 10000 });
     
     // Test switching back to English
     await enButton.click();
     await page.waitForTimeout(1000);
     
-    const enContent = page.locator('text=Developer').first();
+    const enContent = page.locator('text=Senior Frontend Architect').first();
     await expect(enContent).toBeVisible({ timeout: 10000 });
     
     await page.screenshot({ 
@@ -101,8 +101,8 @@ test.describe('Portfolio Critical Path Testing', () => {
     await expect(heroHeadings).toBeVisible();
     
     // Check for developer-related text
-    const devText = page.locator('text=Developer, text=Engineer, text=Motion');
-    await expect(devText.first()).toBeVisible();
+    const badgeText = page.locator('text=Senior Frontend Architect').first();
+    await expect(badgeText).toBeVisible();
     
     await page.screenshot({ 
       path: 'tests/e2e/screenshots/hero_section_verification.png',
@@ -187,7 +187,7 @@ test.describe('Portfolio Critical Path Testing', () => {
       await page.waitForTimeout(1000);
       
       // Verify content is still visible
-      await expect(page.locator('.content-wrapper')).toBeVisible();
+      await expect(page.getByRole('main')).toBeVisible();
       
       await page.screenshot({ 
         path: `tests/e2e/screenshots/responsive_${viewport.name}.png`,

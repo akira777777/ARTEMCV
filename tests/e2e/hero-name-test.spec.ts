@@ -7,49 +7,23 @@ test.describe('Проверка отображения имени ARTEM MIKHAILO
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     
-    // Проверяем наличие обоих частей имени
-    const artemElement = await page.locator('text="ARTEM"').first();
-    const mikhailovElement = await page.locator('text="MIKHAILOV"').first();
-    
-    console.log('🔤 Проверяем ARTEM:');
-    const artemVisible = await artemElement.isVisible();
-    console.log(`  Видимость: ${artemVisible}`);
-    
-    console.log('🔤 Проверяем MIKHAILOV:');
-    const mikhailovVisible = await mikhailovElement.isVisible();
-    console.log(`  Видимость: ${mikhailovVisible}`);
-    
-    // Проверяем стили
-    if (artemVisible) {
-      const artemStyles = await artemElement.evaluate(el => {
-        const styles = window.getComputedStyle(el);
-        return {
-          fontSize: styles.fontSize,
-          color: styles.color,
-          fontWeight: styles.fontWeight
-        };
-      });
-      console.log(`  Стили ARTEM:`, artemStyles);
-    }
-    
-    if (mikhailovVisible) {
-      const mikhailovStyles = await mikhailovElement.evaluate(el => {
-        const styles = window.getComputedStyle(el);
-        return {
-          fontSize: styles.fontSize,
-          color: styles.color,
-          fontWeight: styles.fontWeight
-        };
-      });
-      console.log(`  Стили MIKHAILOV:`, mikhailovStyles);
-    }
+    // Проверяем заголовок hero
+    const heroHeading = page.getByRole('heading', { level: 1 });
+    const heroVisible = await heroHeading.isVisible();
+    console.log(`  Заголовок Hero виден: ${heroVisible}`);
+
+    const heroText = await heroHeading.textContent();
+    console.log(`  Текст Hero: ${heroText}`);
+
+    // Проверяем наличие обоих частей имени в заголовке
+    await expect(heroHeading).toContainText('ARTEM');
+    await expect(heroHeading).toContainText('MIKHAILOV');
     
     // Проверяем анимации (если есть)
     const animatedElements = await page.locator('span.inline-block.relative').count();
     console.log(`✨ Анимированных элементов: ${animatedElements}`);
     
-    expect(artemVisible).toBeTruthy();
-    expect(mikhailovVisible).toBeTruthy();
+    expect(heroVisible).toBeTruthy();
     
     console.log('✅ Имя отображается корректно!');
   });
