@@ -327,4 +327,6 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
   );
 };
 
-export default React.memo(ContactSectionSecure);
+const MemoizedContactSectionSecure = React.memo(ContactSectionSecure);
+MemoizedContactSectionSecure.displayName = 'ContactSectionSecure';
+export default MemoizedContactSectionSecure;
