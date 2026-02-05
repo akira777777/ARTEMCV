@@ -4,20 +4,24 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import BackgroundPaths from '../../components/BackgroundPaths';
 
+// Mock ResizeObserver
+global.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
 
-// Mock MagneticButton component
-vi.mock('../../components/MagneticButton', async () => {
-  const actual = await vi.importActual('../../components/MagneticButton');
-  return {
-    __esModule: true,
-    ...actual,
-    default: ({ children, onClick, ...props }: any) => (
-      <button onClick={onClick} {...props} data-testid="magnetic-button">
-        {children}
-      </button>
-    ),
-  };
-});
+// Mock IntersectionObserver
+global.IntersectionObserver = class IntersectionObserver {
+  readonly root: Element | null = null;
+  readonly rootMargin: string = '';
+  readonly thresholds: ReadonlyArray<number> = [];
+  constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {}
+  disconnect() {}
+  observe(target: Element) {}
+  takeRecords(): IntersectionObserverEntry[] { return []; }
+  unobserve(target: Element) {}
+};
 
 describe('BackgroundPaths Component', () => {
   beforeEach(() => {
@@ -153,37 +157,33 @@ describe('BackgroundPaths Component', () => {
   describe('Button Interaction', () => {
     it('should call onButtonClick when button is clicked', async () => {
       const handleClick = vi.fn();
-      const user = userEvent.setup();
       
       render(<BackgroundPaths onButtonClick={handleClick} />);
       
       const button = screen.getByTestId('magnetic-button');
-      await user.click(button);
+      fireEvent.click(button);
       
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
     it('should not crash when onButtonClick is not provided', async () => {
-      const user = userEvent.setup();
-      
       render(<BackgroundPaths />);
       
       const button = screen.getByTestId('magnetic-button');
-      await expect(user.click(button)).resolves.not.toThrow();
+      expect(() => fireEvent.click(button)).not.toThrow();
     });
 
     it('should handle rapid successive clicks', async () => {
       const handleClick = vi.fn();
-      const user = userEvent.setup();
       
       render(<BackgroundPaths onButtonClick={handleClick} />);
       
       const button = screen.getByTestId('magnetic-button');
       
       // Click multiple times rapidly
-      await user.click(button);
-      await user.click(button);
-      await user.click(button);
+      fireEvent.click(button);
+      fireEvent.click(button);
+      fireEvent.click(button);
       
       expect(handleClick).toHaveBeenCalledTimes(3);
     });
@@ -215,13 +215,9 @@ describe('BackgroundPaths Component', () => {
     it('should maintain proper contrast ratios', () => {
       render(<BackgroundPaths />);
       
-      // Check for dark mode classes
-      const darkModeElements = document.querySelectorAll('.dark\\:bg-neutral-950');
-      expect(darkModeElements.length).toBeGreaterThan(0);
-      
-      // Check for light mode classes
-      const lightModeElements = document.querySelectorAll('.bg-white');
-      expect(lightModeElements.length).toBeGreaterThan(0);
+      const container = document.querySelector('.relative.min-h-screen');
+      expect(container).toHaveClass('dark:bg-neutral-950');
+      expect(container).toHaveClass('bg-white');
     });
 
     it('should have proper ARIA attributes on SVG elements', () => {
