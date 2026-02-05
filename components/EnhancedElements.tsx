@@ -96,17 +96,18 @@ export const GlowCard: React.FC<GlowCardProps> = React.memo(({
   glowColor = 'rgba(99, 102, 241, 0.4)'
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const glowLeft = useTransform(mouseX, x => x - 100);
+  const glowTop = useTransform(mouseY, y => y - 100);
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    setMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  }, []);
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  }, [mouseX, mouseY]);
 
   return (
     <motion.div
@@ -124,8 +125,8 @@ export const GlowCard: React.FC<GlowCardProps> = React.memo(({
           <motion.div
             className="absolute pointer-events-none"
             style={{
-              left: mousePosition.x - 100,
-              top: mousePosition.y - 100,
+              left: glowLeft,
+              top: glowTop,
               width: 200,
               height: 200,
               background: `radial-gradient(circle, ${glowColor}, transparent 70%)`,
