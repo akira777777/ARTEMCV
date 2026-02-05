@@ -12,7 +12,7 @@ import { SpotlightGallery } from '../components/SpotlightGallery';
 import { About } from '../components/About';
 import { CTASection } from '../components/CTASection';
 import ContactSectionSecure from '../components/ContactSectionSecure';
-import InteractiveShowcase from '../components/InteractiveShowcase';
+import LabSection from "../components/home/LabSection";
 import { InteractiveGallery } from '../components/InteractiveGallery';
 import { SimpleTelegramChat } from '../components/SimpleTelegramChat';
 import DefaultLayout from '../components/DefaultLayout';
@@ -36,8 +36,8 @@ const HomePage: React.FC = () => {
           <About />
         </React.Suspense>
         <SectionDivider variant="pulse" />
-        <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading interactive showcase..." />}>
-          <InteractiveShowcase />
+        <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading lab section..." />}>
+          <LabSection />
         </React.Suspense>
         <SectionDivider variant="glitch" />
         <React.Suspense fallback={<div className="h-72 w-full" aria-label="Loading gallery..." />}>
