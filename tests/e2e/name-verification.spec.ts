@@ -1,11 +1,24 @@
 import { test, expect } from '@playwright/test';
 
+const switchLanguage = async (page: import('@playwright/test').Page, code: 'EN' | 'RU' | 'CS') => {
+  const langButton = page.getByRole('button', { name: code, exact: true });
+  if (!(await langButton.isVisible())) {
+    const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+    if (await menuButton.isVisible()) {
+      await menuButton.click();
+    }
+  }
+  await expect(langButton).toBeVisible();
+  await langButton.click();
+};
+
 test.describe('Проверка имени Artem Mikhailov', () => {
   test('Проверка отображения имени в различных местах', async ({ page }) => {
     console.log('🔍 Проверяем отображение имени Artem Mikhailov...');
     
     await page.goto('/');
     await page.waitForLoadState('networkidle');
+    await switchLanguage(page, 'EN');
     
     // Проверяем логотип
     const logoText = await page.locator('text="ARTEM.DEV"').first();

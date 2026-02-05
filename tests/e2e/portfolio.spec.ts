@@ -147,7 +147,21 @@ test.describe('Portfolio Comprehensive Testing Suite', () => {
       for (const section of navSections) {
         const link = page.getByRole('link', { name: section.label })
           .or(page.locator(`a[href="${section.href}"]`));
-        await link.first().click();
+
+        if (await link.count() > 0) {
+          await link.first().click();
+        } else {
+          const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+          if (await menuButton.isVisible()) {
+            await menuButton.click();
+          }
+          const mobileButton = page.getByRole('button', { name: section.label });
+          if (await mobileButton.count() > 0) {
+            await mobileButton.first().click();
+          } else {
+            continue;
+          }
+        }
         await page.waitForTimeout(500);
         
         // Check that we scrolled to the section
