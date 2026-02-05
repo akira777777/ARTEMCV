@@ -33,6 +33,9 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     }
   ]);
 
+  const [inputValue, setInputValue] = useState('');
+  const [userName, setUserName] = useState('');
+
   // Update welcome message text when language changes (only for initial message)
   const [inputValue, setInputValue] = useState('');
   const [userName, setUserName] = useState('');
@@ -53,13 +56,17 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastSubmitRef = useRef<number>(0);
 
-  // Load name from localStorage
+  // Update welcome message text when language or name state changes
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('chat_user_name');
-      if (saved) setUserName(saved);
-    } catch {}
-  }, []);
+    setMessages(prev => {
+      const firstMsg = prev[0];
+      if (firstMsg?.id === INITIAL_MESSAGE_ID && prev.length === 1) {
+        const welcomeText = userName ? t('chat.bot.welcome') : t('chat.prompt.name');
+        return [{ ...firstMsg, text: welcomeText }];
+      }
+      return prev;
+    });
+  }, [lang, t, userName]);
 
   // Scroll to bottom of chat
   useEffect(() => {
@@ -228,6 +235,8 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
           {messages.map((msg) => (
             <div 
               key={msg.id} 
+              role="article"
+              aria-label={`${msg.role === 'user' ? t('chat.role.user') : t('chat.role.bot')}: ${msg.text}`}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div 
@@ -286,6 +295,8 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(e as any)}
               placeholder={!userName ? t('chat.prompt.name') : t('chat.placeholder')}
               aria-label={!userName ? t('chat.prompt.name') : t('chat.placeholder')}
+              placeholder={userName.trim() ? t('chat.placeholder') : t('chat.prompt.name')}
+              aria-label={userName.trim() ? t('chat.placeholder') : t('chat.prompt.name')}
               disabled={loading}
               className="flex-1 bg-white/5 border border-white/10 rounded-full py-3 px-4 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50"
             />
