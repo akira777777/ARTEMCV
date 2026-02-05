@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { SimpleTelegramChat } from './SimpleTelegramChat';
+import { SimpleTelegramChat } from '../components/SimpleTelegramChat';
 
 // Mock необходимые зависимости
 vi.mock('../i18n', () => ({

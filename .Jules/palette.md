@@ -12,6 +12,9 @@
 **Learning:** Hardcoded ARIA labels in a multilingual app break accessibility for non-English users as screen readers will announce labels in the wrong language.
 **Action:** Always use translation keys for `aria-label`, `title`, and `alt` text to ensure a consistent accessible experience across all supported languages.
 
+## 2026-02-04 - [Conversational Name Entry]
+**Learning:** Replacing blocking browser interactions like `window.prompt` with inline conversational UI elements improves user immersion and maintains the app's modern aesthetic.
+**Action:** Use inline form states or bot-driven message prompts for collecting user information instead of native browser dialogs.
 ## 2025-05-24 - [Conversational UI vs. Browser Prompts]
 **Learning:** Replacing blocking `window.prompt` with an inline conversational flow in chat components improves user immersion and flow. It also allows for a more accessible and themed experience.
 **Action:** Prefer inline, asynchronous input methods over synchronous browser dialogs for gathering user data during interactive experiences.
