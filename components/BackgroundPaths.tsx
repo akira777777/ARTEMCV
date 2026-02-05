@@ -144,13 +144,16 @@ const MagneticButton: React.FC<MagneticButtonProps> = React.memo(({
     </motion.button>
   );
 });
+import React, { useMemo } from 'react';
+import { motion } from "framer-motion"
+import MagneticButton from './MagneticButton';
 
 interface FloatingPathsProps {
   position: number;
 }
 
 const FloatingPaths: React.FC<FloatingPathsProps> = React.memo(({ position }) => {
-  const paths = Array.from({ length: 36 }, (_, i) => ({
+  const paths = useMemo(() => Array.from({ length: 36 }, (_, i) => ({
     id: i,
     d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
       380 - i * 5 * position
@@ -161,7 +164,8 @@ const FloatingPaths: React.FC<FloatingPathsProps> = React.memo(({ position }) =>
     } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
     color: `rgba(15,23,42,${0.1 + i * 0.03})`,
     width: 0.5 + i * 0.03,
-  }));
+    duration: 20 + (i % 10) + (i * 0.1),
+  })), [position]);
 
   return (
     <div className="absolute inset-0 pointer-events-none">
@@ -186,7 +190,7 @@ const FloatingPaths: React.FC<FloatingPathsProps> = React.memo(({ position }) =>
               pathOffset: [0, 1, 0],
             }}
             transition={{
-              duration: 20 + Math.random() * 10,
+              duration: path.duration,
               repeat: Number.POSITIVE_INFINITY,
               ease: "linear",
             }}
