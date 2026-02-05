@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import Hero2026 from '../components/home/Hero2026';
 import DefaultLayout from '../components/DefaultLayout';
+import ErrorBoundary from '../components/ErrorBoundary';
 // Lazy load heavy components to reduce initial bundle size
 const BentoGrid = lazy(() => import('../components/home/BentoGrid'));
 const LabSection = lazy(() => import('../components/home/LabSection'));
@@ -15,13 +16,21 @@ const SectionLoader = () => (
 const Home2026: React.FC = () => {
   return (
     <DefaultLayout>
-      <Hero2026 />
-      <Suspense fallback={<SectionLoader />}>  
-        <BentoGrid />
-      </Suspense>
-      <Suspense fallback={<SectionLoader />}>  
-        <LabSection />
-      </Suspense>
+      <ErrorBoundary>
+        <Hero2026 />
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <Suspense fallback={<SectionLoader />}>
+          <BentoGrid />
+        </Suspense>
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <Suspense fallback={<SectionLoader />}>
+          <LabSection />
+        </Suspense>
+      </ErrorBoundary>
     </DefaultLayout>
   );
 };

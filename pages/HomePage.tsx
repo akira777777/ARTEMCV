@@ -39,19 +39,7 @@ const HomePage: React.FC = () => {
         <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading interactive showcase..." />}>
           <InteractiveShowcase />
         </React.Suspense>
-        <SectionDivider variant="glitch" />
-        <React.Suspense fallback={<div className="h-72 w-full" aria-label="Loading gallery..." />}>
-          <SpotlightGallery />
-        </React.Suspense>
-        <SectionDivider variant="dots" />
-        <React.Suspense fallback={<div className="h-96" />}>
-          <About />
-        </React.Suspense>
         <SectionDivider variant="lines" />
-        <React.Suspense fallback={<div className="h-72" />}>
-          <CTASection />
-        </React.Suspense>
-        <SectionDivider variant="gradient" />
         <React.Suspense fallback={<div className="h-72" />}>
           <CTASection />
         </React.Suspense>

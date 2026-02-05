@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useI18n } from '../i18n';
-import { scrollToSection } from '../lib/utils';
 
 /**
  * CTA Section - Strong call-to-action for project inquiries
@@ -34,19 +33,15 @@ export const CTASection: React.FC = React.memo(() => {
           <p className="text-lg md:text-xl text-neutral-300 mb-12 max-w-2xl mx-auto">
             {t('cta.subtitle') || 'Let\'s collaborate and bring your vision to life. I\'m ready to start immediately.'}
           </p>
-          <p className="text-lg md:text-xl text-neutral-300 mb-12 max-w-2xl mx-auto">
-            {t('cta.subtitle')}
-          </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <motion.button
               onClick={scrollToContact}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group px-10 py-4 bg-white text-black rounded-full font-bold text-base hover:bg-neutral-100 transition-all shadow-xl hover:shadow-2xl flex items-center gap-2"
+              className="group px-10 py-4 bg-white text-black rounded-full font-bold text-base hover:bg-neutral-100 active:scale-95 transition-all shadow-xl hover:shadow-2xl flex items-center gap-2"
             >
               {t('cta.button') || 'Start Collaboration'}
-              {t('cta.button')}
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </motion.button>
 
@@ -54,10 +49,9 @@ export const CTASection: React.FC = React.memo(() => {
               href="https://github.com/akira777777"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-10 py-4 bg-white/10 text-white rounded-full font-bold text-base border border-white/20 hover:border-white/50 hover:bg-white/20 transition-all"
+              className="px-10 py-4 bg-white/10 text-white rounded-full font-bold text-base border border-white/20 hover:border-white/50 hover:bg-white/20 active:scale-95 transition-all"
             >
               {t('cta.secondary') || 'View GitHub'}
-              {t('cta.secondary')}
             </a>
           </div>
         </motion.div>
@@ -71,9 +65,9 @@ export const CTASection: React.FC = React.memo(() => {
           className="mt-20 grid grid-cols-3 gap-8 pt-16 border-t border-white/10"
         >
           {[
-            { number: '50+', label: 'Projects Completed' },
-            { number: '30+', label: 'Happy Clients' },
-            { number: '3+', label: 'Years Experience' },
+            { number: '50+', label: t('cta.stat.projects') },
+            { number: '30+', label: t('cta.stat.clients') },
+            { number: '3+', label: t('cta.stat.experience') },
           ].map((stat, i) => (
             <div key={i} className="text-center">
               <motion.div

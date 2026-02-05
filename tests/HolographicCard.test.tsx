@@ -27,9 +27,9 @@ describe('HolographicCard', () => {
   });
 
   it('applies custom className when provided', () => {
-    render(<HolographicCard {...defaultProps} className="custom-class" />);
+    const { container } = render(<HolographicCard {...defaultProps} className="custom-class" />);
     
-    const card = screen.getByRole('none'); // div role
+    const card = container.firstChild;
     expect(card).toHaveClass('custom-class');
   });
 

@@ -5,13 +5,23 @@ import { I18nProvider } from '../i18n';
 import { describe, it, expect, vi } from 'vitest';
 
 // Mock framer-motion
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-}));
+vi.mock('framer-motion', () => {
+  const React = require('react');
+  const motionProxy = new Proxy(
+    {},
+    {
+      get: (_target, key) => {
+        return ({ children, ...props }: any) => {
+          return React.createElement(key as any, props, children);
+        };
+      },
+    }
+  );
+  return {
+    motion: motionProxy,
+    AnimatePresence: ({ children }: any) => <>{children}</>,
+  };
+});
 
 const renderWithI18n = (component: React.ReactElement) => {
   return render(<I18nProvider>{component}</I18nProvider>);
@@ -31,7 +41,7 @@ describe('SpotlightGallery', () => {
 
   it('displays project counter', () => {
     renderWithI18n(<SpotlightGallery />);
-    expect(screen.getByText(/Viewing/i)).toBeInTheDocument();
+    expect(screen.getByText(/View details/i)).toBeInTheDocument();
     expect(screen.getByText(/Project #/i)).toBeInTheDocument();
   });
 

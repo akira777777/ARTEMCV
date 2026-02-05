@@ -39,7 +39,9 @@ export const Footer2026: React.FC = () => {
             <span>Build: #AM-0922</span>
           </div>
           <div className="flex flex-col gap-4 text-right">
-            <div className="text-white font-display font-bold text-lg">Artem Mikhailov</div>
+            <div className="text-white font-display font-bold text-lg uppercase tracking-tighter">
+              {t('hero.title.line1')} {t('hero.title.line2')}
+            </div>
             <p>{t('footer.rights')}</p>
           </div>
         </div>

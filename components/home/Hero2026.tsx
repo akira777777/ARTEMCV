@@ -79,7 +79,7 @@ const Hero2026: React.FC = () => {
           {...descriptionAnimation}
           className="max-w-xl mx-auto text-lg md:text-xl opacity-50 font-light mb-12 text-white"
         >
-          {t('hero.desc')}
+          {t('hero.description')}
         </motion.p>
 
         <motion.div
@@ -87,8 +87,8 @@ const Hero2026: React.FC = () => {
           className="flex flex-col md:flex-row gap-4 justify-center"
         >
           <a 
-            href="#work" 
-            className="bg-indigo-600 px-10 py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-600/20 text-white"
+            href="#works"
+            className="bg-indigo-600 px-10 py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-500 active:scale-95 transition-all shadow-xl shadow-indigo-600/20 text-white"
           >
             {t('hero.cta.portfolio')} <span className="material-symbols-outlined text-sm">arrow_downward</span>
           </a>

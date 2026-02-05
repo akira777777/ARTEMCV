@@ -36,7 +36,8 @@ HTMLCanvasElement.prototype.getBoundingClientRect = vi.fn(() => ({
   bottom: 600,
   x: 0,
   y: 0,
-}));
+  toJSON: () => {},
+}) as DOMRect);
 
 describe('FloatingParticleCanvas', () => {
   it('renders without crashing', () => {

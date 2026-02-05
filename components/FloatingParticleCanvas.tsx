@@ -209,6 +209,7 @@ export const FloatingParticleCanvas: React.FC<{
     <div className={`relative w-full h-full ${className}`}>
       <motion.canvas
         ref={canvasRef}
+        role="presentation"
         className="absolute inset-0 w-full h-full"
         style={{ background: backgroundColor }}
         initial={{ opacity: 0 }}

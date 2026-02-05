@@ -5,7 +5,7 @@ import { RenderOptimizer, LazyRender, FPSMonitor } from '../components/RenderOpt
 
 // Mock requestIdleCallback
 global.requestIdleCallback = vi.fn((cb) => {
-  return setTimeout(cb, 1);
+  return setTimeout(cb, 1) as unknown as number;
 });
 global.cancelIdleCallback = vi.fn((id) => {
   clearTimeout(id);
@@ -33,14 +33,14 @@ describe('RenderOptimizer', () => {
     vi.clearAllMocks();
   });
 
-  it('renders children when shouldRender is true', () => {
+  it('renders children when shouldRender is true', async () => {
     render(
-      <RenderOptimizer shouldRender={true}>
+      <RenderOptimizer shouldRender={true} priority="high">
         <div>Test Content</div>
       </RenderOptimizer>
     );
     
-    expect(screen.getByText('Test Content')).toBeInTheDocument();
+    expect(await screen.findByText('Test Content')).toBeInTheDocument();
   });
 
   it('shows fallback when shouldRender is false', () => {
@@ -84,24 +84,29 @@ describe('LazyRender', () => {
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
-  it('renders children when element becomes visible', () => {
-    const { rerender } = render(
+  it('renders children when element becomes visible', async () => {
+    let intersectCallback: any;
+
+    // Override the mock for this specific test to capture the callback
+    global.IntersectionObserver = vi.fn(function(cb) {
+      intersectCallback = cb;
+      return {
+        observe: vi.fn(),
+        unobserve: vi.fn(),
+        disconnect: vi.fn(),
+      };
+    }) as any;
+
+    render(
       <LazyRender fallback={<div>Loading...</div>}>
         <div>Visible Content</div>
       </LazyRender>
     );
     
     // Simulate intersection
-    const mockObserver = new MockIntersectionObserver(() => {});
-    mockObserver.trigger([{ isIntersecting: true }]);
+    intersectCallback([{ isIntersecting: true }]);
     
-    rerender(
-      <LazyRender fallback={<div>Loading...</div>}>
-        <div>Visible Content</div>
-      </LazyRender>
-    );
-    
-    expect(screen.getByText('Visible Content')).toBeInTheDocument();
+    expect(await screen.findByText('Visible Content')).toBeInTheDocument();
   });
 });
 

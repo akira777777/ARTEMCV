@@ -13,7 +13,7 @@ const BentoGrid: React.FC = () => {
   const tertiaryProject = PROJECTS[1]; // Dental Clinic
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-32" id="work" aria-labelledby="work-title">
+    <section className="max-w-7xl mx-auto px-6 py-32" id="works" aria-labelledby="work-title">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[300px]">
         {/* Main Project: Detailing Hub */}
         <motion.div
@@ -48,13 +48,25 @@ const BentoGrid: React.FC = () => {
                   <span className="material-symbols-outlined" aria-hidden="true">bolt</span>
                 </div>
               </div>
-              <Link
-                to={mainProject.liveLink.startsWith('http') ? mainProject.liveLink : mainProject.liveLink}
-                className="bg-white text-black px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform flex items-center gap-2"
-                aria-label={`${t('works.cta.view')} ${t(mainProject.title)}`}
-              >
-                {t('works.cta.view')} <span className="material-symbols-outlined text-sm" aria-hidden="true">open_in_new</span>
-              </Link>
+              {mainProject.liveLink.startsWith('http') ? (
+                <a
+                  href={mainProject.liveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white text-black px-6 py-3 rounded-xl font-bold hover:scale-105 active:scale-95 transition-transform flex items-center gap-2"
+                  aria-label={`${t('works.cta.view')} ${t(mainProject.title)}`}
+                >
+                  {t('works.cta.view')} <span className="material-symbols-outlined text-sm" aria-hidden="true">open_in_new</span>
+                </a>
+              ) : (
+                <Link
+                  to={mainProject.liveLink}
+                  className="bg-white text-black px-6 py-3 rounded-xl font-bold hover:scale-105 active:scale-95 transition-transform flex items-center gap-2"
+                  aria-label={`${t('works.cta.view')} ${t(mainProject.title)}`}
+                >
+                  {t('works.cta.view')} <span className="material-symbols-outlined text-sm" aria-hidden="true">open_in_new</span>
+                </Link>
+              )}
             </div>
           </div>
         </motion.div>
