@@ -36,11 +36,18 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
   const [inputValue, setInputValue] = useState('');
   const [userName, setUserName] = useState('');
 
+  // Update welcome message text when language or name status changes
+  // Update welcome message text when language changes (only for initial message)
+  const [inputValue, setInputValue] = useState('');
+  const [userName, setUserName] = useState('');
+
   // Update welcome message text when language changes (only for initial message)
   useEffect(() => {
     setMessages(prev => {
       const firstMsg = prev[0];
       if (firstMsg?.id === INITIAL_MESSAGE_ID && prev.length === 1) {
+        const text = !userName ? t('chat.prompt.name') : t('chat.bot.welcome');
+        const text = userName ? t('chat.bot.welcome') : t('chat.prompt.name');
         // Conversational name entry: ask for name if not set
         const text = userName.trim() ? t('chat.bot.welcome') : t('chat.prompt.name');
         return [{ ...firstMsg, text }];
@@ -91,6 +98,13 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       return;
     }
 
+    // Handle inline name setting if not provided
+    if (!userName.trim()) {
+      const name = inputValue.trim();
+    // Handle name entry if not provided
+    if (!userName.trim()) {
+      const name = inputValue.trim();
+      if (!name) {
     // Conversational name entry logic
     let name = userName.trim();
     if (!name) {
@@ -101,22 +115,18 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       }
       name = promptName;
       setUserName(name);
+      setInputValue('');
       try {
         localStorage.setItem('chat_user_name', name);
       } catch {}
-
-      // Clear input and add user's name message
-      setInputValue('');
-      setMessages(prev => [
-        ...prev,
-        { id: createId(), role: 'user', text: name, timestamp: new Date() },
-        { id: createId(), role: 'bot', text: t('chat.bot.welcome'), timestamp: new Date() }
-      ]);
       return;
     }
 
     // name is already defined above
+    const name = userName.trim();
+
     const userMessage = inputValue.trim();
+    const name = userName.trim();
     setInputValue('');
     setError(null);
 
@@ -302,6 +312,10 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage(e as any)}
+              placeholder={!userName ? t('chat.prompt.name') : t('chat.placeholder')}
+              aria-label={!userName ? t('chat.prompt.name') : t('chat.placeholder')}
+              placeholder={userName ? t('chat.placeholder') : t('chat.prompt.name')}
+              aria-label={userName ? t('chat.placeholder') : t('chat.prompt.name')}
               placeholder={userName.trim() ? t('chat.placeholder') : t('chat.prompt.name')}
               aria-label={userName.trim() ? t('chat.placeholder') : t('chat.prompt.name')}
               disabled={loading}

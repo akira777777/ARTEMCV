@@ -379,26 +379,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
     const { cleanName, cleanEmail, cleanSubject, cleanMessage } = fieldResult;
 
-    // Store submission in PostgreSQL (if DATABASE_URL is set)
+    // Store submission in PostgreSQL (concurrently with Telegram)
+    let dbPromise: Promise<any> = Promise.resolve();
+
     if (process.env.DATABASE_URL) {
-      try {
-        const userAgent = req.headers['user-agent'] as string | undefined;
-        await storeContactSubmission(
-          cleanName,
-          cleanEmail,
-          cleanSubject,
-          cleanMessage,
-          clientIp,
-          userAgent || null
-        );
-      } catch (dbError) {
+      const userAgent = req.headers['user-agent'] as string | undefined;
+      dbPromise = storeContactSubmission(
+        cleanName,
+        cleanEmail,
+        cleanSubject,
+        cleanMessage,
+        clientIp,
+        userAgent || null
+      ).catch((dbError) => {
         console.error('Failed to store submission in database:', dbError);
         // Don't fail the request if database storage fails
-      }
+      });
     }
 
     // Send to Telegram
-    const tgResp = await sendToTelegram(cleanName, cleanEmail, cleanSubject, cleanMessage);
+    const tgPromise = sendToTelegram(cleanName, cleanEmail, cleanSubject, cleanMessage);
+
+    // Wait for both to complete
+    const [_, tgResp] = await Promise.all([dbPromise, tgPromise]);
 
     if (!tgResp.ok) {
       const errText = await tgResp.text().catch(() => 'Unknown error');
