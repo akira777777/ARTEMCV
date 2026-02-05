@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import ErrorBoundary from '../components/ErrorBoundary';
 import CursorTrail from '../components/CursorTrail';
 import { SectionDivider } from '../components/SectionDivider';
@@ -7,10 +7,11 @@ import { SpotlightGallery } from '../components/SpotlightGallery';
 import { About } from '../components/About';
 import { CTASection } from '../components/CTASection';
 import ContactSectionSecure from '../components/ContactSectionSecure';
-import LabSection from "../components/home/LabSection";
 import { InteractiveGallery } from '../components/InteractiveGallery';
 import { SimpleTelegramChat } from '../components/SimpleTelegramChat';
 import DefaultLayout from '../components/DefaultLayout';
+
+const LabSection = lazy(() => import('../components/home/LabSection'));
 
 const HomePage: React.FC = () => {
   return (
