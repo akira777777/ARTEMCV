@@ -11,7 +11,7 @@ All major components are wrapped with `React.memo()` to prevent unnecessary re-r
 - ✅ `Hero`, `About`, `Footer`, `WorkGallery`, `Projects`
 - ✅ `Navigation`, `SimpleTelegramChat`, `ScrollToTop`
 - ✅ `CursorTrail`, `GradientShaderCard`, `InteractiveShowcase`
-- ✅ `SkipLink`, `SpinningCube`, `ScrollProgress`
+- ✅ `SkipLink`, `ScrollProgress`
 
 **Why:** React.memo prevents component re-renders when props haven't changed, reducing CPU usage and improving responsiveness.
 
@@ -89,7 +89,6 @@ const BUTTON_STYLE = { contain: 'layout style' } as const;
 
 **Applied to:**
 - `WorkGallery`: 2 style objects
-- `SpinningCube`: 9 style objects
 
 **Why:** React compares style objects by reference. New objects trigger unnecessary DOM updates.
 

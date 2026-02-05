@@ -122,6 +122,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       return;
     }
 
+    // name is already defined above
     const name = userName.trim();
 
     const userMessage = inputValue.trim();
