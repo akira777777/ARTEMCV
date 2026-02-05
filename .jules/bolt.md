@@ -21,3 +21,7 @@
 ## 2026-02-02 - [Centralized Capability Detection]
 **Learning:** Redundant feature detection (like WebP support) in common components (OptimizedImage) scales resource usage linearly with the number of instances. Centralizing this in a utility with a cached promise reduces resource allocation to $O(1)$.
 **Action:** Move all browser capability checks to a centralized utility (e.g., `lib/utils.ts`) and use a cached promise to avoid redundant DOM operations and base64 decoding.
+
+## 2026-02-04 - [Canvas Path2D Batching]
+**Learning:** Batching canvas draw calls using Path2D for discretized opacity levels significantly reduces CPU-to-GPU command overhead. Replacing O(N^2) individual stroke() calls with O(S) calls (where S is number of opacity steps) improves frame time stability, especially on mobile devices with high particle counts.
+**Action:** Use discretized Path2D batching for connecting elements in canvas-based animations to maintain (1)$ draw calls relative to object count.

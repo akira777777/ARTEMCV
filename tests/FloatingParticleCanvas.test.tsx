@@ -1,7 +1,18 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { FloatingParticleCanvas } from '../components/FloatingParticleCanvas';
+
+// Mock Path2D for JSDOM
+if (typeof global.Path2D === 'undefined') {
+  global.Path2D = class Path2D {
+    moveTo() {}
+    lineTo() {}
+    arc() {}
+    rect() {}
+    closePath() {}
+  } as any;
+}
 
 // Mock canvas context
 const mockCanvasContext = {
@@ -36,7 +47,8 @@ HTMLCanvasElement.prototype.getBoundingClientRect = vi.fn(() => ({
   bottom: 600,
   x: 0,
   y: 0,
-}));
+  toJSON: () => {}
+}) as any);
 
 describe('FloatingParticleCanvas', () => {
   it('renders without crashing', () => {
@@ -47,7 +59,6 @@ describe('FloatingParticleCanvas', () => {
 
   it('accepts custom particle count', () => {
     render(<FloatingParticleCanvas particleCount={50} />);
-    // Test that component accepts custom props
     const canvas = screen.getByRole('presentation');
     expect(canvas).toBeInTheDocument();
   });
@@ -58,7 +69,6 @@ describe('FloatingParticleCanvas', () => {
     
     fireEvent.mouseMove(canvas, { clientX: 100, clientY: 100 });
     
-    // Wait for interactions to be processed
     await waitFor(() => {
       expect(canvas).toBeInTheDocument();
     });

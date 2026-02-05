@@ -46,13 +46,11 @@ export const CardStack: React.FC = React.memo(() => {
 
   const handleDragEnd = (_: MouseEvent | TouchEvent, info: PanInfo) => {
     if (Math.abs(info.offset.x) > 100) {
-      // Remove card and add to end
       const newCards = [...cards.slice(1), cards[0]];
       setCards(newCards);
       x.set(0);
       y.set(0);
     } else {
-      // Snap back
       x.set(0);
       y.set(0);
     }
@@ -60,7 +58,6 @@ export const CardStack: React.FC = React.memo(() => {
 
   return (
     <section className="py-20 relative overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/10 via-transparent to-orange-900/10" />
         <div className="blob-bg" style={{
@@ -90,7 +87,6 @@ export const CardStack: React.FC = React.memo(() => {
 
         <div className="relative max-w-md mx-auto h-96">
           {cards.map((card, index) => {
-            // Calculate position based on index
             const positionOffset = index * 8;
             const scaleOffset = 1 - (index * 0.05);
             
@@ -113,14 +109,12 @@ export const CardStack: React.FC = React.memo(() => {
               >
                 <div className={`glass-card-modern rounded-2xl h-full p-6 border-l-4 border-gradient-to-b ${card.gradient}`}>
                   <div className="h-full flex flex-col">
-                    {/* Icon/Image */}
                     <div className="mb-4">
                       <div className="w-12 h-12 rounded-xl bg-gradient-to-br bg-white/10 flex items-center justify-center">
                         <span className="text-2xl">⭐</span>
                       </div>
                     </div>
                     
-                    {/* Content */}
                     <h3 className="text-xl font-bold text-white mb-2">
                       {card.title}
                     </h3>
@@ -129,7 +123,6 @@ export const CardStack: React.FC = React.memo(() => {
                       {card.description}
                     </p>
                     
-                    {/* Tags */}
                     <div className="flex flex-wrap gap-2">
                       {card.tags.map(tag => (
                         <span 
@@ -146,7 +139,6 @@ export const CardStack: React.FC = React.memo(() => {
             );
           })}
           
-          {/* Swipe indicators */}
           <motion.div 
             className="absolute -bottom-16 left-1/2 -translate-x-1/2 flex gap-4 text-neutral-500"
             initial={{ opacity: 0 }}
@@ -165,7 +157,6 @@ export const CardStack: React.FC = React.memo(() => {
   );
 });
 
-// Alternative vertical stack variant
 export const VerticalCardStack: React.FC = React.memo(() => {
   const stackItems = useMemo<CardStackItem[]>(() => [
     {
@@ -236,4 +227,4 @@ export const VerticalCardStack: React.FC = React.memo(() => {
       ))}
     </div>
   );
-};
+});

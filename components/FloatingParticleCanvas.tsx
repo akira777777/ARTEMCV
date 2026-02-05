@@ -9,6 +9,7 @@ interface Particle {
   size: number;
   color: string;
   opacity: number;
+  rgbaPrefix: string;
 }
 
 /**
@@ -32,29 +33,32 @@ export const FloatingParticleCanvas: React.FC<{
   const animationFrameRef = useRef<number>(0);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-  // Initialize particles
+  const interactionRadiusSq = interactionRadius * interactionRadius;
+  const connectionRadiusSq = 10000; // 100 * 100
+
   useEffect(() => {
     const initParticles = () => {
       const particles: Particle[] = [];
-      const colors = [
-        'rgba(99, 102, 241, 0.8)', // indigo-500
-        'rgba(139, 92, 246, 0.8)', // purple-500
-        'rgba(236, 72, 153, 0.8)', // pink-500
-        'rgba(59, 130, 246, 0.8)', // blue-500
+      const colorData = [
+        { prefix: 'rgba(99, 102, 241,', base: 'rgba(99, 102, 241, 0.8)' },
+        { prefix: 'rgba(139, 92, 246,', base: 'rgba(139, 92, 246, 0.8)' },
+        { prefix: 'rgba(236, 72, 153,', base: 'rgba(236, 72, 153, 0.8)' },
+        { prefix: 'rgba(59, 130, 246,', base: 'rgba(59, 130, 246, 0.8)' },
       ];
 
       for (let i = 0; i < particleCount; i++) {
+        const color = colorData[Math.floor(Math.random() * colorData.length)];
         particles.push({
           x: Math.random() * dimensions.width,
           y: Math.random() * dimensions.height,
           vx: (Math.random() - 0.5) * 0.5,
           vy: (Math.random() - 0.5) * 0.5,
           size: Math.random() * 3 + 1,
-          color: colors[Math.floor(Math.random() * colors.length)],
+          color: color.base,
+          rgbaPrefix: color.prefix,
           opacity: Math.random() * 0.5 + 0.2,
         });
       }
-
       particlesRef.current = particles;
     };
 
@@ -63,49 +67,31 @@ export const FloatingParticleCanvas: React.FC<{
     }
   }, [particleCount, dimensions]);
 
-  // Handle resize
   useEffect(() => {
     const handleResize = () => {
       if (canvasRef.current) {
         const rect = canvasRef.current.getBoundingClientRect();
-        setDimensions({
-          width: rect.width,
-          height: rect.height
-        });
+        setDimensions({ width: rect.width, height: rect.height });
       }
     };
-
     handleResize();
     window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Mouse interaction
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       mouseRef.current.x = e.clientX - rect.left;
       mouseRef.current.y = e.clientY - rect.top;
     };
-
-    const handleMouseEnter = () => {
-      mouseRef.current.isInside = true;
-    };
-
-    const handleMouseLeave = () => {
-      mouseRef.current.isInside = false;
-    };
-
+    const handleMouseEnter = () => { mouseRef.current.isInside = true; };
+    const handleMouseLeave = () => { mouseRef.current.isInside = false; };
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseenter', handleMouseEnter);
     canvas.addEventListener('mouseleave', handleMouseLeave);
-
     return () => {
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseenter', handleMouseEnter);
@@ -113,20 +99,20 @@ export const FloatingParticleCanvas: React.FC<{
     };
   }, []);
 
-  // Animation loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: backgroundColor === 'transparent' });
     if (!ctx) return;
 
     const animate = () => {
-      // Clear canvas with background color
-      ctx.fillStyle = backgroundColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (backgroundColor === 'transparent') {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      } else {
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
 
-      // Update canvas dimensions if needed
       if (dimensions.width !== canvas.width || dimensions.height !== canvas.height) {
         canvas.width = dimensions.width;
         canvas.height = dimensions.height;
@@ -134,76 +120,67 @@ export const FloatingParticleCanvas: React.FC<{
 
       const particles = particlesRef.current;
       const mouse = mouseRef.current;
+      const numParticles = particles.length;
 
-      // Update and draw particles
-      for (let i = 0; i < particles.length; i++) {
+      for (let i = 0; i < numParticles; i++) {
         const p = particles[i];
-
-        // Apply mouse interaction if mouse is inside
         if (mouse.isInside) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < interactionRadius) {
+          const distSq = dx * dx + dy * dy;
+          if (distSq < interactionRadiusSq) {
+            const distance = Math.sqrt(distSq);
             const force = (interactionRadius - distance) / interactionRadius;
-            const angle = Math.atan2(dy, dx);
-            
-            // Repel particles from mouse
-            p.vx += Math.cos(angle) * force * 0.2;
-            p.vy += Math.sin(angle) * force * 0.2;
+            const invDist = 1 / (distance || 1);
+            p.vx += (dx * invDist) * force * 0.2;
+            p.vy += (dy * invDist) * force * 0.2;
           }
         }
-
-        // Update position
         p.x += p.vx;
         p.y += p.vy;
-
-        // Boundary collision
         if (p.x <= 0 || p.x >= dimensions.width) p.vx *= -1;
         if (p.y <= 0 || p.y >= dimensions.height) p.vy *= -1;
-
-        // Keep particles within bounds
         p.x = Math.max(0, Math.min(dimensions.width, p.x));
         p.y = Math.max(0, Math.min(dimensions.height, p.y));
-
-        // Apply friction
         p.vx *= 0.99;
         p.vy *= 0.99;
 
-        // Draw particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color.replace('0.8', p.opacity.toString());
+        ctx.fillStyle = `${p.rgbaPrefix} ${p.opacity})`;
         ctx.fill();
+      }
 
-        // Draw connections between close particles
-        for (let j = i + 1; j < particles.length; j++) {
+      const opacitySteps = 5;
+      const connectionPaths = Array.from({ length: opacitySteps }, () => new Path2D());
+      for (let i = 0; i < numParticles; i++) {
+        const p1 = particles[i];
+        for (let j = i + 1; j < numParticles; j++) {
           const p2 = particles[j];
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 100) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.2 * (1 - distance / 100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < connectionRadiusSq) {
+            const distance = Math.sqrt(distSq);
+            const normalizedDist = 1 - distance / 100;
+            const step = Math.floor(normalizedDist * (opacitySteps - 1));
+            const path = connectionPaths[step];
+            path.moveTo(p1.x, p1.y);
+            path.lineTo(p2.x, p2.y);
           }
         }
       }
-
+      ctx.lineWidth = 0.5;
+      for (let s = 0; s < opacitySteps; s++) {
+        const alpha = (s + 1) / opacitySteps * 0.2;
+        ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
+        ctx.stroke(connectionPaths[s]);
+      }
       animationFrameRef.current = requestAnimationFrame(animate);
     };
-
     animationFrameRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(animationFrameRef.current);
-    };
-  }, [dimensions, interactionRadius, backgroundColor]);
+    return () => cancelAnimationFrame(animationFrameRef.current);
+  }, [dimensions, interactionRadius, interactionRadiusSq, backgroundColor]);
 
   return (
     <div className={`relative w-full h-full ${className}`}>
@@ -214,6 +191,8 @@ export const FloatingParticleCanvas: React.FC<{
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
+        role="presentation"
+        aria-label="Floating particles background"
       />
     </div>
   );
