@@ -37,7 +37,6 @@ const STATIC_ASSETS = [
   '/components/Icons.tsx',
   '/components/InteractiveElements.tsx',
   '/components/InteractiveGallery.tsx',
-  '/components/InteractiveShowcase.tsx',
   '/components/LanguageSwitcher.tsx',
   '/components/MagneticButton.tsx',
   '/components/OptimizedImage.tsx',
