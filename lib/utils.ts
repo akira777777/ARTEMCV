@@ -55,22 +55,37 @@ export async function fetchWithTimeout(
 }
 
 /**
- * Centralized WebP support detection to prevent redundant DOM operations
+ * Centralized WebP support detection to prevent redundant DOM operations.
+ * Uses a cached promise and a synchronous flag to eliminate re-renders.
  */
-let supportsWebPCache: Promise<boolean> | null = null;
+let webpSupportPromise: Promise<boolean> | null = null;
+let webpSupportCache: boolean | null = null;
 
+/**
+ * Returns a promise that resolves to true if the browser supports WebP.
+ * The result is cached to avoid redundant DOM operations.
+ */
 export function checkWebPSupport(): Promise<boolean> {
   if (typeof window === 'undefined') return Promise.resolve(false);
+  if (webpSupportPromise) return webpSupportPromise;
 
-  if (supportsWebPCache) return supportsWebPCache;
-
-  supportsWebPCache = new Promise((resolve) => {
-    const webP = new Image();
-    webP.onload = webP.onerror = () => {
-      resolve(webP.height === 2);
+  webpSupportPromise = new Promise((resolve) => {
+    const img = new Image();
+    img.onload = img.onerror = () => {
+      const isSupported = img.height === 2;
+      webpSupportCache = isSupported;
+      resolve(isSupported);
     };
-    webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+    img.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
   });
 
-  return supportsWebPCache;
+  return webpSupportPromise;
+}
+
+/**
+ * Returns the cached WebP support status if available, or null.
+ * Allows components to initialize state synchronously.
+ */
+export function getWebPSupportSync(): boolean | null {
+  return webpSupportCache;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { checkWebPSupport } from '../lib/utils';
+import { checkWebPSupport, getWebPSupportSync } from '../lib/utils';
 
 interface OptimizedImageProps {
   src: string;
@@ -67,10 +67,13 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
   const [lqipLoaded, setLqipLoaded] = useState(false);
 
   // Check if browser supports WebP using centralized utility
-  const [supportsWebP, setSupportsWebP] = useState(true);
+  // Initialize with cached value to avoid extra re-render if already detected
+  const [supportsWebP, setSupportsWebP] = useState(() => getWebPSupportSync() ?? true);
 
   useEffect(() => {
-    checkWebPSupport().then(setSupportsWebP);
+    if (getWebPSupportSync() === null) {
+      checkWebPSupport().then(setSupportsWebP);
+    }
   }, []);
 
   // Intersection Observer for lazy loading
