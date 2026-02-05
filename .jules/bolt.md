@@ -21,3 +21,7 @@
 ## 2026-02-02 - [Centralized Capability Detection]
 **Learning:** Redundant feature detection (like WebP support) in common components (OptimizedImage) scales resource usage linearly with the number of instances. Centralizing this in a utility with a cached promise reduces resource allocation to $O(1)$.
 **Action:** Move all browser capability checks to a centralized utility (e.g., `lib/utils.ts`) and use a cached promise to avoid redundant DOM operations and base64 decoding.
+
+## 2026-02-03 - [IntersectionObserver for Navigation]
+**Learning:** Using `onScroll` with `getBoundingClientRect()` for active section highlighting causes forced synchronous reflows on every scroll event. Replacing this with `IntersectionObserver` offloads visibility calculations to the browser's layout engine, improving scroll performance and reducing main-thread blocking.
+**Action:** Use `IntersectionObserver` for any UI state that depends on element visibility or viewport position to avoid layout thrashing.

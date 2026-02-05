@@ -339,14 +339,9 @@ const Hero: React.FC = React.memo(() => {
             mouseY={mousePosition.y}
           />
         ))}
-        style={{ width: `${Math.min(scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1) * 100, 100)}%` }}
->>>>>>> Remote
-      />
-
-      {/* Animated Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
       </div>
 
+      {/* Animated Background Elements */}
       {/* Scroll Progress Bar */}
       <div 
         className="scroll-progress" 
@@ -356,13 +351,6 @@ const Hero: React.FC = React.memo(() => {
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label="Scroll progress indicator"
-      />
-
-      {/* Animated Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
-=======
-        style={{ width: `${Math.min(scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1) * 100, 100)}%` }}
->>>>>>> Remote
       />
 
       {/* Animated Background Elements */}
