@@ -1,5 +1,17 @@
 import { test, expect } from '@playwright/test';
 
+const switchLanguage = async (page: import('@playwright/test').Page, code: 'EN' | 'RU' | 'CS') => {
+  const langButton = page.getByRole('button', { name: code, exact: true });
+  if (!(await langButton.isVisible())) {
+    const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+    if (await menuButton.isVisible()) {
+      await menuButton.click();
+    }
+  }
+  await expect(langButton).toBeVisible();
+  await langButton.click();
+};
+
 test.describe('Portfolio Critical Path Testing', () => {
   
   test.beforeEach(async ({ page }) => {
@@ -28,16 +40,23 @@ test.describe('Portfolio Critical Path Testing', () => {
 
   test('Language switching functionality', async ({ page }) => {
     // Find language buttons by their text content
-    const enButton = page.getByText('EN');
-    const ruButton = page.getByText('RU');
-    const csButton = page.getByText('CS');
+    const enButton = page.getByRole('button', { name: 'EN', exact: true });
+    const ruButton = page.getByRole('button', { name: 'RU', exact: true });
+    const csButton = page.getByRole('button', { name: 'CS', exact: true });
+    
+    if (!(await enButton.isVisible())) {
+      const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+      if (await menuButton.isVisible()) {
+        await menuButton.click();
+      }
+    }
     
     await expect(enButton).toBeVisible();
     await expect(ruButton).toBeVisible();
     await expect(csButton).toBeVisible();
     
     // Test switching to Russian
-    await ruButton.click();
+    await switchLanguage(page, 'RU');
     await page.waitForTimeout(1000);
     
     // Look for Russian content (more specific selectors)
@@ -45,14 +64,14 @@ test.describe('Portfolio Critical Path Testing', () => {
     await expect(ruContent).toBeVisible({ timeout: 10000 });
     
     // Test switching to Czech
-    await csButton.click();
+    await switchLanguage(page, 'CS');
     await page.waitForTimeout(1000);
     
     const csContent = page.locator('text=Senior Frontend Architekt').first();
     await expect(csContent).toBeVisible({ timeout: 10000 });
     
     // Test switching back to English
-    await enButton.click();
+    await switchLanguage(page, 'EN');
     await page.waitForTimeout(1000);
     
     const enContent = page.locator('text=Senior Frontend Architect').first();

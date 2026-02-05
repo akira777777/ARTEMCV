@@ -1,5 +1,17 @@
 import { test, expect } from '@playwright/test';
 
+const switchLanguage = async (page: import('@playwright/test').Page, code: 'EN' | 'RU' | 'CS') => {
+  const langButton = page.getByRole('button', { name: code, exact: true });
+  if (!(await langButton.isVisible())) {
+    const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+    if (await menuButton.isVisible()) {
+      await menuButton.click();
+    }
+  }
+  await expect(langButton).toBeVisible();
+  await langButton.click();
+};
+
 test.describe('Final Verification - All Improvements', () => {
   
   test('Verify all three key improvements', async ({ page }) => {
@@ -22,8 +34,7 @@ test.describe('Final Verification - All Improvements', () => {
     console.log('\n2. Testing Russian Localization...');
     
     // Switch to Russian
-    const ruButton = page.getByText('RU');
-    await ruButton.click();
+    await switchLanguage(page, 'RU');
     await page.waitForTimeout(1000);
     
     // Verify Russian content is visible
@@ -44,12 +55,10 @@ test.describe('Final Verification - All Improvements', () => {
     // This simulates the heavy operations that previously timed out
     
     // Test language switching with increased timeouts
-    const csButton = page.getByText('CS');
-    await csButton.click();
+    await switchLanguage(page, 'CS');
     await page.waitForTimeout(1000);
     
-    const enButton = page.getByText('EN');
-    await enButton.click();
+    await switchLanguage(page, 'EN');
     await page.waitForTimeout(1000);
     
     console.log('✓ Timeout configuration working - no premature failures!');
