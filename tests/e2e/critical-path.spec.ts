@@ -66,7 +66,7 @@ test.describe('Portfolio Critical Path Testing', () => {
 
   test('Navigation and scrolling functionality', async ({ page }) => {
     // Test smooth scrolling to different sections
-    const sections = ['services', 'work', 'contact'];
+    const sections = ['services', 'works', 'contact'];
     
     for (const section of sections) {
       // Try different ways to find navigation links
