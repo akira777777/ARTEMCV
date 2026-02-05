@@ -15,7 +15,6 @@ import { RenderOptimizer } from './RenderOptimizer';
 export const SpotlightGallery: React.FC = React.memo(() => {
   const { t } = useI18n();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [autoPlay, setAutoPlay] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
   
   const activeProject = useMemo(() => PROJECTS[activeIndex], [activeIndex]);
@@ -28,16 +27,6 @@ export const SpotlightGallery: React.FC = React.memo(() => {
     setActiveIndex((prev) => (prev === PROJECTS.length - 1 ? 0 : prev + 1));
   }, []);
 
-  // Auto-play functionality
-  useEffect(() => {
-    if (!autoPlay) return;
-
-    const interval = setInterval(() => {
-      handleNext();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [autoPlay, handleNext]);
 
   const visibleThumbnails = useMemo(() => {
     const start = activeIndex;
@@ -95,19 +84,6 @@ export const SpotlightGallery: React.FC = React.memo(() => {
 
             {/* Controls */}
             <div className="flex gap-4 mt-8 md:mt-0">
-              {/* Auto-play toggle */}
-              <button
-                onClick={() => setAutoPlay(!autoPlay)}
-                className={`p-4 rounded-full border-2 ${
-                  autoPlay 
-                    ? 'border-indigo-500 bg-indigo-500/20 text-indigo-300' 
-                    : 'border-white/20 text-neutral-400 hover:border-indigo-400/30'
-                } transition-all duration-300`}
-                aria-label={autoPlay ? "Pause auto-play" : "Start auto-play"}
-              >
-                {autoPlay ? '⏸️' : '▶️'}
-              </button>
-              
               <button
                 onClick={handlePrev}
                 aria-label={t('works.prev')}
@@ -279,8 +255,7 @@ export const SpotlightGallery: React.FC = React.memo(() => {
           <div className="mt-16 text-center">
             <p className="text-sm text-neutral-400">
               {t('works.open_details')} <span className="text-white font-bold">{t(activeProject.title)}</span> •{' '}
-              {t('works.scroll_left')} / {t('works.scroll_right')} •{' '}
-              Auto {autoPlay ? 'PLAY' : 'PAUSED'}
+              {t('works.scroll_left')} / {t('works.scroll_right')}
             </p>
           </div>
         </div>
