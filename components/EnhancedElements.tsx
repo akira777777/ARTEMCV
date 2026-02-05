@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
+import { useScroll, motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 
 // Memoized style objects for performance
 const WAVE_SVG_STYLE = { height: '50%' } as const;
@@ -19,7 +19,6 @@ export const WaveBackground: React.FC<{ className?: string }> = React.memo(({ cl
         className="absolute bottom-0 left-0 w-full"
         viewBox="0 0 1440 320"
         preserveAspectRatio="none"
-        style={{ height: '50%' }}
         style={WAVE_SVG_STYLE}
       >
         <motion.path
@@ -582,7 +581,6 @@ export const GlitchText: React.FC<GlitchTextProps> = React.memo(({
               }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, repeat: Infinity }}
-              style={{ clipPath: 'inset(0 0 50% 0)' }}
               style={CLIP_PATH_TOP}
               aria-hidden="true"
             >
@@ -597,7 +595,6 @@ export const GlitchText: React.FC<GlitchTextProps> = React.memo(({
               }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, repeat: Infinity }}
-              style={{ clipPath: 'inset(50% 0 0 0)' }}
               style={CLIP_PATH_BOTTOM}
               aria-hidden="true"
             >
@@ -627,28 +624,16 @@ export const ParallaxSection: React.FC<ParallaxSectionProps> = React.memo(({
   speed = 0.5,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState(0);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
-      const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-      setOffset(scrollProgress * speed * 100);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [speed]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, speed * 100]);
 
   return (
     <div ref={ref} className={`relative overflow-hidden ${className}`}>
-      <motion.div
-        style={{ y: offset }}
-        transition={{ type: 'spring', stiffness: 100, damping: 30 }}
-      >
+      <motion.div style={{ y }}>
         {children}
       </motion.div>
     </div>
@@ -672,7 +657,6 @@ export const OrbitingRings: React.FC<OrbitingRingsProps> = React.memo(({
   return (
     <div 
       className={`relative ${className}`} 
-      style={{ width: size, height: size, perspective: 1000 }}
       style={{ width: size, height: size, ...PERSPECTIVE_CONTAINER_STYLE }}
       aria-hidden="true"
     >
