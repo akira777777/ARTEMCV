@@ -48,7 +48,6 @@ const STATIC_ASSETS = [
   '/components/SkipLink.tsx',
   '/components/SpinningCube.tsx',
   '/components/SpotlightGallery.tsx',
-  '/components/TextReveal.tsx',
   '/components/WorkGallery.tsx',
   '/components/CardStack.tsx',
   '/components/Navigation.tsx',
