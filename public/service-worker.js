@@ -46,7 +46,6 @@ const STATIC_ASSETS = [
   '/components/SectionDivider.tsx',
   '/components/SimpleTelegramChat.tsx',
   '/components/SkipLink.tsx',
-  '/components/SpinningCube.tsx',
   '/components/SpotlightGallery.tsx',
   '/components/TextReveal.tsx',
   '/components/WorkGallery.tsx',

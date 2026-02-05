@@ -7,7 +7,6 @@ import { Navigation } from '../components/Navigation';
 import { SimpleTelegramChat } from '../components/SimpleTelegramChat';
 import { ScrollToTop } from '../components/ScrollToTop';
 import { SkipLink } from '../components/SkipLink';
-import { SpinningCube } from '../components/SpinningCube';
 
 // Общий тест для проверки оптимизаций
 describe('Performance Optimizations Verification', () => {
@@ -91,18 +90,6 @@ describe('Performance Optimizations Verification', () => {
     rerender(<SkipLink />);
     expect(screen.getByText(/skip.content/i)).toBeInTheDocument();
   });
-
-  it('SpinningCube component maintains memoization and functionality', () => {
-    const { rerender } = render(<SpinningCube />);
-    
-    // Проверяем начальный рендер
-    expect(screen.getByText(/Cube 00112/i)).toBeInTheDocument();
-    
-    // Перерендерим - должен использовать memoization
-    rerender(<SpinningCube />);
-    expect(screen.getByText(/Cube 00112/i)).toBeInTheDocument();
-  });
-
   it('All components handle events without memory leaks', () => {
     render(
       <>
@@ -110,7 +97,6 @@ describe('Performance Optimizations Verification', () => {
         <SimpleTelegramChat />
         <ScrollToTop />
         <SkipLink />
-        <SpinningCube />
       </>
     );
 
@@ -119,7 +105,6 @@ describe('Performance Optimizations Verification', () => {
     expect(screen.getByLabelText(/chat.aria.open/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/scroll_to_top/i)).toBeInTheDocument();
     expect(screen.getByText(/skip.content/i)).toBeInTheDocument();
-    expect(screen.getByText(/Cube 00112/i)).toBeInTheDocument();
   });
 
   it('Components properly clean up event listeners', () => {
