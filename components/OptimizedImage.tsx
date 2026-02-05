@@ -61,13 +61,16 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
     return lqipMatch;
   };
 
-  const webpSrc = getWebPSrc(src);
-  const lqipSrc = getLQIPSrc(src);
-  const [currentSrc, setCurrentSrc] = useState(priority ? src : ''); // Don't load non-priority images until in viewport
-  const [lqipLoaded, setLqipLoaded] = useState(false);
-
+  // Transparent 1x1 pixel GIF to prevent empty src warnings during lazy loading
+  const TRANSPARENT_PIXEL = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  
   // Check if browser supports WebP using centralized utility
   const [supportsWebP, setSupportsWebP] = useState(true);
+  
+  const webpSrc = getWebPSrc(src);
+  const lqipSrc = getLQIPSrc(src);
+  const [currentSrc, setCurrentSrc] = useState<string>(priority ? src : TRANSPARENT_PIXEL); // Don't load non-priority images until in viewport
+  const [lqipLoaded, setLqipLoaded] = useState(false);
 
   useEffect(() => {
     checkWebPSupport().then(setSupportsWebP);
@@ -167,7 +170,7 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
         <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
           <span className="text-gray-400 text-sm">Image failed to load</span>
         </div>
-      ) : (
+      ) : currentSrc ? (
         <picture className="block w-full h-full">
           {supportsWebP && (
             <source 
@@ -192,7 +195,7 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
             onError={handleError}
           />
         </picture>
-      )}
+      ) : null}
       
       {isLoading && !lqipLoaded && (
         <div 
