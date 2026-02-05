@@ -45,7 +45,6 @@ const STATIC_ASSETS = [
   '/components/SimpleTelegramChat.tsx',
   '/components/SkipLink.tsx',
   '/components/SpotlightGallery.tsx',
-  '/components/TextReveal.tsx',
   '/components/WorkGallery.tsx',
   '/components/CardStack.tsx',
   '/components/Navigation.tsx',
