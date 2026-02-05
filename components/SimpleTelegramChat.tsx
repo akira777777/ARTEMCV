@@ -53,13 +53,17 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastSubmitRef = useRef<number>(0);
 
-  // Load name from localStorage
+  // Update welcome message text when language or name state changes
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('chat_user_name');
-      if (saved) setUserName(saved);
-    } catch {}
-  }, []);
+    setMessages(prev => {
+      const firstMsg = prev[0];
+      if (firstMsg?.id === INITIAL_MESSAGE_ID && prev.length === 1) {
+        const welcomeText = userName ? t('chat.bot.welcome') : t('chat.prompt.name');
+        return [{ ...firstMsg, text: welcomeText }];
+      }
+      return prev;
+    });
+  }, [lang, t, userName]);
 
   // Scroll to bottom of chat
   useEffect(() => {
@@ -111,6 +115,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       return;
     }
 
+    const name = userName.trim();
     const userMessage = inputValue.trim();
     setInputValue('');
     setError(null);
