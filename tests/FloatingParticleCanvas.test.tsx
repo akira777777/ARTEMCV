@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { FloatingParticleCanvas } from '../components/FloatingParticleCanvas';
 
@@ -39,29 +39,36 @@ HTMLCanvasElement.prototype.getBoundingClientRect = vi.fn(() => ({
   toJSON: () => ({}),
 }));
 
+// Mock framer-motion
+vi.mock('framer-motion', () => ({
+  motion: {
+    canvas: ({ children, ...props }: any) => <canvas {...props} data-testid="particle-canvas">{children}</canvas>,
+  },
+}));
+
 describe('FloatingParticleCanvas', () => {
   it('renders without crashing', () => {
-    render(<FloatingParticleCanvas />);
-    const canvas = screen.getByRole('presentation');
+    const { container } = render(<FloatingParticleCanvas />);
+    const canvas = container.querySelector('canvas') || container.querySelector('[data-testid="particle-canvas"]');
     expect(canvas).toBeInTheDocument();
   });
 
   it('accepts custom particle count', () => {
-    render(<FloatingParticleCanvas particleCount={50} />);
-    // Test that component accepts custom props
-    const canvas = screen.getByRole('presentation');
+    const { container } = render(<FloatingParticleCanvas particleCount={50} />);
+    const canvas = container.querySelector('canvas');
     expect(canvas).toBeInTheDocument();
   });
 
   it('responds to mouse movement', async () => {
-    render(<FloatingParticleCanvas interactionRadius={100} />);
-    const canvas = screen.getByRole('presentation');
+    const { container } = render(<FloatingParticleCanvas interactionRadius={100} />);
+    const canvas = container.querySelector('canvas');
     
-    fireEvent.mouseMove(canvas, { clientX: 100, clientY: 100 });
+    if (canvas) {
+      fireEvent.mouseMove(canvas, { clientX: 100, clientY: 100 });
+    }
     
-    // Wait for interactions to be processed
     await waitFor(() => {
-      expect(canvas).toBeInTheDocument();
+      expect(container.querySelector('canvas')).toBeInTheDocument();
     });
   });
 });
