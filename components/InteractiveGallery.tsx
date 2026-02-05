@@ -18,7 +18,7 @@ import {
  * InteractiveGallery - Showcase of interactive UI components
  * Demonstrates advanced animations and visual effects
  */
-export const InteractiveGallery: React.FC = React.memo(() => {
+export const InteractiveGallery: React.FC = () => {
   const { t } = useI18n();
 
   const features = useMemo(() => [
@@ -206,7 +206,8 @@ export const InteractiveGallery: React.FC = React.memo(() => {
       </div>
     </section>
   );
-};
+}
 
 InteractiveGallery.displayName = 'InteractiveGallery';
+
 export default InteractiveGallery;

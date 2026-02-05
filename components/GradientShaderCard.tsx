@@ -419,9 +419,6 @@ const GradientShaderCard: React.FC = () => {
       animationId = requestAnimationFrame(animate);
     };
 
-    // Add mouse event listeners
-    canvas.addEventListener('mousemove', handleMouseMove, { passive: true });
-
     animate();
 
     return () => {
@@ -468,4 +465,6 @@ const GradientShaderCard: React.FC = () => {
   );
 };
 
-export default React.memo(GradientShaderCard);
+const MemoizedGradientShaderCard = React.memo(GradientShaderCard);
+MemoizedGradientShaderCard.displayName = 'GradientShaderCard';
+export default MemoizedGradientShaderCard;

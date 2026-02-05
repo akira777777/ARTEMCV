@@ -1,0 +1,638 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - region "Accessibility controls" [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - heading "Accessibility Options" [level=3] [ref=e7]
+        - button "Open accessibility panel" [ref=e8]: ×
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - generic [ref=e11]: Text Size
+          - generic [ref=e12]:
+            - button "Normal" [pressed] [ref=e13]
+            - button "Large" [ref=e14]
+            - button "Larger" [ref=e15]
+        - generic [ref=e16]:
+          - generic [ref=e17]: Contrast
+          - generic [ref=e18]:
+            - button "Normal" [pressed] [ref=e19]
+            - button "High" [ref=e20]
+        - generic [ref=e21]:
+          - generic [ref=e22]: Reduce Motion
+          - switch "Reduce Motion" [ref=e23]
+        - generic [ref=e25]:
+          - generic [ref=e26]: Show Focus Indicator
+          - switch "Show Focus Indicator" [checked] [ref=e27]
+  - button "Accessibility options" [ref=e29]:
+    - img [ref=e30]
+  - generic [ref=e32]:
+    - link "Skip to content" [ref=e33] [cursor=pointer]:
+      - /url: "#main-content"
+    - banner "Main website header" [ref=e34]:
+      - navigation "Primary navigation" [ref=e36]:
+        - link "Artem Mikhailov Portfolio - Return to home" [ref=e37] [cursor=pointer]:
+          - /url: "#home"
+          - generic [ref=e38]: ARTEM.DEV
+        - generic [ref=e40]:
+          - menubar [ref=e41]:
+            - listitem [ref=e42]:
+              - link "HOME" [ref=e43] [cursor=pointer]:
+                - /url: "#home"
+            - listitem [ref=e44]:
+              - link "WORK" [ref=e45] [cursor=pointer]:
+                - /url: "#works"
+            - listitem [ref=e46]:
+              - link "LAB" [ref=e47] [cursor=pointer]:
+                - /url: "#lab"
+            - listitem [ref=e48]:
+              - link "STACK" [ref=e49] [cursor=pointer]:
+                - /url: "#services"
+            - listitem [ref=e50]:
+              - link "ABOUT" [ref=e51] [cursor=pointer]:
+                - /url: "#studio"
+            - listitem [ref=e52]:
+              - link "CONTACT" [ref=e53] [cursor=pointer]:
+                - /url: "#contact"
+          - generic [ref=e56]:
+            - button "Switch to EN" [pressed] [ref=e57]: EN
+            - button "Switch to RU" [ref=e58]: RU
+            - button "Switch to CS" [ref=e59]: CS
+    - main "Skip to content" [ref=e60]:
+      - region "Hero section" [ref=e61]:
+        - img "Decorative purple star background element"
+        - progressbar "Scroll progress indicator"
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - generic [ref=e66]: ✦
+              - text: Senior Frontend Architect
+            - generic [ref=e68]: ∞
+            - heading "A R T E M M I K H A I L O V" [level=1] [ref=e69]:
+              - generic [ref=e70]: A
+              - generic [ref=e71]: R
+              - generic [ref=e72]: T
+              - generic [ref=e73]: E
+              - generic [ref=e75]: M
+              - generic [ref=e76]: M
+              - generic [ref=e77]: I
+              - generic [ref=e78]: K
+              - generic [ref=e79]: H
+              - generic [ref=e80]: A
+              - generic [ref=e81]: I
+              - generic [ref=e82]: L
+              - generic [ref=e83]: O
+              - generic [ref=e84]: V
+            - paragraph [ref=e85]: Engineering high-performance interactive 3D ecosystems and results-oriented digital interfaces for 2026.
+            - generic [ref=e86]:
+              - button "Explore Projects" [ref=e87]:
+                - text: Explore Projects
+                - img [ref=e88]
+              - button "Let's Talk" [ref=e90]
+          - complementary [ref=e91]:
+            - generic [ref=e92]:
+              - generic [ref=e93] [cursor=pointer]:
+                - img [ref=e94]
+                - generic [ref=e98]: 50+
+                - generic [ref=e99]: PROJECTS
+              - generic [ref=e100] [cursor=pointer]:
+                - img [ref=e101]
+                - generic [ref=e103]: 8Y+
+                - generic [ref=e104]: YEARS EXP
+              - generic [ref=e105] [cursor=pointer]:
+                - img [ref=e106]
+                - generic [ref=e111]: 30+
+                - generic [ref=e112]: CLIENTS
+              - generic [ref=e113] [cursor=pointer]:
+                - img [ref=e114]
+                - generic [ref=e120]: "12"
+                - generic [ref=e121]: AWARDS
+        - generic [ref=e122]:
+          - heading "INTERACTIVE EXPERIENCE" [level=2] [ref=e124] [cursor=pointer]
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - heading "WHAT I OFFER Specializations" [level=2] [ref=e127]
+              - paragraph [ref=e128]: Turning ideas into high-quality digital products.WHAT I OFFER
+              - paragraph [ref=e129]: I build high-performance digital experiences where precision engineering meets immersive design. Specializing in Next.js, Three.js, and AI-driven SaaS.
+            - generic [ref=e130]:
+              - generic [ref=e133]:
+                - img [ref=e135]
+                - heading "Web Development" [level=3] [ref=e138]
+                - paragraph [ref=e139]: Full-stack applications with React, Next.js, Node.js
+              - generic [ref=e142]:
+                - img [ref=e144]
+                - heading "UI/UX Design" [level=3] [ref=e146]
+                - paragraph [ref=e147]: Modern, accessible interfaces with Figma & Tailwind
+              - generic [ref=e150]:
+                - img [ref=e152]
+                - heading "API Integration" [level=3] [ref=e154]
+                - paragraph [ref=e155]: RESTful APIs, GraphQL, third-party services
+        - button "SCROLL" [ref=e156]:
+          - text: SCROLL
+          - img [ref=e157]
+      - img [ref=e160]
+      - generic [ref=e166]:
+        - generic [ref=e167]:
+          - generic [ref=e168]:
+            - generic [ref=e169]: FEATURED WORK (2026)
+            - heading "WORK" [level=2] [ref=e170]
+          - generic [ref=e171]:
+            - button "Pause auto-play" [ref=e172]: ⏸️
+            - button "Previous project" [ref=e173]:
+              - img [ref=e174]
+            - button "Next project" [ref=e176]:
+              - img [ref=e177]
+        - generic [ref=e179]:
+          - generic [ref=e181]:
+            - img "Dental Clinic Ecosystem" [ref=e184]
+            - generic [ref=e187]:
+              - generic [ref=e188]:
+                - generic [ref=e189]: AI Orchestration
+                - generic [ref=e190]: WebSockets
+                - generic [ref=e191]: Real-time Sync
+              - heading "Dental Clinic Ecosystem" [level=3] [ref=e192]
+              - paragraph [ref=e193]: AI-powered appointment orchestration and diagnostic visualization. Real-time data sync using WebSockets for live clinic availability.
+          - generic [ref=e194]:
+            - generic [ref=e195]:
+              - heading "Project Details" [level=4] [ref=e196]
+              - generic [ref=e197]:
+                - generic [ref=e198]:
+                  - paragraph [ref=e199]: Tech Stack
+                  - generic [ref=e200]:
+                    - generic [ref=e201]: Edge Runtime
+                    - generic [ref=e202]: Scroll-driven Animation
+                    - generic [ref=e203]: React 19
+                    - generic [ref=e204]: LCP Optimization
+                - paragraph [ref=e206]: "Project #3 of 3"
+            - generic [ref=e209]:
+              - link "EXPLORE" [ref=e210] [cursor=pointer]:
+                - /url: https://barber-am.vercel.app/
+                - text: EXPLORE
+                - img [ref=e211]
+              - link "VIEW CODE" [ref=e215] [cursor=pointer]:
+                - /url: https://github.com/akira777777
+                - text: VIEW CODE
+                - img [ref=e216]
+        - generic [ref=e219]:
+          - heading "Quick Navigation" [level=4] [ref=e220]
+          - generic [ref=e221]:
+            - button "Dental Clinic Ecosystem Dental Clinic Ecosystem" [ref=e222] [cursor=pointer]:
+              - img "Dental Clinic Ecosystem" [ref=e225]
+              - paragraph [ref=e231]: Dental Clinic Ecosystem
+            - button "The Barbershop Grid The Barbershop Grid" [ref=e232] [cursor=pointer]:
+              - img "The Barbershop Grid" [ref=e235]
+              - paragraph [ref=e240]: The Barbershop Grid
+            - button "Detailing Hub 3D Detailing Hub 3D" [ref=e241] [cursor=pointer]:
+              - img "Detailing Hub 3D" [ref=e244]
+              - paragraph [ref=e249]: Detailing Hub 3D
+            - button "Dental Clinic Ecosystem Dental Clinic Ecosystem" [ref=e250] [cursor=pointer]:
+              - img "Dental Clinic Ecosystem" [ref=e253]
+              - paragraph [ref=e259]: Dental Clinic Ecosystem
+            - button "The Barbershop Grid The Barbershop Grid" [ref=e260] [cursor=pointer]:
+              - img "The Barbershop Grid" [ref=e263]
+              - paragraph [ref=e269]: The Barbershop Grid
+            - button "Detailing Hub 3D Detailing Hub 3D" [ref=e270] [cursor=pointer]:
+              - img "Detailing Hub 3D" [ref=e273]
+              - paragraph [ref=e278]: Detailing Hub 3D
+            - button "Dental Clinic Ecosystem Dental Clinic Ecosystem" [ref=e279] [cursor=pointer]:
+              - img "Dental Clinic Ecosystem" [ref=e282]
+              - paragraph [ref=e287]: Dental Clinic Ecosystem
+            - button "The Barbershop Grid The Barbershop Grid" [ref=e288] [cursor=pointer]:
+              - img "The Barbershop Grid" [ref=e291]
+              - paragraph [ref=e297]: The Barbershop Grid
+        - paragraph [ref=e299]: View details The Barbershop Grid • Scroll projects left / Scroll projects right • Auto PLAY
+      - region "Visual Experience" [ref=e311]:
+        - generic [ref=e312]:
+          - generic [ref=e313]:
+            - generic [ref=e314]:
+              - img [ref=e315]
+              - generic [ref=e319]: Interactive Components
+            - heading "Visual Experience" [level=2] [ref=e320]:
+              - generic [ref=e321]: Visual
+              - text: Experience
+            - paragraph [ref=e322]:
+              - generic [ref=e323]:
+                - text: Explore a collection of caref
+                - generic [ref=e324]: "|"
+          - generic [ref=e325]:
+            - generic [ref=e329]:
+              - generic [ref=e330]:
+                - generic [ref=e331]:
+                  - img [ref=e332]
+                  - generic [ref=e335]: 3D Effects
+                - heading "Holographic Interface" [level=3] [ref=e336]
+                - paragraph [ref=e337]: Move your cursor to see the 3D depth effect and rainbow shimmer. Built with Framer Motion and CSS transforms.
+              - button "Explore More" [ref=e345]: Explore More
+            - generic [ref=e349]:
+              - heading "Project Stats" [level=3] [ref=e350]
+              - generic [ref=e351]:
+                - generic [ref=e352]:
+                  - generic [ref=e353]: Components
+                  - generic [ref=e355]: 0+
+                - generic [ref=e357]:
+                  - generic [ref=e358]: Animations
+                  - generic [ref=e360]: 0+
+                - generic [ref=e362]:
+                  - generic [ref=e363]: Performance
+                  - generic [ref=e365]: 0 FPS
+            - generic [ref=e368]:
+              - img [ref=e370]
+              - heading "Motion Design" [level=3] [ref=e373]
+              - paragraph [ref=e374]: Fluid animations & transitions
+            - generic [ref=e377]:
+              - img [ref=e379]
+              - heading "Performance" [level=3] [ref=e381]
+              - paragraph [ref=e382]: GPU-accelerated effects
+            - generic [ref=e385]:
+              - img [ref=e387]
+              - heading "Clean Code" [level=3] [ref=e391]
+              - paragraph [ref=e392]: TypeScript & React patterns
+            - generic [ref=e395]:
+              - img [ref=e397]
+              - heading "Visual Design" [level=3] [ref=e403]
+              - paragraph [ref=e404]: Modern glassmorphism UI
+            - generic [ref=e411]:
+              - generic [ref=e412]:
+                - heading "Neon Borders" [level=3] [ref=e413]
+                - paragraph [ref=e414]: Animated gradient borders with glow effects. Perfect for highlighting important content.
+              - generic [ref=e415]:
+                - button "Primary" [ref=e416]: Primary
+                - button "Secondary" [ref=e419]: Secondary
+          - generic [ref=e422]:
+            - paragraph [ref=e423]: All components are fully accessible and optimized for performance
+            - generic [ref=e424]:
+              - generic [ref=e425]: React
+              - generic [ref=e426]: TypeScript
+              - generic [ref=e427]: Framer Motion
+              - generic [ref=e428]: Tailwind
+      - generic [ref=e439]:
+        - generic [ref=e440]:
+          - generic [ref=e441]:
+            - heading "Ready for collaboration." [level=2] [ref=e442]:
+              - text: Ready for
+              - text: collaboration.
+            - paragraph [ref=e443]: I build high-performance digital experiences where precision engineering meets immersive design. Specializing in Next.js, Three.js, and AI-driven SaaS.
+            - button "Navigate to contact section" [ref=e445]: LET'S COLLABORATE
+          - complementary "Technical skills" [ref=e446]:
+            - heading "TECHNICAL EXPERTISE" [level=3] [ref=e447]
+            - generic [ref=e448]:
+              - heading "Frontend Development" [level=4] [ref=e449]
+              - list [ref=e450]:
+                - listitem [ref=e451]: Next.js 16
+                - listitem [ref=e452]: Three.js / R3F
+                - listitem [ref=e453]: Framer Motion
+                - listitem [ref=e454]: GSAP
+                - listitem [ref=e455]: Tailwind CSS
+                - listitem [ref=e456]: WebGPU
+            - generic [ref=e457]:
+              - heading "Backend Systems" [level=4] [ref=e458]
+              - list [ref=e459]:
+                - listitem [ref=e460]: Go (Golang)
+                - listitem [ref=e461]: PostgreSQL
+                - listitem [ref=e462]: Edge Runtime
+                - listitem [ref=e463]: Real-time Data Sync
+            - generic [ref=e464]:
+              - heading "Architecture & Devops" [level=4] [ref=e465]
+              - list [ref=e466]:
+                - listitem [ref=e467]: AWS Lambda
+                - listitem [ref=e468]: OpenAI API (Multi-agent)
+                - listitem [ref=e469]: CI/CD
+                - listitem [ref=e470]: Vercel
+            - generic [ref=e471]:
+              - heading "Workflow & Tools" [level=4] [ref=e472]
+              - list [ref=e473]:
+                - listitem [ref=e474]: TypeScript 6.0
+                - listitem [ref=e475]: Copilot Pro+
+                - listitem [ref=e476]: Figma
+                - listitem [ref=e477]: Docker
+        - generic [ref=e478]:
+          - heading "WHAT I OFFER" [level=3] [ref=e479]
+          - list [ref=e480]:
+            - article [ref=e481] [cursor=pointer]:
+              - generic [ref=e482]:
+                - heading "Web Development" [level=4] [ref=e483]
+                - generic "Service number 1" [ref=e484]: "01"
+              - paragraph [ref=e485]: Full-stack applications with React, Next.js, Node.js
+            - article [ref=e487] [cursor=pointer]:
+              - generic [ref=e488]:
+                - heading "UI/UX Design" [level=4] [ref=e489]
+                - generic "Service number 2" [ref=e490]: "02"
+              - paragraph [ref=e491]: Modern, accessible interfaces with Figma & Tailwind
+            - article [ref=e493] [cursor=pointer]:
+              - generic [ref=e494]:
+                - heading "API Integration" [level=4] [ref=e495]
+                - generic "Service number 3" [ref=e496]: "03"
+              - paragraph [ref=e497]: RESTful APIs, GraphQL, third-party services
+            - article [ref=e499] [cursor=pointer]:
+              - generic [ref=e500]:
+                - heading "Database Design" [level=4] [ref=e501]
+                - generic "Service number 4" [ref=e502]: "04"
+              - paragraph [ref=e503]: PostgreSQL, MongoDB, Redis optimization
+            - article [ref=e505] [cursor=pointer]:
+              - generic [ref=e506]:
+                - heading "Performance" [level=4] [ref=e507]
+                - generic "Service number 5" [ref=e508]: "05"
+              - paragraph [ref=e509]: Core Web Vitals, SEO, loading optimization
+            - article [ref=e511] [cursor=pointer]:
+              - generic [ref=e512]:
+                - heading "Deployment" [level=4] [ref=e513]
+                - generic "Service number 6" [ref=e514]: "06"
+              - paragraph [ref=e515]: CI/CD, Docker, AWS, Vercel cloud hosting
+      - region "Live 3D accents for the wow effect." [ref=e523]:
+        - generic [ref=e525]:
+          - region "3D Tilt Card" [ref=e526] [cursor=pointer]:
+            - generic [ref=e527]:
+              - generic [ref=e531]: 3D Tilt Card
+              - generic [ref=e532]: Hover to explore
+          - generic [ref=e535]:
+            - generic [ref=e540]: Interactive Lab
+            - heading "Live 3D accents for the wow effect." [level=3] [ref=e541]
+            - paragraph [ref=e542]: Added an interactive tilt card and a holographic orb — both work without heavy libraries, using only CSS 3D and Framer Motion. Smooth parallax, glass surfaces, and live hints.
+            - generic [ref=e543]:
+              - generic [ref=e544]:
+                - heading "Holo Orb" [level=4] [ref=e545]
+                - generic [ref=e546]:
+                  - generic [ref=e548]: Decorative holographic orb
+                  - generic [ref=e549]: touchless motion
+              - generic [ref=e550]:
+                - heading "Depth Tokens" [level=4] [ref=e551]
+                - generic [ref=e552]:
+                  - generic [ref=e553]: GSAP-free
+                  - generic [ref=e555]: Perf-safe
+                  - generic [ref=e557]: CSS 3D
+                - paragraph [ref=e559]: "Adaptable for any section: cards, CTA, case previews, or avatars."
+      - generic [ref=e570]:
+        - generic [ref=e571]:
+          - generic [ref=e572]:
+            - generic [ref=e573]: FEATURED WORK (2026)
+            - heading "WORK" [level=2] [ref=e574]
+          - generic [ref=e575]:
+            - button "Pause auto-play" [ref=e576]: ⏸️
+            - button "Previous project" [ref=e577]:
+              - img [ref=e578]
+            - button "Next project" [ref=e580]:
+              - img [ref=e581]
+        - generic [ref=e583]:
+          - generic [ref=e585]:
+            - img "Dental Clinic Ecosystem" [ref=e588]
+            - generic [ref=e591]:
+              - generic [ref=e592]:
+                - generic [ref=e593]: AI Orchestration
+                - generic [ref=e594]: WebSockets
+                - generic [ref=e595]: Real-time Sync
+              - heading "Dental Clinic Ecosystem" [level=3] [ref=e596]
+              - paragraph [ref=e597]: AI-powered appointment orchestration and diagnostic visualization. Real-time data sync using WebSockets for live clinic availability.
+          - generic [ref=e598]:
+            - generic [ref=e599]:
+              - heading "Project Details" [level=4] [ref=e600]
+              - generic [ref=e601]:
+                - generic [ref=e602]:
+                  - paragraph [ref=e603]: Tech Stack
+                  - generic [ref=e604]:
+                    - generic [ref=e605]: Edge Runtime
+                    - generic [ref=e606]: Scroll-driven Animation
+                    - generic [ref=e607]: React 19
+                    - generic [ref=e608]: LCP Optimization
+                - paragraph [ref=e610]: "Project #3 of 3"
+            - generic [ref=e613]:
+              - link "EXPLORE" [ref=e614] [cursor=pointer]:
+                - /url: https://barber-am.vercel.app/
+                - text: EXPLORE
+                - img [ref=e615]
+              - link "VIEW CODE" [ref=e619] [cursor=pointer]:
+                - /url: https://github.com/akira777777
+                - text: VIEW CODE
+                - img [ref=e620]
+        - generic [ref=e623]:
+          - heading "Quick Navigation" [level=4] [ref=e624]
+          - generic [ref=e625]:
+            - button "Dental Clinic Ecosystem Dental Clinic Ecosystem" [ref=e626] [cursor=pointer]:
+              - img "Dental Clinic Ecosystem" [ref=e629]
+              - paragraph [ref=e635]: Dental Clinic Ecosystem
+            - button "The Barbershop Grid The Barbershop Grid" [ref=e636] [cursor=pointer]:
+              - img "The Barbershop Grid" [ref=e639]
+              - paragraph [ref=e644]: The Barbershop Grid
+            - button "Detailing Hub 3D Detailing Hub 3D" [ref=e645] [cursor=pointer]:
+              - img "Detailing Hub 3D" [ref=e648]
+              - paragraph [ref=e653]: Detailing Hub 3D
+            - button "Dental Clinic Ecosystem Dental Clinic Ecosystem" [ref=e654] [cursor=pointer]:
+              - img "Dental Clinic Ecosystem" [ref=e657]
+              - paragraph [ref=e663]: Dental Clinic Ecosystem
+            - button "The Barbershop Grid The Barbershop Grid" [ref=e664] [cursor=pointer]:
+              - img "The Barbershop Grid" [ref=e667]
+              - paragraph [ref=e673]: The Barbershop Grid
+            - button "Detailing Hub 3D Detailing Hub 3D" [ref=e674] [cursor=pointer]:
+              - img "Detailing Hub 3D" [ref=e677]
+              - paragraph [ref=e682]: Detailing Hub 3D
+            - button "Dental Clinic Ecosystem Dental Clinic Ecosystem" [ref=e683] [cursor=pointer]:
+              - img "Dental Clinic Ecosystem" [ref=e686]
+              - paragraph [ref=e691]: Dental Clinic Ecosystem
+            - button "The Barbershop Grid The Barbershop Grid" [ref=e692] [cursor=pointer]:
+              - img "The Barbershop Grid" [ref=e695]
+              - paragraph [ref=e701]: The Barbershop Grid
+        - paragraph [ref=e703]: View details The Barbershop Grid • Scroll projects left / Scroll projects right • Auto PLAY
+      - generic [ref=e709]:
+        - generic [ref=e710]:
+          - generic [ref=e711]:
+            - heading "Ready for collaboration." [level=2] [ref=e712]:
+              - text: Ready for
+              - text: collaboration.
+            - paragraph [ref=e713]: I build high-performance digital experiences where precision engineering meets immersive design. Specializing in Next.js, Three.js, and AI-driven SaaS.
+            - button "Navigate to contact section" [ref=e715]: LET'S COLLABORATE
+          - complementary "Technical skills" [ref=e716]:
+            - heading "TECHNICAL EXPERTISE" [level=3] [ref=e717]
+            - generic [ref=e718]:
+              - heading "Frontend Development" [level=4] [ref=e719]
+              - list [ref=e720]:
+                - listitem [ref=e721]: Next.js 16
+                - listitem [ref=e722]: Three.js / R3F
+                - listitem [ref=e723]: Framer Motion
+                - listitem [ref=e724]: GSAP
+                - listitem [ref=e725]: Tailwind CSS
+                - listitem [ref=e726]: WebGPU
+            - generic [ref=e727]:
+              - heading "Backend Systems" [level=4] [ref=e728]
+              - list [ref=e729]:
+                - listitem [ref=e730]: Go (Golang)
+                - listitem [ref=e731]: PostgreSQL
+                - listitem [ref=e732]: Edge Runtime
+                - listitem [ref=e733]: Real-time Data Sync
+            - generic [ref=e734]:
+              - heading "Architecture & Devops" [level=4] [ref=e735]
+              - list [ref=e736]:
+                - listitem [ref=e737]: AWS Lambda
+                - listitem [ref=e738]: OpenAI API (Multi-agent)
+                - listitem [ref=e739]: CI/CD
+                - listitem [ref=e740]: Vercel
+            - generic [ref=e741]:
+              - heading "Workflow & Tools" [level=4] [ref=e742]
+              - list [ref=e743]:
+                - listitem [ref=e744]: TypeScript 6.0
+                - listitem [ref=e745]: Copilot Pro+
+                - listitem [ref=e746]: Figma
+                - listitem [ref=e747]: Docker
+        - generic [ref=e748]:
+          - heading "WHAT I OFFER" [level=3] [ref=e749]
+          - list [ref=e750]:
+            - article [ref=e751] [cursor=pointer]:
+              - generic [ref=e752]:
+                - heading "Web Development" [level=4] [ref=e753]
+                - generic "Service number 1" [ref=e754]: "01"
+              - paragraph [ref=e755]: Full-stack applications with React, Next.js, Node.js
+            - article [ref=e757] [cursor=pointer]:
+              - generic [ref=e758]:
+                - heading "UI/UX Design" [level=4] [ref=e759]
+                - generic "Service number 2" [ref=e760]: "02"
+              - paragraph [ref=e761]: Modern, accessible interfaces with Figma & Tailwind
+            - article [ref=e763] [cursor=pointer]:
+              - generic [ref=e764]:
+                - heading "API Integration" [level=4] [ref=e765]
+                - generic "Service number 3" [ref=e766]: "03"
+              - paragraph [ref=e767]: RESTful APIs, GraphQL, third-party services
+            - article [ref=e769] [cursor=pointer]:
+              - generic [ref=e770]:
+                - heading "Database Design" [level=4] [ref=e771]
+                - generic "Service number 4" [ref=e772]: "04"
+              - paragraph [ref=e773]: PostgreSQL, MongoDB, Redis optimization
+            - article [ref=e775] [cursor=pointer]:
+              - generic [ref=e776]:
+                - heading "Performance" [level=4] [ref=e777]
+                - generic "Service number 5" [ref=e778]: "05"
+              - paragraph [ref=e779]: Core Web Vitals, SEO, loading optimization
+            - article [ref=e781] [cursor=pointer]:
+              - generic [ref=e782]:
+                - heading "Deployment" [level=4] [ref=e783]
+                - generic "Service number 6" [ref=e784]: "06"
+              - paragraph [ref=e785]: CI/CD, Docker, AWS, Vercel cloud hosting
+      - generic [ref=e794]:
+        - generic [ref=e795]:
+          - heading "Ready to Evolve?" [level=2] [ref=e796]
+          - paragraph [ref=e797]: Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.
+          - paragraph [ref=e798]: Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.
+          - generic [ref=e799]:
+            - button "Hire MeHire Me" [ref=e800]:
+              - text: Hire MeHire Me
+              - img [ref=e801]
+            - link "View GitHubView GitHub" [ref=e803] [cursor=pointer]:
+              - /url: https://github.com/akira777777
+        - generic [ref=e804]:
+          - generic [ref=e805]:
+            - generic: 50+
+            - paragraph [ref=e806]: Projects Completed
+          - generic [ref=e807]:
+            - generic: 30+
+            - paragraph [ref=e808]: Happy Clients
+          - generic [ref=e809]:
+            - generic: 3+
+            - paragraph [ref=e810]: Years Experience
+      - generic [ref=e817]:
+        - generic [ref=e818]:
+          - heading "Ready to Evolve?" [level=2] [ref=e819]
+          - paragraph [ref=e820]: Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.
+          - paragraph [ref=e821]: Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.
+          - generic [ref=e822]:
+            - button "Hire MeHire Me" [ref=e823]:
+              - text: Hire MeHire Me
+              - img [ref=e824]
+            - link "View GitHubView GitHub" [ref=e826] [cursor=pointer]:
+              - /url: https://github.com/akira777777
+        - generic [ref=e827]:
+          - generic [ref=e828]:
+            - generic: 50+
+            - paragraph [ref=e829]: Projects Completed
+          - generic [ref=e830]:
+            - generic: 30+
+            - paragraph [ref=e831]: Happy Clients
+          - generic [ref=e832]:
+            - generic: 3+
+            - paragraph [ref=e833]: Years Experience
+      - region "Ready to Evolve?" [ref=e838]:
+        - generic [ref=e843]:
+          - generic [ref=e844]:
+            - heading "Ready to Evolve?" [level=2] [ref=e845]
+            - paragraph [ref=e846]: Have a project in mind? Let's work together to create something amazing.
+          - generic [ref=e847]:
+            - generic [ref=e848]:
+              - generic [ref=e849]:
+                - generic [ref=e850]: Name *
+                - textbox "Name required" [ref=e851]:
+                  - /placeholder: Your name
+              - generic [ref=e852]:
+                - generic [ref=e853]: Email *
+                - textbox "Email required" [ref=e854]:
+                  - /placeholder: your@email.com
+            - generic [ref=e855]:
+              - generic [ref=e856]: Subject (Optional)
+              - textbox "Subject (Optional)" [ref=e857]:
+                - /placeholder: Project subject
+              - paragraph [ref=e858]: Optional
+            - generic [ref=e859]:
+              - generic [ref=e860]: Message *
+              - textbox "Message required" [ref=e861]:
+                - /placeholder: Tell me about your project...
+              - paragraph [ref=e862]: Minimum 10 characters
+            - button "Send Message" [ref=e863] [cursor=pointer]
+          - generic [ref=e864]:
+            - paragraph [ref=e865]: "Or reach out through:"
+            - list [ref=e866]:
+              - listitem "Send email to fear75412@gmail.com" [ref=e867] [cursor=pointer]:
+                - img [ref=e868]
+                - generic [ref=e871]: Email
+              - listitem "Message on Telegram (opens in new tab)" [ref=e872] [cursor=pointer]:
+                - img [ref=e873]
+                - generic [ref=e875]: Telegram
+              - listitem "View GitHub profile (opens in new tab)" [ref=e876] [cursor=pointer]:
+                - img [ref=e877]
+                - generic [ref=e880]: GitHub
+      - button "Open chat" [ref=e882]:
+        - img [ref=e883]
+      - generic:
+        - generic:
+          - generic:
+            - img
+            - generic: TELEGRAM CHAT
+          - button "Expand panel":
+            - img
+        - log:
+          - 'article "Assistant: Please specify your name:"':
+            - generic:
+              - paragraph: "Please specify your name:"
+              - generic: 06:17 PM
+        - generic:
+          - generic:
+            - textbox "Please specify your name:"
+            - button "Send" [disabled]:
+              - img
+    - contentinfo "Site footer" [ref=e885]:
+      - generic [ref=e887]:
+        - heading "LET'S BUILD" [level=2] [ref=e888] [cursor=pointer]
+        - paragraph [ref=e889]: Ready for collaboration.
+        - navigation "Connect with me on social media" [ref=e890]:
+          - heading "Connect with me on social media" [level=3] [ref=e891]
+          - list [ref=e892]:
+            - listitem [ref=e893]:
+              - link "FEAR75412@GMAIL.COM" [ref=e894] [cursor=pointer]:
+                - /url: mailto:fear75412@gmail.com
+                - text: FEAR75412@GMAIL.COM
+                - img
+            - listitem [ref=e895]:
+              - link "CONTACTS — TELEGRAM" [ref=e896] [cursor=pointer]:
+                - /url: https://t.me/younghustle45
+                - generic [ref=e897]: CONTACTS — TELEGRAM
+                - img
+            - listitem [ref=e898]:
+              - link "GITHUB" [ref=e899] [cursor=pointer]:
+                - /url: https://github.com/akira777777
+                - text: GITHUB
+                - img
+            - listitem [ref=e900]:
+              - link "LINKEDIN" [ref=e901] [cursor=pointer]:
+                - /url: https://www.linkedin.com/
+                - text: LINKEDIN
+                - img
+        - paragraph [ref=e902]: © 2026 JULES.DEV // Full Stack Developer
+    - generic:
+      - button "Scroll to top":
+        - img
+```

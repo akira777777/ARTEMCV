@@ -51,20 +51,28 @@ const CursorTrail: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    // Optimized canvas context for better performance
+    const ctx = canvas.getContext('2d', { willReadFrequently: false });
     if (!ctx) return;
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap DPR at 2 for performance
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
+      ctx.scale(dpr, dpr);
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
     };
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', resize, { passive: true });
 
     const animate = () => {
       if (!ctx) return;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      ctx.clearRect(0, 0, width, height);
 
       const currentX = springX.get();
       const currentY = springY.get();
@@ -114,7 +122,7 @@ const CursorTrail: React.FC = () => {
       rafRef.current = requestAnimationFrame(animate);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     rafRef.current = requestAnimationFrame(animate);
 
     return () => {
@@ -165,4 +173,6 @@ const CursorTrail: React.FC = () => {
   );
 };
 
-export default React.memo(CursorTrail);
+const MemoizedCursorTrail = React.memo(CursorTrail);
+MemoizedCursorTrail.displayName = 'CursorTrail';
+export default MemoizedCursorTrail;
