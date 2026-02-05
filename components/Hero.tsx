@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, useScroll } from 'framer-motion';
 import { ArrowRight, Code2, Palette, Zap, Users } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { ServicesGrid } from './ServicesGrid';
-import { scrollToSection } from '../lib/utils';
 
 // Lazy load ParticleText to prevent chunk duplication
 const LazyParticleText = React.lazy(() => import('./InteractiveElements').then(m => ({ default: m.ParticleText })));
@@ -165,17 +164,14 @@ const Hero: React.FC = React.memo(() => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
 
-  /**
-   * Track scroll position for parallax effects
-   * Uses passive scroll listener for performance
-   */
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Use framer-motion useScroll for more performant scroll tracking
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   /**
    * Handles mouse movement for interactive effects
@@ -194,7 +190,6 @@ const Hero: React.FC = React.memo(() => {
     document.getElementById('works')?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  const name = 'JULES';
   const orbColors = [
     'linear-gradient(135deg, #ec4899, #f472b6)', // pink
     'linear-gradient(135deg, #22d3ee, #67e8f9)', // cyan
@@ -202,6 +197,7 @@ const Hero: React.FC = React.memo(() => {
     'linear-gradient(135deg, #3b82f6, #60a5fa)', // blue
     'linear-gradient(135deg, #10b981, #34d399)', // green
   ];
+
   const scrollToContact = useCallback(() => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   }, []);
@@ -339,30 +335,14 @@ const Hero: React.FC = React.memo(() => {
             mouseY={mousePosition.y}
           />
         ))}
-        style={{ width: `${Math.min(scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1) * 100, 100)}%` }}
->>>>>>> Remote
-      />
-
-      {/* Animated Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
       </div>
 
-      {/* Scroll Progress Bar */}
-      <div 
-        className="scroll-progress" 
-        style={{ width: `${Math.min(scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1) * 100, 100)}%` }}
+      {/* Scroll Progress Bar - Optimized with Framer Motion scaleX */}
+      <motion.div
+        className="scroll-progress fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary z-[100] origin-left"
+        style={{ scaleX }}
         role="progressbar"
-        aria-valuenow={Math.min(scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1) * 100, 100)}
-        aria-valuemin={0}
-        aria-valuemax={100}
         aria-label="Scroll progress indicator"
-      />
-
-      {/* Animated Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
-=======
-        style={{ width: `${Math.min(scrollY / Math.max(document.body.scrollHeight - window.innerHeight, 1) * 100, 100)}%` }}
->>>>>>> Remote
       />
 
       {/* Animated Background Elements */}
@@ -393,7 +373,7 @@ const Hero: React.FC = React.memo(() => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ 
               opacity: [0, 0.6, 0],
-              y: [-20, -window.innerHeight - 20]
+              y: [-20, -2000] // Large enough to fly off screen
             }}
             transition={{
               duration: 15,
@@ -405,52 +385,6 @@ const Hero: React.FC = React.memo(() => {
             role="presentation"
           />
         ))}
-        
-        {/* Blob Background Elements */}
-        <motion.div
-          className="blob-bg"
-          style={{
-            width: '400px',
-            height: '400px',
-            background: 'linear-gradient(45deg, #0EA5E9, #10B981)',
-            top: '10%',
-            left: '5%',
-          }}
-          animate={{
-            x: [0, 50, 0],
-            y: [0, -30, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          aria-hidden="true"
-          role="presentation"
-        />
-        
-        <motion.div
-          className="blob-bg"
-          style={{
-            width: '300px',
-            height: '300px',
-            background: 'linear-gradient(45deg, #F59E0B, #8B5CF6)',
-            bottom: '15%',
-            right: '8%',
-          }}
-          animate={{
-            x: [0, -40, 0],
-            y: [0, 20, 0],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-          aria-hidden="true"
-          role="presentation"
-        />
       </div>
 
       {/* Holographic Abstract Sphere with Parallax */}
@@ -458,7 +392,7 @@ const Hero: React.FC = React.memo(() => {
         className="holo-abstract-sphere top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"
         aria-hidden="true"
         style={{
-          y: scrollY * 0.3
+          y: useTransform(scrollYProgress, [0, 1], [0, 200])
         }}
       />
 

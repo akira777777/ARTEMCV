@@ -21,3 +21,7 @@
 ## 2026-02-02 - [Centralized Capability Detection]
 **Learning:** Redundant feature detection (like WebP support) in common components (OptimizedImage) scales resource usage linearly with the number of instances. Centralizing this in a utility with a cached promise reduces resource allocation to $O(1)$.
 **Action:** Move all browser capability checks to a centralized utility (e.g., `lib/utils.ts`) and use a cached promise to avoid redundant DOM operations and base64 decoding.
+
+## 2026-02-03 - [Synchronous Initialization from Capability Cache]
+**Learning:** Even with a cached promise for capability detection, using it in `useEffect` or `then()` triggers an extra re-render for every component instance upon mounting. For common components like images, this results in O(N) redundant renders.
+**Action:** Provide a synchronous getter for cached capability checks (e.g., `getWebPSupportSync()`). Use this in `useState` or during the initial render to avoid "mount -> check -> re-render" cycles entirely.

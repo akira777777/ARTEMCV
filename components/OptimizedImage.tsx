@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { checkWebPSupport } from '../lib/utils';
+import { checkWebPSupport, getWebPSupportSync } from '../lib/utils';
 
 interface OptimizedImageProps {
   src: string;
@@ -63,15 +63,20 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
 
   const webpSrc = getWebPSrc(src);
   const lqipSrc = getLQIPSrc(src);
-  const [currentSrc, setCurrentSrc] = useState(priority ? src : ''); // Don't load non-priority images until in viewport
+
+  // Use synchronous WebP support check for initial state to avoid extra re-render
+  const [supportsWebP, setSupportsWebP] = useState(() => getWebPSupportSync());
+  const [currentSrc, setCurrentSrc] = useState(priority ? (supportsWebP ? webpSrc : src) : '');
   const [lqipLoaded, setLqipLoaded] = useState(false);
 
-  // Check if browser supports WebP using centralized utility
-  const [supportsWebP, setSupportsWebP] = useState(true);
-
   useEffect(() => {
-    checkWebPSupport().then(setSupportsWebP);
-  }, []);
+    // Ensure the cache is initialized and update state if needed
+    checkWebPSupport().then((supported) => {
+      if (supported !== supportsWebP) {
+        setSupportsWebP(supported);
+      }
+    });
+  }, [supportsWebP]);
 
   // Intersection Observer for lazy loading
   useEffect(() => {
@@ -80,10 +85,6 @@ const OptimizedImage = forwardRef<HTMLImageElement, OptimizedImageProps>(({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Preload image to trigger loading
-          const img = new Image();
-          img.src = supportsWebP ? webpSrc : src;
-          
           setCurrentSrc(supportsWebP ? webpSrc : src);
           observer.unobserve(entry.target);
         }

@@ -58,19 +58,34 @@ export async function fetchWithTimeout(
  * Centralized WebP support detection to prevent redundant DOM operations
  */
 let supportsWebPCache: Promise<boolean> | null = null;
+let supportsWebPSync: boolean | null = null;
 
+/**
+ * Asynchronously checks for WebP support and caches the result.
+ */
 export function checkWebPSupport(): Promise<boolean> {
   if (typeof window === 'undefined') return Promise.resolve(false);
-
+  if (supportsWebPSync !== null) return Promise.resolve(supportsWebPSync);
   if (supportsWebPCache) return supportsWebPCache;
 
   supportsWebPCache = new Promise((resolve) => {
     const webP = new Image();
     webP.onload = webP.onerror = () => {
-      resolve(webP.height === 2);
+      const result = webP.height === 2;
+      supportsWebPSync = result;
+      resolve(result);
     };
     webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
   });
 
   return supportsWebPCache;
+}
+
+/**
+ * Synchronously returns the cached WebP support status.
+ * Returns true by default if the check hasn't completed yet to prioritize modern formats.
+ */
+export function getWebPSupportSync(): boolean {
+  if (typeof window === 'undefined') return false;
+  return supportsWebPSync ?? true;
 }
