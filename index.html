@@ -34,14 +34,16 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
     
-    <!-- Material Symbols (Google Icons) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=psychology,spatial_tracking" />
+    <!-- Material Symbols (Google Icons) - Loaded with display=block for better performance -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=psychology,spatial_tracking&display=block" />
     
     <!-- Preload critical above-the-fold images with WebP priority -->
-    <link rel="preload" href="/marketplace.webp" as="image" type="image/webp" importance="high">
-    <link rel="preload" href="/detailing.webp" as="image" type="image/webp" importance="high">
-    <link rel="preload" href="/barber.webp" as="image" type="image/webp" importance="high">
-    <link rel="preload" href="/dental.webp" as="image" type="image/webp" importance="high">
+    <link rel="preload" href="/detailing.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="/barber.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="/dental.webp" as="image" type="image/webp" fetchpriority="high">
+    
+    <!-- Prefetch non-critical images -->
+    <link rel="prefetch" href="/marketplace.webp" as="image" type="image/webp">
     
     <!-- DNS prefetch for external domains -->
     <link rel="dns-prefetch" href="https://picsum.photos">

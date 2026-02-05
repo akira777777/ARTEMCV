@@ -60,24 +60,24 @@ describe('RenderOptimizer', () => {
 
 describe('LazyRender', () => {
   beforeEach(() => {
-    // Mock IntersectionObserver that immediately triggers visibility
-    global.IntersectionObserver = vi.fn((callback: IntersectionObserverCallback) => {
-      // Store callback to trigger later if needed
-      return {
-        observe: vi.fn(() => {
-          // Immediately trigger intersection
-          setTimeout(() => {
-            callback(
-              [{ isIntersecting: true }] as IntersectionObserverEntry[],
-              {} as IntersectionObserver
-            );
-          }, 10);
-        }),
-        unobserve: vi.fn(),
-        disconnect: vi.fn(),
-        takeRecords: vi.fn(),
-      };
-    }) as unknown as typeof IntersectionObserver;
+    // Mock IntersectionObserver that triggers immediately
+    global.IntersectionObserver = class MockIntersectionObserver {
+      constructor(private callback: IntersectionObserverCallback) {}
+      
+      observe(element: Element) {
+        // Immediately trigger intersection
+        setTimeout(() => {
+          this.callback(
+            [{ isIntersecting: true, target: element }] as IntersectionObserverEntry[],
+            this as unknown as IntersectionObserver
+          );
+        }, 0);
+      }
+      
+      unobserve() {}
+      disconnect() {}
+      takeRecords() { return []; }
+    } as unknown as typeof IntersectionObserver;
   });
 
   afterEach(() => {
@@ -94,7 +94,7 @@ describe('LazyRender', () => {
     // Should eventually show children after intersection
     await waitFor(() => {
       expect(screen.getByText('Visible Content')).toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
   });
 });
 

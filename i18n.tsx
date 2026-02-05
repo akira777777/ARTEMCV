@@ -59,6 +59,7 @@ const translations: Record<Lang, Dict> = {
     'cta.stat.projects': 'Projects Completed',
     'cta.stat.clients': 'Happy Clients',
     'cta.stat.experience': 'Years Experience',
+    'cta.stat.awards': 'Awards',
 
     'project.1.title': 'Detailing Hub 3D',
     'project.1.desc': 'Interactive 3D car configurator using React Three Fiber. Custom shader implementation for realistic paint finishes and real-time reflection probes.',
@@ -288,6 +289,7 @@ const translations: Record<Lang, Dict> = {
     'cta.stat.projects': 'Завершено проектов',
     'cta.stat.clients': 'Довольных клиентов',
     'cta.stat.experience': 'Лет опыта',
+    'cta.stat.awards': 'Награды',
 
     'project.1.title': 'Barber Shop',
     'project.1.desc': 'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',
@@ -295,6 +297,8 @@ const translations: Record<Lang, Dict> = {
     'project.2.desc': 'Лендинг и запись к врачу: каталог услуг, интерактивные планы лечения, отзывы пациентов. Уделено внимание доступности и скорости загрузки.',
     'project.3.title': 'Game Marketplace',
     'project.3.desc': 'Современный маркетплейс игр с каталогом, корзиной покупок, системой фильтрации и адаптивным интерфейсом. Реализованы анимации и плавные переходы.',
+    'project.4.title': 'Detailing Service',
+    'project.4.desc': 'Лендинг для сервиса детейлинга.',
     'contact.help.optional': 'Необязательно',
     'contact.help.message_min': 'Минимум 10 символов',
 
@@ -519,6 +523,7 @@ const translations: Record<Lang, Dict> = {
     'cta.stat.projects': 'Dokončené projekty',
     'cta.stat.clients': 'Spokojení klienti',
     'cta.stat.experience': 'Roky praxe',
+    'cta.stat.awards': 'Ocenění',
 
     'project.1.title': 'Detailing Hub 3D',
     'project.1.desc': 'Interaktivní 3D konfigurátor aut postavený na React Three Fiber. Vlastní shadery pro realistické laky a odrazy v reálném čase.',
