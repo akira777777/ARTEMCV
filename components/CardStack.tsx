@@ -236,4 +236,4 @@ export const VerticalCardStack: React.FC = React.memo(() => {
       ))}
     </div>
   );
-};
+});

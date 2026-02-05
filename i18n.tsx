@@ -17,6 +17,8 @@ const translations: Record<Lang, Dict> = {
     'nav.about': 'ABOUT',
     'nav.contact': 'CONTACT',
     'nav.logo.label': 'Artem Mikhailov Portfolio - Return to home',
+    'nav.aria.open': 'Open navigation menu',
+    'nav.aria.close': 'Close navigation menu',
     'skip.content': 'Skip to content',
 
     'works.badge': 'FEATURED WORK (2026)',
@@ -269,17 +271,8 @@ const translations: Record<Lang, Dict> = {
     'contact.error.timeout': 'Таймаут сети. Пожалуйста, попробуйте позже.',
     'contact.reach_out': 'Или свяжитесь через:',
 
-    'cta.title': 'Давайте создадим что-то классное вместе',
-    'cta.subtitle': 'Готовы воплотить ваше видение в жизнь? Я специализируюсь на создании высокопроизводительных интерактивных веб-приложений, адаптированных под ваши потребности.',
-    'cta.button': 'Начать сотрудничество',
-    'cta.secondary': 'Смотреть GitHub',
-
-    'project.1.title': 'Barber Shop',
-    'project.1.desc': 'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',
-    'project.2.title': 'Dental Clinic Vakalova',
-    'project.2.desc': 'Лендинг и запись к врачу: каталог услуг, интерактивные планы лечения, отзывы пациентов. Уделено внимание доступности и скорости загрузки.',
-    'project.3.title': 'Game Marketplace',
-    'project.3.desc': 'Современный маркетплейс игр с каталогом, корзиной покупок, системой фильтрации и адаптивным интерфейсом. Реализованы анимации и плавные переходы.',
+    'nav.aria.open': 'Открыть меню навигации',
+    'nav.aria.close': 'Закрыть меню навигации',
     'contact.help.optional': 'Необязательно',
     'contact.help.message_min': 'Минимум 10 символов',
 
@@ -469,6 +462,8 @@ const translations: Record<Lang, Dict> = {
     'nav.about': 'O MNĚ',
     'nav.contact': 'KONTAKT',
     'nav.logo.label': 'Portfolio Artema Michajlova - Návrat na domovskou stránku',
+    'nav.aria.open': 'Otevřít menu navigace',
+    'nav.aria.close': 'Zavřít menu navigace',
     'skip.content': 'Přejít na obsah',
 
     'works.badge': 'VÝBĚROVÁ PRÁCE (2026)',
