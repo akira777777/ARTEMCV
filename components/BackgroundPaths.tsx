@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useState, useCallback, ReactNode } from 'react';
+import React, { useRef, useState, useCallback, useMemo, ReactNode } from 'react';
 import { motion, useSpring, useMotionValue } from "framer-motion"
 import { useReducedMotion } from '../lib/hooks';
 
@@ -144,16 +144,21 @@ const MagneticButton: React.FC<MagneticButtonProps> = React.memo(({
     </motion.button>
   );
 });
-import React, { useMemo } from 'react';
-import { motion } from "framer-motion"
-import MagneticButton from './MagneticButton';
 
 interface FloatingPathsProps {
   position: number;
 }
 
+interface PathData {
+  id: number;
+  d: string;
+  color: string;
+  width: number;
+  duration: number;
+}
+
 const FloatingPaths: React.FC<FloatingPathsProps> = React.memo(({ position }) => {
-  const paths = useMemo(() => Array.from({ length: 36 }, (_, i) => ({
+  const paths = useMemo<PathData[]>(() => Array.from({ length: 36 }, (_, i) => ({
     id: i,
     d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
       380 - i * 5 * position

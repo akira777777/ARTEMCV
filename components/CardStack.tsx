@@ -236,4 +236,6 @@ export const VerticalCardStack: React.FC = React.memo(() => {
       ))}
     </div>
   );
-};
+});
+
+VerticalCardStack.displayName = 'VerticalCardStack';

@@ -1,0 +1,46 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('Проверка новых accessibility функций', () => {
+  test('Проверка наличия новых строк перевода в DOM', async ({ page }) => {
+    console.log('🔍 Проверяем новые accessibility строки в DOM...');
+    
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    
+    // Проверяем английские строки
+    const enStrings = [
+      'Accessibility Options',
+      'Close accessibility panel',
+      'Open accessibility panel',
+      'Text Size',
+      'Contrast',
+      'Reduce Motion'
+    ];
+    
+    for (const str of enStrings) {
+      const found = await page.locator(`text="${str}"`).count();
+      console.log(`🇬🇧 "${str}": ${found > 0 ? 'найдено' : 'не найдено'}`);
+    }
+    
+    // Переключаемся на русский
+    await page.click('button:has-text("RU")');
+    await page.waitForTimeout(1000);
+    
+    // Проверяем русские строки
+    const ruStrings = [
+      'Настройки доступности',
+      'Закрыть панель доступности',
+      'Открыть панель доступности',
+      'Размер текста',
+      'Контраст',
+      'Уменьшить движение'
+    ];
+    
+    for (const str of ruStrings) {
+      const found = await page.locator(`text="${str}"`).count();
+      console.log(`🇷🇺 "${str}": ${found > 0 ? 'найдено' : 'не найдено'}`);
+    }
+    
+    console.log('✅ Проверка новых строк завершена!');
+  });
+});

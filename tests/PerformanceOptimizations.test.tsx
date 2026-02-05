@@ -6,7 +6,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Navigation } from '../components/Navigation';
 import { SimpleTelegramChat } from '../components/SimpleTelegramChat';
 import { ScrollToTop } from '../components/ScrollToTop';
-import { SkipLink } from '../components/SkipLink';
+import SkipLink from '../components/SkipLink';
 
 // Общий тест для проверки оптимизаций
 describe('Performance Optimizations Verification', () => {

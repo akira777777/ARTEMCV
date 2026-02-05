@@ -220,17 +220,13 @@ export const SemanticHeading: React.FC<HeadingProps> = ({
   className = '',
   id 
 }) => {
-  const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
+  const HeadingTag = `h${level}` as const;
   
-  return (
-    <HeadingTag 
-      className={className} 
-      id={id}
-      tabIndex={-1} // Allow programmatic focus for skip links
-    >
-      {children}
-    </HeadingTag>
-  );
+  return React.createElement(HeadingTag, {
+    className,
+    id,
+    tabIndex: -1
+  }, children);
 };
 
 /**

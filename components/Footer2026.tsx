@@ -46,4 +46,6 @@ export const Footer2026: React.FC = React.memo(() => {
       </div>
     </footer>
   );
-};
+});
+
+Footer2026.displayName = 'Footer2026';
