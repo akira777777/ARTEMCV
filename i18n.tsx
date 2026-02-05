@@ -18,6 +18,9 @@ const translations: Record<Lang, Dict> = {
     'nav.contact': 'CONTACT',
     'nav.language': 'Language',
     'nav.logo.label': 'Artem Mikhailov Portfolio - Return to home',
+    'nav.aria.open': 'Open navigation menu',
+    'nav.aria.close': 'Close navigation menu',
+    'nav.aria.label': 'Mobile navigation',
     'skip.content': 'Skip to content',
 
     'works.badge': 'FEATURED WORK (2026)',
@@ -250,6 +253,9 @@ const translations: Record<Lang, Dict> = {
     'nav.contact': 'КОНТАКТ',
     'nav.language': 'Язык',
     'nav.logo.label': 'Портфолио Артема Михайлова - Вернуться на главную',
+    'nav.aria.open': 'Открыть меню навигации',
+    'nav.aria.close': 'Закрыть меню навигации',
+    'nav.aria.label': 'Мобильная навигация',
     'skip.content': 'Перейти к контенту',
 
     'works.badge': 'ВЫБОРОЧНЫЕ РАБОТЫ (2026)',
@@ -480,6 +486,9 @@ const translations: Record<Lang, Dict> = {
     'nav.contact': 'KONTAKT',
     'nav.language': 'Jazyk',
     'nav.logo.label': 'Portfolio Artema Michajlova - Návrat na domovskou stránku',
+    'nav.aria.open': 'Otevřít navigační menu',
+    'nav.aria.close': 'Zavřít navigační menu',
+    'nav.aria.label': 'Mobilní navigace',
     'skip.content': 'Přejít na obsah',
 
     'works.badge': 'VÝBĚROVÁ PRÁCE (2026)',

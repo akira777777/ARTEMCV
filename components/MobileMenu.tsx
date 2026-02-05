@@ -110,7 +110,7 @@ export const MobileMenu: React.FC = () => {
       <button
         onClick={() => setIsOpen(true)}
         className="md:hidden p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        aria-label="Open navigation menu"
+        aria-label={t('nav.aria.open')}
       >
         <Menu className="w-6 h-6 text-white" />
       </button>
@@ -135,7 +135,7 @@ export const MobileMenu: React.FC = () => {
               className="fixed top-0 right-0 h-full w-4/5 max-w-sm bg-[#0a0a0a] z-50 shadow-xl"
               role="dialog"
               aria-modal="true"
-              aria-label="Mobile navigation menu"
+              aria-label={t('nav.aria.label')}
             >
               <div className="flex flex-col h-full">
                 <div className="p-6 border-b border-white/10 flex justify-between items-center">
@@ -145,14 +145,14 @@ export const MobileMenu: React.FC = () => {
                   <button
                     onClick={() => setIsOpen(false)}
                     className="p-2 rounded-lg hover:bg-white/10"
-                    aria-label="Close navigation menu"
+                    aria-label={t('nav.aria.close')}
                   >
                     <X className="w-6 h-6 text-white" />
                   </button>
                 </div>
                 
                 <div className="flex-1 overflow-y-auto p-4">
-                  <nav aria-label="Mobile navigation">
+                  <nav aria-label={t('nav.aria.label')}>
                     <ul className="space-y-1">
                       {navItems.map((item, index) => (
                         <li key={item.key}>
