@@ -220,8 +220,7 @@ export const SemanticHeading: React.FC<HeadingProps> = ({
   className = '',
   id 
 }) => {
-  const HeadingTag = `h${level}` as any;
-  const HeadingTag = `h${level}` as const;
+  const HeadingTag = `h${level}` as React.ElementType;
   
   return React.createElement(HeadingTag, {
     className,

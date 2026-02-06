@@ -87,64 +87,37 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
   // Handle message submission
   const handleSendMessage = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    
     const trimmedInput = inputValue.trim();
-    if (!trimmedInput) return;
-    if (loading) return;
+    if (!trimmedInput || loading) return;
 
-    // Check rate limit (5 seconds between messages)
     const now = Date.now();
     if (lastSubmitRef.current && now - lastSubmitRef.current < 5_000) {
       setError(t('chat.error.wait'));
       return;
     }
 
-    // Conversational name entry logic
-    let currentName = userName.trim();
+    const currentName = userName.trim();
     if (!currentName) {
-      const promptName = inputValue.trim();
-      if (!promptName) {
-        setError(t('chat.error.name_required'));
-        return;
-      }
-      currentName = promptName;
-      setUserName(currentName);
+      setUserName(trimmedInput);
       try {
-        localStorage.setItem('chat_user_name', currentName);
+        localStorage.setItem('chat_user_name', trimmedInput);
       } catch {}
 
-      // Clear input and add user's name message
       setInputValue('');
+      setError(null);
       setMessages(prev => [
         ...prev,
-        { id: createId(), role: 'user', text: currentName, timestamp: new Date() },
+        { id: createId(), role: 'user', text: trimmedInput, timestamp: new Date() },
         { id: createId(), role: 'bot', text: t('chat.bot.welcome'), timestamp: new Date() }
       ]);
       return;
     }
 
-    const finalName = currentName;
-    const userMessage = inputValue.trim();
-    // Handle name entry if not provided
-    if (!userName.trim()) {
-      setUserName(trimmedInput);
-      setInputValue('');
-      try {
-        localStorage.setItem('chat_user_name', trimmedInput);
-      } catch {
-        // Ignore localStorage errors
-      }
-      return;
-    }
-
-    const currentUserName = userName.trim();
     setInputValue('');
     setError(null);
 
-    // Add user message to UI
-    const userMsgId = createId();
     setMessages(prev => [...prev, {
-      id: userMsgId,
+      id: createId(),
       role: 'user',
       text: trimmedInput,
       timestamp: new Date()
@@ -156,15 +129,12 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     abortControllerRef.current = controller;
 
     try {
-      // Send to Telegram via /api/send-telegram
       const res = await fetchWithTimeout('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: finalName,
-          email: 'chat@telegram.local', // Dummy email для совместимости с API
-          name: currentUserName,
-          email: 'chat@telegram.local', // Dummy email ?????? ?????????????????????????? ?? API
+          name: currentName,
+          email: 'chat@telegram.local',
           subject: 'Chat Message',
           message: trimmedInput
         }),
@@ -172,7 +142,6 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       });
 
       if (!res.ok) {
-        // Local dev mode may return 404
         if (res.status === 404 && window.location.hostname === 'localhost') {
           devLog.warn('API endpoint not available in dev mode.');
         } else {
@@ -181,11 +150,9 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         }
       }
 
-      // Add bot response
-      const botMsgId = createId();
       if (isMountedRef.current) {
         setMessages(prev => [...prev, {
-          id: botMsgId,
+          id: createId(),
           role: 'bot',
           text: t('chat.bot.success'),
           timestamp: new Date()
@@ -196,20 +163,17 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     } catch (err: unknown) {
       if (!isMountedRef.current) return;
       devLog.error('Error sending message:', err);
-      
+
       let errorText = t('chat.error.sending') || 'Error sending message';
       if ((err as Error)?.name === 'AbortError') {
         errorText = t('chat.error.timeout') || 'Timeout sending message. Please try again.';
       } else if ((err as Error)?.message) {
         errorText = (err as Error).message;
       }
-      
+
       setError(errorText);
-      
-      // Add error message to chat
-      const errorMsgId = createId();
       setMessages(prev => [...prev, {
-        id: errorMsgId,
+        id: createId(),
         role: 'bot',
         text: `вќЊ ${errorText}`,
         timestamp: new Date()

@@ -36,7 +36,6 @@ HTMLCanvasElement.prototype.getBoundingClientRect = vi.fn(() => ({
   bottom: 600,
   x: 0,
   y: 0,
-  toJSON: () => {}
   toJSON: () => ({}),
 }));
 
