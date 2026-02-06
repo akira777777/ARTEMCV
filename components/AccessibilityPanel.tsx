@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useI18n } from '../i18n';
+import { useAccessibility } from './AccessibilityProvider';
 
 /**
  * AccessibilityPanel - Component for managing accessibility features
@@ -7,60 +8,32 @@ import { useI18n } from '../i18n';
  */
 export const AccessibilityPanel: React.FC = () => {
   const { t } = useI18n();
-  const [fontSize, setFontSize] = useState<'normal' | 'large' | 'larger'>('normal');
-  const [contrast, setContrast] = useState<'normal' | 'high'>('normal');
-  const [reduceMotion, setReduceMotion] = useState(false);
-  const [showFocus, setShowFocus] = useState(true);
+  const {
+    fontSize,
+    highContrast,
+    reducedMotion,
+    focusVisible,
+    setFontSize,
+    setHighContrast,
+    setReducedMotion,
+    setFocusVisible,
+  } = useAccessibility();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Apply accessibility settings to document
-  useEffect(() => {
-    document.body.className = document.body.className.replace(/font-size-\w+/g, '');
-    document.body.classList.add(`font-size-${fontSize}`);
-    
-    if (contrast === 'high') {
-      document.body.classList.add('high-contrast');
-    } else {
-      document.body.classList.remove('high-contrast');
-    }
-    
-    if (reduceMotion) {
-      document.body.classList.add('reduce-motion');
-    } else {
-      document.body.classList.remove('reduce-motion');
-    }
-  }, [fontSize, contrast, reduceMotion]);
+  const fontSizeLevel = useMemo(() => {
+    if (fontSize >= 125) return 'larger';
+    if (fontSize >= 110) return 'large';
+    return 'normal';
+  }, [fontSize]);
 
-  // Save settings to localStorage
-  useEffect(() => {
-    const settings = {
-      fontSize,
-      contrast,
-      reduceMotion,
-      showFocus
+  const setFontSizeLevel = useCallback((level: 'normal' | 'large' | 'larger') => {
+    const mapping = {
+      normal: 100,
+      large: 115,
+      larger: 130,
     };
-    try {
-      localStorage.setItem('accessibility-settings', JSON.stringify(settings));
-    } catch (e) {
-      // localStorage might be blocked
-    }
-  }, [fontSize, contrast, reduceMotion, showFocus]);
-
-  // Load settings from localStorage on mount
-  useEffect(() => {
-    try {
-      const savedSettings = localStorage.getItem('accessibility-settings');
-      if (savedSettings) {
-        const parsed = JSON.parse(savedSettings);
-        setFontSize(parsed.fontSize || 'normal');
-        setContrast(parsed.contrast || 'normal');
-        setReduceMotion(parsed.reduceMotion || false);
-        setShowFocus(parsed.showFocus !== false);
-      }
-    } catch (e) {
-      // Ignore localStorage errors
-    }
-  }, []);
+    setFontSize(mapping[level]);
+  }, [setFontSize]);
 
   const togglePanel = useCallback(() => {
     setIsOpen(prev => !prev);
@@ -92,6 +65,7 @@ export const AccessibilityPanel: React.FC = () => {
           isOpen ? 'translate-y-0' : 'translate-y-[120%]'
         }`}
         role="region"
+        id="accessibility-panel"
         aria-label={t('accessibility.title')}
       >
         <div className="bg-black/80 backdrop-blur-md border border-white/20 rounded-xl p-4 shadow-xl w-80">
@@ -116,14 +90,14 @@ export const AccessibilityPanel: React.FC = () => {
                 {(['normal', 'large', 'larger'] as const).map(size => (
                   <button
                     key={size}
-                    onClick={() => setFontSize(size)}
+                    onClick={() => setFontSizeLevel(size)}
                     className={`px-3 py-1 text-xs rounded border ${
-                      fontSize === size
+                      fontSizeLevel === size
                         ? 'bg-indigo-500 border-indigo-500 text-white'
                         : 'bg-white/10 border-white/20 text-white hover:bg-white/20'
                     }`}
                     role="radio"
-                    aria-checked={fontSize === size}
+                    aria-checked={fontSizeLevel === size}
                   >
                     {fontSizeLabels[size]}
                   </button>
@@ -140,14 +114,14 @@ export const AccessibilityPanel: React.FC = () => {
                 {(['normal', 'high'] as const).map(level => (
                   <button
                     key={level}
-                    onClick={() => setContrast(level)}
+                    onClick={() => setHighContrast(level === 'high')}
                     className={`px-3 py-1 text-xs rounded border ${
-                      contrast === level
+                      highContrast === (level === 'high')
                         ? 'bg-indigo-500 border-indigo-500 text-white'
                         : 'bg-white/10 border-white/20 text-white hover:bg-white/20'
                     }`}
                     role="radio"
-                    aria-checked={contrast === level}
+                    aria-checked={highContrast === (level === 'high')}
                   >
                     {contrastLabels[level]}
                   </button>
@@ -161,16 +135,16 @@ export const AccessibilityPanel: React.FC = () => {
                 {t('accessibility.reduce_motion')}
               </span>
               <button
-                onClick={() => setReduceMotion(!reduceMotion)}
+                onClick={() => setReducedMotion(!reducedMotion)}
                 className={`relative inline-flex h-5 w-9 items-center rounded-full ${
-                  reduceMotion ? 'bg-indigo-500' : 'bg-white/20'
+                  reducedMotion ? 'bg-indigo-500' : 'bg-white/20'
                 }`}
                 role="switch"
-                aria-checked={reduceMotion}
+                aria-checked={reducedMotion}
               >
                 <span
                   className={`inline-block h-3 w-3 transform rounded-full bg-white transition ${
-                    reduceMotion ? 'translate-x-5' : 'translate-x-1'
+                    reducedMotion ? 'translate-x-5' : 'translate-x-1'
                   }`}
                 />
               </button>
@@ -182,16 +156,16 @@ export const AccessibilityPanel: React.FC = () => {
                 {t('accessibility.focus_indicator')}
               </span>
               <button
-                onClick={() => setShowFocus(!showFocus)}
+                onClick={() => setFocusVisible(!focusVisible)}
                 className={`relative inline-flex h-5 w-9 items-center rounded-full ${
-                  showFocus ? 'bg-indigo-500' : 'bg-white/20'
+                  focusVisible ? 'bg-indigo-500' : 'bg-white/20'
                 }`}
                 role="switch"
-                aria-checked={showFocus}
+                aria-checked={focusVisible}
               >
                 <span
                   className={`inline-block h-3 w-3 transform rounded-full bg-white transition ${
-                    showFocus ? 'translate-x-5' : 'translate-x-1'
+                    focusVisible ? 'translate-x-5' : 'translate-x-1'
                   }`}
                 />
               </button>

@@ -14,6 +14,7 @@ interface AccessibilityContextType {
 const AccessibilityContext = createContext<AccessibilityContextType | null>(null);
 
 const STORAGE_KEY = 'accessibility_preferences';
+const LEGACY_STORAGE_KEY = 'accessibility-settings';
 
 interface AccessibilityPreferences {
   fontSize: number;
@@ -40,6 +41,28 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
           return { ...defaultPreferences, ...JSON.parse(stored) };
+        }
+        const legacyStored = localStorage.getItem(LEGACY_STORAGE_KEY);
+        if (legacyStored) {
+          const legacy = JSON.parse(legacyStored) as {
+            fontSize?: 'normal' | 'large' | 'larger';
+            contrast?: 'normal' | 'high';
+            reduceMotion?: boolean;
+            showFocus?: boolean;
+          };
+
+          const legacyFontSize = legacy.fontSize;
+          const fontSize =
+            legacyFontSize === 'large' ? 115 :
+            legacyFontSize === 'larger' ? 130 :
+            defaultPreferences.fontSize;
+
+          return {
+            fontSize,
+            highContrast: legacy.contrast === 'high',
+            reducedMotion: legacy.reduceMotion ?? defaultPreferences.reducedMotion,
+            focusVisible: legacy.showFocus ?? defaultPreferences.focusVisible,
+          };
         }
       } catch {
         // Ignore storage errors
@@ -150,7 +173,7 @@ const defaultPreferences: AccessibilityPreferences = {
   fontSize: 100,
   highContrast: false,
   reducedMotion: false,
-  focusVisible: false,
+  focusVisible: true,
 };
 
 export const useAccessibility = (): AccessibilityContextType => {

@@ -88,6 +88,13 @@ export class TimeoutError extends ApiRequestError {
   }
 }
 
+export class RequestAbortedError extends ApiRequestError {
+  constructor(message = 'Request aborted') {
+    super(message, 0, undefined, false);
+    this.name = 'RequestAbortedError';
+  }
+}
+
 // ============================================================================
 // Utility Functions
 // ============================================================================
@@ -174,12 +181,20 @@ export function createApiClient(config: ApiClientConfig) {
 
         // Parse response body
         let data: T;
-        const contentType = response.headers.get('content-type');
-        
-        if (contentType?.includes('application/json')) {
-          data = await response.json() as T;
+        const contentType = response.headers.get('content-type') || '';
+        const rawText = await response.text();
+        const hasBody = rawText.length > 0;
+
+        if (!hasBody) {
+          data = undefined as T;
+        } else if (contentType.includes('application/json')) {
+          try {
+            data = JSON.parse(rawText) as T;
+          } catch {
+            data = rawText as unknown as T;
+          }
         } else {
-          data = await response.text() as unknown as T;
+          data = rawText as unknown as T;
         }
 
         // Handle HTTP errors
@@ -207,6 +222,9 @@ export function createApiClient(config: ApiClientConfig) {
           }
         } else if (error instanceof Error) {
           if (error.name === 'AbortError') {
+            if (requestConfig.signal?.aborted) {
+              throw new RequestAbortedError();
+            }
             throw new TimeoutError();
           }
           

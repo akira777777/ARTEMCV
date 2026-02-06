@@ -6,8 +6,8 @@
 **Modern Full-Stack Developer Portfolio with Interactive Design**
 
 [![React](https://img.shields.io/badge/React-19.2.4-61dafb?logo=react)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.2-3178c6?logo=typescript)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.2.0-646cff?logo=vite)](https://vitejs.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178c6?logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.4.1-646cff?logo=vite)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.18-38bdf8?logo=tailwind-css)](https://tailwindcss.com/)
 
 [Live Demo](https://ai.studio/apps/drive/1Mc19lc1MymRczbhBJqCkLSam8B9dkyZI) • [Setup Guide](SETUP.md)
@@ -46,7 +46,7 @@ A high-performance, motion-rich portfolio website showcasing full-stack developm
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **Node.js** (v18+ recommended)
+- **Node.js** (v20+ recommended)
 - **npm** or **pnpm**
 
 ### Installation
@@ -77,17 +77,20 @@ A high-performance, motion-rich portfolio website showcasing full-stack developm
 
 ### Alternative Development Commands
 ```bash
-# Dev server with cache clearing (recommended for consistent results)
-npm run dev:clean
-
-# Build and preview production version locally
-npm run dev:prod
-
 # Run tests
 npm run test
 
+# Run tests once
+npm run test:run
+
 # Type checking
 npm run typecheck
+
+# Database migration (serverless contact analytics)
+npm run db:migrate
+
+# Optimize images
+npm run images:optimize
 ```
 
 ## 🏗️ Project Structure
@@ -115,10 +118,10 @@ ARTEMCV/
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **Framework**: React 19.2.4 with TypeScript 5.8.2
-- **Build Tool**: Vite 6.2.0
+- **Framework**: React 19.2.4 with TypeScript 5.8.3
+- **Build Tool**: Vite 6.4.1
 - **Styling**: Tailwind CSS 4.1.18
-- **Animation**: Framer Motion 12.29.2
+- **Animation**: Framer Motion 12.29.3
 - **Icons**: Lucide React 0.563.0
 
 ### Backend & Deployment
@@ -199,13 +202,13 @@ ALLOWED_ORIGINS=https://yourdomain.com
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Start development server |
-| `npm run dev:clean` | Dev server with cache clearing |
-| `npm run dev:prod` | Build and preview production locally |
 | `npm run build` | Build for production |
 | `npm run preview` | Preview production build |
 | `npm run test` | Run tests in watch mode |
 | `npm run test:run` | Run tests once |
 | `npm run typecheck` | Check TypeScript types |
+| `npm run db:migrate` | Run contact analytics migrations |
+| `npm run images:optimize` | Optimize image assets |
 
 ## 🤝 Contributing
 
