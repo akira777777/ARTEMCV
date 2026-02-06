@@ -13,7 +13,7 @@ const BentoGrid: React.FC = () => {
   const tertiaryProject = PROJECTS[1]; // Dental Clinic
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-32" id="work" aria-labelledby="work-title">
+    <section className="max-w-7xl mx-auto px-6 py-32" id="works" aria-labelledby="work-title">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[300px]">
         {/* Main Project: Detailing Hub */}
         <motion.div

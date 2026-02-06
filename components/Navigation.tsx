@@ -47,63 +47,61 @@ export const Navigation: React.FC = React.memo(() => {
   const [active, setActive] = useState('nav.home');
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollYRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
-  const sectionCacheRef = useRef<Map<string, HTMLElement | null>>(new Map());
 
-  // Cache section elements and update when items change
+  // Use IntersectionObserver for high-performance section tracking
+  // This avoids calling getBoundingClientRect on every scroll frame,
+  // which causes forced synchronous layouts (reflows).
   useEffect(() => {
-    const newCache = new Map<string, HTMLElement | null>();
-    navItems.forEach(item => {
-      newCache.set(item.href, document.getElementById(item.href.substring(1)));
-    });
-    sectionCacheRef.current = newCache;
-  }, [navItems]); // Add navItems as dependency to refresh cache when items change
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        // We use a small threshold and rootMargin to detect which section is
+        // currently prominent in the viewport.
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          const item = navItems.find(i => i.href === `#${id}`);
+          if (item) {
+            setActive(item.key);
+          }
+        }
+      });
+    };
 
-  // Optimize scroll detection with debouncing
-  const updateActiveSection = useCallback(() => {
-    for (const item of navItems) {
-      const element = sectionCacheRef.current.get(item.href);
-      if (!element) continue;
-      
-      const rect = element.getBoundingClientRect();
-      if (rect.top >= -100 && rect.top <= 300) {
-        setActive(item.key);
-        break;
+    const observer = new IntersectionObserver(observerCallback, {
+      // Trigger when section occupies the top-middle part of viewport
+      rootMargin: '-20% 0px -70% 0px',
+      threshold: 0
+    });
+
+    navItems.forEach(item => {
+      const el = document.getElementById(item.href.substring(1));
+      if (el) {
+        observer.observe(el);
       }
-    }
+    });
+
+    return () => observer.disconnect();
   }, []);
 
-  const handleScroll = useCallback(() => {
-    if (rafRef.current !== null) return;
-
-    rafRef.current = requestAnimationFrame(() => {
+  // Use a separate lightweight scroll listener only for header visibility
+  useEffect(() => {
+    const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // Update visibility
       if (currentScrollY < 50) {
         setIsVisible(true);
-      } else if (currentScrollY > lastScrollYRef.current) {
+      } else if (currentScrollY > lastScrollYRef.current + 10) {
+        // Scrolling down: hide header
         setIsVisible(false);
-      } else {
+      } else if (currentScrollY < lastScrollYRef.current - 10) {
+        // Scrolling up: show header
         setIsVisible(true);
       }
       lastScrollYRef.current = currentScrollY;
-
-      // Update active section
-      updateActiveSection();
-      rafRef.current = null;
-    });
-  }, [updateActiveSection]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-      }
     };
-  }, [handleScroll]);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();

@@ -350,6 +350,7 @@ const Hero: React.FC = React.memo(() => {
         ))}
       </div>
 
+      {/* Animated Background Elements */}
       {/* Scroll Progress Bar */}
       <div 
         className="scroll-progress" 

@@ -8,11 +8,11 @@ vi.mock('../lib/hooks', () => ({
   useReducedMotion: vi.fn(() => false)
 }));
 
-vi.mock('./LanguageSwitcher', () => ({
+vi.mock('../components/LanguageSwitcher', () => ({
   default: () => <div>LanguageSwitcher</div>
 }));
 
-vi.mock('./MobileMenu', () => ({
+vi.mock('../components/MobileMenu', () => ({
   MobileMenu: () => <div>MobileMenu</div>
 }));
 
