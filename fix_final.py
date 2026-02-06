@@ -1,4 +1,12 @@
-import React from 'react';
+import os
+
+def write_file(path, content):
+    with open(path, 'w') as f:
+        f.write(content)
+    print(f"Updated {path}")
+
+# 1. FloatingParticleCanvas.test.tsx
+fp_content = """import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { FloatingParticleCanvas } from '../components/FloatingParticleCanvas';
@@ -56,12 +64,27 @@ describe('FloatingParticleCanvas', () => {
   it('responds to mouse movement', async () => {
     render(<FloatingParticleCanvas interactionRadius={100} />);
     const canvas = screen.getByRole('presentation');
-    
+
     fireEvent.mouseMove(canvas, { clientX: 100, clientY: 100 });
-    
+
     // Wait for interactions to be processed
     await waitFor(() => {
       expect(canvas).toBeInTheDocument();
     });
   });
 });
+"""
+write_file('tests/FloatingParticleCanvas.test.tsx', fp_content)
+
+# 2. PerformanceOptimizations.test.tsx
+po_path = 'tests/PerformanceOptimizations.test.tsx'
+with open(po_path, 'r') as f:
+    content = f.read()
+
+# Check if it ends with });
+if not content.strip().endswith('});'):
+    with open(po_path, 'a') as f:
+        f.write('\n});\n')
+    print(f"Appended }}); to {po_path}")
+else:
+    print(f"{po_path} already ends with }});")

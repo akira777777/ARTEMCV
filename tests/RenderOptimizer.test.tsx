@@ -5,7 +5,7 @@ import { RenderOptimizer, LazyRender, FPSMonitor } from '../components/RenderOpt
 
 // Mock requestIdleCallback
 global.requestIdleCallback = vi.fn((cb) => {
-  return setTimeout(cb, 1);
+  return 123;
 });
 global.cancelIdleCallback = vi.fn((id) => {
   clearTimeout(id);

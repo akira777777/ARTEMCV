@@ -21,3 +21,7 @@
 ## 2026-02-02 - [Centralized Capability Detection]
 **Learning:** Redundant feature detection (like WebP support) in common components (OptimizedImage) scales resource usage linearly with the number of instances. Centralizing this in a utility with a cached promise reduces resource allocation to $O(1)$.
 **Action:** Move all browser capability checks to a centralized utility (e.g., `lib/utils.ts`) and use a cached promise to avoid redundant DOM operations and base64 decoding.
+
+## 2026-02-06 - [Global Code Repair]
+**Learning:** Identified widespread syntax errors involving  (missing closing parenthesis) and severe merge conflicts in . Automated scripts using Python regex were effective for bulk fixes.
+**Action:** When refactoring  components, ensure the closing  is preserved. For merge conflicts, manual or scripted surgical repair is safer than blind acceptance.
