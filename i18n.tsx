@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
 
 export type Lang = 'en' | 'ru' | 'cs';
 
@@ -16,7 +16,11 @@ const translations: Record<Lang, Dict> = {
     'nav.services': 'STACK',
     'nav.about': 'ABOUT',
     'nav.contact': 'CONTACT',
+    'nav.language': 'Language',
     'nav.logo.label': 'Artem Mikhailov Portfolio - Return to home',
+    'nav.aria.open': 'Open navigation menu',
+    'nav.aria.close': 'Close navigation menu',
+    'nav.aria.label': 'Mobile navigation',
     'skip.content': 'Skip to content',
 
     'works.badge': 'FEATURED WORK (2026)',
@@ -58,6 +62,7 @@ const translations: Record<Lang, Dict> = {
     'cta.stat.projects': 'Projects Completed',
     'cta.stat.clients': 'Happy Clients',
     'cta.stat.experience': 'Years Experience',
+    'cta.stat.awards': 'Awards',
 
     'project.1.title': 'Detailing Hub 3D',
     'project.1.desc': 'Interactive 3D car configurator using React Three Fiber. Custom shader implementation for realistic paint finishes and real-time reflection probes.',
@@ -164,6 +169,14 @@ const translations: Record<Lang, Dict> = {
     'works.scroll_left': 'Scroll projects left',
     'works.scroll_right': 'Scroll projects right',
     'switch.to': 'Switch to',
+    'accessibility.title': 'Accessibility Options',
+    'accessibility.close': 'Close accessibility panel',
+    'accessibility.open': 'Open accessibility panel',
+    'accessibility.font_size': 'Text Size',
+    'accessibility.contrast': 'Contrast',
+    'accessibility.reduce_motion': 'Reduce Motion',
+    'accessibility.focus_indicator': 'Show Focus Indicator',
+    'accessibility.skip_to_main': 'Skip to main content',
     'skill.frontend': 'Frontend Development',
     'skill.backend': 'Backend Systems',
     'skill.architecture': 'Architecture & Devops',
@@ -238,7 +251,11 @@ const translations: Record<Lang, Dict> = {
     'nav.services': 'УСЛУГИ',
     'nav.about': 'ОБО МНЕ',
     'nav.contact': 'КОНТАКТ',
+    'nav.language': 'Язык',
     'nav.logo.label': 'Портфолио Артема Михайлова - Вернуться на главную',
+    'nav.aria.open': 'Открыть меню навигации',
+    'nav.aria.close': 'Закрыть меню навигации',
+    'nav.aria.label': 'Мобильная навигация',
     'skip.content': 'Перейти к контенту',
 
     'works.badge': 'ВЫБОРОЧНЫЕ РАБОТЫ (2026)',
@@ -271,24 +288,25 @@ const translations: Record<Lang, Dict> = {
     'contact.error.timeout': 'Таймаут сети. Пожалуйста, попробуйте позже.',
     'contact.reach_out': 'Или свяжитесь через:',
 
-    'contact.help.message_min': 'Минимум 10 символов',
-
     'cta.title': 'Готовы к эволюции?',
     'cta.subtitle': 'Готовы воплотить ваше видение в жизнь? Я специализируюсь на создании высокопроизводительных интерактивных веб-приложений, адаптированных под ваши потребности.',
-    'cta.button': 'Нанять меня',
+    'cta.button': 'Начать сотрудничество',
     'cta.secondary': 'Смотреть GitHub',
-    'cta.stat.projects': 'Проектов завершено',
+    'cta.stat.projects': 'Завершено проектов',
     'cta.stat.clients': 'Довольных клиентов',
     'cta.stat.experience': 'Лет опыта',
+    'cta.stat.awards': 'Награды',
 
-    'project.1.title': 'Detailing Hub 3D',
-    'project.1.desc': 'Интерактивный 3D-конфигуратор автомобилей на React Three Fiber. Кастомные шейдеры для реалистичной покраски и отражений в реальном времени.',
-    'project.2.title': 'Dental Clinic Ecosystem',
-    'project.2.desc': 'AI-система управления записями и визуализация диагностики. Синхронизация данных в реальном времени через WebSockets для живой доступности клиники.',
-    'project.3.title': 'The Barbershop Grid',
-    'project.3.desc': 'Галерея с магнитным скроллом и динамической сеткой. Оптимизированная доставка изображений через Edge-функции для LCP <100мс.',
+    'project.1.title': 'Barber Shop',
+    'project.1.desc': 'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',
+    'project.2.title': 'Dental Clinic Vakalova',
+    'project.2.desc': 'Лендинг и запись к врачу: каталог услуг, интерактивные планы лечения, отзывы пациентов. Уделено внимание доступности и скорости загрузки.',
+    'project.3.title': 'Game Marketplace',
+    'project.3.desc': 'Современный маркетплейс игр с каталогом, корзиной покупок, системой фильтрации и адаптивным интерфейсом. Реализованы анимации и плавные переходы.',
     'project.4.title': 'Detailing Service',
-    'project.4.desc': 'Устаревший лендинг детейлинг-сервиса.',
+    'project.4.desc': 'Лендинг для сервиса детейлинга.',
+    'contact.help.optional': 'Необязательно',
+    'contact.help.message_min': 'Минимум 10 символов',
 
     'hero.badge': 'Старший фронтенд-архитектор',
     'hero.title.line1': 'АРТЕМ',
@@ -386,6 +404,14 @@ const translations: Record<Lang, Dict> = {
     'works.scroll_left': 'Листать проекты влево',
     'works.scroll_right': 'Листать проекты вправо',
     'switch.to': 'Переключить на',
+    'accessibility.title': 'Настройки доступности',
+    'accessibility.close': 'Закрыть панель доступности',
+    'accessibility.open': 'Открыть панель доступности',
+    'accessibility.font_size': 'Размер текста',
+    'accessibility.contrast': 'Контраст',
+    'accessibility.reduce_motion': 'Уменьшить движение',
+    'accessibility.focus_indicator': 'Показывать индикатор фокуса',
+    'accessibility.skip_to_main': 'Перейти к основному содержимому',
     'skill.frontend': 'Frontend разработка',
     'skill.backend': 'Backend системы',
     'skill.architecture': 'Архитектура и Devops',
@@ -460,7 +486,11 @@ const translations: Record<Lang, Dict> = {
     'nav.services': 'SLUŽBY',
     'nav.about': 'O MNĚ',
     'nav.contact': 'KONTAKT',
+    'nav.language': 'Jazyk',
     'nav.logo.label': 'Portfolio Artema Michajlova - Návrat na domovskou stránku',
+    'nav.aria.open': 'Otevřít navigační menu',
+    'nav.aria.close': 'Zavřít navigační menu',
+    'nav.aria.label': 'Mobilní navigace',
     'skip.content': 'Přejít na obsah',
 
     'works.badge': 'VÝBĚROVÁ PRÁCE (2026)',
@@ -502,6 +532,7 @@ const translations: Record<Lang, Dict> = {
     'cta.stat.projects': 'Dokončené projekty',
     'cta.stat.clients': 'Spokojení klienti',
     'cta.stat.experience': 'Roky praxe',
+    'cta.stat.awards': 'Ocenění',
 
     'project.1.title': 'Detailing Hub 3D',
     'project.1.desc': 'Interaktivní 3D konfigurátor aut postavený na React Three Fiber. Vlastní shadery pro realistické laky a odrazy v reálném čase.',
@@ -608,6 +639,14 @@ const translations: Record<Lang, Dict> = {
     'works.scroll_left': 'Posunout projekty doleva',
     'works.scroll_right': 'Posunout projekty doprava',
     'switch.to': 'Přepnout na',
+    'accessibility.title': 'Nastavení přístupnosti',
+    'accessibility.close': 'Zavřít panel přístupnosti',
+    'accessibility.open': 'Otevřít panel přístupnosti',
+    'accessibility.font_size': 'Velikost textu',
+    'accessibility.contrast': 'Kontrast',
+    'accessibility.reduce_motion': 'Snížit pohyb',
+    'accessibility.focus_indicator': 'Zobrazit indikátor fokusu',
+    'accessibility.skip_to_main': 'Přejít na hlavní obsah',
     'skill.frontend': 'Frontend vývoj',
     'skill.backend': 'Backend systémy',
     'skill.architecture': 'Architektura a Devops',
@@ -702,6 +741,12 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLangState(l);
     try { localStorage.setItem('lang', l); } catch {}
   };
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang;
+    }
+  }, [lang]);
 
   const t = useMemo(() => (key: string) => {
     const dict = translations[lang] || translations.en;

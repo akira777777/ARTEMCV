@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { escapeHtml, EMAIL_PATTERN, fetchWithTimeout } from '../lib/utils.js';
+import { escapeHtml, fetchWithTimeout } from '../lib/utils.js';
+import { EMAIL_REGEX, sanitizeString } from '../lib/validation.js';
 import { storeContactSubmission, recordSecurityEvent } from '../lib/contact-db.js';
 
 // ============================================================================
@@ -142,16 +143,6 @@ function setCorsHeaders(res: VercelResponse, origin: string | undefined): void {
   res.setHeader('X-XSS-Protection', '1; mode=block');
 }
 
-/**
- * Sanitizes a string by trimming whitespace and enforcing max length
- * @param value - String to sanitize
- * @param maxLength - Maximum allowed length
- * @returns Sanitized string
- */
-function sanitizeString(value: string, maxLength: number): string {
-  return value.trim().slice(0, maxLength);
-}
-
 interface ValidationError {
   status: number;
   error: string;
@@ -239,7 +230,7 @@ function validateFields(body: unknown): ValidationError | ValidatedData {
   }
 
   // Email validation
-  if (!EMAIL_PATTERN.test(cleanEmail)) {
+  if (!EMAIL_REGEX.test(cleanEmail)) {
     return { status: 400, error: 'Invalid email format. Please provide a valid email address' };
   }
 
@@ -373,32 +364,47 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     // Field validation & sanitization
     const fieldResult = validateFields(req.body);
     if ('status' in fieldResult) {
+      if (fieldResult.status === 200 && fieldResult.error === 'ok') {
+        logRequest(req, 'honeypot', { ip: clientIp });
+        if (process.env.DATABASE_URL) {
+          try {
+            await recordSecurityEvent('honeypot', clientIp);
+          } catch (dbError) {
+            console.error('Failed to record honeypot event:', dbError);
+          }
+        }
+        return res.status(200).json({ ok: true });
+      }
+
       logRequest(req, 'field_validation_failed', { error: fieldResult.error });
       return res.status(fieldResult.status).json({ error: fieldResult.error });
     }
 
     const { cleanName, cleanEmail, cleanSubject, cleanMessage } = fieldResult;
 
-    // Store submission in PostgreSQL (if DATABASE_URL is set)
+    // Store submission in PostgreSQL (concurrently with Telegram)
+    let dbPromise: Promise<any> = Promise.resolve();
+
     if (process.env.DATABASE_URL) {
-      try {
-        const userAgent = req.headers['user-agent'] as string | undefined;
-        await storeContactSubmission(
-          cleanName,
-          cleanEmail,
-          cleanSubject,
-          cleanMessage,
-          clientIp,
-          userAgent || null
-        );
-      } catch (dbError) {
+      const userAgent = req.headers['user-agent'] as string | undefined;
+      dbPromise = storeContactSubmission(
+        cleanName,
+        cleanEmail,
+        cleanSubject,
+        cleanMessage,
+        clientIp,
+        userAgent || null
+      ).catch((dbError) => {
         console.error('Failed to store submission in database:', dbError);
         // Don't fail the request if database storage fails
-      }
+      });
     }
 
     // Send to Telegram
-    const tgResp = await sendToTelegram(cleanName, cleanEmail, cleanSubject, cleanMessage);
+    const tgPromise = sendToTelegram(cleanName, cleanEmail, cleanSubject, cleanMessage);
+
+    // Wait for both to complete
+    const [_, tgResp] = await Promise.all([dbPromise, tgPromise]);
 
     if (!tgResp.ok) {
       const errText = await tgResp.text().catch(() => 'Unknown error');

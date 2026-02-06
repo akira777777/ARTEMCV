@@ -161,21 +161,21 @@ export const WorkGallery: React.FC = React.memo(() => {
     return PROJECTS.filter(project => project.techStack.includes(activeCategory));
   }, [activeCategory]);
 
-  const scroll = (direction: 'left' | 'right') => {
+  const scroll = useCallback((direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const { current } = scrollRef;
       const scrollAmount = direction === 'left' ? -400 : 400;
       current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
-  };
+  }, []);
 
-  const handleCloseOverlay = () => {
+  const handleCloseOverlay = useCallback(() => {
     setIsClosing(true);
     setTimeout(() => {
       setSelectedProject(null);
       setIsClosing(false);
     }, 400); // Matches the animation duration in CSS
-  };
+  }, []);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {

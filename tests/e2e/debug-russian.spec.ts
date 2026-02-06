@@ -1,14 +1,33 @@
 import { test, expect } from '@playwright/test';
 
+const ensureLanguageControls = async (page: import('@playwright/test').Page) => {
+  const langButton = page.getByRole('button', { name: 'EN', exact: true });
+  if (!(await langButton.isVisible())) {
+    const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+    if (await menuButton.isVisible()) {
+      await menuButton.click();
+    }
+  }
+};
+
+const switchLanguage = async (page: import('@playwright/test').Page, code: 'EN' | 'RU' | 'CS') => {
+  const langButton = page.getByRole('button', { name: code, exact: true });
+  await expect(langButton).toBeVisible();
+  await langButton.click();
+};
+
 test.describe('Russian Localization Debug', () => {
   
   test('Debug Russian content visibility', async ({ page }) => {
     console.log('=== Starting Russian localization debug ===');
     
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     console.log('Page loaded');
     
+    // Ensure language controls are visible
+    await ensureLanguageControls(page);
+
     // Check current language
     const currentLangButton = page.locator('button[aria-pressed="true"]');
     const currentLang = await currentLangButton.textContent();
@@ -16,8 +35,7 @@ test.describe('Russian Localization Debug', () => {
     
     // Switch to Russian
     console.log('Switching to Russian...');
-    const ruButton = page.getByText('RU');
-    await ruButton.click();
+    await switchLanguage(page, 'RU');
     await page.waitForTimeout(2000);
     
     // Check if Russian became active

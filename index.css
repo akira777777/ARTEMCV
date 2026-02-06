@@ -100,6 +100,37 @@
 }
 
 /* ========================================
+   ACCESSIBILITY MODES
+   ======================================== */
+
+:root.reduce-motion {
+  scroll-behavior: auto;
+}
+
+:root.reduce-motion *,
+:root.reduce-motion *::before,
+:root.reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+:root.high-contrast {
+  filter: contrast(1.15) saturate(1.1);
+}
+
+:root.high-contrast body {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+:root.focus-visible-enabled :focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ========================================
    TYPOGRAPHY & SIZING CONSISTENCY
    ======================================== */
 
@@ -1720,10 +1751,12 @@ h1:last-child, h2:last-child, h3:last-child, h4:last-child, h5:last-child, h6:la
   display: block;
   overflow: visible;
   aspect-ratio: 1 / 1;
-  background-image: url('/holo-abstract-sphere.png');
+  background: radial-gradient(circle at 30% 30%, 
+    rgba(99, 102, 241, 0.8) 0%, 
+    rgba(168, 85, 247, 0.6) 25%, 
+    rgba(99, 102, 241, 0.4) 50%, 
+    rgba(10, 10, 10, 0) 70%);
   background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
   position: absolute;
   border-radius: 0;
   pointer-events: none;

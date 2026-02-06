@@ -43,12 +43,12 @@ export const useThrottle = <T,>(value: T, delay: number): T => {
 };
 
 // Hook for efficient state updates
-export const useBatchedState = <T,>(initialState: T): [T, (updater: React.SetStateAction<T>) => void] => {
+export const useBatchedState = <T,>(initialState: T): [T, (updater: T | ((prev: T) => T)) => void] => {
   const [state, setState] = useState(initialState);
-  const pendingUpdates = useRef<React.SetStateAction<T>[]>([]);
+  const pendingUpdates = useRef<(T | ((prev: T) => T))[]>([]);
   const updatePending = useRef(false);
 
-  const batchedSetState = useCallback((updater: React.SetStateAction<T>) => {
+  const batchedSetState = useCallback((updater: T | ((prev: T) => T)) => {
     pendingUpdates.current.push(updater);
 
     if (!updatePending.current) {
@@ -61,12 +61,22 @@ export const useBatchedState = <T,>(initialState: T): [T, (updater: React.SetSta
           return pendingUpdates.current.reduce((currentState, update) => {
             return typeof update === 'function' ? (update as any)(currentState) : update;
           }, prev) as T;
+        setState(prev => {
+          let currentState = prev;
+          for (const update of pendingUpdates.current) {
+            if (typeof update === 'function') {
+              currentState = (update as (prev: T) => T)(currentState);
+            } else {
+              currentState = update;
+            }
+          }
+          return currentState;
         });
         pendingUpdates.current = [];
         updatePending.current = false;
       });
     }
-  }, [state]);
+  }, []);
 
   return [state, batchedSetState];
 };

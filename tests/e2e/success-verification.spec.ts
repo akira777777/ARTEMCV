@@ -8,7 +8,7 @@ test.describe('Success Verification', () => {
     // Performance Test - This is definitely working
     console.log('\n1. PERFORMANCE OPTIMIZATION:');
     const startTime = Date.now();
-    await page.goto('http://localhost:3002/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
     const loadTime = Date.now() - startTime;
     

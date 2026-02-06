@@ -35,12 +35,29 @@ export default defineConfig(({ mode }) => {
       // Enhanced code splitting for better caching
       rollupOptions: {
         output: {
-          manualChunks: {
-            react: ['react', 'react-dom'],
-            icons: ['lucide-react'],
-            motion: ['framer-motion'],
-            three: ['three', '@react-three/fiber', '@react-three/drei'],
-            utils: ['gsap', 'clsx', 'tailwind-merge'],
+          manualChunks: (id) => {
+            // React ecosystem
+            if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+              return 'react-vendor';
+            }
+            // Icons
+            if (id.includes('node_modules/lucide-react')) {
+              return 'icons';
+            }
+            // Animation libraries
+            if (id.includes('node_modules/framer-motion') || id.includes('node_modules/gsap')) {
+              return 'animation';
+            }
+            // 3D libraries (heavy)
+            if (id.includes('node_modules/three') || 
+                id.includes('node_modules/@react-three')) {
+              return 'three';
+            }
+            // Utilities
+            if (id.includes('node_modules/clsx') || 
+                id.includes('node_modules/tailwind-merge')) {
+              return 'utils';
+            }
           },
           // Optimize chunk file names
           chunkFileNames: isProd ? 'assets/[name]-[hash:8].js' : 'assets/[name]-[hash].js',

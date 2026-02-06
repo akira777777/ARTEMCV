@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useI18n } from '../i18n';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface MobileMenuItem {
   key: string;
@@ -134,7 +135,7 @@ export const MobileMenu: React.FC = () => {
               className="fixed top-0 right-0 h-full w-4/5 max-w-sm bg-[#0a0a0a] z-50 shadow-xl"
               role="dialog"
               aria-modal="true"
-              aria-label="Mobile navigation menu"
+              aria-label={t('nav.aria.label')}
             >
               <div className="flex flex-col h-full">
                 <div className="p-6 border-b border-white/10 flex justify-between items-center">
@@ -151,7 +152,7 @@ export const MobileMenu: React.FC = () => {
                 </div>
                 
                 <div className="flex-1 overflow-y-auto p-4">
-                  <nav aria-label="Mobile navigation">
+                  <nav aria-label={t('nav.aria.label')}>
                     <ul className="space-y-1">
                       {navItems.map((item, index) => (
                         <li key={item.key}>
@@ -167,14 +168,14 @@ export const MobileMenu: React.FC = () => {
                   <div className="mt-8 pt-6 border-t border-white/10">
                     <div className="px-4">
                       <div className="text-sm text-neutral-400 mb-4">{t('nav.language')}</div>
-                      {/* Языковой переключатель будет добавлен позже */}
+                      <LanguageSwitcher />
                     </div>
                   </div>
                 </div>
                 
                 <div className="p-6 border-t border-white/10 text-center">
                   <div className="text-xs text-neutral-500">
-                    © {new Date().getFullYear()} JULES.DEV
+                    © {new Date().getFullYear()} ARTEM.DEV
                   </div>
                 </div>
               </div>

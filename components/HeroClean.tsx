@@ -197,7 +197,7 @@ export const Hero: React.FC = React.memo(() => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
             >
-              JULES
+              ARTEM
             </motion.h1>
               
             <motion.p 
@@ -215,7 +215,7 @@ export const Hero: React.FC = React.memo(() => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1 }}
             >
-              {t('hero.desc')}
+              {t('hero.description')}
             </motion.p>
 
             <motion.div 

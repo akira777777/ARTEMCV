@@ -1,7 +1,7 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { useI18n } from '../i18n';
 import { useFetchWithTimeout } from '../lib/hooks';
-import { EMAIL_PATTERN } from '../lib/utils';
+import { EMAIL_REGEX } from '../lib/validation';
 import { FORM_INPUT_CLASS, FORM_TEXTAREA_CLASS } from '../constants';
 import devLog from '../lib/logger';
 import { MailIcon, MessageCircleIcon, GithubIcon } from 'lucide-react';
@@ -20,9 +20,11 @@ interface ContactSectionSecureProps {
 
 const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'contact' }) => {
   const { t } = useI18n();
-  const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
   const lastSubmitRef = useRef<number>(0);
   const fetchWithTimeout = useFetchWithTimeout(12_000);
+  const submitTimeoutRef = useRef<number | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const isMountedRef = useRef(true);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -35,6 +37,16 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+      if (submitTimeoutRef.current !== null) {
+        window.clearTimeout(submitTimeoutRef.current);
+      }
+      abortControllerRef.current?.abort();
+    };
+  }, []);
+
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -44,14 +56,11 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       return t('contact.error.required');
     }
-    if (!EMAIL_PATTERN.test(formData.email.trim())) {
+    if (!EMAIL_REGEX.test(formData.email.trim())) {
       return t('contact.error.email');
     }
     if (formData.message.trim().length < 10) {
       return t('contact.error.too_short');
-    }
-    if (formData.hp && formData.hp.trim().length > 0) {
-      return null;
     }
     const now = Date.now();
     if (lastSubmitRef.current && now - lastSubmitRef.current < 10_000) {
@@ -62,6 +71,20 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+    if (formData.hp && formData.hp.trim().length > 0) {
+      // Honeypot triggered: pretend success without sending
+      setError(null);
+      setSubmitted(true);
+      setFormData({ name: '', email: '', subject: '', message: '', hp: '' });
+      lastSubmitRef.current = Date.now();
+      if (submitTimeoutRef.current !== null) {
+        window.clearTimeout(submitTimeoutRef.current);
+      }
+      submitTimeoutRef.current = window.setTimeout(() => setSubmitted(false), 5000);
+      return;
+    }
+
     const validationError = validate();
     if (validationError) {
       setError(validationError);
@@ -70,19 +93,23 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
 
     setLoading(true);
     setError(null);
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
     try {
       const payload = {
         name: formData.name.trim(),
         email: formData.email.trim(),
         subject: formData.subject?.trim() || '',
         message: formData.message.trim(),
-        chatId: TELEGRAM_CHAT_ID
+        hp: formData.hp?.trim() || ''
       };
 
       const res = await fetchWithTimeout('/api/send-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
 
       if (!res.ok) {
@@ -94,11 +121,16 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
         }
       }
 
+      if (!isMountedRef.current) return;
       setSubmitted(true);
       setFormData({ name: '', email: '', subject: '', message: '', hp: '' });
       lastSubmitRef.current = Date.now();
-      setTimeout(() => setSubmitted(false), 5000);
+      if (submitTimeoutRef.current !== null) {
+        window.clearTimeout(submitTimeoutRef.current);
+      }
+      submitTimeoutRef.current = window.setTimeout(() => setSubmitted(false), 5000);
     } catch (err: unknown) {
+      if (!isMountedRef.current) return;
       devLog.error('Error sending message:', err);
       if ((err as Error)?.name === 'AbortError') {
         setError(t('contact.error.timeout'));
@@ -106,9 +138,11 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
         setError((err as Error)?.message || t('contact.error.sending'));
       }
     } finally {
+      abortControllerRef.current = null;
+      if (!isMountedRef.current) return;
       setLoading(false);
     }
-  }, [formData, validate, TELEGRAM_CHAT_ID, fetchWithTimeout]);
+  }, [formData, validate, fetchWithTimeout, loading, t]);
 
   return (
     <section 
@@ -142,7 +176,11 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
           className="space-y-6 glass-card-modern p-8 md:p-10 rounded-3xl border border-emerald-500/30 shadow-[0_0_40px_rgba(16,185,129,0.2)] relative overflow-hidden" 
           noValidate
           aria-describedby="form-description"
+          aria-busy={loading ? 'true' : 'false'}
         >
+          <p id="form-description" className="sr-only">
+            {t('contact.subtitle')}
+          </p>
           {/* Inner decorative borders */}
           <div className="absolute inset-0 border border-emerald-500/20 rounded-3xl pointer-events-none" 
                style={{
@@ -176,6 +214,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
                 value={formData.name} 
                 onChange={handleChange} 
                 placeholder={t('contact.placeholder.name')} 
+                autoComplete="name"
                 required 
                 aria-required="true"
                 aria-invalid={error && !formData.name.trim() ? 'true' : 'false'}
@@ -196,9 +235,10 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
                 value={formData.email} 
                 onChange={handleChange} 
                 placeholder={t('contact.placeholder.email')} 
+                autoComplete="email"
                 required 
                 aria-required="true"
-                aria-invalid={error && (!formData.email.trim() || !EMAIL_PATTERN.test(formData.email.trim())) ? 'true' : 'false'}
+                aria-invalid={error && (!formData.email.trim() || !EMAIL_REGEX.test(formData.email.trim())) ? 'true' : 'false'}
                 className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all" 
               />
             </div>
@@ -218,6 +258,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
               value={formData.subject} 
               onChange={handleChange} 
               placeholder={t('contact.placeholder.subject')} 
+              autoComplete="off"
               aria-describedby="subject-help"
               className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all" 
             />
@@ -238,6 +279,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
               onChange={handleChange} 
               placeholder={t('contact.placeholder.message')} 
               rows={6} 
+              autoComplete="off"
               required 
               aria-required="true"
               aria-invalid={error && (!formData.message.trim() || formData.message.trim().length < 10) ? 'true' : 'false'}
@@ -327,4 +369,6 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
   );
 };
 
-export default React.memo(ContactSectionSecure);
+const MemoizedContactSectionSecure = React.memo(ContactSectionSecure);
+MemoizedContactSectionSecure.displayName = 'ContactSectionSecure';
+export default MemoizedContactSectionSecure;

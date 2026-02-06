@@ -74,7 +74,7 @@ export const Footer: React.FC = React.memo(() => {
           </ul>
         </nav>
         <p className="mt-20 text-neutral-600 text-xs uppercase tracking-widest">
-          <span aria-label="Copyright">©</span> {new Date().getFullYear()} JULES.DEV // {t('footer.copyright')}
+          <span aria-label="Copyright">©</span> {new Date().getFullYear()} ARTEM.DEV // {t('footer.copyright')}
         </p>
       </div>
     </footer>

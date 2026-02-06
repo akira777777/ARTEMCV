@@ -40,17 +40,54 @@ export async function fetchWithTimeout(
   options: RequestInit = {},
   timeoutMs: number = 12_000
 ): Promise<Response> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const timeoutController = new AbortController();
+  const timeout = setTimeout(() => timeoutController.abort(), timeoutMs);
+
+  const signals: AbortSignal[] = [timeoutController.signal];
+  if (options.signal) {
+    signals.push(options.signal);
+  }
+
+  let cleanup = () => {};
+  let combinedSignal = timeoutController.signal;
+
+  const anySignal = (AbortSignal as typeof AbortSignal & {
+    any?: (signals: AbortSignal[]) => AbortSignal;
+  }).any;
+
+  if (signals.length > 1) {
+    if (typeof anySignal === 'function') {
+      combinedSignal = anySignal(signals);
+    } else {
+      const controller = new AbortController();
+      const onAbort = () => controller.abort();
+
+      for (const signal of signals) {
+        if (signal.aborted) {
+          controller.abort();
+          break;
+        }
+        signal.addEventListener('abort', onAbort);
+      }
+
+      combinedSignal = controller.signal;
+      cleanup = () => {
+        for (const signal of signals) {
+          signal.removeEventListener('abort', onAbort);
+        }
+      };
+    }
+  }
 
   try {
     const response = await fetch(url, {
       ...options,
-      signal: controller.signal,
+      signal: combinedSignal,
     });
     return response;
   } finally {
     clearTimeout(timeout);
+    cleanup();
   }
 }
 

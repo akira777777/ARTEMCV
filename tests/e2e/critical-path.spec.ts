@@ -1,5 +1,17 @@
 import { test, expect } from '@playwright/test';
 
+const switchLanguage = async (page: import('@playwright/test').Page, code: 'EN' | 'RU' | 'CS') => {
+  const langButton = page.getByRole('button', { name: code, exact: true });
+  if (!(await langButton.isVisible())) {
+    const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+    if (await menuButton.isVisible()) {
+      await menuButton.click();
+    }
+  }
+  await expect(langButton).toBeVisible();
+  await langButton.click();
+};
+
 test.describe('Portfolio Critical Path Testing', () => {
   
   test.beforeEach(async ({ page }) => {
@@ -9,14 +21,14 @@ test.describe('Portfolio Critical Path Testing', () => {
 
   test('Basic page load and core elements', async ({ page }) => {
     // Check that the page loads successfully
-    await expect(page).toHaveURL('http://localhost:3002/');
+    await expect(page).toHaveURL(/\/$/);
     
     // Check title contains expected text
     const title = await page.title();
     expect(title.toLowerCase()).toContain('full stack');
     
     // Check main content wrapper exists
-    const mainContent = page.locator('.content-wrapper');
+    const mainContent = page.getByRole('main');
     await expect(mainContent).toBeVisible();
     
     // Take baseline screenshot
@@ -28,34 +40,41 @@ test.describe('Portfolio Critical Path Testing', () => {
 
   test('Language switching functionality', async ({ page }) => {
     // Find language buttons by their text content
-    const enButton = page.getByText('EN');
-    const ruButton = page.getByText('RU');
-    const csButton = page.getByText('CS');
+    const enButton = page.getByRole('button', { name: 'EN', exact: true });
+    const ruButton = page.getByRole('button', { name: 'RU', exact: true });
+    const csButton = page.getByRole('button', { name: 'CS', exact: true });
+    
+    if (!(await enButton.isVisible())) {
+      const menuButton = page.getByRole('button', { name: /open navigation menu/i });
+      if (await menuButton.isVisible()) {
+        await menuButton.click();
+      }
+    }
     
     await expect(enButton).toBeVisible();
     await expect(ruButton).toBeVisible();
     await expect(csButton).toBeVisible();
     
     // Test switching to Russian
-    await ruButton.click();
+    await switchLanguage(page, 'RU');
     await page.waitForTimeout(1000);
     
     // Look for Russian content (more specific selectors)
-    const ruContent = page.locator('text=разработчик').first();
+    const ruContent = page.locator('text=Старший фронтенд-архитектор').first();
     await expect(ruContent).toBeVisible({ timeout: 10000 });
     
     // Test switching to Czech
-    await csButton.click();
+    await switchLanguage(page, 'CS');
     await page.waitForTimeout(1000);
     
-    const csContent = page.locator('text=vývojář').first();
+    const csContent = page.locator('text=Senior Frontend Architekt').first();
     await expect(csContent).toBeVisible({ timeout: 10000 });
     
     // Test switching back to English
-    await enButton.click();
+    await switchLanguage(page, 'EN');
     await page.waitForTimeout(1000);
     
-    const enContent = page.locator('text=Developer').first();
+    const enContent = page.locator('text=Senior Frontend Architect').first();
     await expect(enContent).toBeVisible({ timeout: 10000 });
     
     await page.screenshot({ 
@@ -66,7 +85,7 @@ test.describe('Portfolio Critical Path Testing', () => {
 
   test('Navigation and scrolling functionality', async ({ page }) => {
     // Test smooth scrolling to different sections
-    const sections = ['services', 'work', 'contact'];
+    const sections = ['services', 'works', 'contact'];
     
     for (const section of sections) {
       // Try different ways to find navigation links
@@ -101,8 +120,8 @@ test.describe('Portfolio Critical Path Testing', () => {
     await expect(heroHeadings).toBeVisible();
     
     // Check for developer-related text
-    const devText = page.locator('text=Developer, text=Engineer, text=Motion');
-    await expect(devText.first()).toBeVisible();
+    const badgeText = page.locator('text=Senior Frontend Architect').first();
+    await expect(badgeText).toBeVisible();
     
     await page.screenshot({ 
       path: 'tests/e2e/screenshots/hero_section_verification.png',
@@ -187,7 +206,7 @@ test.describe('Portfolio Critical Path Testing', () => {
       await page.waitForTimeout(1000);
       
       // Verify content is still visible
-      await expect(page.locator('.content-wrapper')).toBeVisible();
+      await expect(page.getByRole('main')).toBeVisible();
       
       await page.screenshot({ 
         path: `tests/e2e/screenshots/responsive_${viewport.name}.png`,

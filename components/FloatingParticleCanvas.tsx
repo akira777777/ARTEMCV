@@ -11,6 +11,13 @@ interface Particle {
   opacity: number;
 }
 
+// Performance: Pre-calculate colors to avoid string interpolation in render loop
+const OPACITY_STEPS = 10;
+const CONNECTION_COLORS = Array.from({ length: OPACITY_STEPS }, (_, i) => {
+  const opacity = ((i + 1) / OPACITY_STEPS) * 0.2;
+  return `rgba(99, 102, 241, ${opacity})`;
+});
+
 /**
  * FloatingParticleCanvas - Canvas-based particle system with interactive physics
  * Uses requestAnimationFrame for optimal performance and hardware acceleration
@@ -31,6 +38,9 @@ export const FloatingParticleCanvas: React.FC<{
   const mouseRef = useRef({ x: 0, y: 0, isInside: false });
   const animationFrameRef = useRef<number>(0);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  // Performance: Use batches to reduce draw calls
+  const batchesRef = useRef<number[][]>(Array.from({ length: OPACITY_STEPS }, () => []));
 
   // Initialize particles
   useEffect(() => {
@@ -134,6 +144,12 @@ export const FloatingParticleCanvas: React.FC<{
 
       const particles = particlesRef.current;
       const mouse = mouseRef.current;
+      const batches = batchesRef.current;
+
+      // Reset batches
+      for (let i = 0; i < OPACITY_STEPS; i++) {
+        batches[i].length = 0;
+      }
 
       // Update and draw particles
       for (let i = 0; i < particles.length; i++) {
@@ -143,9 +159,10 @@ export const FloatingParticleCanvas: React.FC<{
         if (mouse.isInside) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (distance < interactionRadius) {
+          if (distSq < interactionRadius * interactionRadius) {
+            const distance = Math.sqrt(distSq);
             const force = (interactionRadius - distance) / interactionRadius;
             const angle = Math.atan2(dy, dx);
             
@@ -177,22 +194,41 @@ export const FloatingParticleCanvas: React.FC<{
         ctx.fillStyle = p.color.replace('0.8', p.opacity.toString());
         ctx.fill();
 
-        // Draw connections between close particles
+        // Calculate connections
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
           const dy = p.y - p2.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (distance < 100) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.2 * (1 - distance / 100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
+          // Performance: Use squared distance check to avoid Math.sqrt
+          if (distSq < 10000) { // 100^2
+            const distance = Math.sqrt(distSq);
+
+            // Map opacity to step index
+            let step = Math.floor((1 - distance / 100) * OPACITY_STEPS);
+            if (step < 0) step = 0;
+            if (step >= OPACITY_STEPS) step = OPACITY_STEPS - 1;
+
+            batches[step].push(p.x, p.y, p2.x, p2.y);
           }
         }
+      }
+
+      // Performance: Draw batches
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i < OPACITY_STEPS; i++) {
+        const batch = batches[i];
+        if (batch.length === 0) continue;
+
+        ctx.beginPath();
+        ctx.strokeStyle = CONNECTION_COLORS[i];
+
+        for (let k = 0; k < batch.length; k += 4) {
+          ctx.moveTo(batch[k], batch[k+1]);
+          ctx.lineTo(batch[k+2], batch[k+3]);
+        }
+        ctx.stroke();
       }
 
       animationFrameRef.current = requestAnimationFrame(animate);

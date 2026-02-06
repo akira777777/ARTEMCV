@@ -194,7 +194,6 @@ const Hero: React.FC = React.memo(() => {
     document.getElementById('works')?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  const name = 'JULES';
   const orbColors = [
     'linear-gradient(135deg, #ec4899, #f472b6)', // pink
     'linear-gradient(135deg, #22d3ee, #67e8f9)', // cyan
@@ -215,7 +214,7 @@ const Hero: React.FC = React.memo(() => {
     y: number;
   };
 
-  // Generate floating particles
+  // Generate floating particles - using fixed values for SSR compatibility
   const particles = useMemo((): Particle[] => 
     Array.from({ length: 15 }, (_, i) => ({
       id: i,
@@ -226,6 +225,16 @@ const Hero: React.FC = React.memo(() => {
     })),
     []
   );
+
+  // Safe window height for animations (defaults for SSR)
+  const [windowHeight, setWindowHeight] = React.useState(1080);
+  
+  React.useEffect(() => {
+    setWindowHeight(window.innerHeight);
+    const handleResize = () => setWindowHeight(window.innerHeight);
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Stats for the aside section
   const stats = useMemo(() => [
@@ -380,7 +389,7 @@ const Hero: React.FC = React.memo(() => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ 
               opacity: [0, 0.6, 0],
-              y: [-20, -window.innerHeight - 20]
+              y: [-20, -windowHeight - 20]
             }}
             transition={{
               duration: 15,

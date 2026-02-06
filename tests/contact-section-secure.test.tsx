@@ -64,4 +64,20 @@ describe('ContactSectionSecure', () => {
       await screen.findByText(/please enter a valid email/i)
     ).toBeInTheDocument();
   });
+
+  it('silently accepts honeypot submissions without a network call', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderWithI18n(<ContactSectionSecure />);
+
+    const honeypot = document.querySelector('input[name="hp"]') as HTMLInputElement | null;
+    expect(honeypot).toBeTruthy();
+    await userEvent.type(honeypot as HTMLInputElement, 'bot');
+
+    await userEvent.click(screen.getByRole('button', { name: /send message/i }));
+
+    expect(await screen.findByText(/message sent/i)).toBeInTheDocument();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });

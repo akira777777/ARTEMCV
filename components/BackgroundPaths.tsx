@@ -1,26 +1,179 @@
 "use client"
 
-import React from 'react';
-import { motion } from "framer-motion"
-import MagneticButton from './MagneticButton';
+import React, { useRef, useState, useCallback, useMemo, ReactNode } from 'react';
+import { motion, useSpring, useMotionValue } from "framer-motion"
+import { useReducedMotion } from '../lib/hooks';
+
+interface MagneticButtonProps {
+  children: ReactNode;
+  className?: string;
+  strength?: number;
+  as?: 'button' | 'a';
+  href?: string;
+  onClick?: () => void;
+  target?: string;
+  rel?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+}
+
+const SPRING_CONFIG = { damping: 15, stiffness: 150, mass: 0.1 };
+
+const MagneticButton: React.FC<MagneticButtonProps> = React.memo(({
+  children,
+  className = '',
+  strength = 0.4,
+  as = 'button',
+  href,
+  onClick,
+  target,
+  rel,
+  type = 'button',
+  disabled = false,
+}) => {
+  const prefersReducedMotion = useReducedMotion();
+  const ref = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const springX = useSpring(x, SPRING_CONFIG);
+  const springY = useSpring(y, SPRING_CONFIG);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (prefersReducedMotion || disabled || !ref.current) return;
+
+    const rect = ref.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const distanceX = e.clientX - centerX;
+    const distanceY = e.clientY - centerY;
+
+    x.set(distanceX * strength);
+    y.set(distanceY * strength);
+  }, [prefersReducedMotion, disabled, strength, x, y]);
+
+  const handleMouseLeave = useCallback(() => {
+    x.set(0);
+    y.set(0);
+    setIsHovered(false);
+  }, [x, y]);
+
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+
+  const motionProps = {
+    ref: ref as React.RefObject<HTMLButtonElement>,
+    className: `magnetic-button ${className}`,
+    style: {
+      x: springX,
+      y: springY,
+    },
+    onMouseMove: handleMouseMove,
+    onMouseLeave: handleMouseLeave,
+    onMouseEnter: handleMouseEnter,
+    whileTap: { scale: 0.97 },
+  };
+
+  if (as === 'a') {
+    return (
+      <motion.a
+        {...motionProps}
+        ref={ref as React.RefObject<HTMLAnchorElement>}
+        href={href}
+        target={target}
+        rel={rel}
+        onClick={onClick}
+        data-testid="magnetic-button"
+      >
+        <motion.span
+          className="magnetic-button-content inline-flex items-center gap-2"
+          animate={{
+            scale: isHovered ? 1.05 : 1,
+          }}
+          transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+        >
+          {children}
+        </motion.span>
+
+        {/* Glow effect on hover */}
+        <motion.div
+          className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/20 via-sky-500/20 to-indigo-500/20 blur-xl -z-10"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{
+            opacity: isHovered ? 1 : 0,
+            scale: isHovered ? 1.2 : 0.8,
+          }}
+          transition={{ duration: 0.3 }}
+        />
+      </motion.a>
+    );
+  }
+
+  return (
+    <motion.button
+      {...motionProps}
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      data-testid="magnetic-button"
+    >
+      <motion.span
+        className="magnetic-button-content inline-flex items-center gap-2"
+        animate={{
+          scale: isHovered ? 1.05 : 1,
+        }}
+        transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+      >
+        {children}
+      </motion.span>
+
+      {/* Glow effect on hover */}
+      <motion.div
+        className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/20 via-sky-500/20 to-indigo-500/20 blur-xl -z-10"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{
+          opacity: isHovered ? 1 : 0,
+          scale: isHovered ? 1.2 : 0.8,
+        }}
+        transition={{ duration: 0.3 }}
+      />
+    </motion.button>
+  );
+});
 
 interface FloatingPathsProps {
   position: number;
 }
 
-const FloatingPaths: React.FC<FloatingPathsProps> = React.memo(({ position }) => {
-  const paths = Array.from({ length: 36 }, (_, i) => ({
-    id: i,
-    d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
-      380 - i * 5 * position
-    } -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${
-      152 - i * 5 * position
-    } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
-      684 - i * 5 * position
-    } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-    color: `rgba(15,23,42,${0.1 + i * 0.03})`,
-    width: 0.5 + i * 0.03,
-  }));
+interface PathData {
+  id: number;
+  d: string;
+  color: string;
+  width: number;
+  duration: number;
+}
+
+const FloatingPaths: React.FC<FloatingPathsProps> = React.memo(({ position = 1 }) => {
+  const paths = useMemo<PathData[]>(() => Array.from({ length: 36 }, (_, i) => {
+    const pos = Number.isFinite(position) ? position : 1;
+    return {
+      id: i,
+      d: `M-${380 - i * 5 * pos} -${189 + i * 6}C-${
+        380 - i * 5 * pos
+      } -${189 + i * 6} -${312 - i * 5 * pos} ${216 - i * 6} ${
+        152 - i * 5 * pos
+      } ${343 - i * 6}C${616 - i * 5 * pos} ${470 - i * 6} ${
+        684 - i * 5 * pos
+      } ${875 - i * 6} ${684 - i * 5 * pos} ${875 - i * 6}`,
+      color: `rgba(15,23,42,${0.1 + i * 0.03})`,
+      width: 0.5 + i * 0.03,
+      duration: 20 + (i % 10) + (i * 0.1),
+    };
+  }), [position]);
 
   return (
     <div className="absolute inset-0 pointer-events-none">
@@ -32,24 +185,26 @@ const FloatingPaths: React.FC<FloatingPathsProps> = React.memo(({ position }) =>
       >
         <title>Background Animated Paths</title>
         {paths.map((path) => (
-          <motion.path
-            key={path.id}
-            d={path.d}
-            stroke="currentColor"
-            strokeWidth={path.width}
-            strokeOpacity={0.1 + path.id * 0.03}
-            initial={{ pathLength: 0.3, opacity: 0.6 }}
-            animate={{
-              pathLength: 1,
-              opacity: [0.3, 0.6, 0.3],
-              pathOffset: [0, 1, 0],
-            }}
-            transition={{
-              duration: 20 + Math.random() * 10,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "linear",
-            }}
-          />
+          path.d && !path.d.includes('undefined') && path.d.startsWith('M') && (
+            <motion.path
+              key={path.id}
+              d={path.d}
+              stroke="currentColor"
+              strokeWidth={path.width}
+              strokeOpacity={0.1 + path.id * 0.03}
+              initial={{ pathLength: 0.3, opacity: 0.6 }}
+              animate={{
+                pathLength: 1,
+                opacity: [0.3, 0.6, 0.3],
+                pathOffset: [0, 1, 0],
+              }}
+              transition={{
+                duration: path.duration,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+          )
         ))}
       </svg>
     </div>

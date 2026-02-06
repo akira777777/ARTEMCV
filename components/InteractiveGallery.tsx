@@ -209,4 +209,5 @@ export const InteractiveGallery: React.FC = React.memo(() => {
 });
 
 InteractiveGallery.displayName = 'InteractiveGallery';
+
 export default InteractiveGallery;

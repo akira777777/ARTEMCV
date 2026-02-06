@@ -79,7 +79,7 @@ const Hero2026: React.FC = () => {
           {...descriptionAnimation}
           className="max-w-xl mx-auto text-lg md:text-xl opacity-50 font-light mb-12 text-white"
         >
-          {t('hero.desc')}
+          {t('hero.description')}
         </motion.p>
 
         <motion.div

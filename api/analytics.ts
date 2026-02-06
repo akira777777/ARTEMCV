@@ -27,10 +27,21 @@ function setCorsHeaders(res: VercelResponse, origin: string | undefined): void {
 
   if (isAllowed && origin) {
     res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Max-Age', '86400');
+}
+
+function parseQueryInt(value: string | string[] | undefined, fallback: number): number {
+  const raw = Array.isArray(value) ? value[0] : value;
+  const parsed = Number.parseInt(raw ?? '', 10);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
 }
 
 function validateApiKey(apiKey: string | undefined): boolean {
@@ -56,6 +67,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  res.setHeader('Cache-Control', 'no-store');
+
   // API key validation
   const apiKey = req.headers.authorization?.replace('Bearer ', '');
   if (!validateApiKey(apiKey)) {
@@ -63,13 +76,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { type = 'summary', days = 30, limit = 50, offset = 0 } = req.query;
+    const rawType = Array.isArray(req.query.type) ? req.query.type[0] : req.query.type;
+    const type = rawType || 'summary';
+    const days = clamp(parseQueryInt(req.query.days, 30), 1, 365);
+    const limit = clamp(parseQueryInt(req.query.limit, 50), 1, 100);
+    const offset = Math.max(0, parseQueryInt(req.query.offset, 0));
 
     if (type === 'submissions') {
       // Get recent submissions
       const { submissions, total } = await getContactSubmissions(
-        Math.min(parseInt(limit as string) || 50, 100),
-        parseInt(offset as string) || 0
+        limit,
+        offset
       );
 
       return res.status(200).json({
@@ -81,7 +98,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (type === 'analytics') {
       // Get analytics for date range
       const endDate = new Date().toISOString().split('T')[0];
-      const startDate = new Date(Date.now() - (parseInt(days as string) || 30) * 24 * 60 * 60 * 1000)
+      const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000)
         .toISOString()
         .split('T')[0];
 

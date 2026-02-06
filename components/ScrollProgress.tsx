@@ -18,6 +18,7 @@ const ScrollProgress: React.FC<ScrollProgressProps> = () => {
 
   return (
     <motion.div
+      data-testid="scroll-progress"
       className="fixed top-0 left-0 right-0 h-1 z-[100] origin-left"
       style={{
         scaleX,
