@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, X, Send, Loader2, Maximize2, Minimize2 } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { useFetchWithTimeout } from '../lib/hooks';
@@ -39,6 +39,26 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastSubmitRef = useRef<number>(0);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+      abortControllerRef.current?.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    try {
+      const storedName = localStorage.getItem('chat_user_name');
+      if (storedName) {
+        setUserName(storedName);
+      }
+    } catch {
+      // Ignore localStorage errors
+    }
+  }, []);
 
   // Update welcome message text when language or name state changes
   useEffect(() => {
@@ -58,6 +78,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       // Use a small timeout to ensure DOM is updated before scrolling
       const timer = setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        signal: controller.signal
       }, 0);
       
       return () => clearTimeout(timer);
@@ -105,6 +126,9 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     }]);
 
     setLoading(true);
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     try {
       // Send to Telegram via /api/send-telegram
@@ -113,11 +137,11 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: currentUserName,
-          email: 'chat@telegram.local', // Dummy email для совместимости с API
+          email: 'chat@telegram.local', // Dummy email ?????? ?????????????????????????? ?? API
           subject: 'Chat Message',
-          message: trimmedInput,
-          chatId: import.meta.env.VITE_TELEGRAM_CHAT_ID // optional
-        })
+          message: trimmedInput
+        }),
+        signal: controller.signal
       });
 
       if (!res.ok) {
@@ -127,20 +151,24 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         } else {
           const err = await res.text().catch(() => '');
           throw new Error(err || `Failed to send (status ${res.status})`);
+        signal: controller.signal
         }
       }
 
       // Add bot response
       const botMsgId = createId();
-      setMessages(prev => [...prev, {
-        id: botMsgId,
-        role: 'bot',
-        text: t('chat.bot.success'),
-        timestamp: new Date()
-      }]);
+      if (isMountedRef.current) {
+        setMessages(prev => [...prev, {
+          id: botMsgId,
+          role: 'bot',
+          text: t('chat.bot.success'),
+          timestamp: new Date()
+        }]);
+      }
 
       lastSubmitRef.current = now;
     } catch (err: unknown) {
+      if (!isMountedRef.current) return;
       devLog.error('Error sending message:', err);
       
       let errorText = t('chat.error.sending') || 'Error sending message';
@@ -157,10 +185,12 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       setMessages(prev => [...prev, {
         id: errorMsgId,
         role: 'bot',
-        text: `❌ ${errorText}`,
+        text: `вќЊ ${errorText}`,
         timestamp: new Date()
       }]);
     } finally {
+      abortControllerRef.current = null;
+      if (!isMountedRef.current) return;
       setLoading(false);
     }
   }, [inputValue, userName, loading, fetchWithTimeout, t]);
@@ -234,6 +264,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
                 <p className="whitespace-pre-wrap break-words">{msg.text}</p>
                 <span className={`text-[10px] mt-2 block ${msg.role === 'user' ? 'text-black/60' : 'text-neutral-500'}`}>
                   {msg.timestamp.toLocaleTimeString(lang === 'ru' ? 'ru-RU' : lang === 'cs' ? 'cs-CZ' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
+        signal: controller.signal
                 </span>
               </div>
             </div>
@@ -271,7 +302,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
             </div>
           )}
 
-          <form onSubmit={handleSendMessage} className="flex gap-2">
+          <form onSubmit={handleSendMessage} className="flex gap-2" aria-busy={loading ? 'true' : 'false'}>
             <input
               type="text"
               value={inputValue}

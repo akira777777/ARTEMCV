@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+﻿import React, { useState, useCallback, useMemo } from 'react';
 import { useI18n } from '../i18n';
 import { useAccessibility } from './AccessibilityProvider';
 
@@ -7,7 +7,7 @@ import { useAccessibility } from './AccessibilityProvider';
  * Complies with WCAG 2.1 AA standards
  */
 export const AccessibilityPanel: React.FC = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const {
     fontSize,
     highContrast,
@@ -40,22 +40,24 @@ export const AccessibilityPanel: React.FC = () => {
   }, []);
 
   // Font size labels with i18n
-  const fontSizeLabels = useMemo(() => ({
-    normal: t('accessibility.font_size') === 'Размер текста' ? 'Обычный' : 
-            t('accessibility.font_size') === 'Velikost textu' ? 'Normální' : 'Normal',
-    large: t('accessibility.font_size') === 'Размер текста' ? 'Крупный' : 
-           t('accessibility.font_size') === 'Velikost textu' ? 'Velký' : 'Large',
-    larger: t('accessibility.font_size') === 'Размер текста' ? 'Очень крупный' : 
-            t('accessibility.font_size') === 'Velikost textu' ? 'Velký' : 'Larger'
-  }), [t]);
+  const fontSizeLabels = useMemo(() => {
+    const labels = {
+      en: { normal: 'Normal', large: 'Large', larger: 'Larger' },
+      ru: { normal: 'Обычный', large: 'Крупный', larger: 'Очень крупный' },
+      cs: { normal: 'Normální', large: 'Velký', larger: 'Velmi velký' },
+    };
+    return labels[lang] ?? labels.en;
+  }, [lang]);
 
   // Contrast labels with i18n
-  const contrastLabels = useMemo(() => ({
-    normal: t('accessibility.contrast') === 'Контраст' ? 'Обычный' : 
-            t('accessibility.contrast') === 'Kontrast' ? 'Normální' : 'Normal',
-    high: t('accessibility.contrast') === 'Контраст' ? 'Высокий' : 
-          t('accessibility.contrast') === 'Kontrast' ? 'Vysoký' : 'High'
-  }), [t]);
+  const contrastLabels = useMemo(() => {
+    const labels = {
+      en: { normal: 'Normal', high: 'High' },
+      ru: { normal: 'Обычный', high: 'Высокий' },
+      cs: { normal: 'Normální', high: 'Vysoký' },
+    };
+    return labels[lang] ?? labels.en;
+  }, [lang]);
 
   return (
     <>
@@ -76,7 +78,7 @@ export const AccessibilityPanel: React.FC = () => {
               className="text-white hover:text-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded p-1"
               aria-label={isOpen ? t('accessibility.close') : t('accessibility.open')}
             >
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true">Г—</span>
             </button>
           </div>
           
@@ -287,3 +289,4 @@ export const ScreenReaderOnly: React.FC<{ children: React.ReactNode }> = ({ chil
 };
 
 ScreenReaderOnly.displayName = 'ScreenReaderOnly';
+

@@ -178,6 +178,9 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
           aria-describedby="form-description"
           aria-busy={loading ? 'true' : 'false'}
         >
+          <p id="form-description" className="sr-only">
+            {t('contact.subtitle')}
+          </p>
           {/* Inner decorative borders */}
           <div className="absolute inset-0 border border-emerald-500/20 rounded-3xl pointer-events-none" 
                style={{
@@ -211,6 +214,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
                 value={formData.name} 
                 onChange={handleChange} 
                 placeholder={t('contact.placeholder.name')} 
+                autoComplete="name"
                 required 
                 aria-required="true"
                 aria-invalid={error && !formData.name.trim() ? 'true' : 'false'}
@@ -231,6 +235,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
                 value={formData.email} 
                 onChange={handleChange} 
                 placeholder={t('contact.placeholder.email')} 
+                autoComplete="email"
                 required 
                 aria-required="true"
                 aria-invalid={error && (!formData.email.trim() || !EMAIL_REGEX.test(formData.email.trim())) ? 'true' : 'false'}
@@ -253,6 +258,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
               value={formData.subject} 
               onChange={handleChange} 
               placeholder={t('contact.placeholder.subject')} 
+              autoComplete="off"
               aria-describedby="subject-help"
               className="w-full px-6 py-3 bg-black/20 border border-emerald-500/30 rounded-xl text-white placeholder:text-emerald-500/50 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all" 
             />
@@ -273,6 +279,7 @@ const ContactSectionSecure: React.FC<ContactSectionSecureProps> = ({ id = 'conta
               onChange={handleChange} 
               placeholder={t('contact.placeholder.message')} 
               rows={6} 
+              autoComplete="off"
               required 
               aria-required="true"
               aria-invalid={error && (!formData.message.trim() || formData.message.trim().length < 10) ? 'true' : 'false'}
