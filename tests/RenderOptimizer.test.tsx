@@ -4,6 +4,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { RenderOptimizer, LazyRender, FPSMonitor } from '../components/RenderOptimizer';
 
 // Mock requestIdleCallback
+global.requestIdleCallback = vi.fn((cb) => {
+  return 123;
 global.requestIdleCallback = vi.fn((cb: IdleRequestCallback) => {
   return setTimeout(cb, 1) as unknown as number;
 });

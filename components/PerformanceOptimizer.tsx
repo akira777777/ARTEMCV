@@ -54,6 +54,13 @@ export const useBatchedState = <T,>(initialState: T): [T, (updater: T | ((prev: 
     if (!updatePending.current) {
       updatePending.current = true;
       Promise.resolve().then(() => {
+        pendingUpdates.current.reduce((currentState, update) => {
+          return typeof update === 'function' ? (update as any)(currentState) : update;
+        }, state);
+        setState(prev => {
+          return pendingUpdates.current.reduce((currentState, update) => {
+            return typeof update === 'function' ? (update as any)(currentState) : update;
+          }, prev) as T;
         setState(prev => {
           let currentState = prev;
           for (const update of pendingUpdates.current) {

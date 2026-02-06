@@ -90,6 +90,7 @@ describe('Performance Optimizations Verification', () => {
     rerender(<SkipLink />);
     expect(screen.getByText(/skip.content/i)).toBeInTheDocument();
   });
+
   it('All components handle events without memory leaks', () => {
     render(
       <>
@@ -105,6 +106,7 @@ describe('Performance Optimizations Verification', () => {
     expect(screen.getByLabelText(/chat.aria.open/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/scroll_to_top/i)).toBeInTheDocument();
     expect(screen.getByText(/skip.content/i)).toBeInTheDocument();
+
   });
 
   it('Components properly clean up event listeners', () => {
@@ -116,4 +118,5 @@ describe('Performance Optimizations Verification', () => {
     // Если были утечки памяти, они проявились бы здесь
     expect(true).toBe(true);
   });
+
 });
