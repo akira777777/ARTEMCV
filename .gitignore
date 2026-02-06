@@ -29,3 +29,7 @@ prn
 con
 lpt[1-9]
 com[1-9]
+
+# System/IDE files
+.Jules/
+.bolt/
