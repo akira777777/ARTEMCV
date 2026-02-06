@@ -78,7 +78,6 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       // Use a small timeout to ensure DOM is updated before scrolling
       const timer = setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        signal: controller.signal
       }, 0);
       
       return () => clearTimeout(timer);
@@ -151,7 +150,6 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         } else {
           const err = await res.text().catch(() => '');
           throw new Error(err || `Failed to send (status ${res.status})`);
-        signal: controller.signal
         }
       }
 
@@ -264,7 +262,6 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
                 <p className="whitespace-pre-wrap break-words">{msg.text}</p>
                 <span className={`text-[10px] mt-2 block ${msg.role === 'user' ? 'text-black/60' : 'text-neutral-500'}`}>
                   {msg.timestamp.toLocaleTimeString(lang === 'ru' ? 'ru-RU' : lang === 'cs' ? 'cs-CZ' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
-        signal: controller.signal
                 </span>
               </div>
             </div>
