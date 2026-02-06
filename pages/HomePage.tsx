@@ -21,7 +21,7 @@ const HomePage: React.FC = () => {
   return (
     <DefaultLayout>
       <CursorTrail />
-      <main id="main-content">
+      <>
         <Hero />
         <SectionDivider variant="wave" />
         <React.Suspense fallback={<div className="h-96 w-full" aria-label="Loading gallery..." />}>
@@ -59,7 +59,7 @@ const HomePage: React.FC = () => {
         <ErrorBoundary>
           <ContactSectionSecure id="contact" />
         </ErrorBoundary>
-      </main>
+      </>
       <React.Suspense fallback={null}>
         <SimpleTelegramChat />
       </React.Suspense>
