@@ -17,22 +17,30 @@ export const SpotlightGallery: React.FC = React.memo(() => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHydrated, setIsHydrated] = useState(false);
   
-  const activeProject = useMemo(() => PROJECTS[activeIndex], [activeIndex]);
+  // Normalize index to handle negative values and wrapping
+  const normalizedIndex = useMemo(() => {
+    const len = PROJECTS.length;
+    return ((activeIndex % len) + len) % len;
+  }, [activeIndex]);
+
+  const activeProject = useMemo(() => PROJECTS[normalizedIndex], [normalizedIndex]);
 
   const handlePrev = useCallback(() => {
-    setActiveIndex((prev) => (prev === 0 ? PROJECTS.length - 1 : prev - 1));
+    setActiveIndex((prev) => prev - 1);
   }, []);
 
   const handleNext = useCallback(() => {
-    setActiveIndex((prev) => (prev === PROJECTS.length - 1 ? 0 : prev + 1));
+    setActiveIndex((prev) => prev + 1);
   }, []);
 
 
   const visibleThumbnails = useMemo(() => {
-    const start = activeIndex;
+    const len = PROJECTS.length;
     const thumbnails = [];
     for (let i = 0; i < 4; i++) {
-      thumbnails.push(PROJECTS[(start + i) % PROJECTS.length]);
+      // Use normalized logic for correct data access
+      const idx = ((activeIndex + i) % len + len) % len;
+      thumbnails.push(PROJECTS[idx]);
     }
     return thumbnails;
   }, [activeIndex]);
@@ -180,12 +188,12 @@ export const SpotlightGallery: React.FC = React.memo(() => {
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs text-neutral-500 mb-2">Project #{activeIndex + 1} of {PROJECTS.length}</p>
+                    <p className="text-xs text-neutral-500 mb-2">Project #{normalizedIndex + 1} of {PROJECTS.length}</p>
                     <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
                       <motion.div
                         className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
                         initial={{ width: 0 }}
-                        animate={{ width: `${((activeIndex + 1) / PROJECTS.length) * 100}%` }}
+                        animate={{ width: `${((normalizedIndex + 1) / PROJECTS.length) * 100}%` }}
                         transition={{ duration: 0.5 }}
                       />
                     </div>
@@ -227,13 +235,13 @@ export const SpotlightGallery: React.FC = React.memo(() => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <AnimatePresence>
                 {visibleThumbnails.map((project, idx) => {
-                  const actualIndex = (activeIndex + idx) % PROJECTS.length;
-                  const isActive = actualIndex === activeIndex;
+                  const isActive = idx === 0;
 
                   return (
                     <motion.button
-                      key={`${actualIndex}-${idx}`}
-                      onClick={() => setActiveIndex(actualIndex)}
+                      key={activeIndex + idx}
+                      layout
+                      onClick={() => setActiveIndex(activeIndex + idx)}
                       className={`group relative overflow-hidden rounded-lg aspect-video cursor-pointer transition-all duration-300 ${
                         isActive
                           ? 'ring-2 ring-indigo-500 scale-105'
