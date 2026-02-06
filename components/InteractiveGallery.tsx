@@ -206,7 +206,7 @@ export const InteractiveGallery: React.FC = React.memo(() => {
       </div>
     </section>
   );
-};
+});
 
 InteractiveGallery.displayName = 'InteractiveGallery';
 export default InteractiveGallery;

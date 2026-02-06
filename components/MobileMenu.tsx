@@ -109,7 +109,7 @@ export const MobileMenu: React.FC = () => {
       <button
         onClick={() => setIsOpen(true)}
         className="md:hidden p-2 rounded-lg hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        aria-label="Open navigation menu"
+        aria-label={t('nav.aria.open')}
       >
         <Menu className="w-6 h-6 text-white" />
       </button>
@@ -144,7 +144,7 @@ export const MobileMenu: React.FC = () => {
                   <button
                     onClick={() => setIsOpen(false)}
                     className="p-2 rounded-lg hover:bg-white/10"
-                    aria-label="Close navigation menu"
+                    aria-label={t('nav.aria.close')}
                   >
                     <X className="w-6 h-6 text-white" />
                   </button>

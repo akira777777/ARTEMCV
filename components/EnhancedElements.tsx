@@ -19,7 +19,6 @@ export const WaveBackground: React.FC<{ className?: string }> = React.memo(({ cl
         className="absolute bottom-0 left-0 w-full"
         viewBox="0 0 1440 320"
         preserveAspectRatio="none"
-        style={{ height: '50%' }}
         style={WAVE_SVG_STYLE}
       >
         <motion.path
@@ -581,7 +580,6 @@ export const GlitchText: React.FC<GlitchTextProps> = React.memo(({
               }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, repeat: Infinity }}
-              style={{ clipPath: 'inset(0 0 50% 0)' }}
               style={CLIP_PATH_TOP}
               aria-hidden="true"
             >
@@ -596,7 +594,6 @@ export const GlitchText: React.FC<GlitchTextProps> = React.memo(({
               }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, repeat: Infinity }}
-              style={{ clipPath: 'inset(50% 0 0 0)' }}
               style={CLIP_PATH_BOTTOM}
               aria-hidden="true"
             >
@@ -671,7 +668,6 @@ export const OrbitingRings: React.FC<OrbitingRingsProps> = React.memo(({
   return (
     <div 
       className={`relative ${className}`} 
-      style={{ width: size, height: size, perspective: 1000 }}
       style={{ width: size, height: size, ...PERSPECTIVE_CONTAINER_STYLE }}
       aria-hidden="true"
     >

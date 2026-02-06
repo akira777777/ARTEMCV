@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ScrollToTop } from './ScrollToTop';
+import { ScrollToTop } from '../components/ScrollToTop';
 
 // Mock необходимые зависимости
 vi.mock('react-router-dom', () => ({

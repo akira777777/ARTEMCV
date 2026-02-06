@@ -92,30 +92,30 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
     }
 
     // Conversational name entry logic
-    let name = userName.trim();
-    if (!name) {
+    let currentName = userName.trim();
+    if (!currentName) {
       const promptName = inputValue.trim();
       if (!promptName) {
         setError(t('chat.error.name_required'));
         return;
       }
-      name = promptName;
-      setUserName(name);
+      currentName = promptName;
+      setUserName(currentName);
       try {
-        localStorage.setItem('chat_user_name', name);
+        localStorage.setItem('chat_user_name', currentName);
       } catch {}
 
       // Clear input and add user's name message
       setInputValue('');
       setMessages(prev => [
         ...prev,
-        { id: createId(), role: 'user', text: name, timestamp: new Date() },
+        { id: createId(), role: 'user', text: currentName, timestamp: new Date() },
         { id: createId(), role: 'bot', text: t('chat.bot.welcome'), timestamp: new Date() }
       ]);
       return;
     }
 
-    const name = userName.trim();
+    const finalName = currentName;
     const userMessage = inputValue.trim();
     setInputValue('');
     setError(null);
@@ -137,7 +137,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: name,
+          name: finalName,
           email: 'chat@telegram.local', // Dummy email для совместимости с API
           subject: 'Chat Message',
           message: userMessage,
