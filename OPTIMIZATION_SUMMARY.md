@@ -20,7 +20,7 @@ This PR identifies and implements performance improvements across the ARTEMCV po
   - Alpha quantization & color-based batching
   - Float32Array for pre-allocated arrays (Grid)
   - Hoisted math calculations (Grid)
-- **Component:** `GradientShaderCard.tsx`
+- **Component:** `OptimizedGradientShaderCard.tsx`
 
 ### 3. CursorTrail Object Reuse ✅
 - **Status:** Already optimized
@@ -136,7 +136,7 @@ Added comprehensive performance guide:
 ### 1. Advanced Bundle Optimization
 - **Manual Chunks:** Successfully separated `three.js`, `framer-motion`, and other heavy libraries.
 - **Initial Bundle Reduction:** Main bundle reduced from **1.2MB** to **93KB** (-92%).
-- **Lazy Loading:** `SimpleTelegramChat` and `GradientShaderCard` are now deferred.
+- **Lazy Loading:** `SimpleTelegramChat` and `OptimizedGradientShaderCard` are now deferred.
 
 ### 2. Full Image Pipeline Optimization
 - **Local WebP Transition:** Moved all project assets to local high-performance WebP formats.

@@ -39,7 +39,6 @@ const ctx = canvas.getContext('2d', {
 ```
 
 **Файлы изменены:**
-- `components/GradientShaderCard.tsx`
 - `components/OptimizedGradientShaderCard.tsx`
 
 **Причины:**
