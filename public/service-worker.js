@@ -30,7 +30,6 @@ const STATIC_ASSETS = [
   '/components/Footer.tsx',
   '/components/Footer2026.tsx',
   '/components/FramerIntegration.tsx',
-  '/components/GradientShaderCard.tsx',
   '/components/Header.tsx',
   '/components/HolographicElements.tsx',
   '/components/Icons.tsx',
