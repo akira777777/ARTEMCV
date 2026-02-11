@@ -33,3 +33,6 @@ com[1-9]
 # System/IDE files
 .Jules/
 .bolt/
+
+# Environment variables
+.env
