@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 
-const GradientShaderCard = lazy(() => import('./GradientShaderCard'));
+const OptimizedGradientShaderCard = lazy(() => import('./OptimizedGradientShaderCard'));
 
 interface LazyGradientShaderCardProps {
   fallback?: React.ReactNode;
@@ -20,7 +20,7 @@ const LazyGradientShaderCard: React.FC<LazyGradientShaderCardProps> = ({
 }) => {
   return (
     <Suspense fallback={fallback}>
-      <GradientShaderCard />
+      <OptimizedGradientShaderCard />
     </Suspense>
   );
 };

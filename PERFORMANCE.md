@@ -10,7 +10,7 @@ All major components are wrapped with `React.memo()` to prevent unnecessary re-r
 
 - ✅ `Hero`, `About`, `Footer`, `WorkGallery`, `Projects`
 - ✅ `Navigation`, `SimpleTelegramChat`, `ScrollToTop`
-- ✅ `CursorTrail`, `GradientShaderCard`, `InteractiveShowcase`
+- ✅ `CursorTrail`, `OptimizedGradientShaderCard`, `InteractiveShowcase`
 - ✅ `SkipLink`, `ScrollProgress`
 
 **Why:** React.memo prevents component re-renders when props haven't changed, reducing CPU usage and improving responsiveness.
@@ -29,7 +29,7 @@ const [lang, setLangState] = useState<Lang>(() => detect());
 
 ### 3. Canvas Optimizations
 
-The `GradientShaderCard` component uses several canvas optimization techniques:
+The `OptimizedGradientShaderCard` component uses several canvas optimization techniques:
 
 - **Float32Array** for wave calculations (pre-allocated typed arrays)
 - **Hoisted math calculations** (time multipliers computed once per frame)
@@ -229,7 +229,7 @@ npx tsx benchmarks/cursortrail_benchmark.ts
 - **Performance gain**: Reduced initial bundle size and improved loading performance
 
 ### 13. Enhanced Mouse Movement Throttling
-- **Advanced Throttling**: Updated `GradientShaderCard` with timestamp-based throttling instead of simple RAF
+- **Advanced Throttling**: Updated `OptimizedGradientShaderCard` with timestamp-based throttling instead of simple RAF
 - **Performance gain**: Reduced mouse event processing overhead while maintaining smooth interaction
 - **Implementation**: Uses 16ms delay (~60fps) with microtask queuing for latest position processing
 

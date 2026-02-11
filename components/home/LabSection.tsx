@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useI18n } from '../../i18n';
 import { Orbit, Brain, ArrowUpRight } from 'lucide-react';
 
-const GradientShaderCard = React.lazy(() => import('../GradientShaderCard'));
+const OptimizedGradientShaderCard = React.lazy(() => import('../OptimizedGradientShaderCard'));
 
 const LabSection: React.FC = () => {
   const { t } = useI18n();
@@ -86,7 +86,7 @@ const LabSection: React.FC = () => {
                 <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
               </div>
             }>
-              <GradientShaderCard />
+              <OptimizedGradientShaderCard />
             </Suspense>
           </motion.div>
 
