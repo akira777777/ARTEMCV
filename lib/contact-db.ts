@@ -28,33 +28,35 @@ export async function storeContactSubmission(
   ipAddress: string | null,
   userAgent: string | null
 ): Promise<string> {
-  const result = await query(
-    `INSERT INTO contact_submissions (name, email, subject, message, ip_address, user_agent)
-     VALUES ($1, $2, $3, $4, $5, $6)
-     RETURNING id`,
-    [name, email, subject, message, ipAddress, userAgent]
-  );
+  return transaction(async (client) => {
+    const result = await client.query(
+      `INSERT INTO contact_submissions (name, email, subject, message, ip_address, user_agent)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id`,
+      [name, email, subject, message, ipAddress, userAgent]
+    );
 
-  const submissionId = result.rows[0].id;
+    const submissionId = result.rows[0].id;
 
-  // Log the submission event
-  await query(
-    `INSERT INTO contact_audit_log (submission_id, event_type, event_data)
-     VALUES ($1, $2, $3)`,
-    [submissionId, 'submitted', JSON.stringify({ method: 'contact_form' })]
-  );
+    // Log the submission event
+    await client.query(
+      `INSERT INTO contact_audit_log (submission_id, event_type, event_data)
+       VALUES ($1, $2, $3)`,
+      [submissionId, 'submitted', JSON.stringify({ method: 'contact_form' })]
+    );
 
-  // Update daily analytics
-  await query(
-    `INSERT INTO contact_analytics (date, total_submissions, unique_visitors)
-     VALUES (CURRENT_DATE, 1, 1)
-     ON CONFLICT (date) DO UPDATE SET
-       total_submissions = contact_analytics.total_submissions + 1,
-       unique_visitors = contact_analytics.unique_visitors + 1`,
-    []
-  );
+    // Update daily analytics
+    await client.query(
+      `INSERT INTO contact_analytics (date, total_submissions, unique_visitors)
+       VALUES (CURRENT_DATE, 1, 1)
+       ON CONFLICT (date) DO UPDATE SET
+         total_submissions = contact_analytics.total_submissions + 1,
+         unique_visitors = contact_analytics.unique_visitors + 1`,
+      []
+    );
 
-  return submissionId;
+    return submissionId;
+  });
 }
 
 /**
@@ -115,22 +117,24 @@ export async function updateSubmissionStatus(
   id: string,
   status: 'new' | 'read' | 'archived'
 ): Promise<boolean> {
-  const result = await query(
-    'UPDATE contact_submissions SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id',
-    [status, id]
-  );
-
-  if (result.rows.length > 0) {
-    // Log the status change
-    await query(
-      `INSERT INTO contact_audit_log (submission_id, event_type, event_data)
-       VALUES ($1, $2, $3)`,
-      [id, 'status_changed', JSON.stringify({ new_status: status })]
+  return transaction(async (client) => {
+    const result = await client.query(
+      'UPDATE contact_submissions SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id',
+      [status, id]
     );
-    return true;
-  }
 
-  return false;
+    if (result.rows.length > 0) {
+      // Log the status change
+      await client.query(
+        `INSERT INTO contact_audit_log (submission_id, event_type, event_data)
+         VALUES ($1, $2, $3)`,
+        [id, 'status_changed', JSON.stringify({ new_status: status })]
+      );
+      return true;
+    }
+
+    return false;
+  });
 }
 
 /**
