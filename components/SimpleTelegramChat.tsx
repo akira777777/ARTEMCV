@@ -20,16 +20,17 @@ const createId = () => globalThis.crypto?.randomUUID?.() ?? `msg-${Date.now()}-$
 const INITIAL_MESSAGE_ID = 'initial-welcome';
 
 export const SimpleTelegramChat: React.FC = React.memo(() => {
+  console.log('Rendering SimpleTelegramChat');
   const { t, lang } = useI18n();
   const fetchWithTimeout = useFetchWithTimeout(12_000);
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>(() => [
-    { 
-      id: INITIAL_MESSAGE_ID, 
-      role: 'bot', 
+    {
+      id: INITIAL_MESSAGE_ID,
+      role: 'bot',
       text: '', // Will be set by useEffect
-      timestamp: new Date() 
+      timestamp: new Date()
     }
   ]);
 
@@ -79,7 +80,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       const timer = setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 0);
-      
+
       return () => clearTimeout(timer);
     }
   }, [messages, isOpen]);
@@ -101,7 +102,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       setUserName(trimmedInput);
       try {
         localStorage.setItem('chat_user_name', trimmedInput);
-      } catch {}
+      } catch { }
 
       setInputValue('');
       setError(null);
@@ -203,7 +204,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       </div>
 
       {/* Main Chat Panel */}
-      <div 
+      <div
         className={`
           fixed bottom-28 right-8 z-40 
           bg-neutral-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl
@@ -237,17 +238,17 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
           aria-live="polite"
         >
           {messages.map((msg) => (
-            <div 
-              key={msg.id} 
+            <div
+              key={msg.id}
               role="article"
               aria-label={`${msg.role === 'user' ? t('chat.role.user') : t('chat.role.bot')}: ${msg.text}`}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div 
+              <div
                 className={`
                   max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed
-                  ${msg.role === 'user' 
-                    ? 'bg-white text-black rounded-tr-none' 
+                  ${msg.role === 'user'
+                    ? 'bg-white text-black rounded-tr-none'
                     : 'bg-white/10 text-neutral-200 rounded-tl-none border border-white/5'}
                 `}
               >
@@ -283,8 +284,8 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
           )}
 
           {error && (
-            <div 
-              role="alert" 
+            <div
+              role="alert"
               className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-xs animate-in fade-in"
             >
               {error}
