@@ -59,5 +59,23 @@
     "typescript": "~5.8.3",
     "vite": "^6.4.1",
     "vitest": "^4.0.18"
-  }
+  },
+  "description": "<div align=\"center\">\r <img width=\"1200\" height=\"475\" alt=\"GHBanner\" src=\"https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6\" />",
+  "main": "compare-translations.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akira777777/ARTEMCV.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akira777777/ARTEMCV/issues"
+  },
+  "homepage": "https://github.com/akira777777/ARTEMCV#readme"
 }

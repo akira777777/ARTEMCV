@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import Hero2026 from '../components/home/Hero2026';
+import CinematicHero from '../components/home/CinematicHero';
 import DefaultLayout from '../components/DefaultLayout';
 // Lazy load heavy components to reduce initial bundle size
 const BentoGrid = lazy(() => import('../components/home/BentoGrid'));
@@ -15,11 +15,13 @@ const SectionLoader = () => (
 const Home2026: React.FC = () => {
   return (
     <DefaultLayout>
-      <Hero2026 />
-      <Suspense fallback={<SectionLoader />}>  
+      <Suspense fallback={<SectionLoader />}>
+        <CinematicHero />
+      </Suspense>
+      <Suspense fallback={<SectionLoader />}>
         <BentoGrid />
       </Suspense>
-      <Suspense fallback={<SectionLoader />}>  
+      <Suspense fallback={<SectionLoader />}>
         <LabSection />
       </Suspense>
     </DefaultLayout>
