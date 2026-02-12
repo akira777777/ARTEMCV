@@ -9,14 +9,14 @@ import { useEffect, useRef, useCallback } from 'react';
  */
 export function preloadResource(href: string, as: 'script' | 'style' | 'image' | 'font' = 'script', type?: string) {
   if (typeof document === 'undefined') return;
-  
+
   const link = document.createElement('link');
   link.rel = 'preload';
   link.href = href;
   link.as = as;
   if (type) link.type = type;
   if (as === 'font') link.crossOrigin = 'anonymous';
-  
+
   document.head.appendChild(link);
 }
 
@@ -25,12 +25,12 @@ export function preloadResource(href: string, as: 'script' | 'style' | 'image' |
  */
 export function preconnect(domain: string, crossOrigin = true) {
   if (typeof document === 'undefined') return;
-  
+
   const link = document.createElement('link');
   link.rel = 'preconnect';
   link.href = domain;
   if (crossOrigin) link.crossOrigin = 'anonymous';
-  
+
   document.head.appendChild(link);
 }
 
@@ -81,7 +81,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
   wait: number
 ): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null = null;
-  
+
   return (...args: Parameters<T>) => {
     if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => {
@@ -99,7 +99,7 @@ export function useThrottleRAF<T extends (...args: unknown[]) => void>(callback:
 
   const throttledCallback = useCallback((...args: Parameters<T>) => {
     latestArgs.current = args;
-    
+
     if (rafRef.current === null) {
       rafRef.current = requestAnimationFrame(() => {
         if (latestArgs.current) {
@@ -132,11 +132,11 @@ export function useRenderPerf(componentName: string) {
     renderCount.current += 1;
     const endTime = performance.now();
     const duration = endTime - startTime.current;
-    
+
     if (process.env.NODE_ENV === 'development') {
       console.log(`[Perf] ${componentName} render #${renderCount.current}: ${duration.toFixed(2)}ms`);
     }
-    
+
     startTime.current = endTime;
   });
 
@@ -160,7 +160,7 @@ export function isInViewport(element: HTMLElement, offset = 0): boolean {
  * Request idle callback with fallback
  */
 export function requestIdle(callback: () => void, timeout = 2000) {
-  if ('requestIdleCallback' in window) {
+  if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
     return window.requestIdleCallback(callback, { timeout });
   }
   return setTimeout(callback, 1);

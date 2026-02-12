@@ -16,9 +16,11 @@ vi.mock('../components/MobileMenu', () => ({
   MobileMenu: () => <div>MobileMenu</div>
 }));
 
+const mockT = (key: string) => key;
+
 vi.mock('../i18n', () => ({
   useI18n: vi.fn(() => ({
-    t: (key: string) => key, // Возвращаем ключ как значение для тестирования
+    t: mockT,
     lang: 'en'
   }))
 }));
@@ -26,7 +28,7 @@ vi.mock('../i18n', () => ({
 describe('Navigation Component Tests', () => {
   it('renders without crashing', () => {
     render(<Navigation />);
-    
+
     // Проверяем, что компонент рендерится
     expect(screen.getByRole('banner')).toBeInTheDocument();
     expect(screen.getByLabelText('Main website header')).toBeInTheDocument();
@@ -34,17 +36,17 @@ describe('Navigation Component Tests', () => {
 
   it('displays navigation items correctly', () => {
     render(<Navigation />);
-    
+
     // Проверяем наличие элементов навигации
     const navItems = [
       'nav.home',
-      'nav.works', 
+      'nav.works',
       'nav.lab',
       'nav.services',
       'nav.about',
       'nav.contact'
     ];
-    
+
     navItems.forEach(item => {
       const link = screen.getByText(item);
       expect(link).toBeInTheDocument();
@@ -53,38 +55,36 @@ describe('Navigation Component Tests', () => {
 
   it('handles scroll events properly', async () => {
     render(<Navigation />);
-    
+
     // Симулируем событие прокрутки
     Object.defineProperty(window, 'scrollY', {
       writable: true,
       configurable: true,
       value: 200
     });
-    
+
     fireEvent.scroll(window, { target: { scrollY: 200 } });
-    
+
     // Проверяем, что компонент не вызывает ошибок при прокрутке
     expect(screen.getByRole('banner')).toBeInTheDocument();
   });
 
   it('toggles visibility on scroll', async () => {
     render(<Navigation />);
-    
+
     // Проверяем начальное состояние
     const header = screen.getByRole('banner');
-    
-    // Симулируем прокрутку вниз
-    Object.defineProperty(window, 'scrollY', {
-      writable: true,
-      configurable: true,
-      value: 300
-    });
-    
-    fireEvent.scroll(window, { target: { scrollY: 300 } });
-    
-    // Проверяем, что компонент не падает
+
+    // Симулируем прокрутку вниз (должен скрыться)
+    Object.defineProperty(window, 'scrollY', { value: 300, writable: true });
+    fireEvent.scroll(window);
+
+    // Симулируем прокрутку вверх (должен появиться)
+    Object.defineProperty(window, 'scrollY', { value: 200, writable: true });
+    fireEvent.scroll(window);
+
     await waitFor(() => {
-      expect(header).toBeInTheDocument();
+      expect(header).toHaveClass('translate-y-0');
     });
   });
 });
