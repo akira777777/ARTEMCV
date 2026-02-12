@@ -4,9 +4,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { SimpleTelegramChat } from '../components/SimpleTelegramChat';
 
 // Mock необходимые зависимости
+const mockT = (key: string) => key;
 vi.mock('../i18n', () => ({
   useI18n: vi.fn(() => ({
-    t: (key: string) => key,
+    t: mockT,
     lang: 'en'
   }))
 }));
@@ -31,7 +32,7 @@ describe('SimpleTelegramChat Component Tests', () => {
 
   it('renders without crashing', () => {
     render(<SimpleTelegramChat />);
-    
+
     // Проверяем, что кнопка чата рендерится
     const chatButton = screen.getByLabelText(/chat.aria.open/i);
     expect(chatButton).toBeInTheDocument();
@@ -39,14 +40,14 @@ describe('SimpleTelegramChat Component Tests', () => {
 
   it('toggles chat panel open/close', () => {
     render(<SimpleTelegramChat />);
-    
+
     // Проверяем начальное состояние (чат закрыт)
     expect(screen.queryByLabelText(/chat.aria.close/i)).not.toBeInTheDocument();
-    
+
     // Открываем чат
     const openButton = screen.getByLabelText(/chat.aria.open/i);
     fireEvent.click(openButton);
-    
+
     // Проверяем, что чат открылся
     const closeButton = screen.getByLabelText(/chat.aria.close/i);
     expect(closeButton).toBeInTheDocument();
@@ -54,10 +55,10 @@ describe('SimpleTelegramChat Component Tests', () => {
 
   it('maintains memoization', () => {
     const { rerender } = render(<SimpleTelegramChat />);
-    
+
     // Перерендерим компонент
     rerender(<SimpleTelegramChat />);
-    
+
     // Проверяем, что компонент не падает при перерендеринге
     const chatButton = screen.getByLabelText(/chat.aria.open/i);
     expect(chatButton).toBeInTheDocument();

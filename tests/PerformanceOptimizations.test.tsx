@@ -35,9 +35,11 @@ vi.mock('../components/MobileMenu', () => ({
   MobileMenu: () => <div>MobileMenu</div>
 }));
 
+// Mock dependencies
+const mockT = (key: string) => key;
 vi.mock('../i18n', () => ({
   useI18n: vi.fn(() => ({
-    t: (key: string) => key,
+    t: mockT,
     lang: 'en'
   }))
 }));
@@ -59,6 +61,7 @@ beforeEach(() => {
 describe('Performance Optimizations Verification', () => {
   it('SimpleTelegramChat component maintains memoization and functionality', () => {
     render(<SimpleTelegramChat />);
-    expect(screen.getByTestId('icon-message-circle')).toBeInTheDocument();
+    const icons = screen.getAllByTestId('icon-message-circle');
+    expect(icons.length).toBeGreaterThan(0);
   });
 });

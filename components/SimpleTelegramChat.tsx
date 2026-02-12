@@ -20,7 +20,6 @@ const createId = () => globalThis.crypto?.randomUUID?.() ?? `msg-${Date.now()}-$
 const INITIAL_MESSAGE_ID = 'initial-welcome';
 
 export const SimpleTelegramChat: React.FC = React.memo(() => {
-  console.log('Rendering SimpleTelegramChat');
   const { t, lang } = useI18n();
   const fetchWithTimeout = useFetchWithTimeout(12_000);
   const [isOpen, setIsOpen] = useState(false);
