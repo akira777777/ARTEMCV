@@ -2,7 +2,7 @@ import React from 'react';
 import DefaultLayout from '../components/DefaultLayout';
 import CleanHero from '../components/home/CleanHero';
 import { WorkGallery } from '../components/WorkGallery';
-import { ContactSectionSecure } from '../components/ContactSectionSecure';
+import ContactSectionSecure from '../components/ContactSectionSecure';
 import { About } from '../components/About';
 
 /**
