@@ -11,6 +11,7 @@ import { PageTransition } from './components/PageTransition';
 const HomePage = lazy(() => import('./pages/HomePage'));
 const Home2026 = lazy(() => import('./pages/Home2026'));
 const DetailingHub = lazy(() => import('./pages/DetailingHub'));
+const CleanHome = lazy(() => import('./pages/CleanHome'));
 
 // Loading fallback
 const PageLoader = () => (
@@ -33,6 +34,11 @@ const AppRoutes = () => {
         <Route path="/home2026" element={
           <PageTransition>
             <Home2026 />
+          </PageTransition>
+        } />
+        <Route path="/clean" element={
+          <PageTransition>
+            <CleanHome />
           </PageTransition>
         } />
         <Route path="/project/detailing" element={
