@@ -31,7 +31,7 @@ const PRECACHE_ASSETS = [
 // Precache critical assets
 self.addEventListener('install', (event) => {
   console.log('[Service Worker] Installing...');
-  
+
   event.waitUntil(
     Promise.all([
       // Precache static assets
@@ -55,9 +55,9 @@ self.addEventListener('install', (event) => {
                   if (matches) {
                     return cache.addAll(matches);
                   }
-                }).catch(() => {});
+                }).catch(() => { });
               } else {
-                return cache.add(asset).catch(() => {});
+                return cache.add(asset).catch(() => { });
               }
             })
           );
@@ -74,9 +74,9 @@ self.addEventListener('install', (event) => {
 // Clean up old caches
 self.addEventListener('activate', (event) => {
   console.log('[Service Worker] Activating...');
-  
+
   const currentCaches = [CACHE_NAME, DYNAMIC_CACHE, IMAGE_CACHE];
-  
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -100,10 +100,15 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') {
     return;
   }
-  
+
+  // Ignore chrome-extension schemes and other non-http protocols
+  if (!event.request.url.startsWith('http')) {
+    return;
+  }
+
   // Cache-first strategy for hashed assets (they never change)
   const isHashedAsset = event.request.url.includes('/assets/') &&
-                        /\.[a-f0-9]{8,10}\./.test(event.request.url);
+    /\.[a-f0-9]{8,10}\./.test(event.request.url);
 
   if (isHashedAsset) {
     event.respondWith(
@@ -129,9 +134,9 @@ self.addEventListener('fetch', (event) => {
   if (event.request.destination === 'document') {
     return;
   }
-  
+
   const url = new URL(event.request.url);
-  
+
   // Image caching strategy
   if (event.request.destination === 'image') {
     event.respondWith(
@@ -143,10 +148,10 @@ self.addEventListener('fetch', (event) => {
               if (networkResponse && networkResponse.status === 200) {
                 cache.put(event.request, networkResponse.clone());
               }
-            }).catch(() => {});
+            }).catch(() => { });
             return cachedResponse;
           }
-          
+
           // Fetch from network and cache
           return fetch(event.request).then(networkResponse => {
             if (networkResponse && networkResponse.status === 200) {
@@ -159,7 +164,7 @@ self.addEventListener('fetch', (event) => {
     );
     return;
   }
-  
+
   // Dynamic asset caching (JS, CSS, etc.)
   if (url.pathname.startsWith('/assets/') || url.pathname.endsWith('.css')) {
     event.respondWith(
@@ -168,7 +173,7 @@ self.addEventListener('fetch', (event) => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          
+
           return fetch(event.request).then(networkResponse => {
             if (networkResponse && networkResponse.status === 200) {
               cache.put(event.request, networkResponse.clone());
@@ -180,19 +185,19 @@ self.addEventListener('fetch', (event) => {
     );
     return;
   }
-  
+
   // Default network-first strategy with cache fallback
   event.respondWith(
     (async () => {
       try {
         const networkResponse = await fetch(event.request);
-        
+
         // Cache successful responses
         if (networkResponse && networkResponse.status === 200) {
           const cache = await caches.open(DYNAMIC_CACHE);
           await cache.put(event.request, networkResponse.clone());
         }
-        
+
         return networkResponse;
       } catch (error) {
         // Network failed, try cache
@@ -200,7 +205,7 @@ self.addEventListener('fetch', (event) => {
         if (cachedResponse) {
           return cachedResponse;
         }
-        
+
         // Both failed, return offline fallback
         return new Response('Offline', {
           status: 503,
