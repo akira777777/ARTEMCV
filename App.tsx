@@ -2,14 +2,14 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { I18nProvider } from './i18n';
-import Home2026 from './pages/Home2026';
-import HomePage from './pages/HomePage';
 import { AccessibilityPanel } from './components/AccessibilityPanel';
 import AccessibilityProvider from './components/AccessibilityProvider';
 import ErrorBoundary from './components/ErrorBoundary';
 import { PageTransition } from './components/PageTransition';
 
 // Lazy load heavy components
+const HomePage = lazy(() => import('./pages/HomePage'));
+const Home2026 = lazy(() => import('./pages/Home2026'));
 const DetailingHub = lazy(() => import('./pages/DetailingHub'));
 
 // Loading fallback

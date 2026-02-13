@@ -1,11 +1,9 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, Github } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Github } from 'lucide-react';
 import { PROJECTS } from '../constants';
-import { Project } from '../types';
 import { useI18n } from '../i18n';
 import OptimizedImage from './OptimizedImage';
-import { HolographicCard } from './HolographicCard';
 import { FloatingParticleCanvas } from './FloatingParticleCanvas';
 import { RenderOptimizer } from './RenderOptimizer';
 
@@ -16,6 +14,7 @@ export const SpotlightGallery: React.FC = React.memo(() => {
   const { t } = useI18n();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHydrated, setIsHydrated] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
   
   // Normalize index to handle negative values and wrapping
   const normalizedIndex = useMemo(() => {
@@ -31,6 +30,19 @@ export const SpotlightGallery: React.FC = React.memo(() => {
 
   const handleNext = useCallback(() => {
     setActiveIndex((prev) => prev + 1);
+  }, []);
+
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      setActiveIndex((prev) => prev - 1);
+      return;
+    }
+
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      setActiveIndex((prev) => prev + 1);
+    }
   }, []);
 
 
@@ -60,6 +72,14 @@ export const SpotlightGallery: React.FC = React.memo(() => {
     });
     return () => cancelAnimationFrame(timer);
   }, [isTestEnv]);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    section.addEventListener('keydown', handleKeyDown);
+    return () => section.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
   
   // Render immediately in test environment
   if (!isHydrated && !isTestEnv) {
@@ -84,7 +104,13 @@ export const SpotlightGallery: React.FC = React.memo(() => {
 
   return (
     <RenderOptimizer priority="medium">
-      <section id="works" className="py-32 w-full relative border-t border-white/5 bg-gradient-to-b from-black via-neutral-950/50 to-black overflow-hidden">
+      <section
+        id="works"
+        ref={sectionRef}
+        tabIndex={0}
+        aria-label={t('works.title')}
+        className="py-32 w-full relative border-t border-white/5 bg-gradient-to-b from-black via-neutral-950/50 to-black overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+      >
         {/* Background floating particles */}
         <div className="absolute inset-0 -z-10">
           <FloatingParticleCanvas 
@@ -105,6 +131,7 @@ export const SpotlightGallery: React.FC = React.memo(() => {
             {/* Controls */}
             <div className="flex gap-4 mt-8 md:mt-0">
               <button
+                type="button"
                 onClick={handlePrev}
                 aria-label={t('works.prev')}
                 className="p-4 rounded-full border-2 border-indigo-400/30 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:border-transparent hover:text-white text-neutral-300 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
@@ -112,6 +139,7 @@ export const SpotlightGallery: React.FC = React.memo(() => {
                 <ChevronLeft size={24} />
               </button>
               <button
+                type="button"
                 onClick={handleNext}
                 aria-label={t('works.next')}
                 className="p-4 rounded-full border-2 border-indigo-400/30 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:border-transparent hover:text-white text-neutral-300 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
@@ -127,7 +155,7 @@ export const SpotlightGallery: React.FC = React.memo(() => {
             <div className="lg:col-span-2">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeIndex}
+                  key={normalizedIndex}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
@@ -142,7 +170,8 @@ export const SpotlightGallery: React.FC = React.memo(() => {
                   />
                   
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent opacity-85" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-transparent" />
 
                   {/* Content Overlay */}
                   <div className="absolute inset-0 p-8 flex flex-col justify-end">
@@ -157,11 +186,11 @@ export const SpotlightGallery: React.FC = React.memo(() => {
                           </span>
                         ))}
                       </div>
-                      <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">
+                      <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-2 [text-shadow:0_6px_22px_rgba(0,0,0,0.85)]">
                         {t(activeProject.title)}
                       </h3>
-                      <p className="text-neutral-300 text-sm md:text-base max-w-lg">
-                        {t(activeProject.description) || 'High-quality project developed with cutting-edge technologies'}
+                      <p className="text-neutral-200 text-sm md:text-base max-w-lg [text-shadow:0_4px_16px_rgba(0,0,0,0.75)]">
+                        {t(activeProject.description) || t('works.no.desc')}
                       </p>
                     </div>
                   </div>
@@ -172,10 +201,10 @@ export const SpotlightGallery: React.FC = React.memo(() => {
             {/* Project Info Sidebar */}
             <div className="space-y-6">
               <div className="space-y-4">
-                <h4 className="text-xs uppercase font-bold tracking-widest text-neutral-400">Project Details</h4>
+                <h4 className="text-xs uppercase font-bold tracking-widest text-neutral-400">{t('works.sidebar.details')}</h4>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-xs text-neutral-500 mb-1">Tech Stack</p>
+                    <p className="text-xs text-neutral-500 mb-1">{t('works.sidebar.stack')}</p>
                     <div className="flex flex-wrap gap-2">
                       {activeProject.techStack.map((tech) => (
                         <span
@@ -188,7 +217,9 @@ export const SpotlightGallery: React.FC = React.memo(() => {
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs text-neutral-500 mb-2">Project #{normalizedIndex + 1} of {PROJECTS.length}</p>
+                    <p className="text-xs text-neutral-500 mb-2">
+                      {t('works.sidebar.project')} {normalizedIndex + 1} {t('works.sidebar.of')} {PROJECTS.length}
+                    </p>
                     <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
                       <motion.div
                         className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
@@ -208,6 +239,7 @@ export const SpotlightGallery: React.FC = React.memo(() => {
                     href={activeProject.liveLink}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`${t('works.cta.view')} ${t(activeProject.title)}`}
                     className="group/btn w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm font-bold rounded-xl hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] transition-all duration-300"
                   >
                     {t('works.cta.view')}
@@ -219,9 +251,10 @@ export const SpotlightGallery: React.FC = React.memo(() => {
                     href={activeProject.githubLink}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`${t('works.cta.code')} ${t(activeProject.title)}`}
                     className="group/btn w-full flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 text-white text-sm font-bold rounded-xl hover:bg-gradient-to-r hover:from-indigo-500/20 hover:to-purple-500/20 transition-all duration-300"
                   >
-                    VIEW CODE
+                    {t('works.cta.code')}
                     <Github size={16} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
                   </a>
                 )}
@@ -231,7 +264,7 @@ export const SpotlightGallery: React.FC = React.memo(() => {
 
           {/* Thumbnail Carousel */}
           <div className="space-y-4">
-            <h4 className="text-xs uppercase font-bold tracking-widest text-neutral-400">Quick Navigation</h4>
+            <h4 className="text-xs uppercase font-bold tracking-widest text-neutral-400">{t('works.quick_nav')}</h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <AnimatePresence>
                 {visibleThumbnails.map((project, idx) => {
@@ -239,9 +272,11 @@ export const SpotlightGallery: React.FC = React.memo(() => {
 
                   return (
                     <motion.button
-                      key={activeIndex + idx}
+                      key={`${project.id}-${idx}-${normalizedIndex}`}
+                      type="button"
                       layout
                       onClick={() => setActiveIndex(activeIndex + idx)}
+                      aria-label={`${t('works.thumb.open')} ${t(project.title)}`}
                       className={`group relative overflow-hidden rounded-lg aspect-video cursor-pointer transition-all duration-300 ${
                         isActive
                           ? 'ring-2 ring-indigo-500 scale-105'
@@ -273,7 +308,7 @@ export const SpotlightGallery: React.FC = React.memo(() => {
 
           {/* Counter */}
           <div className="mt-16 text-center">
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-neutral-400" aria-live="polite">
               {t('works.open_details')} <span className="text-white font-bold">{t(activeProject.title)}</span> •{' '}
               {t('works.scroll_left')} / {t('works.scroll_right')}
             </p>

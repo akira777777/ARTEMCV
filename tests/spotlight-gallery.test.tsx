@@ -7,8 +7,10 @@ import { describe, it, expect, vi } from 'vitest';
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    div: ({ children, layout, initial, animate, exit, transition, whileHover, whileTap, variants, ...props }: any) => <div {...props}>{children}</div>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    button: ({ children, layout, initial, animate, exit, transition, whileHover, whileTap, variants, ...props }: any) => <button {...props}>{children}</button>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
@@ -25,7 +27,7 @@ const renderWithI18n = (component: React.ReactElement) => {
 describe('SpotlightGallery', () => {
   it('renders the works section with title', async () => {
     renderWithI18n(<SpotlightGallery />);
-    
+
     // Wait for hydration to complete
     await waitFor(() => {
       // The title uses translation key 'works.title' which is 'WORK' in English
@@ -35,7 +37,7 @@ describe('SpotlightGallery', () => {
 
   it('renders navigation buttons', async () => {
     renderWithI18n(<SpotlightGallery />);
-    
+
     await waitFor(() => {
       // Navigation buttons use aria-label with translation keys
       expect(screen.getByLabelText('Previous project')).toBeInTheDocument();
@@ -45,16 +47,16 @@ describe('SpotlightGallery', () => {
 
   it('displays project counter', async () => {
     renderWithI18n(<SpotlightGallery />);
-    
+
     await waitFor(() => {
-      // Check for specific project counter text
-      expect(screen.getByText(/Project #\d+ of \d+/)).toBeInTheDocument();
+      // Check for localized counter format
+      expect(screen.getByText(/Project \d+ of \d+/)).toBeInTheDocument();
     });
   });
 
   it('has CTA button for viewing project', async () => {
     renderWithI18n(<SpotlightGallery />);
-    
+
     await waitFor(() => {
       // The CTA uses translation key 'works.cta.view' which is 'EXPLORE' in English
       expect(screen.getByText('EXPLORE')).toBeInTheDocument();
@@ -63,14 +65,14 @@ describe('SpotlightGallery', () => {
 
   it('allows navigation between projects', async () => {
     renderWithI18n(<SpotlightGallery />);
-    
+
     await waitFor(() => {
       expect(screen.getByLabelText('Next project')).toBeInTheDocument();
     });
-    
+
     const nextButton = screen.getByLabelText('Next project');
     fireEvent.click(nextButton);
-    
+
     // After clicking, should still show the section
     await waitFor(() => {
       expect(screen.getByText('WORK')).toBeInTheDocument();

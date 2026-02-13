@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, Github } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
@@ -16,13 +16,13 @@ export const EnhancedSpotlightGallery: React.FC = React.memo(() => {
   const [viewMode, setViewMode] = useState<'spotlight' | 'grid'>('spotlight');
   const activeProject = PROJECTS[activeIndex];
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setActiveIndex((prev) => (prev === 0 ? PROJECTS.length - 1 : prev - 1));
-  };
+  }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setActiveIndex((prev) => (prev === PROJECTS.length - 1 ? 0 : prev + 1));
-  };
+  }, []);
 
   // Keyboard navigation
   useEffect(() => {
@@ -33,7 +33,13 @@ export const EnhancedSpotlightGallery: React.FC = React.memo(() => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [handlePrev, handleNext]);
+
+  const variants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
+  };
 
   const visibleThumbnails = useMemo(() => {
     const start = activeIndex;
@@ -46,6 +52,8 @@ export const EnhancedSpotlightGallery: React.FC = React.memo(() => {
 
   return (
     <section id="works" className="py-32 w-full relative border-t border-white/5 bg-gradient-to-b from-black via-neutral-950/50 to-black">
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-indigo-500/10 blur-3xl float-slower" aria-hidden="true" />
+      <div className="container mx-auto px-6 relative z-10">
       <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-indigo-500/10 blur-3xl float-slower" aria-hidden="true" />
       <div className="container mx-auto px-6 relative z-10">
         {/* Header with view mode toggle */}

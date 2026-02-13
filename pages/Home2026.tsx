@@ -15,9 +15,7 @@ const SectionLoader = () => (
 const Home2026: React.FC = () => {
   return (
     <DefaultLayout>
-      <Suspense fallback={<SectionLoader />}>
-        <CinematicHero />
-      </Suspense>
+      <CinematicHero />
       <Suspense fallback={<SectionLoader />}>
         <BentoGrid />
       </Suspense>
