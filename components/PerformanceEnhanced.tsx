@@ -519,8 +519,86 @@ export function useResourcePreloader(resources: string[]): [boolean, Error | nul
         await Promise.all(preloadPromises);
         
         if (!isCancelled) {
-          setIsLoaded(true);
+          setError(err instanceof Error ? err : new Error('Preload failed'));
         }
+      }
+    };
+
+    preloadResources();
+
+    return () => {
+      isCancelled = true;
+      controllers.forEach(controller => controller.abort());
+    };
+  }, [resources]);
+
+  return [isLoaded, error];
+}
+
+/**
+ * Virtual Scrolling Hook for long lists
+ */
+export function useVirtualization<T>(
+  items: T[],
+  itemHeight: number,
+  containerHeight: number,
+  overscan: number = 5
+): {
+  visibleItems: T[];
+  startIndex: number;
+  endIndex: number;
+  totalHeight: number;
+  offsetY: number;
+} {
+  const [scrollTop, setScrollTop] = useState(0);
+  const rafRef = useRef<number | null>(null);
+
+  const handleScroll = useCallback((newScrollTop: number) => {
+    if (rafRef.current) return;
+    
+    rafRef.current = requestAnimationFrame(() => {
+      setScrollTop(newScrollTop);
+      rafRef.current = null;
+    });
+  }, []);
+
+  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
+  const endIndex = Math.min(
+    items.length - 1,
+    Math.floor((scrollTop + containerHeight) / itemHeight) + overscan
+  );
+
+  const visibleItems = useMemo(() => {
+    return items.slice(startIndex, endIndex + 1);
+  }, [items, startIndex, endIndex]);
+
+  const totalHeight = items.length * itemHeight;
+  const offsetY = startIndex * itemHeight;
+
+  return {
+    visibleItems,
+    startIndex,
+    endIndex,
+    totalHeight,
+    offsetY
+  };
+}
+
+export default {
+  useDebounce,
+  useThrottle,
+  useIntersectionObserver,
+  useInterval,
+  usePerformanceMonitor,
+  useBatchedState,
+  useResourcePreloader,
+  useVirtualization,
+  VirtualList,
+  LazyImage,
+  DebouncedInput,
+  MemoizedComponent,
+  ConditionalRender
+};
       } catch (err) {
         if (!isCancelled) {
           setError(err instanceof Error ? err : new Error('Preload failed'));
