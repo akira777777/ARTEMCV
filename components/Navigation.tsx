@@ -4,6 +4,14 @@ import { useReducedMotion } from '../lib/hooks';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useI18n } from '../i18n';
 import { MobileMenu } from './MobileMenu';
+import { 
+  useFocusTrap, 
+  useKeyboardNavigation, 
+  generateAriaAttributes,
+  createAccessibleButtonProps,
+  createAccessibleLinkProps,
+  checkColorContrast 
+} from './AccessibilityUtils';
 
 const navItems: { key: string; href: string }[] = [
   { key: 'nav.home', href: '#home' },
@@ -21,6 +29,13 @@ const NavLink = React.memo<{
   onClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
 }>(({ item, isActive, onClick }) => {
   const { t } = useI18n();
+  
+  const ariaProps = generateAriaAttributes({
+    label: t(item.key),
+    current: isActive ? 'page' : undefined,
+    disabled: false
+  });
+
   return (
     <li key={item.key}>
       <a
@@ -32,6 +47,14 @@ const NavLink = React.memo<{
             ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]'
             : 'text-neutral-400 hover:text-white hover:bg-white/10 hover:scale-105'}
         `}
+        {...ariaProps}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onClick(e as any, item.href);
+          }
+        }}
       >
         {t(item.key)}
       </a>
