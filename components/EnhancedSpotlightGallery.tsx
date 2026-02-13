@@ -54,8 +54,6 @@ export const EnhancedSpotlightGallery: React.FC = React.memo(() => {
     <section id="works" className="py-32 w-full relative border-t border-white/5 bg-gradient-to-b from-black via-neutral-950/50 to-black">
       <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-indigo-500/10 blur-3xl float-slower" aria-hidden="true" />
       <div className="container mx-auto px-6 relative z-10">
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-indigo-500/10 blur-3xl float-slower" aria-hidden="true" />
-      <div className="container mx-auto px-6 relative z-10">
         {/* Header with view mode toggle */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
           <div>
@@ -67,22 +65,20 @@ export const EnhancedSpotlightGallery: React.FC = React.memo(() => {
           <div className="flex gap-2 mt-8 md:mt-0">
             <button
               onClick={() => setViewMode('spotlight')}
-              className={`px-4 py-2 rounded-full text-xs font-bold tracking-widest ${
-                viewMode === 'spotlight'
-                  ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white'
-                  : 'bg-white/5 text-neutral-400 hover:bg-white/10'
-              }`}
+              className={`px-4 py-2 rounded-full text-xs font-bold tracking-widest ${viewMode === 'spotlight'
+                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white'
+                : 'bg-white/5 text-neutral-400 hover:bg-white/10'
+                }`}
               aria-label="Spotlight view"
             >
               SPOTLIGHT
             </button>
             <button
               onClick={() => setViewMode('grid')}
-              className={`px-4 py-2 rounded-full text-xs font-bold tracking-widest ${
-                viewMode === 'grid'
-                  ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white'
-                  : 'bg-white/5 text-neutral-400 hover:bg-white/10'
-              }`}
+              className={`px-4 py-2 rounded-full text-xs font-bold tracking-widest ${viewMode === 'grid'
+                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white'
+                : 'bg-white/5 text-neutral-400 hover:bg-white/10'
+                }`}
               aria-label="Grid view"
             >
               GRID
@@ -127,9 +123,9 @@ export const EnhancedSpotlightGallery: React.FC = React.memo(() => {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     priority={true}
                   />
-                  
+
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70" />
 
                   {/* Content Overlay */}
                   <div className="absolute inset-0 p-8 flex flex-col justify-end">
@@ -144,7 +140,7 @@ export const EnhancedSpotlightGallery: React.FC = React.memo(() => {
                           </span>
                         ))}
                       </div>
-                      <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">
+                      <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
                         {t(activeProject.title)}
                       </h3>
                       <p className="text-neutral-300 text-sm md:text-base max-w-lg">
@@ -289,11 +285,10 @@ export const EnhancedSpotlightGallery: React.FC = React.memo(() => {
                     <motion.button
                       key={`${actualIndex}-${idx}`}
                       onClick={() => setActiveIndex(actualIndex)}
-                      className={`group relative overflow-hidden rounded-lg aspect-video cursor-pointer transition-all duration-300 ${
-                        isActive
-                          ? 'ring-2 ring-indigo-500 scale-105'
-                          : 'hover:ring-2 hover:ring-indigo-400/50'
-                      }`}
+                      className={`group relative overflow-hidden rounded-lg aspect-video cursor-pointer transition-all duration-300 ${isActive
+                        ? 'ring-2 ring-indigo-500 scale-105'
+                        : 'hover:ring-2 hover:ring-indigo-400/50'
+                        }`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.98 }}
                     >
