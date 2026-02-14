@@ -29,7 +29,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = React.memo(({
   
   return (
     <div 
-      className={`bg-[#0a0a0a] min-h-screen text-white selection:bg-white/10 selection:text-white ${className}`}
+      className={`bg-background min-h-screen text-foreground selection:bg-white/10 selection:text-white ${className}`}
       lang={lang}
     >
       {showSkipLink && <SkipLink />}
