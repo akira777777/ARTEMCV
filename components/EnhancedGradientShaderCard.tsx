@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
+import { useCanvas } from '../lib/useCanvas';
 
 // OPTIMIZATION: Constants defined outside component to avoid recreation
 const PARTICLE_COUNT = 100;
@@ -9,20 +10,12 @@ const MAX_PARTICLES = 200; // Limit total particles for better performance
 
 // OPTIMIZATION: Pre-defined colors to avoid string concatenation in loop
 const HEX_COLORS = ['#3b82f6', '#8b5cf6', '#ec4899']; // Tailwind blue, violet, pink
-const RGB_COLORS = [
-  'rgba(59, 130, 246',  // blue-500
-  'rgba(139, 92, 246', // violet-500  
-  'rgba(236, 72, 153'  // pink-500
-];
 
 interface EnhancedGradientShaderCardProps {
   className?: string;
 }
 
 const EnhancedGradientShaderCard: React.FC<EnhancedGradientShaderCardProps> = ({ className }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
   const mouseRef = useRef({ x: -100, y: -100 });
   const [isHovered, setIsHovered] = useState(false);
   
@@ -49,25 +42,25 @@ const EnhancedGradientShaderCard: React.FC<EnhancedGradientShaderCardProps> = ({
 
     const data = particlesRef.current;
     const activeIndices = activeParticleIndicesRef.current!;
-    const activeCount = activeParticleCountRef.current;
-
-    // Initialize particles
-    for (let i = activeCount; i < PARTICLE_COUNT; i++) {
-      const idx = i * PARTICLE_STRIDE;
-      data[idx] = Math.random() * width;      // x
-      data[idx + 1] = Math.random() * height; // y
-      data[idx + 2] = (Math.random() - 0.5) * 0.5; // vx
-      data[idx + 3] = (Math.random() - 0.5) * 0.5; // vy
-      activeIndices[i] = 1;
+    // If we have fewer particles than target (e.g. initial load), add them
+    if (activeParticleCountRef.current < PARTICLE_COUNT) {
+        for (let i = activeParticleCountRef.current; i < PARTICLE_COUNT; i++) {
+          const idx = i * PARTICLE_STRIDE;
+          data[idx] = Math.random() * width;      // x
+          data[idx + 1] = Math.random() * height; // y
+          data[idx + 2] = (Math.random() - 0.5) * 0.5; // vx
+          data[idx + 3] = (Math.random() - 0.5) * 0.5; // vy
+          activeIndices[i] = 1;
+        }
+        activeParticleCountRef.current = PARTICLE_COUNT;
     }
-    
-    activeParticleCountRef.current = PARTICLE_COUNT;
   }, []);
 
   const createMouseParticle = useCallback((x: number, y: number) => {
-    const activeCount = activeParticleCountRef.current;
-    if (activeCount >= MAX_PARTICLES) {
-      // Remove oldest particle to make room
+    if (activeParticleCountRef.current >= MAX_PARTICLES) {
+      // Remove oldest particle to make room (shift)
+      // Note: This shift operation is O(N) which is expensive for large MAX_PARTICLES
+      // A ring buffer would be O(1) but more complex to manage with linear memory stride
       for (let i = 0; i < MAX_PARTICLES - 1; i++) {
         const srcIdx = (i + 1) * PARTICLE_STRIDE;
         const dstIdx = i * PARTICLE_STRIDE;
@@ -93,7 +86,7 @@ const EnhancedGradientShaderCard: React.FC<EnhancedGradientShaderCardProps> = ({
     activeParticleCountRef.current++;
   }, []);
 
-  const updateAndDraw = useCallback((
+  const animate = useCallback((
     ctx: CanvasRenderingContext2D, 
     width: number, 
     height: number
@@ -146,7 +139,6 @@ const EnhancedGradientShaderCard: React.FC<EnhancedGradientShaderCardProps> = ({
       }
 
       // Check connections (Inner loop optimization)
-      // Only check particles with index > i to avoid double checking and self-checking
       for (let j = i + 1; j < activeCount; j++) {
         if (!activeIndices[j]) continue;
         
@@ -180,13 +172,27 @@ const EnhancedGradientShaderCard: React.FC<EnhancedGradientShaderCardProps> = ({
       if (!activeIndices[i]) continue;
       
       const idx = i * PARTICLE_STRIDE;
-      // Draw circle
       ctx.moveTo(data[idx] + 2, data[idx + 1]); 
       ctx.arc(data[idx], data[idx + 1], 2, 0, Math.PI * 2);
     }
-    ctx.fill(); // Single draw call for all dots
+    ctx.fill();
 
   }, [isHovered, createMouseParticle]);
+
+  const onResize = useCallback((width: number, height: number) => {
+    gradientCacheRef.current = null;
+    initParticles(width, height);
+  }, [initParticles]);
+
+  const { canvasRef, containerRef } = useCanvas({
+    onResize,
+    animate,
+    contextAttributes: {
+      alpha: true,
+      desynchronized: true,
+      willReadFrequently: false
+    }
+  });
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
@@ -200,72 +206,7 @@ const EnhancedGradientShaderCard: React.FC<EnhancedGradientShaderCardProps> = ({
     if (isHovered && Math.random() > 0.3) { // Throttle particle creation
       createMouseParticle(mouseRef.current.x, mouseRef.current.y);
     }
-  }, [isHovered, createMouseParticle]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
-
-    const ctx = canvas.getContext('2d', { 
-      alpha: true, // Set to false if you have a solid background for extra speed
-      desynchronized: true, // Hint to browser to optimize for low latency
-      willReadFrequently: false // We don't read pixels back, better for GPU acceleration
-    });
-    
-    if (!ctx) return;
-
-    let w = 0;
-    let h = 0;
-
-    // OPTIMIZATION: Resize handling with DPR and Debounce protection
-    const handleResize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      const rect = container.getBoundingClientRect();
-      
-      w = rect.width;
-      h = rect.height;
-
-      // Actual size in memory (scaled to account for Retina/HighDPI)
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-
-      // Visual size (CSS)
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-
-      // Normalize coordinate system
-      ctx.scale(dpr, dpr);
-
-      // Reset gradient cache on resize as dimensions changed
-      gradientCacheRef.current = null;
-      
-      initParticles(w, h);
-    };
-
-    // Initial setup
-    handleResize();
-
-    // Loop
-    const animate = () => {
-      updateAndDraw(ctx, w, h);
-      rafRef.current = requestAnimationFrame(animate);
-    };
-    
-    animate();
-
-    // OPTIMIZATION: Use ResizeObserver instead of window 'resize' for better container awareness
-    const resizeObserver = new ResizeObserver(() => {
-        handleResize();
-    });
-    resizeObserver.observe(container);
-
-    // CLEANUP: Prevent memory leaks
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      resizeObserver.disconnect();
-    };
-  }, [initParticles, updateAndDraw]);
+  }, [isHovered, createMouseParticle, containerRef]);
 
   return (
     <div 
