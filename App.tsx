@@ -68,7 +68,7 @@ const App: React.FC = () => {
       <AccessibilityProvider>
         <ErrorBoundary>
           <Router>
-            <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
+            <div className="relative min-h-screen bg-background dark text-white overflow-x-hidden">
               <AccessibilityPanel />
               <Suspense fallback={<PageLoader />}>
                 <AppRoutes />
