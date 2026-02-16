@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { escapeHtml, fetchWithTimeout } from '../lib/utils.js';
 import { EMAIL_REGEX, sanitizeString } from '../lib/validation.js';
-import { storeContactSubmission, recordSecurityEvent } from '../lib/contact-db.js';
+import { storeContactSubmission, recordSecurityEvent, checkRateLimit } from '../lib/contact-db.js';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -59,8 +59,6 @@ try {
   console.error('Environment validation failed:', error instanceof Error ? error.message : 'Unknown error');
 }
 
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-
 // ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
@@ -81,33 +79,6 @@ function logRequest(req: VercelRequest, action: string, details?: Record<string,
   console.log(JSON.stringify(log));
 }
 
-/**
- * Checks if an IP address has exceeded the rate limit
- * @param ip - Client IP address
- * @returns true if rate limited, false otherwise
- */
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  
-  if (!entry || now > entry.resetTime) {
-    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
-    return false;
-  }
-  
-  entry.count++;
-  
-  // Clean up old entries periodically to prevent memory leaks
-  if (rateLimitMap.size > 1000) {
-    for (const [key, value] of rateLimitMap.entries()) {
-      if (now > value.resetTime) {
-        rateLimitMap.delete(key);
-      }
-    }
-  }
-  
-  return entry.count > RATE_LIMIT_MAX_REQUESTS;
-}
 
 /**
  * Extracts client IP address from request headers or socket
@@ -338,18 +309,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Rate limiting
+  // Rate limiting (persistent across serverless instances)
   const clientIp = getClientIp(req);
-  if (isRateLimited(clientIp)) {
+  const { limited } = await checkRateLimit(clientIp, RATE_LIMIT_MAX_REQUESTS, RATE_LIMIT_WINDOW_MS);
+
+  if (limited) {
     logRequest(req, 'rate_limited', { ip: clientIp });
-    // Record rate limit hit for analytics (if DATABASE_URL is set)
-    if (process.env.DATABASE_URL) {
-      try {
-        await recordSecurityEvent('rate_limit', clientIp);
-      } catch (dbError) {
-        console.error('Failed to record rate limit event:', dbError);
-      }
-    }
     return res.status(429).json({ error: 'Too many requests. Please try again later.' });
   }
 

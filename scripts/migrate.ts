@@ -67,6 +67,19 @@ const migrations = [
       CREATE INDEX IF NOT EXISTS idx_audit_log_created_at ON contact_audit_log(created_at DESC);
     `,
   },
+  {
+    name: 'create_rate_limits_table',
+    sql: `
+      CREATE TABLE IF NOT EXISTS rate_limits (
+        ip_address INET PRIMARY KEY,
+        request_count INT DEFAULT 1,
+        reset_time TIMESTAMP WITH TIME ZONE NOT NULL,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_rate_limits_reset_time ON rate_limits(reset_time);
+    `,
+  },
 ];
 
 async function runMigrations(): Promise<void> {

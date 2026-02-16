@@ -3,7 +3,14 @@
  * High-level operations on contact submissions and analytics
  */
 
-import { query, transaction } from './db';
+import { query, transaction } from './db.js';
+
+/**
+ * In-memory fallback for rate limiting when database is unavailable.
+ * Note: This is ineffective in multi-instance serverless environments
+ * but serves as a graceful fallback for development and unexpected DB downtime.
+ */
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
 export interface ContactSubmission {
   id: string;
@@ -164,6 +171,91 @@ export async function getContactAnalytics(
   );
 
   return result.rows;
+}
+
+/**
+ * Checks and increments rate limit for an IP address using the database.
+ * Uses a fixed window rate limiting algorithm.
+ *
+ * @param ip - The IP address to check
+ * @param limit - Maximum number of requests allowed in the window
+ * @param windowMs - The window size in milliseconds
+ * @returns Promise<{ limited: boolean; currentCount: number }>
+ */
+export async function checkRateLimit(
+  ip: string,
+  limit: number,
+  windowMs: number
+): Promise<{ limited: boolean; currentCount: number }> {
+  // If no database, fallback to in-memory
+  if (!process.env.DATABASE_URL) {
+    return checkInMemoryRateLimit(ip, limit, windowMs);
+  }
+
+  const resetTime = new Date(Date.now() + windowMs);
+
+  try {
+    const result = await query(
+      `INSERT INTO rate_limits (ip_address, request_count, reset_time)
+       VALUES ($1, 1, $2)
+       ON CONFLICT (ip_address) DO UPDATE
+       SET
+         request_count = CASE
+           WHEN rate_limits.reset_time < CURRENT_TIMESTAMP THEN 1
+           ELSE rate_limits.request_count + 1
+         END,
+         reset_time = CASE
+           WHEN rate_limits.reset_time < CURRENT_TIMESTAMP THEN $2
+           ELSE rate_limits.reset_time
+         END,
+         updated_at = CURRENT_TIMESTAMP
+       RETURNING request_count`,
+      [ip, resetTime]
+    );
+
+    const currentCount = result.rows[0].request_count;
+    const limited = currentCount > limit;
+
+    // If rate limited, record it in analytics
+    if (limited) {
+      await recordSecurityEvent('rate_limit', ip);
+    }
+
+    return { limited, currentCount };
+  } catch (error) {
+    console.error('Database rate limit check failed:', error);
+    // Fallback to in-memory on DB error
+    return checkInMemoryRateLimit(ip, limit, windowMs);
+  }
+}
+
+/**
+ * In-memory rate limit check (fallback)
+ */
+function checkInMemoryRateLimit(
+  ip: string,
+  limit: number,
+  windowMs: number
+): { limited: boolean; currentCount: number } {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now > entry.resetTime) {
+    const newEntry = { count: 1, resetTime: now + windowMs };
+    rateLimitMap.set(ip, newEntry);
+    return { limited: false, currentCount: 1 };
+  }
+
+  entry.count++;
+
+  // Occasional cleanup
+  if (rateLimitMap.size > 1000) {
+    for (const [key, value] of rateLimitMap.entries()) {
+      if (now > value.resetTime) rateLimitMap.delete(key);
+    }
+  }
+
+  return { limited: entry.count > limit, currentCount: entry.count };
 }
 
 /**
