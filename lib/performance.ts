@@ -3,6 +3,7 @@
  */
 
 import { useEffect, useRef, useCallback } from 'react';
+import { logger } from './logger-enhanced';
 
 /**
  * Preload critical resources
@@ -133,9 +134,7 @@ export function useRenderPerf(componentName: string) {
     const endTime = performance.now();
     const duration = endTime - startTime.current;
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[Perf] ${componentName} render #${renderCount.current}: ${duration.toFixed(2)}ms`);
-    }
+    logger.debug(`[Perf] ${componentName} render #${renderCount.current}: ${duration.toFixed(2)}ms`);
 
     startTime.current = endTime;
   });

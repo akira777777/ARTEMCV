@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { useLogger } from '../lib/logger-enhanced';
 
 interface OptimizedImageProps {
   src: string;
@@ -54,6 +55,7 @@ export const OptimizedImageEnhanced: React.FC<OptimizedImageProps> = ({
   threshold = 0.1,
   rootMargin = '50px'
 }) => {
+  const { logger } = useLogger('OptimizedImage');
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isInView, setIsInView] = useState(priority);
@@ -121,12 +123,10 @@ export const OptimizedImageEnhanced: React.FC<OptimizedImageProps> = ({
     setHasError(false);
     
     // Performance logging
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[Image Load] ${src} loaded in ${loadTime.toFixed(2)}ms`);
-    }
+    logger.debug(`Image loaded: ${src}`, { loadTime: parseFloat(loadTime.toFixed(2)) });
 
     onLoad?.();
-  }, [src, onLoad]);
+  }, [src, onLoad, logger]);
 
   // Handle image error
   const handleError = useCallback(() => {

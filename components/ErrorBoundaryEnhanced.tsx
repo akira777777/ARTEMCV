@@ -1,5 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { useLogger } from '../lib/logger-enhanced';
+import { logger } from '../lib/logger-enhanced';
 
 // ============================================================================
 // Types
@@ -201,7 +201,7 @@ const DefaultFallback: React.FC<DefaultFallbackProps> = ({ error, errorInfo, onR
 // ============================================================================
 
 export class ErrorBoundaryEnhanced extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  private logger = { error: console.error, info: console.log };
+  private logger = logger.child('ErrorBoundary');
   
   constructor(props: ErrorBoundaryProps) {
     super(props);

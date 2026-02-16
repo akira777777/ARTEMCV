@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback, useMemo, useState } from 'react';
+import { logger } from './logger-enhanced';
 
 /**
  * Enhanced Performance Management Utilities
@@ -80,14 +81,8 @@ export function usePerformanceMonitor(config: PerformanceConfig = {}) {
   const log = useCallback((level: string, message: string, data?: any) => {
     if (!enableLogging || Math.random() > sampleRate) return;
 
-    const logFn = console[level as keyof Console] || console.log;
-    const timestamp = new Date().toISOString();
-
-    if (data) {
-      logFn(`[${timestamp}] [${level.toUpperCase()}] ${message}:`, data);
-    } else {
-      logFn(`[${timestamp}] [${level.toUpperCase()}] ${message}`);
-    }
+    const loggerFn = (logger as any)[level] || logger.info;
+    loggerFn(message, data);
   }, [enableLogging, sampleRate]);
 
   const collectMetrics = useCallback(async (): Promise<PerformanceMetrics> => {
@@ -282,7 +277,7 @@ export function useBundleAnalysis() {
 
       setAnalysis(data);
     } catch (error) {
-      console.error('Failed to analyze bundle:', error);
+      logger.error('Failed to analyze bundle:', error);
     } finally {
       setIsLoading(false);
     }
@@ -311,7 +306,7 @@ export function useMemoryMonitor(threshold: number = 100 * 1024 * 1024) {
 
     if (memory.usedJSHeapSize > threshold) {
       setIsExceedingThreshold(true);
-      console.warn('Memory usage threshold exceeded:', memory.usedJSHeapSize);
+      logger.warn('Memory usage threshold exceeded:', { usedJSHeapSize: memory.usedJSHeapSize });
     } else {
       setIsExceedingThreshold(false);
     }
@@ -353,13 +348,13 @@ export function useRenderMonitor(componentName: string) {
 
     // Log performance if it's slow
     if (renderTime > 16) { // More than one frame at 60fps
-      console.warn(`${componentName} render took ${renderTime.toFixed(2)}ms`);
+      logger.warn(`${componentName} render took ${renderTime.toFixed(2)}ms`);
     }
 
     return () => {
       // Component unmount
       const avgRenderTime = renderTimes.current.reduce((a, b) => a + b, 0) / renderTimes.current.length;
-      console.log(`${componentName} unmounted after ${renderCount.current} renders. Avg render time: ${avgRenderTime.toFixed(2)}ms`);
+      logger.info(`${componentName} unmounted after ${renderCount.current} renders. Avg render time: ${avgRenderTime.toFixed(2)}ms`);
     };
   });
 
@@ -423,7 +418,7 @@ export const performanceUtils = {
       }
 
       if (options.monitor && callCount % 100 === 0) {
-        console.log(`Debounced function called ${callCount} times, last call: ${now - lastCallTime}ms ago`);
+        logger.info(`Debounced function called ${callCount} times, last call: ${now - lastCallTime}ms ago`);
       }
     }) as T;
 
@@ -460,7 +455,7 @@ export const performanceUtils = {
 
       callCount++;
       if (options.monitor && callCount % 100 === 0) {
-        console.log(`Throttled function called ${callCount} times`);
+        logger.info(`Throttled function called ${callCount} times`);
       }
     }) as T;
   },
@@ -483,7 +478,7 @@ export const performanceUtils = {
       if (cache.has(key)) {
         hitCount++;
         if (options.monitor && hitCount % 100 === 0) {
-          console.log(`Cache hit ratio: ${(hitCount / (hitCount + missCount) * 100).toFixed(2)}%`);
+          logger.info(`Cache hit ratio: ${(hitCount / (hitCount + missCount) * 100).toFixed(2)}%`);
         }
         return cache.get(key);
       }
@@ -512,7 +507,7 @@ export const performanceUtils = {
     const result = await func();
     const end = performance.now();
 
-    console.log(`${label} took ${end - start}ms`);
+    logger.info(`${label} took ${end - start}ms`);
     return result;
   },
 
