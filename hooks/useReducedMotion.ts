@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
  * @example
  * ```tsx
  * const shouldReduceMotion = useReducedMotion();
- * 
+ *
  * return (
  *   <motion.div
  *     animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
@@ -26,11 +26,13 @@ export function useReducedMotion(): boolean {
     }
 
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    
+
     setPrefersReducedMotion(mediaQuery.matches);
 
     const handleChange = (event: MediaQueryListEvent | MediaQueryList) => {
-      setPrefersReducedMotion('matches' in event ? event.matches : (event as MediaQueryList).matches);
+      setPrefersReducedMotion(
+        'matches' in event ? event.matches : (event as MediaQueryList).matches,
+      );
     };
 
     // Modern API
@@ -64,19 +66,19 @@ export function useReducedMotion(): boolean {
  *   animate: { opacity: 1, y: 0 },
  *   transition: { duration: 0.5 }
  * });
- * 
+ *
  * return <motion.div {...motionProps} />;
  * ```
  */
 export function useMotionPreference<T extends Record<string, unknown>>(
-  animationConfig: T
+  animationConfig: T,
 ): Partial<T> | T {
   const shouldReduceMotion = useReducedMotion();
-  
+
   if (shouldReduceMotion) {
     // Return minimal animation config for reduced motion
     return {} as Partial<T>;
   }
-  
+
   return animationConfig;
 }

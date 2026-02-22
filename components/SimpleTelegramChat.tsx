@@ -14,7 +14,8 @@ interface Message {
   timestamp: Date;
 }
 
-const createId = () => globalThis.crypto?.randomUUID?.() ?? `msg-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+const createId = () =>
+  globalThis.crypto?.randomUUID?.() ?? `msg-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
 // Store initial message ID to track it across language changes
 const INITIAL_MESSAGE_ID = 'initial-welcome';
@@ -29,8 +30,8 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       id: INITIAL_MESSAGE_ID,
       role: 'bot',
       text: '', // Will be set by useEffect
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    },
   ]);
 
   const [inputValue, setInputValue] = useState('');
@@ -62,7 +63,7 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
 
   // Update welcome message text when language or name state changes
   useEffect(() => {
-    setMessages(prev => {
+    setMessages((prev) => {
       const firstMsg = prev[0];
       if (firstMsg?.id === INITIAL_MESSAGE_ID && prev.length === 1) {
         const welcomeText = userName.trim() ? t('chat.bot.welcome') : t('chat.prompt.name');
@@ -85,105 +86,117 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
   }, [messages, isOpen]);
 
   // Handle message submission
-  const handleSendMessage = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmedInput = inputValue.trim();
-    if (!trimmedInput || loading) return;
+  const handleSendMessage = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      const trimmedInput = inputValue.trim();
+      if (!trimmedInput || loading) return;
 
-    const now = Date.now();
-    if (lastSubmitRef.current && now - lastSubmitRef.current < 5_000) {
-      setError(t('chat.error.wait'));
-      return;
-    }
+      const now = Date.now();
+      if (lastSubmitRef.current && now - lastSubmitRef.current < 5_000) {
+        setError(t('chat.error.wait'));
+        return;
+      }
 
-    const currentName = userName.trim();
-    if (!currentName) {
-      setUserName(trimmedInput);
-      try {
-        localStorage.setItem('chat_user_name', trimmedInput);
-      } catch { }
+      const currentName = userName.trim();
+      if (!currentName) {
+        setUserName(trimmedInput);
+        try {
+          localStorage.setItem('chat_user_name', trimmedInput);
+        } catch {}
+
+        setInputValue('');
+        setError(null);
+        setMessages((prev) => [
+          ...prev,
+          { id: createId(), role: 'user', text: trimmedInput, timestamp: new Date() },
+          { id: createId(), role: 'bot', text: t('chat.bot.welcome'), timestamp: new Date() },
+        ]);
+        return;
+      }
 
       setInputValue('');
       setError(null);
-      setMessages(prev => [
+
+      setMessages((prev) => [
         ...prev,
-        { id: createId(), role: 'user', text: trimmedInput, timestamp: new Date() },
-        { id: createId(), role: 'bot', text: t('chat.bot.welcome'), timestamp: new Date() }
-      ]);
-      return;
-    }
-
-    setInputValue('');
-    setError(null);
-
-    setMessages(prev => [...prev, {
-      id: createId(),
-      role: 'user',
-      text: trimmedInput,
-      timestamp: new Date()
-    }]);
-
-    setLoading(true);
-    abortControllerRef.current?.abort();
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    try {
-      const res = await fetchWithTimeout('/api/send-telegram', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: currentName,
-          email: 'chat@telegram.local',
-          subject: 'Chat Message',
-          message: trimmedInput
-        }),
-        signal: controller.signal
-      });
-
-      if (!res.ok) {
-        if (res.status === 404 && window.location.hostname === 'localhost') {
-          devLog.warn('API endpoint not available in dev mode.');
-        } else {
-          const err = await res.text().catch(() => '');
-          throw new Error(err || `Failed to send (status ${res.status})`);
-        }
-      }
-
-      if (isMountedRef.current) {
-        setMessages(prev => [...prev, {
+        {
           id: createId(),
-          role: 'bot',
-          text: t('chat.bot.success'),
-          timestamp: new Date()
-        }]);
+          role: 'user',
+          text: trimmedInput,
+          timestamp: new Date(),
+        },
+      ]);
+
+      setLoading(true);
+      abortControllerRef.current?.abort();
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
+      try {
+        const res = await fetchWithTimeout('/api/send-telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: currentName,
+            email: 'chat@telegram.local',
+            subject: 'Chat Message',
+            message: trimmedInput,
+          }),
+          signal: controller.signal,
+        });
+
+        if (!res.ok) {
+          if (res.status === 404 && window.location.hostname === 'localhost') {
+            devLog.warn('API endpoint not available in dev mode.');
+          } else {
+            const err = await res.text().catch(() => '');
+            throw new Error(err || `Failed to send (status ${res.status})`);
+          }
+        }
+
+        if (isMountedRef.current) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: createId(),
+              role: 'bot',
+              text: t('chat.bot.success'),
+              timestamp: new Date(),
+            },
+          ]);
+        }
+
+        lastSubmitRef.current = now;
+      } catch (err: unknown) {
+        if (!isMountedRef.current) return;
+        devLog.error('Error sending message:', err);
+
+        let errorText = t('chat.error.sending') || 'Error sending message';
+        if ((err as Error)?.name === 'AbortError') {
+          errorText = t('chat.error.timeout') || 'Timeout sending message. Please try again.';
+        } else if ((err as Error)?.message) {
+          errorText = (err as Error).message;
+        }
+
+        setError(errorText);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: createId(),
+            role: 'bot',
+            text: `вќЊ ${errorText}`,
+            timestamp: new Date(),
+          },
+        ]);
+      } finally {
+        abortControllerRef.current = null;
+        if (!isMountedRef.current) return;
+        setLoading(false);
       }
-
-      lastSubmitRef.current = now;
-    } catch (err: unknown) {
-      if (!isMountedRef.current) return;
-      devLog.error('Error sending message:', err);
-
-      let errorText = t('chat.error.sending') || 'Error sending message';
-      if ((err as Error)?.name === 'AbortError') {
-        errorText = t('chat.error.timeout') || 'Timeout sending message. Please try again.';
-      } else if ((err as Error)?.message) {
-        errorText = (err as Error).message;
-      }
-
-      setError(errorText);
-      setMessages(prev => [...prev, {
-        id: createId(),
-        role: 'bot',
-        text: `вќЊ ${errorText}`,
-        timestamp: new Date()
-      }]);
-    } finally {
-      abortControllerRef.current = null;
-      if (!isMountedRef.current) return;
-      setLoading(false);
-    }
-  }, [inputValue, userName, loading, fetchWithTimeout, t]);
+    },
+    [inputValue, userName, loading, fetchWithTimeout, t],
+  );
 
   return (
     <>
@@ -217,7 +230,9 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
         <div className="flex items-center justify-between p-4 border-b border-white/10 bg-black/40">
           <div className="flex items-center gap-2">
             <MessageCircle className="w-4 h-4 text-blue-400" />
-            <span className="font-display font-bold tracking-widest text-sm text-white">{t('chat.label.telegram')}</span>
+            <span className="font-display font-bold tracking-widest text-sm text-white">
+              {t('chat.label.telegram')}
+            </span>
           </div>
           <button
             onClick={() => setIsExpanded(!isExpanded)}
@@ -246,14 +261,21 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
               <div
                 className={`
                   max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed
-                  ${msg.role === 'user'
-                    ? 'bg-white text-black rounded-tr-none'
-                    : 'bg-white/10 text-neutral-200 rounded-tl-none border border-white/5'}
+                  ${
+                    msg.role === 'user'
+                      ? 'bg-white text-black rounded-tr-none'
+                      : 'bg-white/10 text-neutral-200 rounded-tl-none border border-white/5'
+                  }
                 `}
               >
                 <p className="whitespace-pre-wrap break-words">{msg.text}</p>
-                <span className={`text-[10px] mt-2 block ${msg.role === 'user' ? 'text-black/60' : 'text-neutral-500'}`}>
-                  {msg.timestamp.toLocaleTimeString(lang === 'ru' ? 'ru-RU' : lang === 'cs' ? 'cs-CZ' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
+                <span
+                  className={`text-[10px] mt-2 block ${msg.role === 'user' ? 'text-black/60' : 'text-neutral-500'}`}
+                >
+                  {msg.timestamp.toLocaleTimeString(
+                    lang === 'ru' ? 'ru-RU' : lang === 'cs' ? 'cs-CZ' : 'en-US',
+                    { hour: '2-digit', minute: '2-digit' },
+                  )}
                 </span>
               </div>
             </div>
@@ -291,7 +313,11 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
             </div>
           )}
 
-          <form onSubmit={handleSendMessage} className="flex gap-2" aria-busy={loading ? 'true' : 'false'}>
+          <form
+            onSubmit={handleSendMessage}
+            className="flex gap-2"
+            aria-busy={loading ? 'true' : 'false'}
+          >
             <input
               type="text"
               value={inputValue}

@@ -45,8 +45,8 @@ const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS?.split(',').filter(Boolean) 
  */
 function validateEnvironment(): void {
   const required = ['TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID'];
-  const missing = required.filter(key => !process.env[key]);
-  
+  const missing = required.filter((key) => !process.env[key]);
+
   if (missing.length > 0) {
     throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
   }
@@ -56,7 +56,10 @@ function validateEnvironment(): void {
 try {
   validateEnvironment();
 } catch (error) {
-  console.error('Environment validation failed:', error instanceof Error ? error.message : 'Unknown error');
+  console.error(
+    'Environment validation failed:',
+    error instanceof Error ? error.message : 'Unknown error',
+  );
 }
 
 // ============================================================================
@@ -79,7 +82,6 @@ function logRequest(req: VercelRequest, action: string, details?: Record<string,
   console.log(JSON.stringify(log));
 }
 
-
 /**
  * Extracts client IP address from request headers or socket
  * @param req - Vercel request object
@@ -99,7 +101,7 @@ function getClientIp(req: VercelRequest): string {
  */
 function setCorsHeaders(res: VercelResponse, origin: string | undefined): void {
   const isAllowed = !origin || ALLOWED_ORIGINS.length === 0 || ALLOWED_ORIGINS.includes(origin);
-  
+
   if (isAllowed && origin) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Vary', 'Origin'); // Prevent cache issues with CORS
@@ -107,7 +109,7 @@ function setCorsHeaders(res: VercelResponse, origin: string | undefined): void {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Max-Age', CORS_MAX_AGE);
-  
+
   // Security headers
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
@@ -225,7 +227,7 @@ async function sendToTelegram(
   cleanName: string,
   cleanEmail: string,
   cleanSubject: string,
-  cleanMessage: string
+  cleanMessage: string,
 ): Promise<Response> {
   const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
   const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
@@ -238,16 +240,20 @@ async function sendToTelegram(
   const messageText = buildTelegramMessage(cleanName, cleanEmail, cleanSubject, cleanMessage);
   const apiUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
-  return await fetchWithTimeout(apiUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
-      text: messageText,
-      parse_mode: 'HTML',
-      disable_web_page_preview: true,
-    })
-  }, REQUEST_TIMEOUT_MS);
+  return await fetchWithTimeout(
+    apiUrl,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: messageText,
+        parse_mode: 'HTML',
+        disable_web_page_preview: true,
+      }),
+    },
+    REQUEST_TIMEOUT_MS,
+  );
 }
 
 /**
@@ -262,7 +268,7 @@ function buildTelegramMessage(
   name: string,
   email: string,
   subject: string,
-  message: string
+  message: string,
 ): string {
   return [
     '<b>📬 New Contact Message</b>',
@@ -276,7 +282,7 @@ function buildTelegramMessage(
     '',
     '---',
     '<i>From portfolio contact form</i>',
-    `<i>Time: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC</i>`
+    `<i>Time: ${new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })} UTC</i>`,
   ]
     .filter(Boolean)
     .join('\n');
@@ -293,7 +299,10 @@ function buildTelegramMessage(
  * @param res - Vercel response object
  * @returns Promise resolving to the API response
  */
-export default async function handler(req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> {
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse,
+): Promise<VercelResponse | void> {
   const origin = req.headers.origin as string | undefined;
   setCorsHeaders(res, origin);
 
@@ -358,7 +367,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         cleanSubject,
         cleanMessage,
         clientIp,
-        userAgent || null
+        userAgent || null,
       ).catch((dbError) => {
         console.error('Failed to store submission in database:', dbError);
         // Don't fail the request if database storage fails
@@ -374,9 +383,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     if (!tgResp.ok) {
       const errText = await tgResp.text().catch(() => 'Unknown error');
       console.error('Telegram API error:', tgResp.status, errText);
-      logRequest(req, 'telegram_api_error', { 
-        status: tgResp.status, 
-        error: errText.substring(0, 200) 
+      logRequest(req, 'telegram_api_error', {
+        status: tgResp.status,
+        error: errText.substring(0, 200),
       });
       return res.status(502).json({ error: 'Failed to send message' });
     }
@@ -388,7 +397,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
       logRequest(req, 'timeout');
       return res.status(504).json({ error: 'Request timeout' });
     }
-    
+
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('Handler error:', error);
     logRequest(req, 'error', { error: errorMessage });

@@ -15,10 +15,10 @@ const switchLanguage = async (page: import('@playwright/test').Page, code: 'EN' 
 test.describe('Проверка новых accessibility функций', () => {
   test('Проверка наличия новых строк перевода в DOM', async ({ page }) => {
     console.log('🔍 Проверяем новые accessibility строки в DOM...');
-    
+
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    
+
     // Проверяем английские строки
     const enStrings = [
       'Accessibility Options',
@@ -26,18 +26,18 @@ test.describe('Проверка новых accessibility функций', () => 
       'Open accessibility panel',
       'Text Size',
       'Contrast',
-      'Reduce Motion'
+      'Reduce Motion',
     ];
-    
+
     for (const str of enStrings) {
       const found = await page.locator(`text="${str}"`).count();
       console.log(`🇬🇧 "${str}": ${found > 0 ? 'найдено' : 'не найдено'}`);
     }
-    
+
     // Переключаемся на русский
     await switchLanguage(page, 'RU');
     await page.waitForTimeout(1000);
-    
+
     // Проверяем русские строки
     const ruStrings = [
       'Настройки доступности',
@@ -45,14 +45,14 @@ test.describe('Проверка новых accessibility функций', () => 
       'Открыть панель доступности',
       'Размер текста',
       'Контраст',
-      'Уменьшить движение'
+      'Уменьшить движение',
     ];
-    
+
     for (const str of ruStrings) {
       const found = await page.locator(`text="${str}"`).count();
       console.log(`🇷🇺 "${str}": ${found > 0 ? 'найдено' : 'не найдено'}`);
     }
-    
+
     console.log('✅ Проверка новых строк завершена!');
   });
 });

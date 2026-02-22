@@ -189,7 +189,7 @@ export const LibraryInfoSchema = z.object({
         name: z.string(),
         email: z.string().optional(),
         maintainer: z.boolean().optional(),
-      })
+      }),
     )
     .optional(),
   repository: z
@@ -274,7 +274,10 @@ export const InitProjectParamsSchema = z.object({
 // Build project parameters
 export const BuildProjectParamsSchema = z.object({
   projectDir: z.string().min(1).describe('Path to the PlatformIO project directory'),
-  environment: z.string().optional().describe('Specific environment to build (from platformio.ini)'),
+  environment: z
+    .string()
+    .optional()
+    .describe('Specific environment to build (from platformio.ini)'),
 });
 
 // Clean project parameters
@@ -286,14 +289,20 @@ export const CleanProjectParamsSchema = z.object({
 export const UploadFirmwareParamsSchema = z.object({
   projectDir: z.string().min(1).describe('Path to the PlatformIO project directory'),
   port: z.string().optional().describe('Upload port (auto-detected if not specified)'),
-  environment: z.string().optional().describe('Specific environment to upload (from platformio.ini)'),
+  environment: z
+    .string()
+    .optional()
+    .describe('Specific environment to upload (from platformio.ini)'),
 });
 
 // Start monitor parameters
 export const StartMonitorParamsSchema = z.object({
   port: z.string().optional().describe('Serial port to monitor (auto-detected if not specified)'),
   baud: z.number().optional().describe('Baud rate for serial communication'),
-  projectDir: z.string().optional().describe('Project directory (for environment-specific settings)'),
+  projectDir: z
+    .string()
+    .optional()
+    .describe('Project directory (for environment-specific settings)'),
 });
 
 // Search libraries parameters
@@ -305,11 +314,17 @@ export const SearchLibrariesParamsSchema = z.object({
 // Install library parameters
 export const InstallLibraryParamsSchema = z.object({
   library: z.string().min(1).describe('Library name or ID to install'),
-  projectDir: z.string().optional().describe('Project directory (installs globally if not specified)'),
+  projectDir: z
+    .string()
+    .optional()
+    .describe('Project directory (installs globally if not specified)'),
   version: z.string().optional().describe('Specific version to install'),
 });
 
 // List installed libraries parameters
 export const ListInstalledLibrariesParamsSchema = z.object({
-  projectDir: z.string().optional().describe('Project directory (lists global libraries if not specified)'),
+  projectDir: z
+    .string()
+    .optional()
+    .describe('Project directory (lists global libraries if not specified)'),
 });

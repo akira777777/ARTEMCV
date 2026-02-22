@@ -2,13 +2,13 @@ import { performance } from 'perf_hooks';
 
 // Simulate DB Latency (e.g. 100ms)
 async function mockStoreContactSubmission() {
-  await new Promise(resolve => setTimeout(resolve, 100));
+  await new Promise((resolve) => setTimeout(resolve, 100));
   // console.log('DB Stored');
 }
 
 // Simulate Telegram API Latency (e.g. 300ms)
 async function mockSendToTelegram() {
-  await new Promise(resolve => setTimeout(resolve, 300));
+  await new Promise((resolve) => setTimeout(resolve, 300));
   // console.log('Telegram Sent');
   return { ok: true, status: 200 };
 }
@@ -25,7 +25,7 @@ async function runSequential() {
 
 async function runParallel() {
   // Proposed Implementation Logic
-  const dbPromise = mockStoreContactSubmission().catch(e => console.error(e));
+  const dbPromise = mockStoreContactSubmission().catch((e) => console.error(e));
   const tgPromise = mockSendToTelegram();
 
   await Promise.all([dbPromise, tgPromise]);
@@ -43,7 +43,7 @@ async function main() {
     const start = performance.now();
     await runSequential();
     const end = performance.now();
-    seqTotal += (end - start);
+    seqTotal += end - start;
   }
   const seqAvg = seqTotal / iterations;
   console.log(`Sequential Average: ${seqAvg.toFixed(2)}ms`);
@@ -54,7 +54,7 @@ async function main() {
     const start = performance.now();
     await runParallel();
     const end = performance.now();
-    parTotal += (end - start);
+    parTotal += end - start;
   }
   const parAvg = parTotal / iterations;
   console.log(`Parallel Average: ${parAvg.toFixed(2)}ms`);

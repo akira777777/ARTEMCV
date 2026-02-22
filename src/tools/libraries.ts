@@ -21,7 +21,7 @@ export async function searchLibraries(query: string, limit?: number): Promise<Li
       'lib',
       ['search', query.trim()],
       LibrariesArraySchema,
-      { timeout: 30000 }
+      { timeout: 30000 },
     );
 
     // Apply limit if specified
@@ -31,10 +31,7 @@ export async function searchLibraries(query: string, limit?: number): Promise<Li
 
     return result;
   } catch (error) {
-    throw new LibraryError(
-      `Failed to search libraries with query '${query}': ${error}`,
-      { query }
-    );
+    throw new LibraryError(`Failed to search libraries with query '${query}': ${error}`, { query });
   }
 }
 
@@ -46,14 +43,16 @@ export async function installLibrary(
   options?: {
     projectDir?: string;
     version?: string;
-  }
+  },
 ): Promise<LibraryInstallResult> {
   if (!validateLibraryName(libraryName)) {
     throw new LibraryError(`Invalid library name: ${libraryName}`, { libraryName });
   }
 
   if (options?.version && !validateVersion(options.version)) {
-    throw new LibraryError(`Invalid version format: ${options.version}`, { version: options.version });
+    throw new LibraryError(`Invalid version format: ${options.version}`, {
+      version: options.version,
+    });
   }
 
   try {
@@ -76,10 +75,10 @@ export async function installLibrary(
     const result = await platformioExecutor.execute('lib', ['install', librarySpec], execOptions);
 
     if (result.exitCode !== 0) {
-      throw new LibraryError(
-        `Failed to install library '${librarySpec}': ${result.stderr}`,
-        { library: librarySpec, stderr: result.stderr }
-      );
+      throw new LibraryError(`Failed to install library '${librarySpec}': ${result.stderr}`, {
+        library: librarySpec,
+        stderr: result.stderr,
+      });
     }
 
     return {
@@ -91,10 +90,10 @@ export async function installLibrary(
     if (error instanceof LibraryError) {
       throw error;
     }
-    throw new LibraryError(
-      `Failed to install library '${libraryName}': ${error}`,
-      { libraryName, options }
-    );
+    throw new LibraryError(`Failed to install library '${libraryName}': ${error}`, {
+      libraryName,
+      options,
+    });
   }
 }
 
@@ -113,7 +112,7 @@ export async function listInstalledLibraries(projectDir?: string): Promise<Libra
       'lib',
       ['list'],
       LibrariesArraySchema,
-      execOptions
+      execOptions,
     );
 
     return result;
@@ -128,7 +127,7 @@ export async function listInstalledLibraries(projectDir?: string): Promise<Libra
 
     throw new LibraryError(
       `Failed to list installed libraries${projectDir ? ` for project at ${projectDir}` : ''}: ${error}`,
-      { projectDir }
+      { projectDir },
     );
   }
 }
@@ -138,7 +137,7 @@ export async function listInstalledLibraries(projectDir?: string): Promise<Libra
  */
 export async function uninstallLibrary(
   libraryName: string,
-  projectDir?: string
+  projectDir?: string,
 ): Promise<{ success: boolean; message: string }> {
   if (!validateLibraryName(libraryName)) {
     throw new LibraryError(`Invalid library name: ${libraryName}`, { libraryName });
@@ -154,10 +153,10 @@ export async function uninstallLibrary(
     const result = await platformioExecutor.execute('lib', ['uninstall', libraryName], execOptions);
 
     if (result.exitCode !== 0) {
-      throw new LibraryError(
-        `Failed to uninstall library '${libraryName}': ${result.stderr}`,
-        { library: libraryName, stderr: result.stderr }
-      );
+      throw new LibraryError(`Failed to uninstall library '${libraryName}': ${result.stderr}`, {
+        library: libraryName,
+        stderr: result.stderr,
+      });
     }
 
     return {
@@ -168,17 +167,19 @@ export async function uninstallLibrary(
     if (error instanceof LibraryError) {
       throw error;
     }
-    throw new LibraryError(
-      `Failed to uninstall library '${libraryName}': ${error}`,
-      { libraryName, projectDir }
-    );
+    throw new LibraryError(`Failed to uninstall library '${libraryName}': ${error}`, {
+      libraryName,
+      projectDir,
+    });
   }
 }
 
 /**
  * Updates installed libraries (globally or for a specific project)
  */
-export async function updateLibraries(projectDir?: string): Promise<{ success: boolean; message: string }> {
+export async function updateLibraries(
+  projectDir?: string,
+): Promise<{ success: boolean; message: string }> {
   try {
     const execOptions: { cwd?: string; timeout?: number } = { timeout: 180000 };
     if (projectDir) {
@@ -189,10 +190,9 @@ export async function updateLibraries(projectDir?: string): Promise<{ success: b
     const result = await platformioExecutor.execute('lib', ['update'], execOptions);
 
     if (result.exitCode !== 0) {
-      throw new LibraryError(
-        `Failed to update libraries: ${result.stderr}`,
-        { stderr: result.stderr }
-      );
+      throw new LibraryError(`Failed to update libraries: ${result.stderr}`, {
+        stderr: result.stderr,
+      });
     }
 
     return {
@@ -203,10 +203,7 @@ export async function updateLibraries(projectDir?: string): Promise<{ success: b
     if (error instanceof LibraryError) {
       throw error;
     }
-    throw new LibraryError(
-      `Failed to update libraries: ${error}`,
-      { projectDir }
-    );
+    throw new LibraryError(`Failed to update libraries: ${error}`, { projectDir });
   }
 }
 
@@ -216,11 +213,12 @@ export async function updateLibraries(projectDir?: string): Promise<{ success: b
 export async function getLibraryInfo(libraryNameOrId: string): Promise<LibraryInfo | null> {
   try {
     const results = await searchLibraries(libraryNameOrId, 50);
-    
+
     // Try to find exact match first
-    const exactMatch = results.find(lib => 
-      lib.name.toLowerCase() === libraryNameOrId.toLowerCase() ||
-      lib.id.toString() === libraryNameOrId
+    const exactMatch = results.find(
+      (lib) =>
+        lib.name.toLowerCase() === libraryNameOrId.toLowerCase() ||
+        lib.id.toString() === libraryNameOrId,
     );
 
     if (exactMatch) {
@@ -230,9 +228,8 @@ export async function getLibraryInfo(libraryNameOrId: string): Promise<LibraryIn
     // Return first result if available
     return results.length > 0 ? results[0] : null;
   } catch (error) {
-    throw new LibraryError(
-      `Failed to get library info for '${libraryNameOrId}': ${error}`,
-      { library: libraryNameOrId }
-    );
+    throw new LibraryError(`Failed to get library info for '${libraryNameOrId}': ${error}`, {
+      library: libraryNameOrId,
+    });
   }
 }

@@ -32,7 +32,7 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: true,
-    
+
     // Minification
     minify: 'terser',
     terserOptions: {
@@ -81,12 +81,12 @@ export default defineConfig({
 
     // Code splitting
     cssCodeSplit: true,
-    
+
     // Build performance
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
   },
-  
+
   // Development server
   server: {
     port: 5173,
@@ -97,7 +97,7 @@ export default defineConfig({
       overlay: true,
     },
   },
-  
+
   // Preview server
   preview: {
     port: 4173,
@@ -105,7 +105,7 @@ export default defineConfig({
     open: true,
     host: true,
   },
-  
+
   // Optimizations
   optimizeDeps: {
     include: [
@@ -119,7 +119,7 @@ export default defineConfig({
     ],
     exclude: [],
   },
-  
+
   // ESBuild options
   esbuild: {
     logOverride: { 'this-is-undefined-in-esm': 'silent' },

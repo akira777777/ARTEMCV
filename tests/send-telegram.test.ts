@@ -55,7 +55,7 @@ describe('Backend Validation Layer', () => {
   describe('Email Pattern Validation', () => {
     it('should accept valid email formats', () => {
       const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      
+
       expect(EMAIL_PATTERN.test('user@example.com')).toBe(true);
       expect(EMAIL_PATTERN.test('test.user@domain.co.uk')).toBe(true);
       expect(EMAIL_PATTERN.test('name+tag@example.org')).toBe(true);
@@ -63,7 +63,7 @@ describe('Backend Validation Layer', () => {
 
     it('should reject invalid email formats', () => {
       const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      
+
       expect(EMAIL_PATTERN.test('invalid')).toBe(false);
       expect(EMAIL_PATTERN.test('no@domain')).toBe(false);
       expect(EMAIL_PATTERN.test('@example.com')).toBe(false);
@@ -140,7 +140,7 @@ describe('Field Validation', () => {
 
   it('should reject data with missing required fields', () => {
     const invalidData = { name: '', email: '', message: '' };
-    
+
     expect(invalidData.name).toBe('');
     expect(invalidData.email).toBe('');
     expect(invalidData.message).toBe('');
@@ -187,9 +187,9 @@ describe('Rate Limiting', () => {
     const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
     const ip = '192.168.1.1';
     const now = Date.now();
-    
+
     rateLimitMap.set(ip, { count: 1, resetTime: now + 60000 });
-    
+
     const entry = rateLimitMap.get(ip);
     expect(entry).toBeDefined();
     expect(entry?.count).toBe(1);
@@ -208,7 +208,7 @@ describe('Rate Limiting', () => {
   it('should reset count after time window', () => {
     const now = Date.now();
     const resetTime = now - 1000; // Already expired
-    
+
     expect(now).toBeGreaterThan(resetTime);
   });
 });
@@ -221,7 +221,7 @@ describe('CORS Configuration', () => {
   it('should handle allowed origins correctly', () => {
     const ALLOWED_ORIGINS = ['https://example.com', 'https://test.com'];
     const testOrigin = 'https://example.com';
-    
+
     const isAllowed = ALLOWED_ORIGINS.includes(testOrigin);
     expect(isAllowed).toBe(true);
   });
@@ -229,7 +229,7 @@ describe('CORS Configuration', () => {
   it('should reject disallowed origins', () => {
     const ALLOWED_ORIGINS = ['https://example.com'];
     const testOrigin = 'https://malicious.com';
-    
+
     const isAllowed = ALLOWED_ORIGINS.includes(testOrigin);
     expect(isAllowed).toBe(false);
   });
@@ -237,7 +237,7 @@ describe('CORS Configuration', () => {
   it('should allow all origins when list is empty', () => {
     const ALLOWED_ORIGINS: string[] = [];
     const anyOrigin = 'https://any.com';
-    
+
     const isAllowed = ALLOWED_ORIGINS.length === 0;
     expect(isAllowed).toBe(true);
   });
@@ -251,14 +251,14 @@ describe('Client IP Extraction', () => {
   it('should extract IP from x-forwarded-for header (string)', () => {
     const forwarded = '203.0.113.1, 198.51.100.1';
     const ip = forwarded.split(',')[0].trim();
-    
+
     expect(ip).toBe('203.0.113.1');
   });
 
   it('should extract IP from x-forwarded-for header (array)', () => {
     const forwarded = ['203.0.113.1', '198.51.100.1'];
     const ip = forwarded[0];
-    
+
     expect(ip).toBe('203.0.113.1');
   });
 
@@ -319,7 +319,7 @@ describe('Telegram Message Formatting', () => {
   it('should escape HTML in user input', () => {
     const maliciousName = '<script>alert("xss")</script>';
     const escaped = escapeHtml(maliciousName);
-    
+
     expect(escaped).toBe('&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;');
     expect(escaped).not.toContain('<script>');
   });

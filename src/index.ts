@@ -7,10 +7,7 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
 // Import types and schemas
 import {
@@ -47,7 +44,7 @@ const server = new Server(
     capabilities: {
       tools: {},
     },
-  }
+  },
 );
 
 // List available tools
@@ -56,20 +53,23 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: 'list_boards',
-        description: 'Lists all available PlatformIO boards with optional filtering by platform, framework, or MCU. Supports 1000+ boards across 30+ platforms.',
+        description:
+          'Lists all available PlatformIO boards with optional filtering by platform, framework, or MCU. Supports 1000+ boards across 30+ platforms.',
         inputSchema: {
           type: 'object',
           properties: {
             filter: {
               type: 'string',
-              description: 'Optional filter by platform (e.g., "espressif32"), framework (e.g., "arduino"), or MCU name',
+              description:
+                'Optional filter by platform (e.g., "espressif32"), framework (e.g., "arduino"), or MCU name',
             },
           },
         },
       },
       {
         name: 'get_board_info',
-        description: 'Gets detailed information about a specific board including MCU, frequency, flash, RAM, and supported frameworks.',
+        description:
+          'Gets detailed information about a specific board including MCU, frequency, flash, RAM, and supported frameworks.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -83,7 +83,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'list_devices',
-        description: 'Lists all connected serial devices that can be used for firmware upload and monitoring.',
+        description:
+          'Lists all connected serial devices that can be used for firmware upload and monitoring.',
         inputSchema: {
           type: 'object',
           properties: {},
@@ -91,7 +92,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'init_project',
-        description: 'Initializes a new PlatformIO project with the specified board and optional framework. Creates project structure with src/, include/, lib/, and test/ directories.',
+        description:
+          'Initializes a new PlatformIO project with the specified board and optional framework. Creates project structure with src/, include/, lib/, and test/ directories.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -117,7 +119,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'build_project',
-        description: 'Compiles the project source code and generates firmware binary. Automatically downloads required toolchains and libraries on first build.',
+        description:
+          'Compiles the project source code and generates firmware binary. Automatically downloads required toolchains and libraries on first build.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -149,7 +152,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'upload_firmware',
-        description: 'Uploads compiled firmware to a connected device. Automatically builds if necessary. Supports automatic port detection.',
+        description:
+          'Uploads compiled firmware to a connected device. Automatically builds if necessary. Supports automatic port detection.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -171,7 +175,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'start_monitor',
-        description: 'Provides instructions and command for starting serial monitor to view device output. Monitor requires interactive terminal.',
+        description:
+          'Provides instructions and command for starting serial monitor to view device output. Monitor requires interactive terminal.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -192,7 +197,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'search_libraries',
-        description: 'Searches the PlatformIO library registry for available libraries by name, keywords, or description.',
+        description:
+          'Searches the PlatformIO library registry for available libraries by name, keywords, or description.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -210,7 +216,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'install_library',
-        description: 'Installs a library from the PlatformIO registry either globally or to a specific project. Supports version specification.',
+        description:
+          'Installs a library from the PlatformIO registry either globally or to a specific project. Supports version specification.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -420,7 +427,9 @@ async function main() {
   // Check if PlatformIO is installed
   const isInstalled = await checkPlatformIOInstalled();
   if (!isInstalled) {
-    console.error('Warning: PlatformIO CLI not found. Please install it from https://platformio.org/install/cli');
+    console.error(
+      'Warning: PlatformIO CLI not found. Please install it from https://platformio.org/install/cli',
+    );
     console.error('The server will start but commands will fail until PlatformIO is installed.\n');
   }
 

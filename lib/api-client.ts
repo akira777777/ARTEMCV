@@ -1,9 +1,9 @@
 /**
  * API Client Module
- * 
+ *
  * Provides a consistent, type-safe interface for making API requests
  * with automatic error handling, retries, and request/response interceptors.
- * 
+ *
  * @example
  * ```typescript
  * const api = createApiClient({ baseUrl: '/api' });
@@ -55,12 +55,7 @@ export class ApiRequestError extends Error implements ApiError {
   public readonly data?: unknown;
   public readonly isRetryable: boolean;
 
-  constructor(
-    message: string,
-    status: number,
-    data?: unknown,
-    isRetryable = false
-  ) {
+  constructor(message: string, status: number, data?: unknown, isRetryable = false) {
     super(message);
     this.name = 'ApiRequestError';
     this.status = status;
@@ -109,7 +104,7 @@ function isRetryableStatus(status: number): boolean {
     status === 500 || // Internal Server Error
     status === 502 || // Bad Gateway
     status === 503 || // Service Unavailable
-    status === 504    // Gateway Timeout
+    status === 504 // Gateway Timeout
   );
 }
 
@@ -117,7 +112,7 @@ function isRetryableStatus(status: number): boolean {
  * Delay execution for a specified number of milliseconds
  */
 function delay(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -149,7 +144,7 @@ export function createApiClient(config: ApiClientConfig) {
     method: HttpMethod,
     endpoint: string,
     body?: unknown,
-    requestConfig: ApiRequestConfig = {}
+    requestConfig: ApiRequestConfig = {},
   ): Promise<ApiResponse<T>> {
     const url = `${baseUrl}${endpoint}`;
     const requestTimeout = requestConfig.timeout ?? timeout;
@@ -203,7 +198,7 @@ export function createApiClient(config: ApiClientConfig) {
             typeof data === 'string' ? data : (data as any)?.error || `HTTP ${response.status}`,
             response.status,
             data,
-            isRetryableStatus(response.status) && attempt < maxRetries
+            isRetryableStatus(response.status) && attempt < maxRetries,
           );
         }
 
@@ -227,10 +222,10 @@ export function createApiClient(config: ApiClientConfig) {
             }
             throw new TimeoutError();
           }
-          
+
           // Network errors are retryable
           lastError = new NetworkError(error.message);
-          
+
           if (requestConfig.signal?.aborted) {
             throw lastError;
           }
@@ -254,16 +249,16 @@ export function createApiClient(config: ApiClientConfig) {
   return {
     get: <T>(endpoint: string, config?: ApiRequestConfig) =>
       request<T>('GET', endpoint, undefined, config),
-    
+
     post: <T>(endpoint: string, body: unknown, config?: ApiRequestConfig) =>
       request<T>('POST', endpoint, body, config),
-    
+
     put: <T>(endpoint: string, body: unknown, config?: ApiRequestConfig) =>
       request<T>('PUT', endpoint, body, config),
-    
+
     patch: <T>(endpoint: string, body: unknown, config?: ApiRequestConfig) =>
       request<T>('PATCH', endpoint, body, config),
-    
+
     delete: <T>(endpoint: string, config?: ApiRequestConfig) =>
       request<T>('DELETE', endpoint, undefined, config),
 

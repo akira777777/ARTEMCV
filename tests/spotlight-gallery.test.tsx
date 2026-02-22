@@ -7,10 +7,31 @@ import { describe, it, expect, vi } from 'vitest';
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    div: ({ children, layout, initial, animate, exit, transition, whileHover, whileTap, variants, ...props }: any) => <div {...props}>{children}</div>,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    button: ({ children, layout, initial, animate, exit, transition, whileHover, whileTap, variants, ...props }: any) => <button {...props}>{children}</button>,
+    div: ({
+      children,
+      layout,
+      initial,
+      animate,
+      exit,
+      transition,
+      whileHover,
+      whileTap,
+      variants,
+      ...props
+    }: any) => <div {...props}>{children}</div>,
+
+    button: ({
+      children,
+      layout,
+      initial,
+      animate,
+      exit,
+      transition,
+      whileHover,
+      whileTap,
+      variants,
+      ...props
+    }: any) => <button {...props}>{children}</button>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));

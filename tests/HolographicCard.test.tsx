@@ -14,7 +14,11 @@ vi.mock('framer-motion', () => ({
         }
         return acc;
       }, {} as any);
-      return <div className={className} {...domProps}>{children}</div>;
+      return (
+        <div className={className} {...domProps}>
+          {children}
+        </div>
+      );
     },
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
@@ -28,7 +32,7 @@ describe('HolographicCard', () => {
 
   it('renders title and description', () => {
     render(<HolographicCard {...defaultProps} />);
-    
+
     expect(screen.getByText('Test Title')).toBeInTheDocument();
     expect(screen.getByText('Test Description')).toBeInTheDocument();
   });
@@ -37,29 +41,31 @@ describe('HolographicCard', () => {
     render(
       <HolographicCard {...defaultProps}>
         <div>Child Content</div>
-      </HolographicCard>
+      </HolographicCard>,
     );
-    
+
     expect(screen.getByText('Child Content')).toBeInTheDocument();
   });
 
   it('applies custom className when provided', () => {
     const { container } = render(<HolographicCard {...defaultProps} className="custom-class" />);
-    
+
     // Check that the custom class is somewhere in the rendered output
     expect(container.innerHTML).toContain('custom-class');
   });
 
   it('uses default glow color when not specified', () => {
     const { container } = render(<HolographicCard {...defaultProps} />);
-    
+
     // Component should render with default glow color
     expect(screen.getByText('Test Title')).toBeInTheDocument();
   });
 
   it('applies custom glow color when specified', () => {
-    const { container } = render(<HolographicCard {...defaultProps} glowColor="from-red-500 to-blue-500" />);
-    
+    const { container } = render(
+      <HolographicCard {...defaultProps} glowColor="from-red-500 to-blue-500" />,
+    );
+
     // Component should render with custom glow color
     expect(screen.getByText('Test Title')).toBeInTheDocument();
   });

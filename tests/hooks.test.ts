@@ -1,4 +1,3 @@
-
 import { renderHook } from '@testing-library/react';
 import { useReducedMotion, useWindowSize } from '../lib/hooks';
 import { describe, it, expect, vi } from 'vitest';

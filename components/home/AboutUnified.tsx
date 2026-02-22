@@ -55,10 +55,18 @@ export const AboutUnified: React.FC = () => {
     <section id="about" className="py-24 lg:py-32 bg-white/[0.01]" aria-label="About me">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <Label size="sm" weight="semibold" uppercase tracking="wider" className="text-emerald-400 mb-4">
+          <Label
+            size="sm"
+            weight="semibold"
+            uppercase
+            tracking="wider"
+            className="text-emerald-400 mb-4"
+          >
             About Me
           </Label>
-          <Heading as="h2" size="lg" className="mb-4">Skills & Expertise</Heading>
+          <Heading as="h2" size="lg" className="mb-4">
+            Skills & Expertise
+          </Heading>
           <Text size="lg" color="secondary" className="max-w-2xl mx-auto">
             With over 8 years of experience, I specialize in building modern web applications.
           </Text>
@@ -77,8 +85,12 @@ export const AboutUnified: React.FC = () => {
                 <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
                   <service.icon className="w-6 h-6 text-emerald-400" />
                 </div>
-                <Heading as="h3" size="xs" className="mb-2">{service.title}</Heading>
-                <Text size="sm" color="tertiary">{service.description}</Text>
+                <Heading as="h3" size="xs" className="mb-2">
+                  {service.title}
+                </Heading>
+                <Text size="sm" color="tertiary">
+                  {service.description}
+                </Text>
               </Card>
             </motion.div>
           ))}
@@ -98,11 +110,16 @@ export const AboutUnified: React.FC = () => {
                   <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
                     <category.icon className="w-5 h-5 text-zinc-400" />
                   </div>
-                  <Heading as="h3" size="xs">{category.title}</Heading>
+                  <Heading as="h3" size="xs">
+                    {category.title}
+                  </Heading>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {category.skills.map((skill) => (
-                    <span key={skill} className="px-3 py-1.5 text-sm rounded-full bg-white/5 text-zinc-400 border border-white/[0.06]">
+                    <span
+                      key={skill}
+                      className="px-3 py-1.5 text-sm rounded-full bg-white/5 text-zinc-400 border border-white/[0.06]"
+                    >
                       {skill}
                     </span>
                   ))}

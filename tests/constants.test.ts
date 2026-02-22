@@ -15,7 +15,7 @@ describe('constants', () => {
     });
 
     it('has unique project IDs', () => {
-      const ids = PROJECTS.map(p => p.id);
+      const ids = PROJECTS.map((p) => p.id);
       const uniqueIds = new Set(ids);
       expect(uniqueIds.size).toBe(ids.length);
     });

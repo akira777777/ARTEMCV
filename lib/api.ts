@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 
 /**
  * Enhanced API Management Utilities
- * 
+ *
  * Advanced API handling with caching, error handling, retry logic,
  * authentication, and performance optimization.
  *
@@ -86,45 +86,54 @@ export function useApi(config: ApiConfig = {}) {
     authHeader = 'Authorization',
     authPrefix = 'Bearer',
     headers = {},
-    interceptors = {}
+    interceptors = {},
   } = config;
 
   const cacheRef = useRef<Map<string, { data: any; timestamp: number }>>(new Map());
   const abortControllersRef = useRef<Map<string, AbortController>>(new Map());
 
-  const generateCacheKey = useCallback((config: RequestConfig) => {
-    const url = new URL(config.url, baseURL);
-    if (config.params) {
-      Object.entries(config.params).forEach(([key, value]) => {
-        url.searchParams.append(key, String(value));
+  const generateCacheKey = useCallback(
+    (config: RequestConfig) => {
+      const url = new URL(config.url, baseURL);
+      if (config.params) {
+        Object.entries(config.params).forEach(([key, value]) => {
+          url.searchParams.append(key, String(value));
+        });
+      }
+      return `${config.method || 'GET'}:${url.toString()}:${JSON.stringify(config.data || {})}`;
+    },
+    [baseURL],
+  );
+
+  const getCachedData = useCallback(
+    (key: string) => {
+      if (!cache) return null;
+
+      const cached = cacheRef.current.get(key);
+      if (!cached) return null;
+
+      const isExpired = Date.now() - cached.timestamp > cacheTime;
+      if (isExpired) {
+        cacheRef.current.delete(key);
+        return null;
+      }
+
+      return cached.data;
+    },
+    [cache, cacheTime],
+  );
+
+  const setCachedData = useCallback(
+    (key: string, data: any) => {
+      if (!cache) return;
+
+      cacheRef.current.set(key, {
+        data,
+        timestamp: Date.now(),
       });
-    }
-    return `${config.method || 'GET'}:${url.toString()}:${JSON.stringify(config.data || {})}`;
-  }, [baseURL]);
-
-  const getCachedData = useCallback((key: string) => {
-    if (!cache) return null;
-
-    const cached = cacheRef.current.get(key);
-    if (!cached) return null;
-
-    const isExpired = Date.now() - cached.timestamp > cacheTime;
-    if (isExpired) {
-      cacheRef.current.delete(key);
-      return null;
-    }
-
-    return cached.data;
-  }, [cache, cacheTime]);
-
-  const setCachedData = useCallback((key: string, data: any) => {
-    if (!cache) return;
-
-    cacheRef.current.set(key, {
-      data,
-      timestamp: Date.now()
-    });
-  }, [cache]);
+    },
+    [cache],
+  );
 
   const abortRequest = useCallback((key: string) => {
     const controller = abortControllersRef.current.get(key);
@@ -134,176 +143,219 @@ export function useApi(config: ApiConfig = {}) {
     }
   }, []);
 
-  const request = useCallback(async <T = any>(requestConfig: RequestConfig): Promise<ApiResponse<T>> => {
-    const cacheKey = generateCacheKey(requestConfig);
-    const cachedData = getCachedData(cacheKey);
+  const request = useCallback(
+    async <T = any>(requestConfig: RequestConfig): Promise<ApiResponse<T>> => {
+      const cacheKey = generateCacheKey(requestConfig);
+      const cachedData = getCachedData(cacheKey);
 
-    if (cachedData) {
-      return {
-        data: cachedData,
-        status: 200,
-        statusText: 'OK',
-        headers: {},
-        config: requestConfig
-      };
-    }
-
-    // Abort previous request with same key
-    abortRequest(cacheKey);
-
-    // Create new abort controller
-    const abortController = new AbortController();
-    abortControllersRef.current.set(cacheKey, abortController);
-
-    const config: RequestConfig = {
-      ...requestConfig,
-      timeout: requestConfig.timeout || timeout,
-      retries: requestConfig.retries !== undefined ? requestConfig.retries : retries,
-      retryDelay: requestConfig.retryDelay || retryDelay,
-      cache: requestConfig.cache !== undefined ? requestConfig.cache : cache,
-      cacheTime: requestConfig.cacheTime || cacheTime,
-      auth: requestConfig.auth !== undefined ? requestConfig.auth : auth
-    };
-
-    // Apply request interceptor
-    let processedConfig = config;
-    if (interceptors.request) {
-      processedConfig = await interceptors.request(config);
-    }
-
-    // Build URL
-    const url = new URL(processedConfig.url, baseURL);
-    if (processedConfig.params) {
-      Object.entries(processedConfig.params).forEach(([key, value]) => {
-        url.searchParams.append(key, String(value));
-      });
-    }
-
-    // Build headers
-    const requestHeaders: Record<string, string> = {
-      ...headers,
-      ...processedConfig.headers
-    };
-
-    // Add authentication header
-    if (processedConfig.auth) {
-      const token = getAuthToken();
-      if (token) {
-        requestHeaders[authHeader] = `${authPrefix} ${token}`;
-      }
-    }
-
-    // Add content type for POST/PUT/PATCH requests
-    if (['POST', 'PUT', 'PATCH'].includes(processedConfig.method || 'GET')) {
-      requestHeaders['Content-Type'] = 'application/json';
-    }
-
-    const fetchConfig: RequestInit = {
-      method: processedConfig.method || 'GET',
-      headers: requestHeaders,
-      signal: abortController.signal,
-      // Include cookies in cross-origin requests if needed,
-      // and always include for same-origin requests.
-      credentials: processedConfig.auth ? 'include' : 'same-origin'
-    };
-
-    // Add body for POST/PUT/PATCH requests
-    if (['POST', 'PUT', 'PATCH'].includes(processedConfig.method || 'GET') && processedConfig.data) {
-      fetchConfig.body = JSON.stringify(processedConfig.data);
-    }
-
-    // Add timeout
-    if (processedConfig.timeout) {
-      setTimeout(() => abortController.abort(), processedConfig.timeout);
-    }
-
-    let lastError: any;
-
-    for (let attempt = 0; attempt <= (processedConfig.retries || 0); attempt++) {
-      try {
-        const response = await fetch(url.toString(), fetchConfig);
-
-        // Apply response interceptor
-        let processedResponse = response;
-        if (interceptors.response) {
-          processedResponse = await interceptors.response(response);
-        }
-
-        let data: T;
-        const contentType = response.headers.get('content-type');
-
-        if (contentType?.includes('application/json')) {
-          data = await response.json();
-        } else {
-          data = await response.text() as unknown as T;
-        }
-
-        const apiResponse: ApiResponse<T> = {
-          data,
-          status: response.status,
-          statusText: response.statusText,
-          headers: Object.fromEntries(response.headers.entries()),
-          config: processedConfig,
-          request: response
+      if (cachedData) {
+        return {
+          data: cachedData,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config: requestConfig,
         };
+      }
 
-        // Cache successful responses
-        if (response.ok && processedConfig.cache) {
-          setCachedData(cacheKey, data);
-        }
+      // Abort previous request with same key
+      abortRequest(cacheKey);
 
-        // Remove abort controller on success
-        abortControllersRef.current.delete(cacheKey);
+      // Create new abort controller
+      const abortController = new AbortController();
+      abortControllersRef.current.set(cacheKey, abortController);
 
-        return apiResponse;
+      const config: RequestConfig = {
+        ...requestConfig,
+        timeout: requestConfig.timeout || timeout,
+        retries: requestConfig.retries !== undefined ? requestConfig.retries : retries,
+        retryDelay: requestConfig.retryDelay || retryDelay,
+        cache: requestConfig.cache !== undefined ? requestConfig.cache : cache,
+        cacheTime: requestConfig.cacheTime || cacheTime,
+        auth: requestConfig.auth !== undefined ? requestConfig.auth : auth,
+      };
 
-      } catch (error) {
-        lastError = error;
+      // Apply request interceptor
+      let processedConfig = config;
+      if (interceptors.request) {
+        processedConfig = await interceptors.request(config);
+      }
 
-        // Don't retry on abort or network errors
-        if (error.name === 'AbortError' || !navigator.onLine) {
-          break;
-        }
+      // Build URL
+      const url = new URL(processedConfig.url, baseURL);
+      if (processedConfig.params) {
+        Object.entries(processedConfig.params).forEach(([key, value]) => {
+          url.searchParams.append(key, String(value));
+        });
+      }
 
-        // Don't retry on 4xx errors (except 408, 429)
-        if (attempt > 0 && error.status >= 400 && error.status < 500 && ![408, 429].includes(error.status)) {
-          break;
-        }
+      // Build headers
+      const requestHeaders: Record<string, string> = {
+        ...headers,
+        ...processedConfig.headers,
+      };
 
-        // Wait before retrying
-        if (attempt < (processedConfig.retries || 0)) {
-          await new Promise(resolve => setTimeout(resolve, processedConfig.retryDelay || retryDelay));
+      // Add authentication header
+      if (processedConfig.auth) {
+        const token = getAuthToken();
+        if (token) {
+          requestHeaders[authHeader] = `${authPrefix} ${token}`;
         }
       }
-    }
 
-    // Apply error interceptor
-    if (interceptors.error) {
-      lastError = await interceptors.error(lastError);
-    }
+      // Add content type for POST/PUT/PATCH requests
+      if (['POST', 'PUT', 'PATCH'].includes(processedConfig.method || 'GET')) {
+        requestHeaders['Content-Type'] = 'application/json';
+      }
 
-    throw lastError;
-  }, [baseURL, timeout, retries, retryDelay, cache, cacheTime, auth, authHeader, authPrefix, headers, interceptors, generateCacheKey, getCachedData, abortRequest, setCachedData]);
+      const fetchConfig: RequestInit = {
+        method: processedConfig.method || 'GET',
+        headers: requestHeaders,
+        signal: abortController.signal,
+        // Include cookies in cross-origin requests if needed,
+        // and always include for same-origin requests.
+        credentials: processedConfig.auth ? 'include' : 'same-origin',
+      };
 
-  const get = useCallback(<T = any>(url: string, config?: Omit<RequestConfig, 'url' | 'method'>) => {
-    return request<T>({ ...config, url, method: 'GET' });
-  }, [request]);
+      // Add body for POST/PUT/PATCH requests
+      if (
+        ['POST', 'PUT', 'PATCH'].includes(processedConfig.method || 'GET') &&
+        processedConfig.data
+      ) {
+        fetchConfig.body = JSON.stringify(processedConfig.data);
+      }
 
-  const post = useCallback(<T = any>(url: string, data?: any, config?: Omit<RequestConfig, 'url' | 'method' | 'data'>) => {
-    return request<T>({ ...config, url, method: 'POST', data });
-  }, [request]);
+      // Add timeout
+      if (processedConfig.timeout) {
+        setTimeout(() => abortController.abort(), processedConfig.timeout);
+      }
 
-  const put = useCallback(<T = any>(url: string, data?: any, config?: Omit<RequestConfig, 'url' | 'method' | 'data'>) => {
-    return request<T>({ ...config, url, method: 'PUT', data });
-  }, [request]);
+      let lastError: any;
 
-  const patch = useCallback(<T = any>(url: string, data?: any, config?: Omit<RequestConfig, 'url' | 'method' | 'data'>) => {
-    return request<T>({ ...config, url, method: 'PATCH', data });
-  }, [request]);
+      for (let attempt = 0; attempt <= (processedConfig.retries || 0); attempt++) {
+        try {
+          const response = await fetch(url.toString(), fetchConfig);
 
-  const del = useCallback(<T = any>(url: string, config?: Omit<RequestConfig, 'url' | 'method'>) => {
-    return request<T>({ ...config, url, method: 'DELETE' });
-  }, [request]);
+          // Apply response interceptor
+          let processedResponse = response;
+          if (interceptors.response) {
+            processedResponse = await interceptors.response(response);
+          }
+
+          let data: T;
+          const contentType = response.headers.get('content-type');
+
+          if (contentType?.includes('application/json')) {
+            data = await response.json();
+          } else {
+            data = (await response.text()) as unknown as T;
+          }
+
+          const apiResponse: ApiResponse<T> = {
+            data,
+            status: response.status,
+            statusText: response.statusText,
+            headers: Object.fromEntries(response.headers.entries()),
+            config: processedConfig,
+            request: response,
+          };
+
+          // Cache successful responses
+          if (response.ok && processedConfig.cache) {
+            setCachedData(cacheKey, data);
+          }
+
+          // Remove abort controller on success
+          abortControllersRef.current.delete(cacheKey);
+
+          return apiResponse;
+        } catch (error) {
+          lastError = error;
+
+          // Don't retry on abort or network errors
+          if (error.name === 'AbortError' || !navigator.onLine) {
+            break;
+          }
+
+          // Don't retry on 4xx errors (except 408, 429)
+          if (
+            attempt > 0 &&
+            error.status >= 400 &&
+            error.status < 500 &&
+            ![408, 429].includes(error.status)
+          ) {
+            break;
+          }
+
+          // Wait before retrying
+          if (attempt < (processedConfig.retries || 0)) {
+            await new Promise((resolve) =>
+              setTimeout(resolve, processedConfig.retryDelay || retryDelay),
+            );
+          }
+        }
+      }
+
+      // Apply error interceptor
+      if (interceptors.error) {
+        lastError = await interceptors.error(lastError);
+      }
+
+      throw lastError;
+    },
+    [
+      baseURL,
+      timeout,
+      retries,
+      retryDelay,
+      cache,
+      cacheTime,
+      auth,
+      authHeader,
+      authPrefix,
+      headers,
+      interceptors,
+      generateCacheKey,
+      getCachedData,
+      abortRequest,
+      setCachedData,
+    ],
+  );
+
+  const get = useCallback(
+    <T = any>(url: string, config?: Omit<RequestConfig, 'url' | 'method'>) => {
+      return request<T>({ ...config, url, method: 'GET' });
+    },
+    [request],
+  );
+
+  const post = useCallback(
+    <T = any>(url: string, data?: any, config?: Omit<RequestConfig, 'url' | 'method' | 'data'>) => {
+      return request<T>({ ...config, url, method: 'POST', data });
+    },
+    [request],
+  );
+
+  const put = useCallback(
+    <T = any>(url: string, data?: any, config?: Omit<RequestConfig, 'url' | 'method' | 'data'>) => {
+      return request<T>({ ...config, url, method: 'PUT', data });
+    },
+    [request],
+  );
+
+  const patch = useCallback(
+    <T = any>(url: string, data?: any, config?: Omit<RequestConfig, 'url' | 'method' | 'data'>) => {
+      return request<T>({ ...config, url, method: 'PATCH', data });
+    },
+    [request],
+  );
+
+  const del = useCallback(
+    <T = any>(url: string, config?: Omit<RequestConfig, 'url' | 'method'>) => {
+      return request<T>({ ...config, url, method: 'DELETE' });
+    },
+    [request],
+  );
 
   const clearCache = useCallback(() => {
     cacheRef.current.clear();
@@ -322,7 +374,7 @@ export function useApi(config: ApiConfig = {}) {
       }
     });
 
-    keysToDelete.forEach(key => cacheRef.current.delete(key));
+    keysToDelete.forEach((key) => cacheRef.current.delete(key));
   }, []);
 
   return {
@@ -334,7 +386,7 @@ export function useApi(config: ApiConfig = {}) {
     del,
     clearCache,
     invalidateCache,
-    abortRequest
+    abortRequest,
   };
 }
 
@@ -343,7 +395,7 @@ export function useApi(config: ApiConfig = {}) {
  */
 export function useApiData<T = any>(
   apiCall: () => Promise<ApiResponse<T>>,
-  options: { immediate?: boolean; dependencies?: any[] } = {}
+  options: { immediate?: boolean; dependencies?: any[] } = {},
 ) {
   const { immediate = true, dependencies = [] } = options;
   const [data, setData] = useState<T | null>(null);
@@ -398,7 +450,7 @@ export function useApiData<T = any>(
     loading,
     error,
     refetch,
-    reset
+    reset,
   };
 }
 
@@ -419,7 +471,7 @@ export const apiUtils = {
       status: response.status,
       code: response.status.toString(),
       config,
-      response
+      response,
     };
   },
 
@@ -450,7 +502,7 @@ export const apiUtils = {
   retryWithBackoff: async <T>(
     fn: () => Promise<T>,
     maxRetries: number = 3,
-    baseDelay: number = 1000
+    baseDelay: number = 1000,
   ): Promise<T> => {
     let lastError: any;
 
@@ -465,7 +517,7 @@ export const apiUtils = {
         }
 
         const delay = baseDelay * Math.pow(2, i);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
 
@@ -475,10 +527,7 @@ export const apiUtils = {
   /**
    * Debounce API requests
    */
-  debounceApi: <T extends (...args: any[]) => Promise<any>>(
-    fn: T,
-    delay: number
-  ): T => {
+  debounceApi: <T extends (...args: any[]) => Promise<any>>(fn: T, delay: number): T => {
     let timeoutId: NodeJS.Timeout;
 
     return ((...args: Parameters<T>) => {
@@ -499,10 +548,7 @@ export const apiUtils = {
   /**
    * Throttle API requests
    */
-  throttleApi: <T extends (...args: any[]) => Promise<any>>(
-    fn: T,
-    limit: number
-  ): T => {
+  throttleApi: <T extends (...args: any[]) => Promise<any>>(fn: T, limit: number): T => {
     let lastCall = 0;
     let lastResult: any;
     let lastArgs: any[] = [];
@@ -520,14 +566,14 @@ export const apiUtils = {
         lastArgs = args;
 
         fn(...args)
-          .then(result => {
+          .then((result) => {
             lastResult = result;
             resolve(result);
           })
           .catch(reject);
       });
     }) as T;
-  }
+  },
 };
 
 // ============================================================================
@@ -548,7 +594,7 @@ export function getAuthToken(): string | null {
   const name = 'authToken=';
   const ca = document.cookie.split(';');
   for (let i = 0; i < ca.length; i++) {
-    let c = ca[i].trim();
+    const c = ca[i].trim();
     if (c.indexOf(name) === 0) {
       return decodeURIComponent(c.substring(name.length));
     }
@@ -562,8 +608,8 @@ export function setAuthToken(token: string, remember: boolean = false): void {
   let expires = '';
   if (remember) {
     const date = new Date();
-    date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 days
-    expires = "; expires=" + date.toUTCString();
+    date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+    expires = '; expires=' + date.toUTCString();
   }
 
   // Set cookie with security best practices
@@ -575,7 +621,8 @@ export function clearAuthToken(): void {
   if (typeof document === 'undefined') return;
 
   // Clear by setting expiration to the past
-  document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict; Secure";
+  document.cookie =
+    'authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict; Secure';
 
   // Also clear legacy storage just in case
   localStorage.removeItem('authToken');
@@ -590,19 +637,19 @@ export const apiEndpoints = {
     login: '/api/auth/login',
     logout: '/api/auth/logout',
     register: '/api/auth/register',
-    refreshToken: '/api/auth/refresh'
+    refreshToken: '/api/auth/refresh',
   },
   users: {
     profile: '/api/users/profile',
     update: '/api/users/update',
-    delete: '/api/users/delete'
+    delete: '/api/users/delete',
   },
   posts: {
     list: '/api/posts',
     create: '/api/posts',
     update: (id: string) => `/api/posts/${id}`,
-    delete: (id: string) => `/api/posts/${id}`
-  }
+    delete: (id: string) => `/api/posts/${id}`,
+  },
 };
 
 export default {
@@ -612,5 +659,5 @@ export default {
   apiEndpoints,
   getAuthToken,
   setAuthToken,
-  clearAuthToken
+  clearAuthToken,
 };

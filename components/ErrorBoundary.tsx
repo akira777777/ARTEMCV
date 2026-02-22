@@ -28,7 +28,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     devLog.error('ErrorBoundary caught an error:', error, errorInfo);
-    
+
     // Optional: Send to error tracking service (Sentry, LogRocket, etc.)
     // logErrorToService(error, errorInfo);
   }
@@ -45,10 +45,11 @@ export class ErrorBoundary extends React.Component<Props, State> {
             <div className="space-y-3 text-center">
               <h2 className="text-2xl font-serif text-red-400">Something went wrong</h2>
               <p className="text-zinc-400 text-sm max-w-md">
-                We encountered an unexpected error. Please try refreshing the page or come back later.
+                We encountered an unexpected error. Please try refreshing the page or come back
+                later.
               </p>
             </div>
-            
+
             <details className="w-full max-w-md text-left">
               <summary className="text-xs uppercase tracking-widest font-bold text-zinc-500 cursor-pointer hover:text-white transition-colors">
                 Error Details

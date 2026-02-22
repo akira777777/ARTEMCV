@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback, useState, useMemo } from 'react';
 
 /**
  * Enhanced Router Management Utilities
- * 
+ *
  * Advanced routing with lazy loading, performance optimization,
  * accessibility, and SEO features.
  */
@@ -56,10 +56,12 @@ export function useRouter(routes: RouteConfig[] = []) {
     query: {},
     history: [window.location.pathname],
     isLoading: false,
-    error: null
+    error: null,
   });
 
-  const [loadedComponents, setLoadedComponents] = useState<Record<string, React.ComponentType<any>>>({});
+  const [loadedComponents, setLoadedComponents] = useState<
+    Record<string, React.ComponentType<any>>
+  >({});
   const [preloadedComponents, setPreloadedComponents] = useState<Set<string>>(new Set());
   const mountedRef = useRef(true);
 
@@ -77,100 +79,105 @@ export function useRouter(routes: RouteConfig[] = []) {
   }, []);
 
   // Match route and extract parameters
-  const matchRoute = useCallback((path: string) => {
-    for (const route of routes) {
-      const regex = pathToRegex(route.path, route.exact);
-      const match = path.match(regex);
+  const matchRoute = useCallback(
+    (path: string) => {
+      for (const route of routes) {
+        const regex = pathToRegex(route.path, route.exact);
+        const match = path.match(regex);
 
-      if (match) {
-        const params = extractParams(route.path, match);
-        return { route, params };
+        if (match) {
+          const params = extractParams(route.path, match);
+          return { route, params };
+        }
       }
-    }
-    return null;
-  }, [routes]);
+      return null;
+    },
+    [routes],
+  );
 
   // Navigate to a new route
-  const navigate = useCallback(async (to: string, options: NavigationOptions = {}) => {
-    const { replace = false, state, title, description, scrollRestoration = true } = options;
-    const { path, query } = parseUrl(to);
+  const navigate = useCallback(
+    async (to: string, options: NavigationOptions = {}) => {
+      const { replace = false, state, title, description, scrollRestoration = true } = options;
+      const { path, query } = parseUrl(to);
 
-    setState(prev => ({
-      ...prev,
-      isLoading: true,
-      error: null
-    }));
+      setState((prev) => ({
+        ...prev,
+        isLoading: true,
+        error: null,
+      }));
 
-    try {
-      const match = matchRoute(path);
-      if (!match) {
-        throw new Error(`No route found for ${path}`);
-      }
-
-      const { route, params } = match;
-
-      // Check authentication and roles
-      if (route.authRequired) {
-        // This would integrate with your auth system
-        const isAuthenticated = checkAuth();
-        if (!isAuthenticated) {
-          navigate('/login', { replace: true });
-          return;
+      try {
+        const match = matchRoute(path);
+        if (!match) {
+          throw new Error(`No route found for ${path}`);
         }
 
-        if (route.roles && !hasRoles(route.roles)) {
-          navigate('/unauthorized', { replace: true });
-          return;
+        const { route, params } = match;
+
+        // Check authentication and roles
+        if (route.authRequired) {
+          // This would integrate with your auth system
+          const isAuthenticated = checkAuth();
+          if (!isAuthenticated) {
+            navigate('/login', { replace: true });
+            return;
+          }
+
+          if (route.roles && !hasRoles(route.roles)) {
+            navigate('/unauthorized', { replace: true });
+            return;
+          }
         }
-      }
 
-      // Load component if not already loaded
-      let Component = loadedComponents[path];
-      if (!Component) {
-        Component = await loadComponent(route);
-        if (!mountedRef.current) return; // Component was unmounted during loading
+        // Load component if not already loaded
+        let Component = loadedComponents[path];
+        if (!Component) {
+          Component = await loadComponent(route);
+          if (!mountedRef.current) return; // Component was unmounted during loading
 
-        setLoadedComponents(prev => ({
+          setLoadedComponents((prev) => ({
+            ...prev,
+            [path]: Component,
+          }));
+        }
+
+        // Update browser history
+        const newUrl = buildUrl(path, query);
+        if (replace) {
+          window.history.replaceState({ path, query, state }, title || '', newUrl);
+        } else {
+          window.history.pushState({ path, query, state }, title || '', newUrl);
+        }
+
+        // Update document metadata
+        if (title) document.title = title;
+        if (description) updateMetaTags(route, description);
+
+        // Scroll restoration
+        if (scrollRestoration) {
+          window.scrollTo(0, 0);
+        }
+
+        // Update state
+        setState((prev) => ({
+          path,
+          params,
+          query,
+          history: [...prev.history, path],
+          isLoading: false,
+          error: null,
+        }));
+      } catch (error) {
+        setState((prev) => ({
           ...prev,
-          [path]: Component
+          isLoading: false,
+          error: error instanceof Error ? error.message : 'Navigation failed',
         }));
       }
-
-      // Update browser history
-      const newUrl = buildUrl(path, query);
-      if (replace) {
-        window.history.replaceState({ path, query, state }, title || '', newUrl);
-      } else {
-        window.history.pushState({ path, query, state }, title || '', newUrl);
-      }
-
-      // Update document metadata
-      if (title) document.title = title;
-      if (description) updateMetaTags(route, description);
-
-      // Scroll restoration
-      if (scrollRestoration) {
-        window.scrollTo(0, 0);
-      }
-
-      // Update state
-      setState(prev => ({
-        path,
-        params,
-        query,
-        history: [...prev.history, path],
-        isLoading: false,
-        error: null
-      }));
-
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        isLoading: false,
-        error: error instanceof Error ? error.message : 'Navigation failed'
-      }));
-    }
-  }, [loadedComponents, matchRoute, parseUrl]);
+    },
+    [loadedComponents, matchRoute, parseUrl],
+  );
 
   // Handle browser back/forward buttons
   useEffect(() => {
@@ -186,20 +193,23 @@ export function useRouter(routes: RouteConfig[] = []) {
   }, [navigate]);
 
   // Preload components for better performance
-  const preloadComponent = useCallback(async (path: string) => {
-    if (preloadedComponents.has(path)) return;
+  const preloadComponent = useCallback(
+    async (path: string) => {
+      if (preloadedComponents.has(path)) return;
 
-    const match = matchRoute(path);
-    if (!match) return;
+      const match = matchRoute(path);
+      if (!match) return;
 
-    const { route } = match;
-    try {
-      const Component = await loadComponent(route);
-      setPreloadedComponents(prev => new Set([...prev, path]));
-    } catch (error) {
-      console.warn(`Failed to preload component for ${path}:`, error);
-    }
-  }, [matchRoute, preloadedComponents]);
+      const { route } = match;
+      try {
+        const Component = await loadComponent(route);
+        setPreloadedComponents((prev) => new Set([...prev, path]));
+      } catch (error) {
+        console.warn(`Failed to preload component for ${path}:`, error);
+      }
+    },
+    [matchRoute, preloadedComponents],
+  );
 
   // Cleanup on unmount
   useEffect(() => {
@@ -213,7 +223,7 @@ export function useRouter(routes: RouteConfig[] = []) {
     navigate,
     preloadComponent,
     loadedComponents,
-    preloadedComponents
+    preloadedComponents,
   };
 }
 
@@ -226,7 +236,12 @@ export function useRouteGuard(config: {
   redirectPath?: string;
   unauthorizedPath?: string;
 }) {
-  const { authRequired = false, roles = [], redirectPath = '/login', unauthorizedPath = '/unauthorized' } = config;
+  const {
+    authRequired = false,
+    roles = [],
+    redirectPath = '/login',
+    unauthorizedPath = '/unauthorized',
+  } = config;
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -244,7 +259,7 @@ export function useRouteGuard(config: {
 
           if (roles.length > 0) {
             const userRoles = await getUserRoles();
-            const hasRequiredRoles = roles.some(role => userRoles.includes(role));
+            const hasRequiredRoles = roles.some((role) => userRoles.includes(role));
             if (!hasRequiredRoles) {
               window.location.href = unauthorizedPath;
               return;
@@ -277,11 +292,11 @@ export function useBreadcrumbs(routes: RouteConfig[], currentPath: string) {
     let currentPath = '';
     for (const segment of pathSegments) {
       currentPath += `/${segment}`;
-      const route = routes.find(r => r.path === currentPath);
+      const route = routes.find((r) => r.path === currentPath);
       if (route) {
         result.push({
           label: route.breadcrumbs?.[0]?.label || segment,
-          path: currentPath
+          path: currentPath,
         });
       }
     }
@@ -320,7 +335,7 @@ export function useQueryParams<T extends Record<string, string> = Record<string,
     });
 
     window.history.pushState({}, '', url.toString());
-    setParams(prev => ({ ...prev, ...newParams } as T));
+    setParams((prev) => ({ ...prev, ...newParams }) as T);
   }, []);
 
   return { params, updateParams };
@@ -338,9 +353,7 @@ export const routerUtils = {
    * Convert path to regex for matching
    */
   pathToRegex: (path: string, exact: boolean = false) => {
-    const escapedPath = path
-      .replace(/:[^\s/]+/g, '([^/]+)')
-      .replace(/\*/g, '(.*)');
+    const escapedPath = path.replace(/:[^\s/]+/g, '([^/]+)').replace(/\*/g, '(.*)');
 
     const regex = new RegExp(`^${escapedPath}${exact ? '$' : ''}`);
     return regex;
@@ -404,12 +417,14 @@ export const routerUtils = {
     }
 
     // Update Open Graph tags
-    const ogTitle = document.querySelector('meta[property="og:title"]') || document.createElement('meta');
+    const ogTitle =
+      document.querySelector('meta[property="og:title"]') || document.createElement('meta');
     ogTitle.setAttribute('property', 'og:title');
     ogTitle.setAttribute('content', route.title || document.title);
     document.head.appendChild(ogTitle);
 
-    const ogDescription = document.querySelector('meta[property="og:description"]') || document.createElement('meta');
+    const ogDescription =
+      document.querySelector('meta[property="og:description"]') || document.createElement('meta');
     ogDescription.setAttribute('property', 'og:description');
     ogDescription.setAttribute('content', description || route.description || '');
     document.head.appendChild(ogDescription);
@@ -422,15 +437,19 @@ export const routerUtils = {
     return function AccessibleLink(props: any) {
       const { href, children, ...rest } = props;
 
-      return React.createElement(Component, {
-        ...rest,
-        href,
-        'aria-current': window.location.pathname === href ? 'page' : undefined,
-        onClick: (e: React.MouseEvent) => {
-          e.preventDefault();
-          window.history.pushState({}, '', href);
-        }
-      }, children);
+      return React.createElement(
+        Component,
+        {
+          ...rest,
+          href,
+          'aria-current': window.location.pathname === href ? 'page' : undefined,
+          onClick: (e: React.MouseEvent) => {
+            e.preventDefault();
+            window.history.pushState({}, '', href);
+          },
+        },
+        children,
+      );
     };
   },
 
@@ -446,7 +465,7 @@ export const routerUtils = {
    */
   isExternalPath: (path: string) => {
     return /^(https?:)?\/\//.test(path) || path.startsWith('mailto:') || path.startsWith('tel:');
-  }
+  },
 };
 
 // ============================================================================
@@ -469,16 +488,21 @@ async function getUserRoles(): Promise<string[]> {
 
 function hasRoles(requiredRoles: string[]): boolean {
   const userRoles = JSON.parse(localStorage.getItem('userRoles') || '[]');
-  return requiredRoles.some(role => userRoles.includes(role));
+  return requiredRoles.some((role) => userRoles.includes(role));
 }
 
 /**
  * Component loading helper with error boundaries
  */
 async function loadComponent(route: RouteConfig): Promise<React.ComponentType<any>> {
-  if (typeof route.component === 'function' && route.component.constructor.name === 'AsyncFunction') {
+  if (
+    typeof route.component === 'function' &&
+    route.component.constructor.name === 'AsyncFunction'
+  ) {
     try {
-      const loadComponentFn = route.component as () => Promise<{ default: React.ComponentType<any> }>;
+      const loadComponentFn = route.component as () => Promise<{
+        default: React.ComponentType<any>;
+      }>;
       const module = await loadComponentFn();
       return module.default;
     } catch (error) {
@@ -494,5 +518,5 @@ export default {
   useRouteGuard,
   useBreadcrumbs,
   useQueryParams,
-  routerUtils
+  routerUtils,
 };

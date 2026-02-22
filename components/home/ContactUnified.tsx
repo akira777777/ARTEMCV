@@ -6,7 +6,12 @@ import { Card } from '../ui/Card';
 import { Heading, Text, Label } from '../ui/Typography';
 
 const contactInfo = [
-  { icon: Mail, label: 'Email', value: 'hello@artemmikhailov.dev', href: 'mailto:hello@artemmikhailov.dev' },
+  {
+    icon: Mail,
+    label: 'Email',
+    value: 'hello@artemmikhailov.dev',
+    href: 'mailto:hello@artemmikhailov.dev',
+  },
   { icon: MapPin, label: 'Location', value: 'Prague, Czech Republic', href: null },
 ];
 
@@ -41,12 +46,21 @@ export const ContactUnified: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <Label size="sm" weight="semibold" uppercase tracking="wider" className="text-emerald-400 mb-4">
+            <Label
+              size="sm"
+              weight="semibold"
+              uppercase
+              tracking="wider"
+              className="text-emerald-400 mb-4"
+            >
               Get In Touch
             </Label>
-            <Heading as="h2" size="lg" className="mb-6">Let's Work Together</Heading>
+            <Heading as="h2" size="lg" className="mb-6">
+              Let's Work Together
+            </Heading>
             <Text size="lg" color="secondary" className="mb-8">
-              Have a project in mind? I'd love to hear about it. Send me a message and let's create something amazing.
+              Have a project in mind? I'd love to hear about it. Send me a message and let's create
+              something amazing.
             </Text>
 
             <div className="space-y-4 mb-8">
@@ -56,9 +70,13 @@ export const ContactUnified: React.FC = () => {
                     <item.icon className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div>
-                    <Text size="sm" color="tertiary">{item.label}</Text>
+                    <Text size="sm" color="tertiary">
+                      {item.label}
+                    </Text>
                     {item.href ? (
-                      <a href={item.href} className="text-white hover:text-emerald-400">{item.value}</a>
+                      <a href={item.href} className="text-white hover:text-emerald-400">
+                        {item.value}
+                      </a>
                     ) : (
                       <Text color="primary">{item.value}</Text>
                     )}
@@ -93,13 +111,19 @@ export const ContactUnified: React.FC = () => {
                   <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
                     <Send className="w-8 h-8 text-emerald-400" />
                   </div>
-                  <Heading as="h3" size="sm" className="mb-2">Message Sent!</Heading>
-                  <Text color="secondary">Thank you for reaching out. I'll get back to you soon.</Text>
+                  <Heading as="h3" size="sm" className="mb-2">
+                    Message Sent!
+                  </Heading>
+                  <Text color="secondary">
+                    Thank you for reaching out. I'll get back to you soon.
+                  </Text>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-zinc-300 mb-2">Name</label>
+                    <label htmlFor="name" className="block text-sm font-medium text-zinc-300 mb-2">
+                      Name
+                    </label>
                     <input
                       type="text"
                       id="name"
@@ -111,7 +135,9 @@ export const ContactUnified: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-zinc-300 mb-2">Email</label>
+                    <label htmlFor="email" className="block text-sm font-medium text-zinc-300 mb-2">
+                      Email
+                    </label>
                     <input
                       type="email"
                       id="email"
@@ -123,7 +149,12 @@ export const ContactUnified: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-zinc-300 mb-2">Message</label>
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium text-zinc-300 mb-2"
+                    >
+                      Message
+                    </label>
                     <textarea
                       id="message"
                       rows={5}
@@ -134,7 +165,14 @@ export const ContactUnified: React.FC = () => {
                       placeholder="Tell me about your project..."
                     />
                   </div>
-                  <Button type="submit" variant="primary" size="lg" fullWidth isLoading={isSubmitting} rightIcon={<Send className="w-4 h-4" />}>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    isLoading={isSubmitting}
+                    rightIcon={<Send className="w-4 h-4" />}
+                  >
                     Send Message
                   </Button>
                 </form>

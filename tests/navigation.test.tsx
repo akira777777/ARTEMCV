@@ -36,7 +36,7 @@ describe('Navigation', () => {
     renderWithI18n(<Navigation />);
     const homeLink = screen.getByText('HOME').closest('a');
     expect(homeLink).toHaveAttribute('href', '#home');
-    
+
     const worksLink = screen.getByText('WORK').closest('a');
     expect(worksLink).toHaveAttribute('href', '#works');
   });

@@ -1,13 +1,13 @@
 /**
  * Enhanced Logging System
- * 
+ *
  * Provides structured, level-based logging with support for:
  * - Environment-based log level filtering
  * - Structured JSON logging for production
  * - Pretty printing for development
  * - Log correlation IDs for request tracing
  * - Batched log shipping for analytics
- * 
+ *
  * @example
  * ```typescript
  * const logger = createLogger({ context: 'ContactForm' });
@@ -100,20 +100,20 @@ function formatForConsole(entry: LogEntry): string {
   const levelColor = getLevelColor(entry.level);
   const context = entry.context ? `[${entry.context}]` : '';
   const correlation = entry.correlationId ? `(${entry.correlationId.slice(0, 8)})` : '';
-  
+
   let output = `${timestamp} ${levelColor}${entry.level.toUpperCase()}\x1b[0m ${context} ${correlation} ${entry.message}`;
-  
+
   if (entry.data && Object.keys(entry.data).length > 0) {
     output += '\n  ' + JSON.stringify(entry.data, null, 2).replace(/\n/g, '\n  ');
   }
-  
+
   if (entry.error) {
     output += `\n  Error: ${entry.error.message}`;
     if (entry.error.stack && process.env.NODE_ENV !== 'production') {
       output += `\n  ${entry.error.stack}`;
     }
   }
-  
+
   return output;
 }
 
@@ -122,12 +122,18 @@ function formatForConsole(entry: LogEntry): string {
  */
 function getLevelColor(level: LogLevel): string {
   switch (level) {
-    case 'debug': return '\x1b[36m'; // Cyan
-    case 'info': return '\x1b[32m';  // Green
-    case 'warn': return '\x1b[33m';  // Yellow
-    case 'error': return '\x1b[31m'; // Red
-    case 'fatal': return '\x1b[35m'; // Magenta
-    default: return '\x1b[0m';
+    case 'debug':
+      return '\x1b[36m'; // Cyan
+    case 'info':
+      return '\x1b[32m'; // Green
+    case 'warn':
+      return '\x1b[33m'; // Yellow
+    case 'error':
+      return '\x1b[31m'; // Red
+    case 'fatal':
+      return '\x1b[35m'; // Magenta
+    default:
+      return '\x1b[0m';
   }
 }
 
@@ -138,7 +144,7 @@ function serializeError(error: unknown): LogEntry['error'] | undefined {
   if (!(error instanceof Error)) {
     return undefined;
   }
-  
+
   return {
     message: error.message,
     name: error.name,
@@ -151,11 +157,11 @@ function serializeError(error: unknown): LogEntry['error'] | undefined {
  */
 async function flushLogs(logs: LogEntry[]): Promise<void> {
   if (logs.length === 0) return;
-  
+
   // In production, you might send these to a log aggregation service
   // For now, we just output to console in JSON format
   if (process.env.NODE_ENV === 'production') {
-    logs.forEach(log => {
+    logs.forEach((log) => {
       console.log(JSON.stringify(log));
     });
   }
@@ -168,7 +174,7 @@ function scheduleFlush(interval: number): void {
   if (flushTimeout) {
     clearTimeout(flushTimeout);
   }
-  
+
   flushTimeout = setTimeout(() => {
     const logsToFlush = [...logBuffer];
     logBuffer = [];
@@ -198,7 +204,7 @@ export function createLogger(config: LoggerConfig = {}) {
     level: LogLevel,
     message: string,
     data?: Record<string, unknown>,
-    error?: unknown
+    error?: unknown,
   ): void {
     if (!shouldLog(level, minLevel)) {
       return;
@@ -242,7 +248,7 @@ export function createLogger(config: LoggerConfig = {}) {
     // Batched logging
     if (enableBatching) {
       logBuffer.push(entry);
-      
+
       if (logBuffer.length >= batchSize) {
         const logsToFlush = [...logBuffer];
         logBuffer = [];
@@ -255,25 +261,23 @@ export function createLogger(config: LoggerConfig = {}) {
 
   // Return logger interface
   return {
-    debug: (message: string, data?: Record<string, unknown>) => 
-      log('debug', message, data),
-    
-    info: (message: string, data?: Record<string, unknown>) => 
-      log('info', message, data),
-    
-    warn: (message: string, data?: Record<string, unknown>, error?: unknown) => 
+    debug: (message: string, data?: Record<string, unknown>) => log('debug', message, data),
+
+    info: (message: string, data?: Record<string, unknown>) => log('info', message, data),
+
+    warn: (message: string, data?: Record<string, unknown>, error?: unknown) =>
       log('warn', message, data, error),
-    
-    error: (message: string, error?: unknown, data?: Record<string, unknown>) => 
+
+    error: (message: string, error?: unknown, data?: Record<string, unknown>) =>
       log('error', message, data, error),
-    
-    fatal: (message: string, error?: unknown, data?: Record<string, unknown>) => 
+
+    fatal: (message: string, error?: unknown, data?: Record<string, unknown>) =>
       log('fatal', message, data, error),
 
     /**
      * Create a child logger with additional context
      */
-    child: (childContext: string) => 
+    child: (childContext: string) =>
       createLogger({
         ...config,
         context: `${context}.${childContext}`,
@@ -310,17 +314,21 @@ import { useCallback, useRef } from 'react';
  */
 export function useLogger(context: string) {
   const correlationId = useRef(generateCorrelationId()).current;
-  const componentLogger = useRef(
-    createLogger({ context, correlationId })
-  ).current;
+  const componentLogger = useRef(createLogger({ context, correlationId })).current;
 
-  const logError = useCallback((message: string, error: unknown) => {
-    componentLogger.error(message, error);
-  }, [componentLogger]);
+  const logError = useCallback(
+    (message: string, error: unknown) => {
+      componentLogger.error(message, error);
+    },
+    [componentLogger],
+  );
 
-  const logInfo = useCallback((message: string, data?: Record<string, unknown>) => {
-    componentLogger.info(message, data);
-  }, [componentLogger]);
+  const logInfo = useCallback(
+    (message: string, data?: Record<string, unknown>) => {
+      componentLogger.info(message, data);
+    },
+    [componentLogger],
+  );
 
   return {
     logger: componentLogger,

@@ -38,34 +38,36 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 /**
  * Badge component for labels and statuses
- * 
+ *
  * @example
  * ```tsx
  * <Badge variant="success" size="md" icon={<CheckIcon />}>Completed</Badge>
  * ```
  */
-export const Badge = React.memo<BadgeProps>(({
-  variant = 'default',
-  size = 'md',
-  icon,
-  clickable = false,
-  className,
-  children,
-  ...props
-}) => (
-  <span
-    className={cn(
-      'inline-flex items-center font-medium rounded-full border transition-colors',
-      badgeVariants[variant],
-      badgeSizes[size],
-      clickable && 'cursor-pointer hover:opacity-80',
-      className
-    )}
-    {...props}
-  >
-    {icon && <span className="flex-shrink-0">{icon}</span>}
-    {children}
-  </span>
-));
+export const Badge = React.memo<BadgeProps>(
+  ({
+    variant = 'default',
+    size = 'md',
+    icon,
+    clickable = false,
+    className,
+    children,
+    ...props
+  }) => (
+    <span
+      className={cn(
+        'inline-flex items-center font-medium rounded-full border transition-colors',
+        badgeVariants[variant],
+        badgeSizes[size],
+        clickable && 'cursor-pointer hover:opacity-80',
+        className,
+      )}
+      {...props}
+    >
+      {icon && <span className="flex-shrink-0">{icon}</span>}
+      {children}
+    </span>
+  ),
+);
 
 Badge.displayName = 'Badge';

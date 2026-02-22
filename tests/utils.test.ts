@@ -10,10 +10,10 @@ describe('Validation Utils', () => {
         'user.name@domain.co.uk',
         'user+tag@example.org',
         'user123@test-domain.com',
-        'test.email.with+symbol@example.com'
+        'test.email.with+symbol@example.com',
       ];
 
-      validEmails.forEach(email => {
+      validEmails.forEach((email) => {
         expect(EMAIL_REGEX.test(email)).toBe(true);
       });
     });
@@ -26,10 +26,10 @@ describe('Validation Utils', () => {
         'test@.com',
         'test@example.',
         'test space@example.com',
-        'test@ex ample.com'
+        'test@ex ample.com',
       ];
 
-      invalidEmails.forEach(email => {
+      invalidEmails.forEach((email) => {
         expect(EMAIL_REGEX.test(email)).toBe(false);
       });
     });
@@ -61,9 +61,9 @@ describe('Validation Utils', () => {
     });
 
     it('should handle HTML entities correctly', () => {
-      const htmlString = 'Hello & < > " \\'';
+      const htmlString = `Hello & < > " '`;
       const result = sanitizeString(htmlString, 100);
-      expect(result).toBe('Hello &amp; &lt; &gt; &quot; &#39;');
+      expect(result).toBe(`Hello &amp; &lt; &gt; &quot; &#39;`);
     });
   });
 });
@@ -115,7 +115,7 @@ describe('Performance Utils', () => {
       setTimeout(() => clearInterval(interval), 100);
 
       // Wait for debounce period
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
       // This is a simplified test - in real implementation you'd use @testing-library/react
       expect(callCount).toBeGreaterThan(0);
@@ -129,7 +129,7 @@ describe('Integration Tests', () => {
       const formData = {
         name: 'John Doe',
         email: 'john@example.com',
-        message: 'This is a test message with more than 10 characters.'
+        message: 'This is a test message with more than 10 characters.',
       };
 
       // Test email validation
@@ -139,7 +139,7 @@ describe('Integration Tests', () => {
       const sanitizedData = {
         name: sanitizeString(formData.name, 100),
         email: sanitizeString(formData.email, 254),
-        message: sanitizeString(formData.message, 5000)
+        message: sanitizeString(formData.message, 5000),
       };
 
       expect(sanitizedData.name).toBe('John Doe');
@@ -151,13 +151,13 @@ describe('Integration Tests', () => {
       const maliciousData = {
         name: '<script>alert("xss")</script>John',
         email: 'test@<script>alert("xss")</script>.com',
-        message: '<img src=x onerror=alert(1)>'
+        message: '<img src=x onerror=alert(1)>',
       };
 
       const sanitizedData = {
         name: sanitizeString(maliciousData.name, 100),
         email: sanitizeString(maliciousData.email, 254),
-        message: sanitizeString(maliciousData.message, 5000)
+        message: sanitizeString(maliciousData.message, 5000),
       };
 
       // Should not contain any script tags or executable code
@@ -182,7 +182,7 @@ describe('Integration Tests', () => {
         pressed: false,
         selected: false,
         disabled: false,
-        level: 2
+        level: 2,
       };
 
       // This would test the generateAriaAttributes function
@@ -268,12 +268,12 @@ describe('Performance Tests', () => {
         'user.name@domain.co.uk',
         'invalid-email',
         '@example.com',
-        'test@'
+        'test@',
       ];
 
       const startTime = performance.now();
 
-      testEmails.forEach(email => {
+      testEmails.forEach((email) => {
         EMAIL_REGEX.test(email);
       });
 

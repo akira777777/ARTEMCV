@@ -8,19 +8,19 @@ const mockT = (key: string) => key;
 vi.mock('../i18n', () => ({
   useI18n: vi.fn(() => ({
     t: mockT,
-    lang: 'en'
-  }))
+    lang: 'en',
+  })),
 }));
 
 vi.mock('../lib/hooks', () => ({
-  useFetchWithTimeout: vi.fn(() => vi.fn())
+  useFetchWithTimeout: vi.fn(() => vi.fn()),
 }));
 
 vi.mock('../lib/logger', () => ({
   default: {
     warn: vi.fn(),
-    error: vi.fn()
-  }
+    error: vi.fn(),
+  },
 }));
 
 describe('SimpleTelegramChat Component Tests', () => {

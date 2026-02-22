@@ -3,10 +3,10 @@ import { useI18n } from '../i18n';
 
 /**
  * SkipLink Component
- * 
+ *
  * Accessibility feature that allows keyboard users to skip navigation
  * and jump directly to the main content.
- * 
+ *
  * This component is visually hidden by default but becomes visible
  * when focused via keyboard navigation.
  */

@@ -8,16 +8,16 @@ interface UseInViewOptions {
 
 /**
  * Hook to detect when an element enters the viewport
- * 
+ *
  * @example
  * const [ref, isInView] = useInView({ threshold: 0.5 });
- * 
+ *
  * <div ref={ref}>
  *   {isInView && <AnimatedContent />}
  * </div>
  */
 export function useInView<T extends HTMLElement = HTMLDivElement>(
-  options: UseInViewOptions = {}
+  options: UseInViewOptions = {},
 ): [RefObject<T | null>, boolean] {
   const { threshold = 0, rootMargin = '0px', triggerOnce = false } = options;
   const ref = useRef<T>(null);
@@ -38,7 +38,7 @@ export function useInView<T extends HTMLElement = HTMLDivElement>(
           setIsInView(false);
         }
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
 
     observer.observe(element);
@@ -56,7 +56,7 @@ export function useInView<T extends HTMLElement = HTMLDivElement>(
  */
 export function useAnimateInView<T extends HTMLElement = HTMLDivElement>(
   animationClass: string = 'animate-fade-in-up',
-  options: UseInViewOptions = {}
+  options: UseInViewOptions = {},
 ): [RefObject<T | null>, boolean] {
   const [ref, isInView] = useInView<T>({ triggerOnce: true, ...options });
 
@@ -75,7 +75,7 @@ export function useAnimateInView<T extends HTMLElement = HTMLDivElement>(
  */
 export function useInViewMultiple(
   count: number,
-  options: UseInViewOptions = {}
+  options: UseInViewOptions = {},
 ): { refs: RefObject<HTMLElement | null>[]; inViewStates: boolean[] } {
   const refs = Array.from({ length: count }, () => useRef<HTMLElement>(null));
   const [inViewStates, setInViewStates] = useState<boolean[]>(Array(count).fill(false));
@@ -106,7 +106,7 @@ export function useInViewMultiple(
             });
           }
         },
-        { threshold: options.threshold ?? 0, rootMargin: options.rootMargin ?? '0px' }
+        { threshold: options.threshold ?? 0, rootMargin: options.rootMargin ?? '0px' },
       );
 
       observer.observe(element);

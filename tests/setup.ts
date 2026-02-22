@@ -7,14 +7,11 @@ class MockIntersectionObserver implements IntersectionObserver {
   readonly rootMargin: string;
   readonly thresholds: number[];
 
-  constructor(
-    callback: IntersectionObserverCallback,
-    options?: IntersectionObserverInit
-  ) {
+  constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
     this.root = options?.root || null;
     this.rootMargin = options?.rootMargin || '0px';
-    this.thresholds = Array.isArray(options?.threshold) 
-      ? options.threshold 
+    this.thresholds = Array.isArray(options?.threshold)
+      ? options.threshold
       : [options?.threshold || 0];
   }
 
@@ -59,7 +56,7 @@ window.ResizeObserver = MockResizeObserver;
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -74,7 +71,7 @@ Object.defineProperty(window, 'matchMedia', {
 // Mock requestAnimationFrame
 Object.defineProperty(window, 'requestAnimationFrame', {
   writable: true,
-  value: vi.fn().mockImplementation(callback => setTimeout(callback, 16)),
+  value: vi.fn().mockImplementation((callback) => setTimeout(callback, 16)),
 });
 
 // Mock cancelAnimationFrame
@@ -200,16 +197,32 @@ global.URLSearchParams = class URLSearchParams {
 
   append(name: string, value: string): void {}
   delete(name: string): void {}
-  get(name: string): string | null { return null; }
-  getAll(name: string): string[] { return []; }
-  has(name: string): boolean { return false; }
+  get(name: string): string | null {
+    return null;
+  }
+  getAll(name: string): string[] {
+    return [];
+  }
+  has(name: string): boolean {
+    return false;
+  }
   set(name: string, value: string): void {}
   sort(): void {}
-  toString(): string { return ''; }
-  keys(): IterableIterator<string> { return [] as any; }
-  values(): IterableIterator<string> { return [] as any; }
-  entries(): IterableIterator<[string, string]> { return [] as any; }
-  [Symbol.iterator](): IterableIterator<[string, string]> { return [] as any; }
+  toString(): string {
+    return '';
+  }
+  keys(): IterableIterator<string> {
+    return [] as any;
+  }
+  values(): IterableIterator<string> {
+    return [] as any;
+  }
+  entries(): IterableIterator<[string, string]> {
+    return [] as any;
+  }
+  [Symbol.iterator](): IterableIterator<[string, string]> {
+    return [] as any;
+  }
 };
 
 // Mock crypto
@@ -234,11 +247,12 @@ if (!global.structuredClone) {
 expect.extend({
   toBeAccessible(received) {
     // Basic accessibility checks
-    const hasAriaLabel = received.hasAttribute('aria-label') || 
-                        received.hasAttribute('aria-labelledby');
+    const hasAriaLabel =
+      received.hasAttribute('aria-label') || received.hasAttribute('aria-labelledby');
     const hasRole = received.hasAttribute('role');
-    const isFocusable = received.tabIndex >= 0 || 
-                       ['button', 'input', 'a', 'select', 'textarea'].includes(received.tagName.toLowerCase());
+    const isFocusable =
+      received.tabIndex >= 0 ||
+      ['button', 'input', 'a', 'select', 'textarea'].includes(received.tagName.toLowerCase());
 
     const pass = hasAriaLabel || hasRole || isFocusable;
 

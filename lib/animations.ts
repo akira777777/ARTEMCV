@@ -12,12 +12,12 @@ import { smooth, smoothOut, snap, bounce, springs, durations, staggers } from '.
 
 /** Fade in from bottom */
 export const fadeInUp: Variants = {
-  hidden: { 
-    opacity: 0, 
-    y: 30 
+  hidden: {
+    opacity: 0,
+    y: 30,
   },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: {
       duration: durations.normal,
@@ -28,12 +28,12 @@ export const fadeInUp: Variants = {
 
 /** Fade in from top */
 export const fadeInDown: Variants = {
-  hidden: { 
-    opacity: 0, 
-    y: -30 
+  hidden: {
+    opacity: 0,
+    y: -30,
   },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: {
       duration: durations.normal,
@@ -44,12 +44,12 @@ export const fadeInDown: Variants = {
 
 /** Fade in from left */
 export const fadeInLeft: Variants = {
-  hidden: { 
-    opacity: 0, 
-    x: -30 
+  hidden: {
+    opacity: 0,
+    x: -30,
   },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     x: 0,
     transition: {
       duration: durations.normal,
@@ -60,12 +60,12 @@ export const fadeInLeft: Variants = {
 
 /** Fade in from right */
 export const fadeInRight: Variants = {
-  hidden: { 
-    opacity: 0, 
-    x: 30 
+  hidden: {
+    opacity: 0,
+    x: 30,
   },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     x: 0,
     transition: {
       duration: durations.normal,
@@ -76,10 +76,10 @@ export const fadeInRight: Variants = {
 
 /** Simple fade in */
 export const fadeIn: Variants = {
-  hidden: { 
-    opacity: 0 
+  hidden: {
+    opacity: 0,
   },
-  visible: { 
+  visible: {
     opacity: 1,
     transition: {
       duration: durations.normal,
@@ -90,10 +90,10 @@ export const fadeIn: Variants = {
 
 /** Fade out */
 export const fadeOut: Variants = {
-  visible: { 
-    opacity: 1 
+  visible: {
+    opacity: 1,
   },
-  hidden: { 
+  hidden: {
     opacity: 0,
     transition: {
       duration: durations.fast,
@@ -108,12 +108,12 @@ export const fadeOut: Variants = {
 
 /** Scale in from small */
 export const scaleIn: Variants = {
-  hidden: { 
-    opacity: 0, 
-    scale: 0.8 
+  hidden: {
+    opacity: 0,
+    scale: 0.8,
   },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     scale: 1,
     transition: {
       duration: durations.normal,
@@ -124,12 +124,12 @@ export const scaleIn: Variants = {
 
 /** Scale in with bounce */
 export const scaleInBounce: Variants = {
-  hidden: { 
-    opacity: 0, 
-    scale: 0.5 
+  hidden: {
+    opacity: 0,
+    scale: 0.5,
   },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     scale: 1,
     transition: {
       duration: durations.slow,
@@ -140,12 +140,12 @@ export const scaleInBounce: Variants = {
 
 /** Scale out */
 export const scaleOut: Variants = {
-  visible: { 
-    opacity: 1, 
-    scale: 1 
+  visible: {
+    opacity: 1,
+    scale: 1,
   },
-  hidden: { 
-    opacity: 0, 
+  hidden: {
+    opacity: 0,
     scale: 0.8,
     transition: {
       duration: durations.fast,
@@ -156,12 +156,12 @@ export const scaleOut: Variants = {
 
 /** Pop animation - scale with bounce */
 export const pop: Variants = {
-  hidden: { 
-    opacity: 0, 
-    scale: 0 
+  hidden: {
+    opacity: 0,
+    scale: 0,
   },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     scale: 1,
     transition: springs.bouncy,
   },
@@ -173,10 +173,10 @@ export const pop: Variants = {
 
 /** Slide in from bottom */
 export const slideIn: Variants = {
-  hidden: { 
-    y: '100%' 
+  hidden: {
+    y: '100%',
   },
-  visible: { 
+  visible: {
     y: 0,
     transition: {
       duration: durations.slow,
@@ -187,10 +187,10 @@ export const slideIn: Variants = {
 
 /** Slide in from left */
 export const slideInLeft: Variants = {
-  hidden: { 
-    x: '-100%' 
+  hidden: {
+    x: '-100%',
   },
-  visible: { 
+  visible: {
     x: 0,
     transition: {
       duration: durations.slow,
@@ -201,10 +201,10 @@ export const slideInLeft: Variants = {
 
 /** Slide in from right */
 export const slideInRight: Variants = {
-  hidden: { 
-    x: '100%' 
+  hidden: {
+    x: '100%',
   },
-  visible: { 
+  visible: {
     x: 0,
     transition: {
       duration: durations.slow,
@@ -215,10 +215,10 @@ export const slideInRight: Variants = {
 
 /** Slide out to bottom */
 export const slideOut: Variants = {
-  visible: { 
-    y: 0 
+  visible: {
+    y: 0,
   },
-  hidden: { 
+  hidden: {
     y: '100%',
     transition: {
       duration: durations.normal,
@@ -233,14 +233,14 @@ export const slideOut: Variants = {
 
 /** Rotate in */
 export const rotateIn: Variants = {
-  hidden: { 
-    opacity: 0, 
-    rotate: -180, 
-    scale: 0.8 
+  hidden: {
+    opacity: 0,
+    rotate: -180,
+    scale: 0.8,
   },
-  visible: { 
-    opacity: 1, 
-    rotate: 0, 
+  visible: {
+    opacity: 1,
+    rotate: 0,
     scale: 1,
     transition: springs.default,
   },
@@ -248,12 +248,12 @@ export const rotateIn: Variants = {
 
 /** Flip in from X axis */
 export const flipInX: Variants = {
-  hidden: { 
-    opacity: 0, 
-    rotateX: -90 
+  hidden: {
+    opacity: 0,
+    rotateX: -90,
   },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     rotateX: 0,
     transition: {
       duration: durations.slow,
@@ -264,12 +264,12 @@ export const flipInX: Variants = {
 
 /** Flip in from Y axis */
 export const flipInY: Variants = {
-  hidden: { 
-    opacity: 0, 
-    rotateY: -90 
+  hidden: {
+    opacity: 0,
+    rotateY: -90,
   },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     rotateY: 0,
     transition: {
       duration: durations.slow,
@@ -284,8 +284,8 @@ export const flipInY: Variants = {
 
 /** Pulse animation */
 export const pulse: Variants = {
-  initial: { 
-    scale: 1 
+  initial: {
+    scale: 1,
   },
   animate: {
     scale: [1, 1.05, 1],
@@ -299,8 +299,8 @@ export const pulse: Variants = {
 
 /** Float animation - gentle up/down movement */
 export const float: Variants = {
-  initial: { 
-    y: 0 
+  initial: {
+    y: 0,
   },
   animate: {
     y: [-10, 10, -10],
@@ -314,8 +314,8 @@ export const float: Variants = {
 
 /** Shake animation - error feedback */
 export const shake: Variants = {
-  initial: { 
-    x: 0 
+  initial: {
+    x: 0,
   },
   animate: {
     x: [-10, 10, -10, 10, 0],
@@ -328,8 +328,8 @@ export const shake: Variants = {
 
 /** Glow animation - for emphasis */
 export const glow: Variants = {
-  initial: { 
-    boxShadow: '0 0 0 rgba(255, 255, 255, 0)' 
+  initial: {
+    boxShadow: '0 0 0 rgba(255, 255, 255, 0)',
   },
   animate: {
     boxShadow: [
@@ -359,14 +359,8 @@ interface StaggerContainerOptions {
 }
 
 /** Create a stagger container variant */
-export function staggerContainer(
-  options: StaggerContainerOptions = {}
-): Variants {
-  const {
-    staggerChildren = staggers.normal,
-    delayChildren = 0,
-    staggerDirection = 1,
-  } = options;
+export function staggerContainer(options: StaggerContainerOptions = {}): Variants {
+  const { staggerChildren = staggers.normal, delayChildren = 0, staggerDirection = 1 } = options;
 
   return {
     hidden: {},
@@ -420,14 +414,11 @@ export const staggerSlow: Variants = {
 /** Creates reduced-motion safe variants
  * When reduced motion is preferred, animations will be instant
  */
-export function createAccessibleVariants(
-  variants: Variants,
-  reducedMotion: boolean
-): Variants {
+export function createAccessibleVariants(variants: Variants, reducedMotion: boolean): Variants {
   if (!reducedMotion) return variants;
 
   const accessibleVariants: Variants = {};
-  
+
   for (const [key, value] of Object.entries(variants)) {
     if (typeof value === 'object' && value !== null) {
       // Keep the final state, remove animations
@@ -458,20 +449,20 @@ export const reducedMotionVariants: Variants = {
 
 /** Page transition - fade and slide up */
 export const pageTransition: Variants = {
-  initial: { 
-    opacity: 0, 
-    y: 20 
+  initial: {
+    opacity: 0,
+    y: 20,
   },
-  animate: { 
-    opacity: 1, 
+  animate: {
+    opacity: 1,
     y: 0,
     transition: {
       duration: durations.normal,
       ease: smoothOut,
     },
   },
-  exit: { 
-    opacity: 0, 
+  exit: {
+    opacity: 0,
     y: -20,
     transition: {
       duration: durations.fast,
@@ -482,20 +473,20 @@ export const pageTransition: Variants = {
 
 /** Page transition - scale and fade */
 export const pageTransitionScale: Variants = {
-  initial: { 
-    opacity: 0, 
-    scale: 0.95 
+  initial: {
+    opacity: 0,
+    scale: 0.95,
   },
-  animate: { 
-    opacity: 1, 
+  animate: {
+    opacity: 1,
     scale: 1,
     transition: {
       duration: durations.slow,
       ease: snap,
     },
   },
-  exit: { 
-    opacity: 0, 
+  exit: {
+    opacity: 0,
     scale: 1.05,
     transition: {
       duration: durations.normal,

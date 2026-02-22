@@ -18,7 +18,7 @@ export const smooth = [0.4, 0, 0.2, 1] as const;
 export const smoothOut = [0, 0, 0.2, 1] as const;
 
 /**
- * Smooth in - acceleration curve  
+ * Smooth in - acceleration curve
  * Good for elements exiting the screen
  */
 export const smoothIn = [0.4, 0, 1, 1] as const;
@@ -180,7 +180,14 @@ export const transitions = {
 } as const;
 
 // Type exports
-export type Easing = typeof smooth | typeof bounce | typeof snap | typeof elastic | typeof expo | typeof circ | typeof back;
+export type Easing =
+  | typeof smooth
+  | typeof bounce
+  | typeof snap
+  | typeof elastic
+  | typeof expo
+  | typeof circ
+  | typeof back;
 export type SpringConfig = typeof springs.gentle;
 export type Duration = typeof durations.normal;
 export type StaggerDelay = typeof staggers.normal;

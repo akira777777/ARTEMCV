@@ -27,7 +27,7 @@ export async function execPioCommand(
     cwd?: string;
     timeout?: number;
     parseJson?: boolean;
-  } = {}
+  } = {},
 ): Promise<CommandResult> {
   const timeout = options.timeout ?? DEFAULT_TIMEOUT;
 
@@ -105,14 +105,14 @@ export function parsePioJsonOutput<T>(output: string, schema: z.ZodSchema<T>): T
       throw new PlatformIOError(
         `Failed to parse PlatformIO output: ${error.message}`,
         'PARSE_ERROR',
-        { zodError: error.errors, output: output.substring(0, 500) }
+        { zodError: error.errors, output: output.substring(0, 500) },
       );
     }
     if (error instanceof SyntaxError) {
       throw new PlatformIOError(
         `Invalid JSON output from PlatformIO: ${error.message}`,
         'INVALID_JSON',
-        { output: output.substring(0, 500) }
+        { output: output.substring(0, 500) },
       );
     }
     throw error;
@@ -163,7 +163,11 @@ export class PlatformIOExecutor {
   /**
    * Executes a PlatformIO command
    */
-  async execute(command: string, args: string[], options?: { cwd?: string; timeout?: number }): Promise<CommandResult> {
+  async execute(
+    command: string,
+    args: string[],
+    options?: { cwd?: string; timeout?: number },
+  ): Promise<CommandResult> {
     const fullArgs = [command, ...args];
     return execPioCommand(fullArgs, options);
   }
@@ -189,7 +193,7 @@ export class PlatformIOExecutor {
     command: string,
     args: string[],
     schema: z.ZodSchema<T>,
-    options?: { cwd?: string; timeout?: number }
+    options?: { cwd?: string; timeout?: number },
   ): Promise<T> {
     // Ensure --json-output is included
     const fullArgs = [...args];
@@ -203,7 +207,7 @@ export class PlatformIOExecutor {
       throw new PlatformIOError(
         `PlatformIO command failed: ${command} ${args.join(' ')}`,
         'COMMAND_FAILED',
-        { stderr: result.stderr, exitCode: result.exitCode }
+        { stderr: result.stderr, exitCode: result.exitCode },
       );
     }
 

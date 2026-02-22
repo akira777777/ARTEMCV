@@ -29,14 +29,18 @@ export async function initProject(config: {
   }
 
   if (config.framework && !validateFramework(config.framework)) {
-    throw new ProjectInitError(`Invalid framework: ${config.framework}`, { framework: config.framework });
+    throw new ProjectInitError(`Invalid framework: ${config.framework}`, {
+      framework: config.framework,
+    });
   }
 
   let projectPath: string;
   try {
     projectPath = validateProjectPath(config.projectDir);
   } catch (error) {
-    throw new ProjectInitError(`Invalid project directory: ${error}`, { projectDir: config.projectDir });
+    throw new ProjectInitError(`Invalid project directory: ${error}`, {
+      projectDir: config.projectDir,
+    });
   }
 
   try {
@@ -68,10 +72,11 @@ export async function initProject(config: {
     });
 
     if (result.exitCode !== 0) {
-      throw new ProjectInitError(
-        `Failed to initialize project: ${result.stderr}`,
-        { board: config.board, stderr: result.stderr, exitCode: result.exitCode }
-      );
+      throw new ProjectInitError(`Failed to initialize project: ${result.stderr}`, {
+        board: config.board,
+        stderr: result.stderr,
+        exitCode: result.exitCode,
+      });
     }
 
     return {
@@ -83,10 +88,10 @@ export async function initProject(config: {
     if (error instanceof ProjectInitError) {
       throw error;
     }
-    throw new ProjectInitError(
-      `Failed to initialize project: ${error}`,
-      { board: config.board, projectDir: config.projectDir }
-    );
+    throw new ProjectInitError(`Failed to initialize project: ${error}`, {
+      board: config.board,
+      projectDir: config.projectDir,
+    });
   }
 }
 
@@ -116,10 +121,10 @@ export async function getProjectConfig(projectDir: string): Promise<Record<strin
     });
 
     if (result.exitCode !== 0) {
-      throw new ProjectInitError(
-        `Failed to get project config: ${result.stderr}`,
-        { projectDir, stderr: result.stderr }
-      );
+      throw new ProjectInitError(`Failed to get project config: ${result.stderr}`, {
+        projectDir,
+        stderr: result.stderr,
+      });
     }
 
     // Parse the config output (it's in INI format)
@@ -128,9 +133,6 @@ export async function getProjectConfig(projectDir: string): Promise<Record<strin
       rawConfig: result.stdout,
     };
   } catch (error) {
-    throw new ProjectInitError(
-      `Failed to get project configuration: ${error}`,
-      { projectDir }
-    );
+    throw new ProjectInitError(`Failed to get project configuration: ${error}`, { projectDir });
   }
 }

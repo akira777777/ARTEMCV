@@ -47,11 +47,11 @@ describe('Responsive Design Hooks', () => {
       };
 
       render(<TestComponent />);
-      
+
       mockWindowDimensions(800, 600);
-      
+
       // Wait for debounced resize handler
-      await new Promise(resolve => setTimeout(resolve, 150));
+      await new Promise((resolve) => setTimeout(resolve, 150));
 
       expect(screen.getByTestId('width')).toHaveTextContent('800');
       expect(screen.getByTestId('height')).toHaveTextContent('600');
@@ -100,7 +100,7 @@ describe('Responsive Design Hooks', () => {
 describe('Responsive Layout', () => {
   it('renders mobile navigation on small screens', () => {
     mockWindowDimensions(375, 667);
-    
+
     const MobileNav: React.FC = () => (
       <nav className="md:hidden" aria-label="Mobile navigation">
         <button>Menu</button>
@@ -119,13 +119,13 @@ describe('Responsive Layout', () => {
     };
 
     render(<Navigation />);
-    
+
     expect(screen.getByRole('navigation', { name: /mobile/i })).toBeInTheDocument();
   });
 
   it('renders desktop navigation on large screens', () => {
     mockWindowDimensions(1024, 768);
-    
+
     const MobileNav: React.FC = () => (
       <nav className="md:hidden" aria-label="Mobile navigation">
         <button>Menu</button>
@@ -144,7 +144,7 @@ describe('Responsive Layout', () => {
     };
 
     render(<Navigation />);
-    
+
     expect(screen.getByRole('navigation', { name: /desktop/i })).toBeInTheDocument();
   });
 });

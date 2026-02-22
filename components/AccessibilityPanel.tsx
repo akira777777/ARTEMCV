@@ -26,17 +26,20 @@ export const AccessibilityPanel: React.FC = () => {
     return 'normal';
   }, [fontSize]);
 
-  const setFontSizeLevel = useCallback((level: 'normal' | 'large' | 'larger') => {
-    const mapping = {
-      normal: 100,
-      large: 115,
-      larger: 130,
-    };
-    setFontSize(mapping[level]);
-  }, [setFontSize]);
+  const setFontSizeLevel = useCallback(
+    (level: 'normal' | 'large' | 'larger') => {
+      const mapping = {
+        normal: 100,
+        large: 115,
+        larger: 130,
+      };
+      setFontSize(mapping[level]);
+    },
+    [setFontSize],
+  );
 
   const togglePanel = useCallback(() => {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
   }, []);
 
   // Font size labels with i18n
@@ -62,7 +65,7 @@ export const AccessibilityPanel: React.FC = () => {
   return (
     <>
       {/* Accessibility toolbar */}
-      <div 
+      <div
         className={`fixed bottom-4 right-4 z-[9999] transition-all duration-300 ${
           isOpen ? 'translate-y-0' : 'translate-y-[120%]'
         }`}
@@ -81,15 +84,19 @@ export const AccessibilityPanel: React.FC = () => {
               <span aria-hidden="true">Г—</span>
             </button>
           </div>
-          
+
           <div className="space-y-4">
             {/* Font size control */}
             <div>
               <span className="block text-white text-xs font-bold mb-2">
                 {t('accessibility.font_size')}
               </span>
-              <div className="flex gap-2" role="radiogroup" aria-label={t('accessibility.font_size')}>
-                {(['normal', 'large', 'larger'] as const).map(size => (
+              <div
+                className="flex gap-2"
+                role="radiogroup"
+                aria-label={t('accessibility.font_size')}
+              >
+                {(['normal', 'large', 'larger'] as const).map((size) => (
                   <button
                     key={size}
                     onClick={() => setFontSizeLevel(size)}
@@ -106,14 +113,18 @@ export const AccessibilityPanel: React.FC = () => {
                 ))}
               </div>
             </div>
-            
+
             {/* Contrast control */}
             <div>
               <span className="block text-white text-xs font-bold mb-2">
                 {t('accessibility.contrast')}
               </span>
-              <div className="flex gap-2" role="radiogroup" aria-label={t('accessibility.contrast')}>
-                {(['normal', 'high'] as const).map(level => (
+              <div
+                className="flex gap-2"
+                role="radiogroup"
+                aria-label={t('accessibility.contrast')}
+              >
+                {(['normal', 'high'] as const).map((level) => (
                   <button
                     key={level}
                     onClick={() => setHighContrast(level === 'high')}
@@ -130,7 +141,7 @@ export const AccessibilityPanel: React.FC = () => {
                 ))}
               </div>
             </div>
-            
+
             {/* Motion reduction */}
             <div className="flex items-center justify-between">
               <span className="text-white text-xs font-bold">
@@ -151,7 +162,7 @@ export const AccessibilityPanel: React.FC = () => {
                 />
               </button>
             </div>
-            
+
             {/* Focus indicator */}
             <div className="flex items-center justify-between">
               <span className="text-white text-xs font-bold">
@@ -175,7 +186,7 @@ export const AccessibilityPanel: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Toggle button */}
       <button
         onClick={togglePanel}
@@ -184,8 +195,18 @@ export const AccessibilityPanel: React.FC = () => {
         aria-controls="accessibility-panel"
         aria-label={t('accessibility.open')}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fillRule="evenodd"
+            d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+            clipRule="evenodd"
+          />
         </svg>
       </button>
     </>
@@ -199,7 +220,7 @@ AccessibilityPanel.displayName = 'AccessibilityPanel';
  */
 export const SkipLink: React.FC = () => {
   const { t } = useI18n();
-  
+
   const skipToContent = useCallback((e: React.MouseEvent | React.KeyboardEvent) => {
     e.preventDefault();
     const mainContent = document.getElementById('main-content');
@@ -243,9 +264,9 @@ export const FocusTrap: React.FC<FocusTrapProps> = ({ children, active }) => {
     if (!active || !containerRef.current) return;
 
     const focusableElements = containerRef.current.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
-    
+
     const firstElement = focusableElements[0] as HTMLElement;
     const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
@@ -281,12 +302,7 @@ FocusTrap.displayName = 'FocusTrap';
  * ScreenReaderOnly - Component to hide content visually but keep it accessible to screen readers
  */
 export const ScreenReaderOnly: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <span className="sr-only">
-      {children}
-    </span>
-  );
+  return <span className="sr-only">{children}</span>;
 };
 
 ScreenReaderOnly.displayName = 'ScreenReaderOnly';
-

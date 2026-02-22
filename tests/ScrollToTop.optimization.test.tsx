@@ -5,14 +5,14 @@ import { ScrollToTop } from '../components/ScrollToTop';
 
 // Mock необходимые зависимости
 vi.mock('react-router-dom', () => ({
-  useLocation: vi.fn(() => ({ pathname: '/' }))
+  useLocation: vi.fn(() => ({ pathname: '/' })),
 }));
 
 vi.mock('../i18n', () => ({
   useI18n: vi.fn(() => ({
     t: (key: string) => key,
-    lang: 'en'
-  }))
+    lang: 'en',
+  })),
 }));
 
 describe('ScrollToTop Component Tests', () => {
@@ -21,15 +21,15 @@ describe('ScrollToTop Component Tests', () => {
     Object.defineProperty(window, 'scrollY', {
       writable: true,
       configurable: true,
-      value: 0
+      value: 0,
     });
-    
+
     window.scrollTo = vi.fn();
   });
 
   it('renders without crashing', () => {
     render(<ScrollToTop />);
-    
+
     // Проверяем, что компонент рендерится
     expect(screen.getByLabelText(/scroll_to_top/i)).toBeInTheDocument();
   });
@@ -39,11 +39,11 @@ describe('ScrollToTop Component Tests', () => {
     Object.defineProperty(window, 'scrollY', {
       writable: true,
       configurable: true,
-      value: 500
+      value: 500,
     });
-    
+
     render(<ScrollToTop />);
-    
+
     // Компонент должен быть скрыт при маленьком скролле
     const button = screen.getByLabelText(/scroll_to_top/i);
     expect(button).toBeInTheDocument();
@@ -54,14 +54,14 @@ describe('ScrollToTop Component Tests', () => {
     Object.defineProperty(window, 'scrollY', {
       writable: true,
       configurable: true,
-      value: 1500
+      value: 1500,
     });
-    
+
     // Имитируем событие скролла
     fireEvent.scroll(window, { target: { scrollY: 1500 } });
-    
+
     render(<ScrollToTop />);
-    
+
     // Проверяем, что кнопка существует
     const button = screen.getByLabelText(/scroll_to_top/i);
     expect(button).toBeInTheDocument();
@@ -71,19 +71,19 @@ describe('ScrollToTop Component Tests', () => {
     Object.defineProperty(window, 'scrollY', {
       writable: true,
       configurable: true,
-      value: 1500
+      value: 1500,
     });
-    
+
     render(<ScrollToTop />);
-    
+
     // Клик по кнопке
     const button = screen.getByLabelText(/scroll_to_top/i);
     fireEvent.click(button);
-    
+
     // Проверяем, что window.scrollTo был вызван
     expect(window.scrollTo).toHaveBeenCalledWith({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   });
 });

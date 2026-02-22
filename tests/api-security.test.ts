@@ -4,8 +4,10 @@ import { getAuthToken, setAuthToken, clearAuthToken } from '../lib/api';
 describe('API Security - Auth Token Storage', () => {
   beforeEach(() => {
     // Clear cookies before each test
-    document.cookie.split(";").forEach(function(c) {
-      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    document.cookie.split(';').forEach(function (c) {
+      document.cookie = c
+        .replace(/^ +/, '')
+        .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
     });
 
     // Clear localStorage/sessionStorage

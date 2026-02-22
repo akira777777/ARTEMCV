@@ -39,8 +39,8 @@ export const FooterUnified: React.FC = () => {
               </span>
             </a>
             <Text size="sm" color="tertiary" className="max-w-xs">
-              Full-stack developer crafting modern web experiences with clean
-              code and thoughtful design.
+              Full-stack developer crafting modern web experiences with clean code and thoughtful
+              design.
             </Text>
           </div>
 
@@ -88,7 +88,7 @@ export const FooterUnified: React.FC = () => {
           <Text size="sm" color="muted">
             © {currentYear} Artem Mikhailov. All rights reserved.
           </Text>
-          
+
           <div className="flex items-center gap-2 text-zinc-500 text-sm">
             Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> using React & Tailwind
           </div>

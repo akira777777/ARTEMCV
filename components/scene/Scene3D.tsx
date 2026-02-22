@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import React, { useRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei'
-import * as THREE from 'three'
+import React, { useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
+import * as THREE from 'three';
 
 function AnimatedSphere() {
-  const meshRef = useRef<THREE.Mesh>(null)
+  const meshRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.2
-      meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.3
+      meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.2;
+      meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.3;
     }
-  })
+  });
 
   return (
     <Sphere ref={meshRef} args={[1, 100, 100]} scale={2.5}>
@@ -26,24 +26,24 @@ function AnimatedSphere() {
         metalness={0.8}
       />
     </Sphere>
-  )
+  );
 }
 
 function ParticleField() {
-  const count = 500
-  const particlesRef = useRef<THREE.Points>(null)
+  const count = 500;
+  const particlesRef = useRef<THREE.Points>(null);
 
   // Use Float32Array directly for particles
-  const particles = new Float32Array(count * 3)
+  const particles = new Float32Array(count * 3);
   for (let i = 0; i < count * 3; i++) {
-    particles[i] = (Math.random() - 0.5) * 10
+    particles[i] = (Math.random() - 0.5) * 10;
   }
 
   useFrame((state) => {
     if (particlesRef.current) {
-      particlesRef.current.rotation.y = state.clock.getElapsedTime() * 0.05
+      particlesRef.current.rotation.y = state.clock.getElapsedTime() * 0.05;
     }
-  })
+  });
 
   return (
     <points ref={particlesRef}>
@@ -55,15 +55,9 @@ function ParticleField() {
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial
-        size={0.02}
-        color="#8b5cf6"
-        transparent
-        opacity={0.6}
-        sizeAttenuation
-      />
+      <pointsMaterial size={0.02} color="#8b5cf6" transparent opacity={0.6} sizeAttenuation />
     </points>
-  )
+  );
 }
 
 export function Scene() {
@@ -87,5 +81,5 @@ export function Scene() {
         minPolarAngle={Math.PI / 2}
       />
     </Canvas>
-  )
+  );
 }

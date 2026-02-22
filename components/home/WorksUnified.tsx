@@ -19,7 +19,8 @@ const projects: Project[] = [
   {
     id: '1',
     title: 'E-Commerce Platform',
-    description: 'Modern e-commerce solution with real-time inventory, AI-powered recommendations, and seamless checkout experience.',
+    description:
+      'Modern e-commerce solution with real-time inventory, AI-powered recommendations, and seamless checkout experience.',
     image: '/projects/project1.jpg',
     tags: ['React', 'Node.js', 'PostgreSQL', 'Redis'],
     link: '#',
@@ -29,7 +30,8 @@ const projects: Project[] = [
   {
     id: '2',
     title: 'SaaS Dashboard',
-    description: 'Analytics dashboard with real-time data visualization, custom reports, and team collaboration features.',
+    description:
+      'Analytics dashboard with real-time data visualization, custom reports, and team collaboration features.',
     image: '/projects/project2.jpg',
     tags: ['TypeScript', 'Next.js', 'Prisma', 'Tailwind'],
     link: '#',
@@ -39,7 +41,8 @@ const projects: Project[] = [
   {
     id: '3',
     title: 'Mobile Banking App',
-    description: 'Secure mobile banking application with biometric authentication and instant payments.',
+    description:
+      'Secure mobile banking application with biometric authentication and instant payments.',
     image: '/projects/project3.jpg',
     tags: ['React Native', 'Node.js', 'MongoDB', 'AWS'],
     link: '#',
@@ -48,7 +51,8 @@ const projects: Project[] = [
   {
     id: '4',
     title: 'AI Content Platform',
-    description: 'AI-powered content generation platform with multilingual support and SEO optimization.',
+    description:
+      'AI-powered content generation platform with multilingual support and SEO optimization.',
     image: '/projects/project4.jpg',
     tags: ['Python', 'FastAPI', 'OpenAI', 'React'],
     link: '#',
@@ -57,10 +61,7 @@ const projects: Project[] = [
   },
 ];
 
-const ProjectCard: React.FC<{ project: Project; index: number }> = ({
-  project,
-  index,
-}) => {
+const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -75,9 +76,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({
       <Card variant="interactive" padding="none" className="overflow-hidden">
         <div className="relative aspect-video overflow-hidden">
           <div className="w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
-            <span className="text-6xl font-bold text-zinc-700">
-              {project.title.charAt(0)}
-            </span>
+            <span className="text-6xl font-bold text-zinc-700">{project.title.charAt(0)}</span>
           </div>
 
           <motion.div
@@ -112,7 +111,9 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({
 
         <div className="p-6">
           <div className="flex items-start justify-between gap-4 mb-3">
-            <Heading as="h3" size="xs">{project.title}</Heading>
+            <Heading as="h3" size="xs">
+              {project.title}
+            </Heading>
             <ArrowUpRight className="w-5 h-5 text-zinc-500 group-hover:text-emerald-400" />
           </div>
           <Text size="sm" color="tertiary" className="mb-4 line-clamp-2">
@@ -120,7 +121,10 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({
           </Text>
           <div className="flex flex-wrap gap-2">
             {project.tags.map((tag) => (
-              <span key={tag} className="px-2 py-1 text-xs rounded bg-white/5 text-zinc-400 border border-white/5">
+              <span
+                key={tag}
+                className="px-2 py-1 text-xs rounded bg-white/5 text-zinc-400 border border-white/5"
+              >
                 {tag}
               </span>
             ))}
@@ -136,12 +140,21 @@ export const WorksUnified: React.FC = () => {
     <section id="works" className="py-24 lg:py-32" aria-label="Selected works">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <Label size="sm" weight="semibold" uppercase tracking="wider" className="text-emerald-400 mb-4">
+          <Label
+            size="sm"
+            weight="semibold"
+            uppercase
+            tracking="wider"
+            className="text-emerald-400 mb-4"
+          >
             Portfolio
           </Label>
-          <Heading as="h2" size="lg" className="mb-4">Selected Works</Heading>
+          <Heading as="h2" size="lg" className="mb-4">
+            Selected Works
+          </Heading>
           <Text size="lg" color="secondary" className="max-w-2xl mx-auto">
-            A collection of projects that showcase my expertise in building modern, scalable web applications.
+            A collection of projects that showcase my expertise in building modern, scalable web
+            applications.
           </Text>
         </div>
 

@@ -9,10 +9,10 @@ interface ScrollProgress {
 
 /**
  * Hook to track scroll progress
- * 
+ *
  * @example
  * const { progress, scrollY } = useScrollProgress();
- * 
+ *
  * <div style={{ transform: `scaleX(${progress})` }} />
  */
 export function useScrollProgress(): ScrollProgress {
@@ -57,7 +57,7 @@ export function useScrollProgress(): ScrollProgress {
  * Hook to track scroll progress within a specific element
  */
 export function useElementScrollProgress<T extends HTMLElement>(
-  ref: RefObject<T | null>
+  ref: RefObject<T | null>,
 ): ScrollProgress {
   const [state, setState] = useState<ScrollProgress>({
     progress: 0,

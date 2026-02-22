@@ -24,9 +24,9 @@ describe('RenderOptimizer', () => {
     render(
       <RenderOptimizer shouldRender={true} priority="high">
         <div>Test Content</div>
-      </RenderOptimizer>
+      </RenderOptimizer>,
     );
-    
+
     // High priority should render immediately
     await waitFor(() => {
       expect(screen.getByText('Test Content')).toBeInTheDocument();
@@ -37,9 +37,9 @@ describe('RenderOptimizer', () => {
     render(
       <RenderOptimizer shouldRender={false} fallback={<div>Fallback</div>}>
         <div>Test Content</div>
-      </RenderOptimizer>
+      </RenderOptimizer>,
     );
-    
+
     expect(screen.getByText('Fallback')).toBeInTheDocument();
     expect(screen.queryByText('Test Content')).not.toBeInTheDocument();
   });
@@ -48,9 +48,9 @@ describe('RenderOptimizer', () => {
     render(
       <RenderOptimizer priority="high" fallback={<div>Loading...</div>}>
         <div>Test Content</div>
-      </RenderOptimizer>
+      </RenderOptimizer>,
     );
-    
+
     // High priority renders immediately
     await waitFor(() => {
       expect(screen.getByText('Test Content')).toBeInTheDocument();
@@ -63,20 +63,22 @@ describe('LazyRender', () => {
     // Mock IntersectionObserver that triggers immediately
     global.IntersectionObserver = class MockIntersectionObserver {
       constructor(private callback: IntersectionObserverCallback) {}
-      
+
       observe(element: Element) {
         // Immediately trigger intersection
         setTimeout(() => {
           this.callback(
             [{ isIntersecting: true, target: element }] as IntersectionObserverEntry[],
-            this as unknown as IntersectionObserver
+            this as unknown as IntersectionObserver,
           );
         }, 0);
       }
-      
+
       unobserve() {}
       disconnect() {}
-      takeRecords() { return []; }
+      takeRecords() {
+        return [];
+      }
     } as unknown as typeof IntersectionObserver;
   });
 
@@ -88,13 +90,16 @@ describe('LazyRender', () => {
     render(
       <LazyRender fallback={<div>Loading...</div>}>
         <div>Visible Content</div>
-      </LazyRender>
+      </LazyRender>,
     );
-    
+
     // Should eventually show children after intersection
-    await waitFor(() => {
-      expect(screen.getByText('Visible Content')).toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(screen.getByText('Visible Content')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 });
 
@@ -110,9 +115,9 @@ describe('FPSMonitor', () => {
 
   it('does not render in production', () => {
     process.env.NODE_ENV = 'production';
-    
+
     render(<FPSMonitor />);
-    
+
     // FPS monitor should not render in production
     const fpsElements = screen.queryAllByText(/FPS:/);
     expect(fpsElements.length).toBe(0);
@@ -120,9 +125,9 @@ describe('FPSMonitor', () => {
 
   it('renders in development', () => {
     process.env.NODE_ENV = 'development';
-    
+
     render(<FPSMonitor />);
-    
+
     // FPS monitor should render in development
     const fpsElement = screen.queryByText(/FPS:/);
     expect(fpsElement).toBeInTheDocument();

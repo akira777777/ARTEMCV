@@ -24,7 +24,7 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['html', { open: 'never' }],
-    ['json', { outputFile: 'test-results/results.json' }]
+    ['json', { outputFile: 'test-results/results.json' }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -34,13 +34,13 @@ export default defineConfig({
     /* Increased timeouts for heavy operations */
     actionTimeout: 15000,
     navigationTimeout: 30000,
-    
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    
+
     /* Screenshot on failure */
     screenshot: 'only-on-failure',
-    
+
     /* Video recording */
     video: 'retain-on-failure',
   },

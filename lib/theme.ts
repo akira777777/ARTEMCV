@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 
 /**
  * Enhanced Theme Management Utilities
- * 
+ *
  * Advanced theming with CSS-in-JS, dynamic styles, accessibility,
  * and performance optimization.
  */
@@ -172,7 +172,7 @@ export function useTheme(options: ThemeOptions = {}) {
     enableSystemTheme = true,
     enableHighContrast = true,
     enableReducedMotion = true,
-    customThemes = {}
+    customThemes = {},
   } = options;
 
   const [currentTheme, setCurrentTheme] = useState<string>('light');
@@ -194,10 +194,11 @@ export function useTheme(options: ThemeOptions = {}) {
       warning: '#f59e0b',
       success: '#22c55e',
       info: '#3b82f6',
-      overlay: 'rgba(0, 0, 0, 0.5)'
+      overlay: 'rgba(0, 0, 0, 0.5)',
     },
     typography: {
-      fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif',
+      fontFamily:
+        'Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif',
       fontSize: {
         xs: '0.75rem',
         sm: '0.875rem',
@@ -208,22 +209,22 @@ export function useTheme(options: ThemeOptions = {}) {
         '3xl': '1.875rem',
         '4xl': '2.25rem',
         '5xl': '3rem',
-        '6xl': '4rem'
+        '6xl': '4rem',
       },
       lineHeight: {
         tight: '1.25',
         snug: '1.375',
         normal: '1.5',
         relaxed: '1.625',
-        loose: '2'
+        loose: '2',
       },
       fontWeight: {
         light: '300',
         normal: '400',
         medium: '500',
         semibold: '600',
-        bold: '700'
-      }
+        bold: '700',
+      },
     },
     spacing: {
       px: '1px',
@@ -247,7 +248,7 @@ export function useTheme(options: ThemeOptions = {}) {
       64: '16rem',
       72: '18rem',
       80: '20rem',
-      96: '24rem'
+      96: '24rem',
     },
     shadows: {
       sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
@@ -257,7 +258,7 @@ export function useTheme(options: ThemeOptions = {}) {
       xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
       '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
       inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
-      outline: '0 0 0 3px rgb(66 153 225 / 0.5)'
+      outline: '0 0 0 3px rgb(66 153 225 / 0.5)',
     },
     radius: {
       none: '0px',
@@ -268,28 +269,28 @@ export function useTheme(options: ThemeOptions = {}) {
       xl: '0.75rem',
       '2xl': '1rem',
       '3xl': '1.5rem',
-      full: '9999px'
+      full: '9999px',
     },
     breakpoints: {
       sm: '640px',
       md: '768px',
       lg: '1024px',
       xl: '1280px',
-      '2xl': '1536px'
+      '2xl': '1536px',
     },
     transitions: {
       duration: {
         fast: '150ms',
         normal: '300ms',
-        slow: '500ms'
+        slow: '500ms',
       },
       easing: {
         linear: 'linear',
         ease: 'ease',
         easeIn: 'ease-in',
         easeOut: 'ease-out',
-        easeInOut: 'ease-in-out'
-      }
+        easeInOut: 'ease-in-out',
+      },
     },
     zIndex: {
       auto: 'auto',
@@ -303,8 +304,8 @@ export function useTheme(options: ThemeOptions = {}) {
       popover: 1500,
       skipLink: 1600,
       toast: 1700,
-      tooltip: 1800
-    }
+      tooltip: 1800,
+    },
   };
 
   // Get current theme configuration
@@ -333,35 +334,38 @@ export function useTheme(options: ThemeOptions = {}) {
   }, [customTheme, enableSystemTheme, enableHighContrast]);
 
   // Apply theme to document
-  const applyTheme = useCallback((themeName: string) => {
-    if (!mountedRef.current) return;
+  const applyTheme = useCallback(
+    (themeName: string) => {
+      if (!mountedRef.current) return;
 
-    const themeConfig = getThemeConfig();
+      const themeConfig = getThemeConfig();
 
-    // Update CSS custom properties
-    updateCSSCustomProperties(themeConfig);
+      // Update CSS custom properties
+      updateCSSCustomProperties(themeConfig);
 
-    // Update CSS-in-JS styles
-    updateCSSInJS(themeConfig);
+      // Update CSS-in-JS styles
+      updateCSSInJS(themeConfig);
 
-    // Update document class
-    document.documentElement.classList.remove('light', 'dark', 'high-contrast');
-    document.documentElement.classList.add(themeName);
+      // Update document class
+      document.documentElement.classList.remove('light', 'dark', 'high-contrast');
+      document.documentElement.classList.add(themeName);
 
-    // Update meta theme-color
-    updateThemeColor(themeConfig.colors.primary);
+      // Update meta theme-color
+      updateThemeColor(themeConfig.colors.primary);
 
-    // Save to persistence
-    if (enablePersistence) {
-      try {
-        localStorage.setItem(persistenceKey, themeName);
-      } catch (error) {
-        console.warn('Failed to save theme:', error);
+      // Save to persistence
+      if (enablePersistence) {
+        try {
+          localStorage.setItem(persistenceKey, themeName);
+        } catch (error) {
+          console.warn('Failed to save theme:', error);
+        }
       }
-    }
 
-    setCurrentTheme(themeName);
-  }, [getThemeConfig, enablePersistence, persistenceKey]);
+      setCurrentTheme(themeName);
+    },
+    [getThemeConfig, enablePersistence, persistenceKey],
+  );
 
   // Initialize theme
   useEffect(() => {
@@ -410,7 +414,7 @@ export function useTheme(options: ThemeOptions = {}) {
     applyTheme,
     getThemeConfig,
     toggleTheme: () => applyTheme(currentTheme === 'light' ? 'dark' : 'light'),
-    setTheme: applyTheme
+    setTheme: applyTheme,
   };
 }
 
@@ -477,7 +481,9 @@ export const themeUtils = {
           css += `${indent}}\n`;
         } else if (typeof value === 'object' && value !== null) {
           // Nested selector
-          const nestedSelector = key.startsWith('&') ? key.replace('&', selector) : `${selector} ${key}`;
+          const nestedSelector = key.startsWith('&')
+            ? key.replace('&', selector)
+            : `${selector} ${key}`;
           processStyles(nestedSelector, value, indent);
         } else {
           // CSS property
@@ -503,7 +509,7 @@ export const themeUtils = {
 
     for (const [breakpoint, width] of Object.entries(breakpoints)) {
       responsiveStyles[`@media (min-width: ${width})`] = {
-        [`.${breakpoint}-styles`]: styles
+        [`.${breakpoint}-styles`]: styles,
       };
     }
 
@@ -518,8 +524,8 @@ export const themeUtils = {
       ...styles,
       '@media (prefers-reduced-motion: reduce)': {
         transition: 'none !important',
-        animation: 'none !important'
-      }
+        animation: 'none !important',
+      },
     };
   },
 
@@ -531,8 +537,8 @@ export const themeUtils = {
       outline: 'none',
       boxShadow: `0 0 0 3px ${color}`,
       '@media (prefers-reduced-motion: reduce)': {
-        transition: 'none'
-      }
+        transition: 'none',
+      },
     };
   },
 
@@ -542,7 +548,7 @@ export const themeUtils = {
   getContrastRatio: (color1: string, color2: string): number => {
     const getLuminance = (color: string): number => {
       const rgb = parseColor(color);
-      const [r, g, b] = rgb.map(c => {
+      const [r, g, b] = rgb.map((c) => {
         c = c / 255;
         return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
       });
@@ -563,7 +569,7 @@ export const themeUtils = {
     const ratio = themeUtils.getContrastRatio(color, backgroundColor);
     const requiredRatio = level === 'AA' ? 4.5 : 7;
     return ratio >= requiredRatio;
-  }
+  },
 };
 
 // ============================================================================
@@ -583,7 +589,7 @@ function mergeTheme(base: ThemeConfig, custom: Partial<ThemeConfig>): ThemeConfi
     shadows: { ...base.shadows, ...custom.shadows },
     radius: { ...base.radius, ...custom.radius },
     transitions: { ...base.transitions, ...custom.transitions },
-    zIndex: { ...base.zIndex, ...custom.zIndex }
+    zIndex: { ...base.zIndex, ...custom.zIndex },
   };
 }
 
@@ -608,8 +614,8 @@ function applyDarkTheme(theme: ThemeConfig): ThemeConfig {
       surface: '#1e293b',
       text: '#f1f5f9',
       textSecondary: '#94a3b8',
-      border: '#334155'
-    }
+      border: '#334155',
+    },
   };
 }
 
@@ -622,14 +628,14 @@ function applyHighContrastTheme(theme: ThemeConfig): ThemeConfig {
       surface: '#ffffff',
       text: '#000000',
       textSecondary: '#000000',
-      border: '#000000'
-    }
+      border: '#000000',
+    },
   };
 }
 
 function updateCSSCustomProperties(theme: ThemeConfig) {
   const root = document.documentElement;
-  
+
   // Set color variables
   Object.entries(theme.colors).forEach(([key, value]) => {
     root.style.setProperty(`--color-${key}`, value);
@@ -707,5 +713,5 @@ export default {
   getSystemTheme,
   isHighContrastEnabled,
   applyDarkTheme,
-  applyHighContrastTheme
+  applyHighContrastTheme,
 };

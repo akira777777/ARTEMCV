@@ -1,7 +1,7 @@
 import { performance } from 'perf_hooks';
 
 const iterations = 1000000;
-const email = "test.user@example.com";
+const email = 'test.user@example.com';
 
 console.log(`Running ${iterations} iterations...`);
 
@@ -23,7 +23,6 @@ for (let i = 0; i < iterations; i++) {
 }
 const end2 = performance.now();
 console.log(`Regex outside loop: ${(end2 - start2).toFixed(2)}ms`);
-
 
 // 2. EscapeHtml Benchmark
 function escapeHtmlCurrent(value: string): string {
@@ -50,14 +49,20 @@ function escapeHtmlMap(value: string): string {
 
 function escapeHtmlSwitch(value: string): string {
   return value.replace(HTML_ESCAPE_REGEX, (match) => {
-     switch (match) {
-        case '&': return '&amp;';
-        case '<': return '&lt;';
-        case '>': return '&gt;';
-        case '"': return '&quot;';
-        case "'": return '&#39;';
-        default: return match;
-     }
+    switch (match) {
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '"':
+        return '&quot;';
+      case "'":
+        return '&#39;';
+      default:
+        return match;
+    }
   });
 }
 
@@ -84,7 +89,8 @@ console.log(`\nEscapeHtml Benchmark with long text (${longText.length} chars)`);
 
 // Current EscapeHtml
 const start3 = performance.now();
-for (let i = 0; i < iterations/10; i++) { // Reduce iterations for long text
+for (let i = 0; i < iterations / 10; i++) {
+  // Reduce iterations for long text
   escapeHtmlCurrent(longText);
 }
 const end3 = performance.now();
@@ -92,7 +98,7 @@ console.log(`Current escapeHtml: ${(end3 - start3).toFixed(2)}ms`);
 
 // Map EscapeHtml
 const start4 = performance.now();
-for (let i = 0; i < iterations/10; i++) {
+for (let i = 0; i < iterations / 10; i++) {
   escapeHtmlMap(longText);
 }
 const end4 = performance.now();
@@ -100,7 +106,7 @@ console.log(`Map escapeHtml: ${(end4 - start4).toFixed(2)}ms`);
 
 // Switch EscapeHtml
 const start5 = performance.now();
-for (let i = 0; i < iterations/10; i++) {
+for (let i = 0; i < iterations / 10; i++) {
   escapeHtmlSwitch(longText);
 }
 const end5 = performance.now();
@@ -108,7 +114,7 @@ console.log(`Switch escapeHtml: ${(end5 - start5).toFixed(2)}ms`);
 
 // ReplaceAll EscapeHtml
 const start6 = performance.now();
-for (let i = 0; i < iterations/10; i++) {
+for (let i = 0; i < iterations / 10; i++) {
   escapeHtmlReplaceAll(longText);
 }
 const end6 = performance.now();

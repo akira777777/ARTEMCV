@@ -8,7 +8,11 @@ import { logger } from './logger-enhanced';
 /**
  * Preload critical resources
  */
-export function preloadResource(href: string, as: 'script' | 'style' | 'image' | 'font' = 'script', type?: string) {
+export function preloadResource(
+  href: string,
+  as: 'script' | 'style' | 'image' | 'font' = 'script',
+  type?: string,
+) {
   if (typeof document === 'undefined') return;
 
   const link = document.createElement('link');
@@ -58,7 +62,7 @@ export function useLazyImage(src: string, placeholder?: string) {
             }
           });
         },
-        { rootMargin: '50px' }
+        { rootMargin: '50px' },
       );
       observerRef.current.observe(img);
     } else {
@@ -79,7 +83,7 @@ export function useLazyImage(src: string, placeholder?: string) {
  */
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -98,18 +102,21 @@ export function useThrottleRAF<T extends (...args: unknown[]) => void>(callback:
   const rafRef = useRef<number | null>(null);
   const latestArgs = useRef<Parameters<T> | null>(null);
 
-  const throttledCallback = useCallback((...args: Parameters<T>) => {
-    latestArgs.current = args;
+  const throttledCallback = useCallback(
+    (...args: Parameters<T>) => {
+      latestArgs.current = args;
 
-    if (rafRef.current === null) {
-      rafRef.current = requestAnimationFrame(() => {
-        if (latestArgs.current) {
-          callback(...latestArgs.current);
-        }
-        rafRef.current = null;
-      });
-    }
-  }, [callback]);
+      if (rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(() => {
+          if (latestArgs.current) {
+            callback(...latestArgs.current);
+          }
+          rafRef.current = null;
+        });
+      }
+    },
+    [callback],
+  );
 
   useEffect(() => {
     return () => {
@@ -134,7 +141,9 @@ export function useRenderPerf(componentName: string) {
     const endTime = performance.now();
     const duration = endTime - startTime.current;
 
-    logger.debug(`[Perf] ${componentName} render #${renderCount.current}: ${duration.toFixed(2)}ms`);
+    logger.debug(
+      `[Perf] ${componentName} render #${renderCount.current}: ${duration.toFixed(2)}ms`,
+    );
 
     startTime.current = endTime;
   });

@@ -21,9 +21,7 @@ interface UseLocalStorageReturn<T> {
  * Custom event dispatcher for same-tab updates
  */
 function dispatchStorageEvent(key: string, newValue: string | null) {
-  window.dispatchEvent(
-    new CustomEvent(STORAGE_EVENT, { detail: { key, newValue } })
-  );
+  window.dispatchEvent(new CustomEvent(STORAGE_EVENT, { detail: { key, newValue } }));
 }
 
 /**
@@ -34,24 +32,21 @@ function dispatchStorageEvent(key: string, newValue: string | null) {
  * @example
  * ```tsx
  * const { value, setValue, removeValue } = useLocalStorage('theme', 'dark');
- * 
+ *
  * // Set value
  * setValue('light');
- * 
+ *
  * // Functional update
  * setValue(prev => prev === 'dark' ? 'light' : 'dark');
- * 
+ *
  * // Remove
  * removeValue();
  * ```
  */
-export function useLocalStorage<T>(
-  key: string,
-  initialValue: T
-): UseLocalStorageReturn<T> {
+export function useLocalStorage<T>(key: string, initialValue: T): UseLocalStorageReturn<T> {
   // SSR safety - use syncExternalStore for better hydration handling
   const getServerSnapshot = useCallback(() => JSON.stringify(initialValue), [initialValue]);
-  
+
   const getSnapshot = useCallback(() => {
     if (typeof window === 'undefined') return JSON.stringify(initialValue);
     try {
@@ -87,14 +82,10 @@ export function useLocalStorage<T>(
         window.removeEventListener(STORAGE_EVENT, handleCustomEvent);
       };
     },
-    [key]
+    [key],
   );
 
-  const storedValue = useSyncExternalStore(
-    subscribe,
-    getSnapshot,
-    getServerSnapshot
-  );
+  const storedValue = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -117,7 +108,7 @@ export function useLocalStorage<T>(
       try {
         const currentValue = parsedValue;
         const valueToStore = value instanceof Function ? value(currentValue) : value;
-        
+
         if (valueToStore === undefined) {
           window.localStorage.removeItem(key);
           dispatchStorageEvent(key, null);
@@ -130,7 +121,7 @@ export function useLocalStorage<T>(
         console.warn(`Error setting localStorage key "${key}":`, error);
       }
     },
-    [key, parsedValue]
+    [key, parsedValue],
   );
 
   const removeValue: RemoveValue = useCallback(() => {

@@ -19,14 +19,14 @@ test('GlowCard render count on mouse move', async () => {
     right: 200,
     x: 0,
     y: 0,
-    toJSON: () => {}
+    toJSON: () => {},
   }));
 
   try {
     render(
       <React.Profiler id="GlowCard" onRender={onRender}>
         <GlowCard>Test Content</GlowCard>
-      </React.Profiler>
+      </React.Profiler>,
     );
 
     const content = screen.getByText('Test Content');
@@ -45,7 +45,6 @@ test('GlowCard render count on mouse move', async () => {
 
     // If userEvent works, we should see renders.
     expect(onRender.mock.calls.length).toBeLessThanOrEqual(3);
-
   } finally {
     Element.prototype.getBoundingClientRect = originalGetBoundingClientRect;
   }

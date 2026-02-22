@@ -25,7 +25,7 @@ interface AccessibilityPreferences {
 
 /**
  * AccessibilityProvider - Provides accessibility settings across the app
- * 
+ *
  * Features:
  * - Font size adjustment
  * - High contrast mode
@@ -53,9 +53,11 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
 
           const legacyFontSize = legacy.fontSize;
           const fontSize =
-            legacyFontSize === 'large' ? 115 :
-            legacyFontSize === 'larger' ? 130 :
-            defaultPreferences.fontSize;
+            legacyFontSize === 'large'
+              ? 115
+              : legacyFontSize === 'larger'
+                ? 130
+                : defaultPreferences.fontSize;
 
           return {
             fontSize,
@@ -67,7 +69,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       } catch {
         // Ignore storage errors
       }
-      
+
       // Check for system reduced motion preference
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       return { ...defaultPreferences, reducedMotion: prefersReducedMotion };
@@ -128,28 +130,40 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [focusVisible]);
 
-  const updatePreference = useCallback(<K extends keyof AccessibilityPreferences>(
-    key: K,
-    value: AccessibilityPreferences[K]
-  ) => {
-    setPreferences(prev => ({ ...prev, [key]: value }));
-  }, []);
+  const updatePreference = useCallback(
+    <K extends keyof AccessibilityPreferences>(key: K, value: AccessibilityPreferences[K]) => {
+      setPreferences((prev) => ({ ...prev, [key]: value }));
+    },
+    [],
+  );
 
-  const setFontSize = useCallback((size: number) => {
-    updatePreference('fontSize', Math.max(80, Math.min(150, size)));
-  }, [updatePreference]);
+  const setFontSize = useCallback(
+    (size: number) => {
+      updatePreference('fontSize', Math.max(80, Math.min(150, size)));
+    },
+    [updatePreference],
+  );
 
-  const setHighContrast = useCallback((enabled: boolean) => {
-    updatePreference('highContrast', enabled);
-  }, [updatePreference]);
+  const setHighContrast = useCallback(
+    (enabled: boolean) => {
+      updatePreference('highContrast', enabled);
+    },
+    [updatePreference],
+  );
 
-  const setReducedMotion = useCallback((enabled: boolean) => {
-    updatePreference('reducedMotion', enabled);
-  }, [updatePreference]);
+  const setReducedMotion = useCallback(
+    (enabled: boolean) => {
+      updatePreference('reducedMotion', enabled);
+    },
+    [updatePreference],
+  );
 
-  const setFocusVisible = useCallback((enabled: boolean) => {
-    updatePreference('focusVisible', enabled);
-  }, [updatePreference]);
+  const setFocusVisible = useCallback(
+    (enabled: boolean) => {
+      updatePreference('focusVisible', enabled);
+    },
+    [updatePreference],
+  );
 
   const value: AccessibilityContextType = {
     fontSize,
@@ -162,11 +176,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     setFocusVisible,
   };
 
-  return (
-    <AccessibilityContext.Provider value={value}>
-      {children}
-    </AccessibilityContext.Provider>
-  );
+  return <AccessibilityContext.Provider value={value}>{children}</AccessibilityContext.Provider>;
 };
 
 const defaultPreferences: AccessibilityPreferences = {

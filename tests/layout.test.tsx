@@ -27,7 +27,11 @@ vi.mock('../components/Footer', () => ({
 }));
 
 vi.mock('../components/SkipLink', () => ({
-  default: () => <a href="#main-content" data-testid="skip-link">Skip to content</a>,
+  default: () => (
+    <a href="#main-content" data-testid="skip-link">
+      Skip to content
+    </a>
+  ),
 }));
 
 vi.mock('../components/ScrollToTop', () => ({
@@ -47,7 +51,7 @@ describe('BaseLayout', () => {
     render(
       <BaseLayout>
         <div data-testid="child-element">Test Child</div>
-      </BaseLayout>
+      </BaseLayout>,
     );
 
     expect(screen.getByTestId('child-element')).toBeInTheDocument();
@@ -58,7 +62,7 @@ describe('BaseLayout', () => {
     render(
       <BaseLayout>
         <div>Test Content</div>
-      </BaseLayout>
+      </BaseLayout>,
     );
 
     // Check that main content is rendered
@@ -69,7 +73,7 @@ describe('BaseLayout', () => {
     render(
       <BaseLayout className="custom-class">
         <div>Test Content</div>
-      </BaseLayout>
+      </BaseLayout>,
     );
 
     // Check if the custom class is applied somewhere in the layout
@@ -80,7 +84,7 @@ describe('BaseLayout', () => {
     render(
       <BaseLayout>
         <div>Test Content</div>
-      </BaseLayout>
+      </BaseLayout>,
     );
 
     expect(screen.getByTestId('navigation')).toBeInTheDocument();
@@ -90,7 +94,7 @@ describe('BaseLayout', () => {
     render(
       <BaseLayout>
         <div>Test Content</div>
-      </BaseLayout>
+      </BaseLayout>,
     );
 
     expect(screen.getByTestId('footer')).toBeInTheDocument();
@@ -100,7 +104,7 @@ describe('BaseLayout', () => {
     render(
       <BaseLayout>
         <div>Test Content</div>
-      </BaseLayout>
+      </BaseLayout>,
     );
 
     expect(screen.getByTestId('skip-link')).toBeInTheDocument();
@@ -108,14 +112,14 @@ describe('BaseLayout', () => {
 
   it('can hide optional components', () => {
     render(
-      <BaseLayout 
-        showNavigation={false} 
-        showFooter={false} 
+      <BaseLayout
+        showNavigation={false}
+        showFooter={false}
         showSkipLink={false}
         showScrollToTop={false}
       >
         <div data-testid="child">Test Content</div>
-      </BaseLayout>
+      </BaseLayout>,
     );
 
     expect(screen.getByTestId('child')).toBeInTheDocument();

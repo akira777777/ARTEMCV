@@ -21,27 +21,27 @@ export default defineConfig({
         'src/**/*.test.{js,ts,jsx,tsx}',
         'src/**/*.spec.{js,ts,jsx,tsx}',
         'src/main.tsx',
-        'src/vite-env.d.ts'
+        'src/vite-env.d.ts',
       ],
       thresholds: {
         global: {
           branches: 80,
           functions: 80,
           lines: 80,
-          statements: 80
-        }
-      }
+          statements: 80,
+        },
+      },
     },
     reporters: ['default', 'html'],
     outputFile: {
-      html: './test-results/index.html'
+      html: './test-results/index.html',
     },
     testTimeout: 10000,
     hookTimeout: 10000,
     css: true,
     deps: {
-      inline: ['vitest-canvas-mock']
-    }
+      inline: ['vitest-canvas-mock'],
+    },
   },
   resolve: {
     alias: {
@@ -49,7 +49,7 @@ export default defineConfig({
       '@components': path.resolve(__dirname, './src/components'),
       '@lib': path.resolve(__dirname, './src/lib'),
       '@utils': path.resolve(__dirname, './src/utils'),
-      '@tests': path.resolve(__dirname, './tests')
-    }
-  }
+      '@tests': path.resolve(__dirname, './tests'),
+    },
+  },
 });

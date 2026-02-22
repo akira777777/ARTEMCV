@@ -6,14 +6,14 @@ import { vi } from 'vitest';
 
 // Mock external dependencies
 vi.mock('../lib/api-client', () => ({
-  sendContactForm: vi.fn(() => Promise.resolve())
+  sendContactForm: vi.fn(() => Promise.resolve()),
 }));
 
 vi.mock('../i18n', () => ({
   useI18n: () => ({
     t: (key: string) => key,
-    currentLang: 'en'
-  })
+    currentLang: 'en',
+  }),
 }));
 
 vi.mock('../components/AccessibilityUtils', () => ({
@@ -22,12 +22,12 @@ vi.mock('../components/AccessibilityUtils', () => ({
   createAccessibleButtonProps: (props: any) => props,
   createAccessibleLinkProps: (props: any) => props,
   checkColorContrast: () => true,
-  announceLoadingState: vi.fn()
+  announceLoadingState: vi.fn(),
 }));
 
 vi.mock('../lib/validation', () => ({
   EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  sanitizeString: (str: string, max: number) => str.slice(0, max)
+  sanitizeString: (str: string, max: number) => str.slice(0, max),
 }));
 
 describe('ContactSectionEnhanced', () => {
@@ -37,15 +37,19 @@ describe('ContactSectionEnhanced', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(await import('../components/AccessibilityUtils')).useAnnouncement.mockReturnValue(mockAnnouncement);
-    vi.mocked(await import('../components/AccessibilityUtils')).announceLoadingState.mockImplementation(mockAnnounceLoadingState);
+    vi.mocked(await import('../components/AccessibilityUtils')).useAnnouncement.mockReturnValue(
+      mockAnnouncement,
+    );
+    vi.mocked(
+      await import('../components/AccessibilityUtils'),
+    ).announceLoadingState.mockImplementation(mockAnnounceLoadingState);
   });
 
   it('should render contact form with all required fields', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(screen.getByText('contact.title')).toBeInTheDocument();
@@ -60,7 +64,7 @@ describe('ContactSectionEnhanced', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const submitButton = screen.getByText('contact.button.send');
@@ -75,7 +79,7 @@ describe('ContactSectionEnhanced', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const emailInput = screen.getByDisplayValue('');
@@ -90,7 +94,7 @@ describe('ContactSectionEnhanced', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const messageInput = screen.getByDisplayValue('');
@@ -107,7 +111,7 @@ describe('ContactSectionEnhanced', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Fill out form
@@ -121,7 +125,7 @@ describe('ContactSectionEnhanced', () => {
         name: 'John Doe',
         email: 'john@example.com',
         subject: '',
-        message: 'Test message with more than 10 characters'
+        message: 'Test message with more than 10 characters',
       });
     });
 
@@ -135,7 +139,7 @@ describe('ContactSectionEnhanced', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Fill out form and submit
@@ -154,7 +158,7 @@ describe('ContactSectionEnhanced', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Fill honeypot field (should be hidden from users)
@@ -173,7 +177,7 @@ describe('ContactSectionEnhanced', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Fill out form
@@ -193,7 +197,7 @@ describe('ContactSectionEnhanced', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Submit form
@@ -220,7 +224,7 @@ describe('Navigation', () => {
         <div id="services" />
         <div id="studio" />
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(screen.getByText('nav.home')).toBeInTheDocument();
@@ -241,7 +245,7 @@ describe('Navigation', () => {
         <div id="services" />
         <div id="studio" />
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const worksLink = screen.getByText('nav.works');
@@ -260,14 +264,14 @@ describe('Navigation', () => {
         <div id="services" />
         <div id="studio" />
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Mock intersection observer
     const mockIntersectionObserver = vi.fn();
     mockIntersectionObserver.mockReturnValue({
       observe: vi.fn(),
-      disconnect: vi.fn()
+      disconnect: vi.fn(),
     });
     window.IntersectionObserver = mockIntersectionObserver;
 
@@ -285,7 +289,7 @@ describe('Navigation', () => {
         <div id="services" />
         <div id="studio" />
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const homeLink = screen.getByText('nav.home');
@@ -304,7 +308,7 @@ describe('Accessibility Features', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Check for proper ARIA labels
@@ -312,7 +316,7 @@ describe('Accessibility Features', () => {
     expect(form).toHaveAttribute('aria-label', 'contact.title');
 
     const inputs = screen.getAllByRole('textbox');
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       expect(input).toHaveAttribute('aria-invalid', 'false');
     });
   });
@@ -322,7 +326,7 @@ describe('Accessibility Features', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const nameInput = screen.getByDisplayValue('');
@@ -340,7 +344,7 @@ describe('Accessibility Features', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const submitButton = screen.getByText('contact.button.send');
@@ -355,7 +359,7 @@ describe('Accessibility Features', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Should have screen reader instructions
@@ -385,7 +389,7 @@ describe('Performance Features', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const messageInput = screen.getByDisplayValue('');
@@ -408,7 +412,7 @@ describe('Performance Features', () => {
     render(
       <MemoryRouter>
         <div id="contact" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const messageInput = screen.getByDisplayValue('');
@@ -432,7 +436,7 @@ describe('Error Boundaries', () => {
     const { container } = render(
       <MemoryRouter>
         <TestErrorComponent />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Should show error boundary fallback
@@ -452,7 +456,7 @@ describe('Error Boundaries', () => {
     const { rerender } = render(
       <MemoryRouter>
         <TestComponent />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(screen.getByText('Success')).toBeInTheDocument();
@@ -462,7 +466,7 @@ describe('Error Boundaries', () => {
     rerender(
       <MemoryRouter>
         <TestComponent />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Should show error boundary

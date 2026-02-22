@@ -19,7 +19,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 /**
  * Modern Card Component
- * 
+ *
  * @example
  * <Card variant="glass" padding="md">
  *   <Card.Header>Title</Card.Header>
@@ -28,15 +28,8 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   (
-    {
-      children,
-      variant = 'default',
-      padding = 'md',
-      isHoverable = false,
-      className,
-      ...props
-    },
-    ref
+    { children, variant = 'default', padding = 'md', isHoverable = false, className, ...props },
+    ref,
   ) => {
     const baseStyles = `
       rounded-2xl border
@@ -75,20 +68,15 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
       lg: 'p-8',
     };
 
-    const hoverStyles = isHoverable && variant !== 'interactive'
-      ? 'hover:border-white/20 hover:-translate-y-0.5'
-      : '';
+    const hoverStyles =
+      isHoverable && variant !== 'interactive'
+        ? 'hover:border-white/20 hover:-translate-y-0.5'
+        : '';
 
     return (
       <motion.div
         ref={ref}
-        className={cn(
-          baseStyles,
-          variants[variant],
-          paddings[padding],
-          hoverStyles,
-          className
-        )}
+        className={cn(baseStyles, variants[variant], paddings[padding], hoverStyles, className)}
         whileHover={isHoverable ? { y: -2 } : undefined}
         transition={{ duration: 0.2 }}
         {...props}
@@ -96,7 +84,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
         {children}
       </motion.div>
     );
-  }
+  },
 );
 
 Card.displayName = 'Card';
@@ -112,16 +100,13 @@ Card.Header = React.forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ children, action, className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn(
-        'flex items-start justify-between gap-4 mb-4',
-        className
-      )}
+      className={cn('flex items-start justify-between gap-4 mb-4', className)}
       {...props}
     >
       <div className="flex-1">{children}</div>
       {action && <div className="flex-shrink-0">{action}</div>}
     </div>
-  )
+  ),
 );
 
 Card.Header.displayName = 'CardHeader';
@@ -129,31 +114,27 @@ Card.Header.displayName = 'CardHeader';
 /**
  * Card Content Component
  */
-Card.Content = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn('', className)} {...props} />
-));
+Card.Content = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => <div ref={ref} className={cn('', className)} {...props} />,
+);
 
 Card.Content.displayName = 'CardContent';
 
 /**
  * Card Footer Component
  */
-Card.Footer = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      'flex items-center justify-between gap-4 mt-4 pt-4 border-t border-white/[0.06]',
-      className
-    )}
-    {...props}
-  />
-));
+Card.Footer = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        'flex items-center justify-between gap-4 mt-4 pt-4 border-t border-white/[0.06]',
+        className,
+      )}
+      {...props}
+    />
+  ),
+);
 
 Card.Footer.displayName = 'CardFooter';
 

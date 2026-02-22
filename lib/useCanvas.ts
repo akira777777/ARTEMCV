@@ -14,7 +14,12 @@ export interface UseCanvasOptions {
    * Animation frame callback.
    * Return false to stop animation loop.
    */
-  animate?: (ctx: CanvasRenderingContext2D, width: number, height: number, time: number) => void | boolean;
+  animate?: (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    time: number,
+  ) => void | boolean;
 }
 
 export function useCanvas(options: UseCanvasOptions = {}) {
@@ -81,7 +86,7 @@ export function useCanvas(options: UseCanvasOptions = {}) {
       if (animateRef.current) {
         const shouldContinue = animateRef.current(ctx, width, height, time);
         if (shouldContinue !== false) {
-           frameRef.current = requestAnimationFrame(loop);
+          frameRef.current = requestAnimationFrame(loop);
         }
       }
     };
@@ -92,7 +97,7 @@ export function useCanvas(options: UseCanvasOptions = {}) {
 
     // Use ResizeObserver for robust resize handling
     const resizeObserver = new ResizeObserver(() => {
-        handleResize();
+      handleResize();
     });
     resizeObserver.observe(container);
 

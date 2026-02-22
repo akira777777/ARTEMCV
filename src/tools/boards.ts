@@ -21,7 +21,7 @@ const PioBoardsOutputSchema = z.record(z.array(BoardInfoSchema));
 export async function listBoards(filter?: string): Promise<BoardInfo[]> {
   try {
     const args: string[] = ['boards'];
-    
+
     if (filter && filter.trim().length > 0) {
       args.push(filter.trim());
     }
@@ -31,7 +31,7 @@ export async function listBoards(filter?: string): Promise<BoardInfo[]> {
       'boards',
       [],
       PioBoardsOutputSchema,
-      { timeout: 30000 }
+      { timeout: 30000 },
     );
 
     // Flatten the platform-grouped boards into a single array
@@ -43,12 +43,13 @@ export async function listBoards(filter?: string): Promise<BoardInfo[]> {
     // Apply filter if provided (PlatformIO does basic filtering, but we can enhance it)
     if (filter && filter.trim().length > 0) {
       const filterLower = filter.trim().toLowerCase();
-      return allBoards.filter(board => 
-        board.id.toLowerCase().includes(filterLower) ||
-        board.name.toLowerCase().includes(filterLower) ||
-        board.platform.toLowerCase().includes(filterLower) ||
-        board.mcu.toLowerCase().includes(filterLower) ||
-        board.frameworks?.some(fw => fw.toLowerCase().includes(filterLower))
+      return allBoards.filter(
+        (board) =>
+          board.id.toLowerCase().includes(filterLower) ||
+          board.name.toLowerCase().includes(filterLower) ||
+          board.platform.toLowerCase().includes(filterLower) ||
+          board.mcu.toLowerCase().includes(filterLower) ||
+          board.frameworks?.some((fw) => fw.toLowerCase().includes(filterLower)),
       );
     }
 
@@ -57,7 +58,7 @@ export async function listBoards(filter?: string): Promise<BoardInfo[]> {
     throw new PlatformIOError(
       `Failed to list boards${filter ? ` with filter '${filter}'` : ''}: ${error}`,
       'LIST_BOARDS_FAILED',
-      { filter }
+      { filter },
     );
   }
 }
@@ -77,12 +78,12 @@ export async function getBoardInfo(boardId: string): Promise<BoardInfo> {
       'boards',
       [boardId],
       PioBoardsOutputSchema,
-      { timeout: 30000 }
+      { timeout: 30000 },
     );
 
     // Flatten and find exact match
     for (const platformBoards of Object.values(result)) {
-      const board = platformBoards.find(b => b.id === boardId);
+      const board = platformBoards.find((b) => b.id === boardId);
       if (board) {
         return board;
       }
@@ -97,7 +98,7 @@ export async function getBoardInfo(boardId: string): Promise<BoardInfo> {
     throw new PlatformIOError(
       `Failed to get board info for '${boardId}': ${error}`,
       'GET_BOARD_INFO_FAILED',
-      { boardId }
+      { boardId },
     );
   }
 }
@@ -111,14 +112,14 @@ export async function listBoardsByPlatform(): Promise<Record<string, BoardInfo[]
       'boards',
       [],
       PioBoardsOutputSchema,
-      { timeout: 30000 }
+      { timeout: 30000 },
     );
 
     return result;
   } catch (error) {
     throw new PlatformIOError(
       `Failed to list boards by platform: ${error}`,
-      'LIST_BOARDS_BY_PLATFORM_FAILED'
+      'LIST_BOARDS_BY_PLATFORM_FAILED',
     );
   }
 }
@@ -134,13 +135,17 @@ export async function searchBoards(criteria: {
 }): Promise<BoardInfo[]> {
   const allBoards = await listBoards();
 
-  return allBoards.filter(board => {
-    if (criteria.platform && !board.platform.toLowerCase().includes(criteria.platform.toLowerCase())) {
+  return allBoards.filter((board) => {
+    if (
+      criteria.platform &&
+      !board.platform.toLowerCase().includes(criteria.platform.toLowerCase())
+    ) {
       return false;
     }
-    if (criteria.framework && !board.frameworks?.some(fw => 
-      fw.toLowerCase().includes(criteria.framework!.toLowerCase())
-    )) {
+    if (
+      criteria.framework &&
+      !board.frameworks?.some((fw) => fw.toLowerCase().includes(criteria.framework!.toLowerCase()))
+    ) {
       return false;
     }
     if (criteria.mcu && !board.mcu.toLowerCase().includes(criteria.mcu.toLowerCase())) {

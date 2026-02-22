@@ -82,7 +82,7 @@ export const InteractiveDotGrid: React.FC = React.memo(() => {
   const getDotScale = (distance: number) => {
     const maxDistance = 150;
     if (distance > maxDistance) return 1;
-    return 1 + (maxDistance - distance) / maxDistance * 0.8;
+    return 1 + ((maxDistance - distance) / maxDistance) * 0.8;
   };
 
   return (
@@ -92,7 +92,10 @@ export const InteractiveDotGrid: React.FC = React.memo(() => {
       role="presentation"
       aria-hidden="true"
     >
-      <div className="relative" style={{ width: gridSize * (dotSize + gapSize), height: gridSize * (dotSize + gapSize) }}>
+      <div
+        className="relative"
+        style={{ width: gridSize * (dotSize + gapSize), height: gridSize * (dotSize + gapSize) }}
+      >
         {Array.from({ length: gridSize * gridSize }).map((_, index) => {
           const row = Math.floor(index / gridSize);
           const col = index % gridSize;
@@ -183,7 +186,7 @@ Eyes.displayName = 'Eyes';
 export const ParticleText: React.FC<{ text: string }> = React.memo(({ text }) => {
   const [particles, setParticles] = React.useState<Array<{ id: number; x: number; y: number }>>([]);
   const containerRef = React.useRef<HTMLDivElement>(null);
-  let particleId = React.useRef(0);
+  const particleId = React.useRef(0);
 
   const createParticles = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = (e.target as HTMLElement).getBoundingClientRect();
@@ -199,9 +202,7 @@ export const ParticleText: React.FC<{ text: string }> = React.memo(({ text }) =>
     setParticles((prev) => [...prev, ...newParticles]);
 
     setTimeout(() => {
-      setParticles((prev) =>
-        prev.filter((p) => !newParticles.some((np) => np.id === p.id))
-      );
+      setParticles((prev) => prev.filter((p) => !newParticles.some((np) => np.id === p.id)));
     }, 600);
   };
 
@@ -242,7 +243,10 @@ ParticleText.displayName = 'ParticleText';
 export const InteractiveSection: React.FC = () => {
   return (
     <section className="py-32 relative overflow-hidden bg-gradient-to-b from-black via-neutral-950 to-black">
-      <div className="absolute -top-32 left-0 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl float-slow" aria-hidden="true" />
+      <div
+        className="absolute -top-32 left-0 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl float-slow"
+        aria-hidden="true"
+      />
       <div className="container mx-auto px-6 relative z-10">
         <ParticleText text="INTERACT & EXPLORE" />
         <Eyes />

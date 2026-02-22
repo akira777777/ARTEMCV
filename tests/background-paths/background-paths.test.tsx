@@ -19,7 +19,9 @@ global.IntersectionObserver = class IntersectionObserver {
   constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {}
   disconnect() {}
   observe(target: Element) {}
-  takeRecords(): IntersectionObserverEntry[] { return []; }
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
   unobserve(target: Element) {}
 };
 
@@ -38,28 +40,28 @@ describe('BackgroundPaths Component', () => {
   describe('Component Rendering', () => {
     it('should render without crashing with default props', () => {
       render(<BackgroundPaths />);
-      
+
       // Check if main container exists
       const container = document.querySelector('.relative.min-h-screen');
       expect(container).toBeInTheDocument();
-      
+
       // Check if SVG containers exist
       const svgContainers = document.querySelectorAll('.absolute.inset-0.pointer-events-none');
       expect(svgContainers).toHaveLength(2); // Two FloatingPaths components
-      
+
       // Check if main content area exists
       const contentArea = document.querySelector('.relative.z-10.container');
       expect(contentArea).toBeInTheDocument();
     });
 
     it('should render with custom title', () => {
-      const customTitle = "Custom Hero Title";
+      const customTitle = 'Custom Hero Title';
       render(<BackgroundPaths title={customTitle} />);
-      
+
       // Check if individual words exist in the DOM
       const titleElement = document.querySelector('h1');
       expect(titleElement).toBeInTheDocument();
-      
+
       // Check for individual words (since they're in separate spans)
       expect(titleElement?.textContent).toContain('Custom');
       expect(titleElement?.textContent).toContain('Hero');
@@ -67,9 +69,9 @@ describe('BackgroundPaths Component', () => {
     });
 
     it('should render with subtitle when provided', () => {
-      const subtitle = "This is a custom subtitle";
+      const subtitle = 'This is a custom subtitle';
       render(<BackgroundPaths subtitle={subtitle} />);
-      
+
       const subtitleElement = document.querySelector('p');
       expect(subtitleElement).toBeInTheDocument();
       // Check for key words in subtitle
@@ -80,16 +82,16 @@ describe('BackgroundPaths Component', () => {
 
     it('should render without subtitle when not provided', () => {
       render(<BackgroundPaths />);
-      
+
       // Should not contain subtitle-specific text
       const subtitleElements = document.querySelectorAll('p.text-xl');
       expect(subtitleElements).toHaveLength(0);
     });
 
     it('should apply custom className when provided', () => {
-      const customClass = "custom-background-test";
+      const customClass = 'custom-background-test';
       render(<BackgroundPaths className={customClass} />);
-      
+
       const container = document.querySelector(`.${customClass}`);
       expect(container).toBeInTheDocument();
     });
@@ -99,22 +101,22 @@ describe('BackgroundPaths Component', () => {
   describe('Prop Handling', () => {
     it('should use default props when none provided', () => {
       render(<BackgroundPaths />);
-      
+
       // Check default title
       const titleElement = document.querySelector('h1');
       expect(titleElement).toBeInTheDocument();
       expect(titleElement?.textContent).toContain('Background');
       expect(titleElement?.textContent).toContain('Paths');
-      
+
       // Check default button text
       const button = screen.getByTestId('magnetic-button');
       expect(button).toBeInTheDocument();
-      expect(button.textContent).toContain("Discover Excellence");
+      expect(button.textContent).toContain('Discover Excellence');
     });
 
     it('should handle empty title gracefully', () => {
       render(<BackgroundPaths title="" />);
-      
+
       // Should still render without errors
       const container = document.querySelector('.relative.min-h-screen');
       expect(container).toBeInTheDocument();
@@ -122,7 +124,7 @@ describe('BackgroundPaths Component', () => {
 
     it('should handle empty subtitle gracefully', () => {
       render(<BackgroundPaths subtitle="" />);
-      
+
       // Should not render subtitle paragraph
       const subtitleParagraphs = document.querySelectorAll('p');
       expect(subtitleParagraphs).toHaveLength(0);
@@ -130,21 +132,23 @@ describe('BackgroundPaths Component', () => {
 
     it('should handle undefined props gracefully', () => {
       render(<BackgroundPaths title={undefined} subtitle={undefined} buttonText={undefined} />);
-      
+
       // Should use defaults
       const titleElement = document.querySelector('h1');
       expect(titleElement).toBeInTheDocument();
       expect(titleElement?.textContent).toContain('Background');
       expect(titleElement?.textContent).toContain('Paths');
-      
+
       const button = screen.getByTestId('magnetic-button');
       expect(button).toBeInTheDocument();
-      expect(button.textContent).toContain("Discover Excellence");
+      expect(button.textContent).toContain('Discover Excellence');
     });
 
     it('should handle null props gracefully', () => {
-      render(<BackgroundPaths title={null as any} subtitle={null as any} buttonText={null as any} />);
-      
+      render(
+        <BackgroundPaths title={null as any} subtitle={null as any} buttonText={null as any} />,
+      );
+
       // Should use defaults with null safety
       const titleElement = document.querySelector('h1');
       expect(titleElement).toBeInTheDocument();
@@ -157,34 +161,34 @@ describe('BackgroundPaths Component', () => {
   describe('Button Interaction', () => {
     it('should call onButtonClick when button is clicked', async () => {
       const handleClick = vi.fn();
-      
+
       render(<BackgroundPaths onButtonClick={handleClick} />);
-      
+
       const button = screen.getByTestId('magnetic-button');
       fireEvent.click(button);
-      
+
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
     it('should not crash when onButtonClick is not provided', async () => {
       render(<BackgroundPaths />);
-      
+
       const button = screen.getByTestId('magnetic-button');
       expect(() => fireEvent.click(button)).not.toThrow();
     });
 
     it('should handle rapid successive clicks', async () => {
       const handleClick = vi.fn();
-      
+
       render(<BackgroundPaths onButtonClick={handleClick} />);
-      
+
       const button = screen.getByTestId('magnetic-button');
-      
+
       // Click multiple times rapidly
       fireEvent.click(button);
       fireEvent.click(button);
       fireEvent.click(button);
-      
+
       expect(handleClick).toHaveBeenCalledTimes(3);
     });
   });
@@ -193,11 +197,11 @@ describe('BackgroundPaths Component', () => {
   describe('Accessibility', () => {
     it('should have proper semantic HTML structure', () => {
       render(<BackgroundPaths />);
-      
+
       // Check for main container
       const mainContainer = document.querySelector('.relative.min-h-screen');
       expect(mainContainer).toBeInTheDocument();
-      
+
       // Check for proper heading structure
       const headings = document.querySelectorAll('h1');
       expect(headings).toHaveLength(1);
@@ -205,7 +209,7 @@ describe('BackgroundPaths Component', () => {
 
     it('should have accessible button with proper labeling', () => {
       render(<BackgroundPaths buttonText="Test Button" />);
-      
+
       const button = screen.getByTestId('magnetic-button');
       expect(button).toBeInTheDocument();
       // Button type is handled by MagneticButton component
@@ -214,7 +218,7 @@ describe('BackgroundPaths Component', () => {
 
     it('should maintain proper contrast ratios', () => {
       render(<BackgroundPaths />);
-      
+
       const container = document.querySelector('.relative.min-h-screen');
       expect(container).toHaveClass('dark:bg-neutral-950');
       expect(container).toHaveClass('bg-white');
@@ -222,9 +226,9 @@ describe('BackgroundPaths Component', () => {
 
     it('should have proper ARIA attributes on SVG elements', () => {
       render(<BackgroundPaths />);
-      
+
       const svgs = document.querySelectorAll('svg');
-      svgs.forEach(svg => {
+      svgs.forEach((svg) => {
         expect(svg).toHaveAttribute('aria-hidden', 'true');
       });
     });
@@ -240,18 +244,18 @@ describe('BackgroundPaths Component', () => {
         { width: 1024, height: 768 }, // Desktop
         { width: 1920, height: 1080 }, // Large Desktop
       ];
-      
-      testSizes.forEach(size => {
+
+      testSizes.forEach((size) => {
         // Mock window dimensions
         (window as any).innerWidth = size.width;
         (window as any).innerHeight = size.height;
-        
+
         render(<BackgroundPaths key={`${size.width}x${size.height}`} />);
-        
+
         // Check if component still renders properly
         const container = document.querySelector('.relative.min-h-screen');
         expect(container).toBeInTheDocument();
-        
+
         // Cleanup
         document.body.innerHTML = '';
       });
@@ -261,15 +265,15 @@ describe('BackgroundPaths Component', () => {
       // Very small screen
       (window as any).innerWidth = 100;
       (window as any).innerHeight = 100;
-      
+
       expect(() => {
         render(<BackgroundPaths />);
       }).not.toThrow();
-      
+
       // Very large screen
       (window as any).innerWidth = 10000;
       (window as any).innerHeight = 10000;
-      
+
       document.body.innerHTML = '';
       expect(() => {
         render(<BackgroundPaths />);
@@ -280,18 +284,18 @@ describe('BackgroundPaths Component', () => {
   // 6. Edge cases and error conditions
   describe('Edge Cases', () => {
     it('should handle very long titles gracefully', () => {
-      const longTitle = "A".repeat(1000);
+      const longTitle = 'A'.repeat(1000);
       render(<BackgroundPaths title={longTitle} />);
-      
+
       // Should not crash
       const container = document.querySelector('.relative.min-h-screen');
       expect(container).toBeInTheDocument();
     });
 
     it('should handle special characters in title', () => {
-      const specialTitle = "Title with <>&\"' characters";
+      const specialTitle = 'Title with <>&"\' characters';
       render(<BackgroundPaths title={specialTitle} />);
-      
+
       // Should render without XSS issues
       const container = document.querySelector('.relative.min-h-screen');
       expect(container).toBeInTheDocument();
@@ -299,20 +303,20 @@ describe('BackgroundPaths Component', () => {
 
     it('should handle zero-length strings gracefully', () => {
       render(<BackgroundPaths title="" subtitle="" buttonText="" />);
-      
+
       // Should still render
       const container = document.querySelector('.relative.min-h-screen');
       expect(container).toBeInTheDocument();
     });
 
     it('should handle extremely long subtitle gracefully', () => {
-      const longSubtitle = "Lorem ipsum ".repeat(100);
+      const longSubtitle = 'Lorem ipsum '.repeat(100);
       render(<BackgroundPaths subtitle={longSubtitle} />);
-      
+
       // Should not crash
       const container = document.querySelector('.relative.min-h-screen');
       expect(container).toBeInTheDocument();
-      
+
       // Should render subtitle element
       const subtitleElement = document.querySelector('p');
       expect(subtitleElement).toBeInTheDocument();
@@ -324,13 +328,13 @@ describe('BackgroundPaths Component', () => {
   describe('Performance', () => {
     it('should not cause memory leaks on unmount', () => {
       const { unmount } = render(<BackgroundPaths />);
-      
+
       // Track initial state
       const initialElementCount = document.querySelectorAll('*').length;
-      
+
       // Unmount component
       unmount();
-      
+
       // Should clean up elements
       const finalElementCount = document.querySelectorAll('*').length;
       expect(finalElementCount).toBeLessThanOrEqual(initialElementCount);
@@ -338,12 +342,12 @@ describe('BackgroundPaths Component', () => {
 
     it('should handle multiple re-renders efficiently', () => {
       const { rerender } = render(<BackgroundPaths />);
-      
+
       // Multiple re-renders with different props
       rerender(<BackgroundPaths title="New Title 1" />);
       rerender(<BackgroundPaths title="New Title 2" />);
       rerender(<BackgroundPaths title="New Title 3" />);
-      
+
       // Should still work
       const container = document.querySelector('.relative.min-h-screen');
       expect(container).toBeInTheDocument();
@@ -354,7 +358,7 @@ describe('BackgroundPaths Component', () => {
   describe('Animation Behavior', () => {
     it('should render motion elements without crashing', () => {
       render(<BackgroundPaths />);
-      
+
       // Check if motion.div elements exist
       const motionDivs = document.querySelectorAll('[data-testid="motion-div"]');
       // Even though we mocked motion.div, the structure should still exist
@@ -363,16 +367,16 @@ describe('BackgroundPaths Component', () => {
 
     it('should handle animation delays properly', () => {
       vi.useFakeTimers();
-      
+
       render(<BackgroundPaths />);
-      
+
       // Fast-forward timers to ensure animations complete
       vi.advanceTimersByTime(5000);
-      
+
       // Component should still be mounted
       const container = document.querySelector('.relative.min-h-screen');
       expect(container).toBeInTheDocument();
-      
+
       vi.useRealTimers();
     });
   });

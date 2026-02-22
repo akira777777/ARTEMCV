@@ -1,10 +1,10 @@
 /**
  * Validation Utilities
- * 
+ *
  * Provides comprehensive validation functions for forms, user input,
  * and data sanitization throughout the application.
- * 
- * All validators return { valid: true } on success or 
+ *
+ * All validators return { valid: true } on success or
  * { valid: false, error: string } on failure for consistent handling.
  */
 
@@ -38,13 +38,15 @@ export const VALIDATION_LIMITS = {
 } as const;
 
 // RFC 5322 compliant email regex (simplified but effective)
-export const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+export const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 // Phone number regex (international format support)
 export const PHONE_REGEX = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,9}$/;
 
 // URL regex
-export const URL_REGEX = /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
+export const URL_REGEX =
+  /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
 
 // ============================================================================
 // String Validators
@@ -67,28 +69,28 @@ export function isLength(
   value: string,
   min: number,
   max: number,
-  fieldName = 'Field'
+  fieldName = 'Field',
 ): ValidationResult {
   if (typeof value !== 'string') {
     return { valid: false, error: `${fieldName} must be a string` };
   }
-  
+
   const trimmed = value.trim();
-  
+
   if (trimmed.length < min) {
-    return { 
-      valid: false, 
-      error: `${fieldName} must be at least ${min} characters` 
+    return {
+      valid: false,
+      error: `${fieldName} must be at least ${min} characters`,
     };
   }
-  
+
   if (trimmed.length > max) {
-    return { 
-      valid: false, 
-      error: `${fieldName} must be no more than ${max} characters` 
+    return {
+      valid: false,
+      error: `${fieldName} must be no more than ${max} characters`,
     };
   }
-  
+
   return { valid: true };
 }
 
@@ -99,17 +101,17 @@ export function isEmail(value: string): ValidationResult {
   if (!value || typeof value !== 'string') {
     return { valid: false, error: 'Email is required' };
   }
-  
+
   const trimmed = value.trim().toLowerCase();
-  
+
   if (trimmed.length > VALIDATION_LIMITS.EMAIL_MAX) {
     return { valid: false, error: 'Email is too long' };
   }
-  
+
   if (!EMAIL_REGEX.test(trimmed)) {
     return { valid: false, error: 'Please enter a valid email address' };
   }
-  
+
   return { valid: true };
 }
 
@@ -120,11 +122,11 @@ export function isPhoneNumber(value: string): ValidationResult {
   if (!value || typeof value !== 'string') {
     return { valid: false, error: 'Phone number is required' };
   }
-  
+
   if (!PHONE_REGEX.test(value.trim())) {
     return { valid: false, error: 'Please enter a valid phone number' };
   }
-  
+
   return { valid: true };
 }
 
@@ -135,21 +137,21 @@ export function isUrl(value: string, requireProtocol = false): ValidationResult 
   if (!value || typeof value !== 'string') {
     return { valid: false, error: 'URL is required' };
   }
-  
+
   let url = value.trim();
-  
+
   if (requireProtocol && !url.startsWith('http')) {
     return { valid: false, error: 'URL must start with http:// or https://' };
   }
-  
+
   if (!requireProtocol && !url.startsWith('http')) {
     url = 'https://' + url;
   }
-  
+
   if (!URL_REGEX.test(url)) {
     return { valid: false, error: 'Please enter a valid URL' };
   }
-  
+
   return { valid: true };
 }
 
@@ -163,21 +165,24 @@ export function isUrl(value: string, requireProtocol = false): ValidationResult 
 export function isValidName(value: string): ValidationResult {
   const required = isRequired(value);
   if (!required.valid) return required;
-  
+
   const length = isLength(
-    value as string, 
-    VALIDATION_LIMITS.NAME_MIN, 
-    VALIDATION_LIMITS.NAME_MAX, 
-    'Name'
+    value as string,
+    VALIDATION_LIMITS.NAME_MIN,
+    VALIDATION_LIMITS.NAME_MAX,
+    'Name',
   );
   if (!length.valid) return length;
-  
+
   // Check for only letters, spaces, hyphens, and apostrophes
   const nameRegex = /^[a-zA-Z\s\-'']+$/;
   if (!nameRegex.test((value as string).trim())) {
-    return { valid: false, error: 'Name can only contain letters, spaces, hyphens, and apostrophes' };
+    return {
+      valid: false,
+      error: 'Name can only contain letters, spaces, hyphens, and apostrophes',
+    };
   }
-  
+
   return { valid: true };
 }
 
@@ -187,22 +192,22 @@ export function isValidName(value: string): ValidationResult {
 export function isValidMessage(value: string): ValidationResult {
   const required = isRequired(value);
   if (!required.valid) return required;
-  
+
   const length = isLength(
     value as string,
     VALIDATION_LIMITS.MESSAGE_MIN,
     VALIDATION_LIMITS.MESSAGE_MAX,
-    'Message'
+    'Message',
   );
   if (!length.valid) return length;
-  
+
   // Check for excessive repetition (possible spam)
   const trimmed = (value as string).trim();
   const repeatedCharRegex = /(.)\1{10,}/;
   if (repeatedCharRegex.test(trimmed)) {
     return { valid: false, error: 'Message contains excessive repeated characters' };
   }
-  
+
   return { valid: true };
 }
 
@@ -213,12 +218,12 @@ export function isValidSubject(value: string): ValidationResult {
   if (!value || (typeof value === 'string' && value.trim() === '')) {
     return { valid: true }; // Subject is optional
   }
-  
+
   return isLength(
     value as string,
     VALIDATION_LIMITS.SUBJECT_MIN,
     VALIDATION_LIMITS.SUBJECT_MAX,
-    'Subject'
+    'Subject',
   );
 }
 
@@ -229,33 +234,31 @@ export function isStrongPassword(value: string): ValidationResult {
   if (!value || typeof value !== 'string') {
     return { valid: false, error: 'Password is required' };
   }
-  
+
   const length = isLength(
     value,
     VALIDATION_LIMITS.PASSWORD_MIN,
     VALIDATION_LIMITS.PASSWORD_MAX,
-    'Password'
+    'Password',
   );
   if (!length.valid) return length;
-  
+
   const checks = [
     { test: /[a-z]/, name: 'lowercase letter' },
     { test: /[A-Z]/, name: 'uppercase letter' },
     { test: /[0-9]/, name: 'number' },
     { test: /[^a-zA-Z0-9]/, name: 'special character' },
   ];
-  
-  const missing = checks
-    .filter(check => !check.test.test(value))
-    .map(check => check.name);
-  
+
+  const missing = checks.filter((check) => !check.test.test(value)).map((check) => check.name);
+
   if (missing.length > 0) {
-    return { 
-      valid: false, 
-      error: `Password must contain at least one ${missing.join(', ')}` 
+    return {
+      valid: false,
+      error: `Password must contain at least one ${missing.join(', ')}`,
     };
   }
-  
+
   return { valid: true };
 }
 
@@ -268,15 +271,13 @@ export function isStrongPassword(value: string): ValidationResult {
  */
 export function sanitizeString(value: string, maxLength?: number): string {
   if (typeof value !== 'string') return '';
-  
-  let sanitized = value
-    .trim()
-    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ''); // Remove control characters
-  
+
+  let sanitized = value.trim().replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ''); // Remove control characters
+
   if (maxLength && maxLength > 0) {
     sanitized = sanitized.slice(0, maxLength);
   }
-  
+
   return sanitized;
 }
 
@@ -324,11 +325,11 @@ export function composeValidators<T>(...validators: Validator<T>[]): Validator<T
  */
 export function validateObject<T extends Record<string, unknown>>(
   obj: T,
-  schema: { [K in keyof T]?: Validator<T[K]> }
+  schema: { [K in keyof T]?: Validator<T[K]> },
 ): { valid: boolean; errors: Partial<Record<keyof T, string>> } {
   const errors: Partial<Record<keyof T, string>> = {};
   let valid = true;
-  
+
   for (const [key, validator] of Object.entries(schema)) {
     if (validator) {
       const result = (validator as Validator<unknown>)(obj[key]);
@@ -338,7 +339,7 @@ export function validateObject<T extends Record<string, unknown>>(
       }
     }
   }
-  
+
   return { valid, errors };
 }
 

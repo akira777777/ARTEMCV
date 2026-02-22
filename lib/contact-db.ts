@@ -33,14 +33,14 @@ export async function storeContactSubmission(
   subject: string,
   message: string,
   ipAddress: string | null,
-  userAgent: string | null
+  userAgent: string | null,
 ): Promise<string> {
   return transaction(async (client) => {
     const result = await client.query(
       `INSERT INTO contact_submissions (name, email, subject, message, ip_address, user_agent)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING id`,
-      [name, email, subject, message, ipAddress, userAgent]
+      [name, email, subject, message, ipAddress, userAgent],
     );
 
     const submissionId = result.rows[0].id;
@@ -49,7 +49,7 @@ export async function storeContactSubmission(
     await client.query(
       `INSERT INTO contact_audit_log (submission_id, event_type, event_data)
        VALUES ($1, $2, $3)`,
-      [submissionId, 'submitted', JSON.stringify({ method: 'contact_form' })]
+      [submissionId, 'submitted', JSON.stringify({ method: 'contact_form' })],
     );
 
     // Update daily analytics
@@ -59,7 +59,7 @@ export async function storeContactSubmission(
        ON CONFLICT (date) DO UPDATE SET
          total_submissions = contact_analytics.total_submissions + 1,
          unique_visitors = contact_analytics.unique_visitors + 1`,
-      []
+      [],
     );
 
     return submissionId;
@@ -72,7 +72,7 @@ export async function storeContactSubmission(
 export async function getContactSubmissions(
   limit: number = 50,
   offset: number = 0,
-  status?: 'new' | 'read' | 'archived'
+  status?: 'new' | 'read' | 'archived',
 ): Promise<{ submissions: ContactSubmission[]; total: number }> {
   let sql = 'SELECT * FROM contact_submissions';
   const params: unknown[] = [];
@@ -82,7 +82,8 @@ export async function getContactSubmissions(
     params.push(status);
   }
 
-  sql += ' ORDER BY created_at DESC LIMIT $' + (params.length + 1) + ' OFFSET $' + (params.length + 2);
+  sql +=
+    ' ORDER BY created_at DESC LIMIT $' + (params.length + 1) + ' OFFSET $' + (params.length + 2);
   params.push(limit, offset);
 
   const result = await query(sql, params);
@@ -105,10 +106,7 @@ export async function getContactSubmissions(
  * Get a single contact submission by ID
  */
 export async function getContactSubmission(id: string): Promise<ContactSubmission | null> {
-  const result = await query(
-    'SELECT * FROM contact_submissions WHERE id = $1',
-    [id]
-  );
+  const result = await query('SELECT * FROM contact_submissions WHERE id = $1', [id]);
 
   if (result.rows.length === 0) {
     return null;
@@ -122,12 +120,12 @@ export async function getContactSubmission(id: string): Promise<ContactSubmissio
  */
 export async function updateSubmissionStatus(
   id: string,
-  status: 'new' | 'read' | 'archived'
+  status: 'new' | 'read' | 'archived',
 ): Promise<boolean> {
   return transaction(async (client) => {
     const result = await client.query(
       'UPDATE contact_submissions SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id',
-      [status, id]
+      [status, id],
     );
 
     if (result.rows.length > 0) {
@@ -135,7 +133,7 @@ export async function updateSubmissionStatus(
       await client.query(
         `INSERT INTO contact_audit_log (submission_id, event_type, event_data)
          VALUES ($1, $2, $3)`,
-        [id, 'status_changed', JSON.stringify({ new_status: status })]
+        [id, 'status_changed', JSON.stringify({ new_status: status })],
       );
       return true;
     }
@@ -150,7 +148,7 @@ export async function updateSubmissionStatus(
 export async function addSubmissionNotes(id: string, notes: string): Promise<boolean> {
   const result = await query(
     'UPDATE contact_submissions SET notes = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id',
-    [notes, id]
+    [notes, id],
   );
 
   return result.rows.length > 0;
@@ -161,13 +159,13 @@ export async function addSubmissionNotes(id: string, notes: string): Promise<boo
  */
 export async function getContactAnalytics(
   startDate: string,
-  endDate: string
+  endDate: string,
 ): Promise<Record<string, unknown>[]> {
   const result = await query(
     `SELECT * FROM contact_analytics
      WHERE date BETWEEN $1 AND $2
      ORDER BY date DESC`,
-    [startDate, endDate]
+    [startDate, endDate],
   );
 
   return result.rows;
@@ -185,7 +183,7 @@ export async function getContactAnalytics(
 export async function checkRateLimit(
   ip: string,
   limit: number,
-  windowMs: number
+  windowMs: number,
 ): Promise<{ limited: boolean; currentCount: number }> {
   // If no database, fallback to in-memory
   if (!process.env.DATABASE_URL) {
@@ -210,7 +208,7 @@ export async function checkRateLimit(
          END,
          updated_at = CURRENT_TIMESTAMP
        RETURNING request_count`,
-      [ip, resetTime]
+      [ip, resetTime],
     );
 
     const currentCount = result.rows[0].request_count;
@@ -235,7 +233,7 @@ export async function checkRateLimit(
 function checkInMemoryRateLimit(
   ip: string,
   limit: number,
-  windowMs: number
+  windowMs: number,
 ): { limited: boolean; currentCount: number } {
   const now = Date.now();
   const entry = rateLimitMap.get(ip);
@@ -263,7 +261,7 @@ function checkInMemoryRateLimit(
  */
 export async function recordSecurityEvent(
   eventType: 'honeypot' | 'rate_limit',
-  ipAddress: string | null
+  ipAddress: string | null,
 ): Promise<void> {
   if (eventType === 'honeypot') {
     await query(
@@ -271,7 +269,7 @@ export async function recordSecurityEvent(
        VALUES (CURRENT_DATE, 1)
        ON CONFLICT (date) DO UPDATE SET
          honeypot_catches = contact_analytics.honeypot_catches + 1`,
-      []
+      [],
     );
   } else {
     await query(
@@ -279,7 +277,7 @@ export async function recordSecurityEvent(
        VALUES (CURRENT_DATE, 1)
        ON CONFLICT (date) DO UPDATE SET
          rate_limit_hits = contact_analytics.rate_limit_hits + 1`,
-      []
+      [],
     );
   }
 }
@@ -288,9 +286,7 @@ export async function recordSecurityEvent(
  * Get today's statistics
  */
 export async function getTodayStatistics(): Promise<Record<string, unknown> | null> {
-  const result = await query(
-    'SELECT * FROM contact_analytics WHERE date = CURRENT_DATE'
-  );
+  const result = await query('SELECT * FROM contact_analytics WHERE date = CURRENT_DATE');
 
   return result.rows[0] || null;
 }
@@ -303,7 +299,7 @@ export async function deleteOldSubmissions(daysOld: number = 90): Promise<number
     `DELETE FROM contact_submissions
      WHERE created_at < CURRENT_TIMESTAMP - INTERVAL '1 day' * $1
      AND status = 'archived'`,
-    [daysOld]
+    [daysOld],
   );
 
   return result.rowCount || 0;

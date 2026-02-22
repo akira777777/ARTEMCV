@@ -159,7 +159,7 @@ export function useWindowSize() {
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
-    
+
     const handler = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
@@ -192,21 +192,24 @@ export function useThrottle<T extends (...args: unknown[]) => void>(callback: T,
   const lastRan = useRef(Date.now());
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  return useCallback((...args: Parameters<T>) => {
-    const now = Date.now();
-    const remaining = delay - (now - lastRan.current);
+  return useCallback(
+    (...args: Parameters<T>) => {
+      const now = Date.now();
+      const remaining = delay - (now - lastRan.current);
 
-    if (remaining <= 0) {
-      lastRan.current = now;
-      callback(...args);
-    } else {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      timeoutRef.current = setTimeout(() => {
-        lastRan.current = Date.now();
+      if (remaining <= 0) {
+        lastRan.current = now;
         callback(...args);
-      }, remaining);
-    }
-  }, [callback, delay]) as T;
+      } else {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+          lastRan.current = Date.now();
+          callback(...args);
+        }, remaining);
+      }
+    },
+    [callback, delay],
+  ) as T;
 }
 
 /**
@@ -230,21 +233,24 @@ export function useMagnetic(strength = 0.3) {
   const ref = useRef<HTMLElement>(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!ref.current) return;
-    
-    const rect = ref.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    
-    const distanceX = e.clientX - centerX;
-    const distanceY = e.clientY - centerY;
-    
-    setOffset({
-      x: distanceX * strength,
-      y: distanceY * strength,
-    });
-  }, [strength]);
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!ref.current) return;
+
+      const rect = ref.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const distanceX = e.clientX - centerX;
+      const distanceY = e.clientY - centerY;
+
+      setOffset({
+        x: distanceX * strength,
+        y: distanceY * strength,
+      });
+    },
+    [strength],
+  );
 
   const handleMouseLeave = useCallback(() => {
     setOffset({ x: 0, y: 0 });
@@ -259,7 +265,10 @@ export function useMagnetic(strength = 0.3) {
  * Uses the fetchWithTimeout utility function for consistency
  */
 export function useFetchWithTimeout(timeoutMs: number = 12_000) {
-  return useCallback((url: string, options: RequestInit = {}) => {
-    return fetchWithTimeoutUtil(url, options, timeoutMs);
-  }, [timeoutMs]);
+  return useCallback(
+    (url: string, options: RequestInit = {}) => {
+      return fetchWithTimeoutUtil(url, options, timeoutMs);
+    },
+    [timeoutMs],
+  );
 }

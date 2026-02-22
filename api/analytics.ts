@@ -7,11 +7,7 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import {
-  getContactSubmissions,
-  getContactAnalytics,
-  getTodayStatistics,
-} from '../lib/contact-db';
+import { getContactSubmissions, getContactAnalytics, getTodayStatistics } from '../lib/contact-db';
 
 interface AnalyticsDay {
   date: string;
@@ -85,10 +81,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (type === 'submissions') {
       // Get recent submissions
-      const { submissions, total } = await getContactSubmissions(
-        limit,
-        offset
-      );
+      const { submissions, total } = await getContactSubmissions(limit, offset);
 
       return res.status(200).json({
         data: submissions,
@@ -115,17 +108,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const today = await getTodayStatistics();
     const { submissions, total } = await getContactSubmissions(5);
 
-    const recentWeekAnalytics = await getContactAnalytics(
+    const recentWeekAnalytics = (await getContactAnalytics(
       new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      new Date().toISOString().split('T')[0]
-    ) as unknown as AnalyticsDay[];
+      new Date().toISOString().split('T')[0],
+    )) as unknown as AnalyticsDay[];
 
     return res.status(200).json({
       today: today || { total_submissions: 0, honeypot_catches: 0, rate_limit_hits: 0 },
       weekSummary: {
-        total_submissions: recentWeekAnalytics.reduce((sum, day) => sum + (day.total_submissions || 0), 0),
-        unique_visitors: recentWeekAnalytics.reduce((sum, day) => sum + (day.unique_visitors || 0), 0),
-        honeypot_catches: recentWeekAnalytics.reduce((sum, day) => sum + (day.honeypot_catches || 0), 0),
+        total_submissions: recentWeekAnalytics.reduce(
+          (sum, day) => sum + (day.total_submissions || 0),
+          0,
+        ),
+        unique_visitors: recentWeekAnalytics.reduce(
+          (sum, day) => sum + (day.unique_visitors || 0),
+          0,
+        ),
+        honeypot_catches: recentWeekAnalytics.reduce(
+          (sum, day) => sum + (day.honeypot_catches || 0),
+          0,
+        ),
       },
       totalSubmissions: total,
       recentSubmissions: submissions.slice(0, 5),

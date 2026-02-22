@@ -7,7 +7,7 @@ interface ScrollProgressProps {}
 const ScrollProgress: React.FC<ScrollProgressProps> = () => {
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
-  
+
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -27,14 +27,14 @@ const ScrollProgress: React.FC<ScrollProgressProps> = () => {
       }}
     >
       {/* Glow effect */}
-      <div 
+      <div
         className="absolute inset-0 blur-md"
         style={{
           background: 'inherit',
           opacity: 0.8,
         }}
       />
-      
+
       {/* Shine effect */}
       <motion.div
         className="absolute inset-0"

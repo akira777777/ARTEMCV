@@ -4,7 +4,11 @@
 
 import { platformioExecutor } from '../platformio.js';
 import type { UploadResult } from '../types.js';
-import { validateProjectPath, validateEnvironmentName, validateSerialPort } from '../utils/validation.js';
+import {
+  validateProjectPath,
+  validateEnvironmentName,
+  validateSerialPort,
+} from '../utils/validation.js';
 import { UploadError, PlatformIOError } from '../utils/errors.js';
 import { parseStderrErrors } from '../utils/errors.js';
 
@@ -14,7 +18,7 @@ import { parseStderrErrors } from '../utils/errors.js';
 export async function uploadFirmware(
   projectDir: string,
   port?: string,
-  environment?: string
+  environment?: string,
 ): Promise<UploadResult> {
   const validatedPath = validateProjectPath(projectDir);
 
@@ -55,15 +59,9 @@ export async function uploadFirmware(
     };
   } catch (error) {
     if (error instanceof PlatformIOError) {
-      throw new UploadError(
-        `Upload failed: ${error.message}`,
-        { projectDir, port, environment }
-      );
+      throw new UploadError(`Upload failed: ${error.message}`, { projectDir, port, environment });
     }
-    throw new UploadError(
-      `Failed to upload firmware: ${error}`,
-      { projectDir, port, environment }
-    );
+    throw new UploadError(`Failed to upload firmware: ${error}`, { projectDir, port, environment });
   }
 }
 
@@ -73,7 +71,7 @@ export async function uploadFirmware(
 export async function uploadAndMonitor(
   projectDir: string,
   port?: string,
-  environment?: string
+  environment?: string,
 ): Promise<UploadResult> {
   const validatedPath = validateProjectPath(projectDir);
 
@@ -113,15 +111,17 @@ export async function uploadAndMonitor(
     };
   } catch (error) {
     if (error instanceof PlatformIOError) {
-      throw new UploadError(
-        `Upload and monitor failed: ${error.message}`,
-        { projectDir, port, environment }
-      );
+      throw new UploadError(`Upload and monitor failed: ${error.message}`, {
+        projectDir,
+        port,
+        environment,
+      });
     }
-    throw new UploadError(
-      `Failed to upload and monitor: ${error}`,
-      { projectDir, port, environment }
-    );
+    throw new UploadError(`Failed to upload and monitor: ${error}`, {
+      projectDir,
+      port,
+      environment,
+    });
   }
 }
 
@@ -131,7 +131,7 @@ export async function uploadAndMonitor(
 export async function buildAndUpload(
   projectDir: string,
   port?: string,
-  environment?: string
+  environment?: string,
 ): Promise<UploadResult> {
   // Upload target automatically builds first if needed
   return uploadFirmware(projectDir, port, environment);

@@ -51,7 +51,7 @@ const containerSizes = {
 
 /**
  * Page section component with container and consistent spacing
- * 
+ *
  * @example
  * ```tsx
  * <Section id="hero" background="gradient" padding="lg" container="narrow">
@@ -59,36 +59,43 @@ const containerSizes = {
  * </Section>
  * ```
  */
-export const Section = React.forwardRef<HTMLElement, SectionProps>(({
-  background = 'default',
-  padding = 'md',
-  container = 'default',
-  id,
-  className,
-  containerClassName,
-  children,
-  ...props
-}, ref) => (
-  <section
-    ref={ref}
-    id={id}
-    className={cn(
-      'relative w-full',
-      sectionBackgrounds[background],
-      sectionPaddings[padding],
-      className
-    )}
-    {...props}
-  >
-    <div className={cn(
-      'mx-auto px-4 sm:px-6 lg:px-8',
-      containerSizes[container],
-      containerClassName
-    )}>
-      {children}
-    </div>
-  </section>
-));
+export const Section = React.forwardRef<HTMLElement, SectionProps>(
+  (
+    {
+      background = 'default',
+      padding = 'md',
+      container = 'default',
+      id,
+      className,
+      containerClassName,
+      children,
+      ...props
+    },
+    ref,
+  ) => (
+    <section
+      ref={ref}
+      id={id}
+      className={cn(
+        'relative w-full',
+        sectionBackgrounds[background],
+        sectionPaddings[padding],
+        className,
+      )}
+      {...props}
+    >
+      <div
+        className={cn(
+          'mx-auto px-4 sm:px-6 lg:px-8',
+          containerSizes[container],
+          containerClassName,
+        )}
+      >
+        {children}
+      </div>
+    </section>
+  ),
+);
 
 Section.displayName = 'Section';
 
@@ -110,7 +117,7 @@ export interface SectionHeaderProps extends React.HTMLAttributes<HTMLDivElement>
 
 /**
  * Pre-styled section header with eyebrow, title and subtitle
- * 
+ *
  * @example
  * ```tsx
  * <SectionHeader
@@ -121,39 +128,32 @@ export interface SectionHeaderProps extends React.HTMLAttributes<HTMLDivElement>
  * />
  * ```
  */
-export const SectionHeader = React.memo<SectionHeaderProps>(({
-  eyebrow,
-  title,
-  subtitle,
-  align = 'center',
-  className,
-  ...props
-}) => {
-  const alignClasses = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right',
-  } as const;
+export const SectionHeader = React.memo<SectionHeaderProps>(
+  ({ eyebrow, title, subtitle, align = 'center', className, ...props }) => {
+    const alignClasses = {
+      left: 'text-left',
+      center: 'text-center',
+      right: 'text-right',
+    } as const;
 
-  return (
-    <div className={cn('mb-12 md:mb-16', alignClasses[align], className)} {...props}>
-      {eyebrow && (
-        <span className="inline-block px-3 py-1 mb-4 text-xs font-medium tracking-wider text-emerald-400 uppercase bg-emerald-500/10 rounded-full border border-emerald-500/20">
-          {eyebrow}
-        </span>
-      )}
-      {title && (
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-zinc-100 tracking-tight">
-          {title}
-        </h2>
-      )}
-      {subtitle && (
-        <p className="mt-4 text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
-          {subtitle}
-        </p>
-      )}
-    </div>
-  );
-});
+    return (
+      <div className={cn('mb-12 md:mb-16', alignClasses[align], className)} {...props}>
+        {eyebrow && (
+          <span className="inline-block px-3 py-1 mb-4 text-xs font-medium tracking-wider text-emerald-400 uppercase bg-emerald-500/10 rounded-full border border-emerald-500/20">
+            {eyebrow}
+          </span>
+        )}
+        {title && (
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-zinc-100 tracking-tight">
+            {title}
+          </h2>
+        )}
+        {subtitle && (
+          <p className="mt-4 text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">{subtitle}</p>
+        )}
+      </div>
+    );
+  },
+);
 
 SectionHeader.displayName = 'SectionHeader';

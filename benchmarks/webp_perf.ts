@@ -1,4 +1,3 @@
-
 import { performance } from 'perf_hooks';
 
 // Mock Image class to simulate browser behavior
@@ -38,13 +37,16 @@ async function runOldDetection(count: number) {
   const promises = [];
 
   for (let i = 0; i < count; i++) {
-    promises.push(new Promise<boolean>((resolve) => {
-      const img = new MockImage();
-      img.onload = img.onerror = () => {
-        resolve(img.height === 2);
-      };
-      img.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
-    }));
+    promises.push(
+      new Promise<boolean>((resolve) => {
+        const img = new MockImage();
+        img.onload = img.onerror = () => {
+          resolve(img.height === 2);
+        };
+        img.src =
+          'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+      }),
+    );
   }
 
   await Promise.all(promises);
@@ -66,7 +68,8 @@ function checkWebPSupportOptimized(): Promise<boolean> {
       isWebPSupportedCached = img.height === 2;
       resolve(isWebPSupportedCached);
     };
-    img.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+    img.src =
+      'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
   });
 
   return webPSupportPromiseCached;
@@ -110,8 +113,12 @@ async function run() {
   const instanceSavings = oldResult.instances - optimizedResult.instances;
 
   console.log(`\nResults:`);
-  console.log(`- Time Improvement: ${timeSavings.toFixed(2)}ms (${((timeSavings / oldResult.time) * 100).toFixed(2)}%)`);
-  console.log(`- Resource Reduction: ${instanceSavings} Image instances avoided (${((instanceSavings / oldResult.instances) * 100).toFixed(2)}%)`);
+  console.log(
+    `- Time Improvement: ${timeSavings.toFixed(2)}ms (${((timeSavings / oldResult.time) * 100).toFixed(2)}%)`,
+  );
+  console.log(
+    `- Resource Reduction: ${instanceSavings} Image instances avoided (${((instanceSavings / oldResult.instances) * 100).toFixed(2)}%)`,
+  );
 }
 
 run();

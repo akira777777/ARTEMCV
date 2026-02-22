@@ -19,9 +19,7 @@ describe('useRenderMonitor', () => {
   });
 
   it('tracks render count and returns stats without errors', () => {
-    const { result, rerender } = renderHook(() =>
-      useRenderMonitor('TestComponent')
-    );
+    const { result, rerender } = renderHook(() => useRenderMonitor('TestComponent'));
 
     // Trigger additional renders
     rerender();
@@ -36,9 +34,7 @@ describe('useRenderMonitor', () => {
   });
 
   it('does not accumulate an unbounded array – getStats is safe after many renders', () => {
-    const { result, rerender } = renderHook(() =>
-      useRenderMonitor('StressTest')
-    );
+    const { result, rerender } = renderHook(() => useRenderMonitor('StressTest'));
 
     // Simulate a large number of renders – previously would store all times in
     // an array and Math.max(...array) could overflow the call stack.
@@ -56,9 +52,7 @@ describe('useRenderMonitor', () => {
   });
 
   it('minRenderTime is never greater than maxRenderTime', () => {
-    const { result, rerender } = renderHook(() =>
-      useRenderMonitor('MinMaxTest')
-    );
+    const { result, rerender } = renderHook(() => useRenderMonitor('MinMaxTest'));
 
     rerender();
     rerender();

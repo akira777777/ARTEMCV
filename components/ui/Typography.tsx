@@ -34,7 +34,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const sizes = {
       display: 'text-5xl sm:text-6xl lg:text-7xl xl:text-8xl',
@@ -62,14 +62,14 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
           weights[weight],
           gradient && 'text-gradient',
           balance && 'text-balance',
-          className
+          className,
         )}
         {...props}
       >
         {children}
       </Component>
     );
-  }
+  },
 );
 
 Heading.displayName = 'Heading';
@@ -95,7 +95,7 @@ export const Text = React.forwardRef<HTMLParagraphElement, TextProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const sizes = {
       xs: 'text-xs',
@@ -127,19 +127,13 @@ export const Text = React.forwardRef<HTMLParagraphElement, TextProps>(
     return (
       <p
         ref={ref}
-        className={cn(
-          sizes[size],
-          colors[color],
-          weights[weight],
-          leadings[leading],
-          className
-        )}
+        className={cn(sizes[size], colors[color], weights[weight], leadings[leading], className)}
         {...props}
       >
         {children}
       </p>
     );
-  }
+  },
 );
 
 Text.displayName = 'Text';
@@ -166,7 +160,7 @@ export const Label = React.forwardRef<HTMLSpanElement, LabelProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const sizes = {
       xs: 'text-xs',
@@ -193,14 +187,14 @@ export const Label = React.forwardRef<HTMLSpanElement, LabelProps>(
           weights[weight],
           trackings[tracking],
           uppercase && 'uppercase',
-          className
+          className,
         )}
         {...props}
       >
         {children}
       </span>
     );
-  }
+  },
 );
 
 Label.displayName = 'Label';
@@ -219,13 +213,13 @@ export const GradientText = React.forwardRef<HTMLSpanElement, GradientTextProps>
       className={cn(
         'bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent',
         animate && 'animate-gradient-shift bg-[length:200%_auto]',
-        className
+        className,
       )}
       {...props}
     >
       {children}
     </span>
-  )
+  ),
 );
 
 GradientText.displayName = 'GradientText';

@@ -47,9 +47,7 @@ describe('api-client', () => {
 
   it('handles empty responses gracefully', async () => {
     const headers =
-      typeof Headers !== 'undefined'
-        ? new Headers()
-        : { get: (_key: string) => null };
+      typeof Headers !== 'undefined' ? new Headers() : { get: (_key: string) => null };
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       status: 204,

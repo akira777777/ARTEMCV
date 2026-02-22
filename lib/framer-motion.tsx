@@ -1,4 +1,13 @@
-import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate, AnimatePresence, LayoutGroup } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValue,
+  useMotionTemplate,
+  AnimatePresence,
+  LayoutGroup,
+} from 'framer-motion';
 import React, { useRef, useState, useEffect, CSSProperties } from 'react';
 
 // ============================================================================
@@ -14,9 +23,9 @@ export const staggerContainer = {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.1
-    }
-  }
+      delayChildren: 0.1,
+    },
+  },
 };
 
 /**
@@ -30,9 +39,9 @@ export const fadeUp = {
     transition: {
       type: 'spring',
       stiffness: 100,
-      damping: 20
-    }
-  }
+      damping: 20,
+    },
+  },
 };
 
 /**
@@ -46,9 +55,9 @@ export const fadeDown = {
     transition: {
       type: 'spring',
       stiffness: 100,
-      damping: 20
-    }
-  }
+      damping: 20,
+    },
+  },
 };
 
 /**
@@ -62,9 +71,9 @@ export const fadeLeft = {
     transition: {
       type: 'spring',
       stiffness: 100,
-      damping: 20
-    }
-  }
+      damping: 20,
+    },
+  },
 };
 
 /**
@@ -78,9 +87,9 @@ export const fadeRight = {
     transition: {
       type: 'spring',
       stiffness: 100,
-      damping: 20
-    }
-  }
+      damping: 20,
+    },
+  },
 };
 
 /**
@@ -94,9 +103,9 @@ export const scaleUp = {
     transition: {
       type: 'spring',
       stiffness: 100,
-      damping: 20
-    }
-  }
+      damping: 20,
+    },
+  },
 };
 
 /**
@@ -108,9 +117,9 @@ export const blurReveal = {
     opacity: 1,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.5
-    }
-  }
+      duration: 0.5,
+    },
+  },
 };
 
 // ============================================================================
@@ -120,10 +129,12 @@ export const blurReveal = {
 /**
  * Hook for scroll-triggered animations
  */
-export function useScrollAnimation(options: {
-  threshold?: number;
-  rootMargin?: string;
-} = {}) {
+export function useScrollAnimation(
+  options: {
+    threshold?: number;
+    rootMargin?: string;
+  } = {},
+) {
   const ref = useRef<HTMLDivElement>(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -134,8 +145,8 @@ export function useScrollAnimation(options: {
       },
       {
         threshold: options.threshold || 0.1,
-        rootMargin: options.rootMargin || '0px'
-      }
+        rootMargin: options.rootMargin || '0px',
+      },
     );
 
     if (ref.current) {
@@ -201,7 +212,7 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
   className = '',
   tilt = true,
   glow = true,
-  onClick
+  onClick,
 }) => {
   const [rotate, setRotate] = useState({ x: 0, y: 0 });
   const ref = useRef<HTMLDivElement>(null);
@@ -237,7 +248,7 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
         rotateY: rotate.y,
         boxShadow: glow
           ? `0 ${20 + Math.abs(rotate.x)}px ${40 + Math.abs(rotate.y)}px rgba(99, 102, 241, ${0.1 + Math.abs(rotate.x) / 100})`
-          : '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+          : '0 4px 6px -1px rgb(0 0 0 / 0.1)',
       }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       style={{ perspective: 1000 }}
@@ -261,7 +272,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
   children,
   className = '',
   onClick,
-  strength = 0.3
+  strength = 0.3,
 }) => {
   const { ref, position, handleMouseMove, handleMouseLeave } = useMagnetic(strength);
 
@@ -298,17 +309,22 @@ export const Reveal: React.FC<RevealProps> = ({
   className = '',
   direction = 'up',
   delay = 0,
-  duration = 0.5
+  duration = 0.5,
 }) => {
   const { ref, isInView } = useScrollAnimation({ threshold: 0.1 });
 
   const getVariants = () => {
     switch (direction) {
-      case 'up': return fadeUp;
-      case 'down': return fadeDown;
-      case 'left': return fadeLeft;
-      case 'right': return fadeRight;
-      default: return fadeUp;
+      case 'up':
+        return fadeUp;
+      case 'down':
+        return fadeDown;
+      case 'left':
+        return fadeLeft;
+      case 'right':
+        return fadeRight;
+      default:
+        return fadeUp;
     }
   };
 
@@ -322,8 +338,8 @@ export const Reveal: React.FC<RevealProps> = ({
         ...getVariants(),
         show: {
           ...getVariants().show.transition,
-          delay
-        }
+          delay,
+        },
       }}
     >
       {children}
@@ -343,12 +359,12 @@ interface ParallaxSectionProps {
 export const ParallaxSection: React.FC<ParallaxSectionProps> = ({
   children,
   className = '',
-  speed = 0.5
+  speed = 0.5,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ['start end', 'end start']
+    offset: ['start end', 'end start'],
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [0, -100 * speed]);
@@ -373,7 +389,7 @@ interface StaggeredListProps {
 export const StaggeredList: React.FC<StaggeredListProps> = ({
   children,
   className = '',
-  delay = 0.1
+  delay = 0.1,
 }) => {
   return (
     <motion.div
@@ -384,11 +400,7 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
       viewport={{ once: true }}
     >
       {React.Children.map(children, (child, index) => (
-        <motion.div
-          key={index}
-          variants={fadeUp}
-          custom={{ delay: delay * index }}
-        >
+        <motion.div key={index} variants={fadeUp} custom={{ delay: delay * index }}>
           {child}
         </motion.div>
       ))}
@@ -410,7 +422,7 @@ export const GlowButton: React.FC<GlowButtonProps> = ({
   children,
   className = '',
   onClick,
-  color = '#6366f1'
+  color = '#6366f1',
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -429,7 +441,7 @@ export const GlowButton: React.FC<GlowButtonProps> = ({
           opacity: isHovered ? 1 : 0,
         }}
         style={{
-          background: `radial-gradient(circle at center, ${color}40 0%, transparent 70%)`
+          background: `radial-gradient(circle at center, ${color}40 0%, transparent 70%)`,
         }}
       />
       <motion.span
@@ -437,7 +449,7 @@ export const GlowButton: React.FC<GlowButtonProps> = ({
         animate={{
           boxShadow: isHovered
             ? `0 0 20px ${color}80, 0 0 40px ${color}40, 0 0 60px ${color}20`
-            : 'none'
+            : 'none',
         }}
       />
       <span className="relative z-10">{children}</span>
@@ -457,20 +469,17 @@ interface AnimatedUnderlineProps {
 export const AnimatedUnderline: React.FC<AnimatedUnderlineProps> = ({
   children,
   className = '',
-  color = '#6366f1'
+  color = '#6366f1',
 }) => {
   return (
-    <motion.span
-      className={`relative inline-block ${className}`}
-      whileHover="hover"
-    >
+    <motion.span className={`relative inline-block ${className}`} whileHover="hover">
       {children}
       <motion.span
         className="absolute left-0 bottom-0 w-full h-[2px]"
         style={{ backgroundColor: color }}
         initial={{ scaleX: 0 }}
         variants={{
-          hover: { scaleX: 1 }
+          hover: { scaleX: 1 },
         }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       />
@@ -490,22 +499,22 @@ interface AnimatedGradientProps {
 export const AnimatedGradient: React.FC<AnimatedGradientProps> = ({
   className = '',
   colors = ['#6366f1', '#8b5cf6', '#ec4899', '#6366f1'],
-  speed = 5
+  speed = 5,
 }) => {
   return (
     <motion.div
       className={`absolute inset-0 ${className}`}
       style={{
         background: `linear-gradient(-45deg, ${colors.join(', ')})`,
-        backgroundSize: '400% 400%'
+        backgroundSize: '400% 400%',
       }}
       animate={{
-        backgroundPosition: ['0% 50%', '100% 50%', '100% 100%', '0% 100%', '0% 50%']
+        backgroundPosition: ['0% 50%', '100% 50%', '100% 100%', '0% 100%', '0% 50%'],
       }}
       transition={{
         duration: speed,
         repeat: Infinity,
-        repeatType: 'reverse'
+        repeatType: 'reverse',
       }}
     />
   );
@@ -525,19 +534,19 @@ export const Floating: React.FC<FloatingProps> = ({
   children,
   className = '',
   amplitude = 10,
-  speed = 3
+  speed = 3,
 }) => {
   return (
     <motion.div
       className={className}
       animate={{
-        y: [0, -amplitude, 0]
+        y: [0, -amplitude, 0],
       }}
       transition={{
         duration: speed,
         repeat: Infinity,
         repeatType: 'reverse',
-        ease: 'easeInOut'
+        ease: 'easeInOut',
       }}
     >
       {children}
@@ -557,7 +566,7 @@ interface ProgressBarProps {
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   progress,
   className = '',
-  color = '#6366f1'
+  color = '#6366f1',
 }) => {
   const scaleX = useSpring(0, { stiffness: 100, damping: 30 });
 
@@ -571,7 +580,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         className="h-full origin-left"
         style={{
           scaleX,
-          backgroundColor: color
+          backgroundColor: color,
         }}
       />
     </div>
@@ -587,17 +596,17 @@ interface ShakeProps {
   trigger: boolean;
 }
 
-export const Shake: React.FC<ShakeProps> = ({
-  children,
-  className = '',
-  trigger
-}) => {
+export const Shake: React.FC<ShakeProps> = ({ children, className = '', trigger }) => {
   return (
     <motion.div
       className={className}
-      animate={trigger ? {
-        x: [-10, 10, -10, 10, -5, 5, -2, 2, 0]
-      } : { x: 0 }}
+      animate={
+        trigger
+          ? {
+              x: [-10, 10, -10, 10, -5, 5, -2, 2, 0],
+            }
+          : { x: 0 }
+      }
       transition={{ duration: 0.5 }}
     >
       {children}
@@ -614,17 +623,17 @@ interface BounceProps {
   trigger?: boolean;
 }
 
-export const Bounce: React.FC<BounceProps> = ({
-  children,
-  className = '',
-  trigger = true
-}) => {
+export const Bounce: React.FC<BounceProps> = ({ children, className = '', trigger = true }) => {
   return (
     <motion.div
       className={className}
-      animate={trigger ? {
-        scale: [1, 1.1, 0.9, 1.05, 0.95, 1]
-      } : {}}
+      animate={
+        trigger
+          ? {
+              scale: [1, 1.1, 0.9, 1.05, 0.95, 1],
+            }
+          : {}
+      }
       transition={{ duration: 0.5 }}
     >
       {children}
@@ -648,17 +657,17 @@ export const pageTransition = {
     transition: {
       type: 'spring',
       stiffness: 100,
-      damping: 20
-    }
+      damping: 20,
+    },
   },
   exit: {
     opacity: 0,
     y: -20,
     scale: 0.95,
     transition: {
-      duration: 0.2
-    }
-  }
+      duration: 0.2,
+    },
+  },
 };
 
 /**
@@ -669,13 +678,13 @@ export const blurTransition = {
   animate: {
     opacity: 1,
     filter: 'blur(0px)',
-    transition: { duration: 0.4 }
+    transition: { duration: 0.4 },
   },
   exit: {
     opacity: 0,
     filter: 'blur(10px)',
-    transition: { duration: 0.2 }
-  }
+    transition: { duration: 0.2 },
+  },
 };
 
 /**
@@ -689,14 +698,14 @@ export const slideTransition = {
     transition: {
       type: 'spring',
       stiffness: 100,
-      damping: 25
-    }
+      damping: 25,
+    },
   },
   exit: {
     opacity: 0,
     x: 100,
-    transition: { duration: 0.2 }
-  }
+    transition: { duration: 0.2 },
+  },
 };
 
 export default {
@@ -724,5 +733,5 @@ export default {
   Bounce,
   pageTransition,
   blurTransition,
-  slideTransition
+  slideTransition,
 };

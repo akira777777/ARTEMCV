@@ -3,10 +3,10 @@ import { useState, useEffect, useSyncExternalStore } from 'react';
 /**
  * Hook to detect user's motion preference
  * Returns true if user prefers reduced motion
- * 
+ *
  * @example
  * const prefersReducedMotion = usePrefersReducedMotion();
- * 
+ *
  * <motion.div
  *   animate={prefersReducedMotion ? {} : { scale: 1.1 }}
  * />

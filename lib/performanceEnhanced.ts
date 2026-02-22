@@ -3,7 +3,7 @@ import { logger } from './logger-enhanced';
 
 /**
  * Enhanced Performance Management Utilities
- * 
+ *
  * Advanced performance monitoring, optimization, and debugging tools.
  */
 
@@ -71,19 +71,22 @@ export function usePerformanceMonitor(config: PerformanceConfig = {}) {
     enableProfiling = false,
     logLevel = 'info',
     sampleRate = 1.0,
-    thresholds = {}
+    thresholds = {},
   } = config;
 
   const metricsRef = useRef<PerformanceMetrics | null>(null);
   const observerRefs = useRef<PerformanceObserver[]>([]);
   const [isMonitoring, setIsMonitoring] = useState(false);
 
-  const log = useCallback((level: string, message: string, data?: any) => {
-    if (!enableLogging || Math.random() > sampleRate) return;
+  const log = useCallback(
+    (level: string, message: string, data?: any) => {
+      if (!enableLogging || Math.random() > sampleRate) return;
 
-    const loggerFn = (logger as any)[level] || logger.info;
-    loggerFn(message, data);
-  }, [enableLogging, sampleRate]);
+      const loggerFn = (logger as any)[level] || logger.info;
+      loggerFn(message, data);
+    },
+    [enableLogging, sampleRate],
+  );
 
   const collectMetrics = useCallback(async (): Promise<PerformanceMetrics> => {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
@@ -121,8 +124,9 @@ export function usePerformanceMonitor(config: PerformanceConfig = {}) {
     const metrics: PerformanceMetrics = {
       loadTime: navigation.loadEventEnd - navigation.loadEventStart,
       domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
-      firstPaint: paint.find(entry => entry.name === 'first-paint')?.startTime || 0,
-      firstContentfulPaint: paint.find(entry => entry.name === 'first-contentful-paint')?.startTime || 0,
+      firstPaint: paint.find((entry) => entry.name === 'first-paint')?.startTime || 0,
+      firstContentfulPaint:
+        paint.find((entry) => entry.name === 'first-contentful-paint')?.startTime || 0,
       largestContentfulPaint: lcp,
       cumulativeLayoutShift: cls,
       firstInputDelay: fid,
@@ -132,7 +136,7 @@ export function usePerformanceMonitor(config: PerformanceConfig = {}) {
         return acc + (duration > 50 ? duration - 50 : 0);
       }, 0),
       memoryUsage: memory,
-      connectionType
+      connectionType,
     };
 
     metricsRef.current = metrics;
@@ -144,23 +148,29 @@ export function usePerformanceMonitor(config: PerformanceConfig = {}) {
     return metrics;
   }, [enableLogging, log]);
 
-  const checkThresholds = useCallback((metrics: PerformanceMetrics) => {
-    if (!thresholds.coreWebVitals) return;
+  const checkThresholds = useCallback(
+    (metrics: PerformanceMetrics) => {
+      if (!thresholds.coreWebVitals) return;
 
-    const { lcp: lcpThreshold, fid: fidThreshold, cls: clsThreshold } = thresholds.coreWebVitals;
+      const { lcp: lcpThreshold, fid: fidThreshold, cls: clsThreshold } = thresholds.coreWebVitals;
 
-    if (lcpThreshold && metrics.largestContentfulPaint > lcpThreshold) {
-      log('warn', `LCP threshold exceeded: ${metrics.largestContentfulPaint}ms > ${lcpThreshold}ms`);
-    }
+      if (lcpThreshold && metrics.largestContentfulPaint > lcpThreshold) {
+        log(
+          'warn',
+          `LCP threshold exceeded: ${metrics.largestContentfulPaint}ms > ${lcpThreshold}ms`,
+        );
+      }
 
-    if (fidThreshold && metrics.firstInputDelay > fidThreshold) {
-      log('warn', `FID threshold exceeded: ${metrics.firstInputDelay}ms > ${fidThreshold}ms`);
-    }
+      if (fidThreshold && metrics.firstInputDelay > fidThreshold) {
+        log('warn', `FID threshold exceeded: ${metrics.firstInputDelay}ms > ${fidThreshold}ms`);
+      }
 
-    if (clsThreshold && metrics.cumulativeLayoutShift > clsThreshold) {
-      log('warn', `CLS threshold exceeded: ${metrics.cumulativeLayoutShift} > ${clsThreshold}`);
-    }
-  }, [thresholds, log]);
+      if (clsThreshold && metrics.cumulativeLayoutShift > clsThreshold) {
+        log('warn', `CLS threshold exceeded: ${metrics.cumulativeLayoutShift} > ${clsThreshold}`);
+      }
+    },
+    [thresholds, log],
+  );
 
   const startMonitoring = useCallback(async () => {
     if (!enableMonitoring || isMonitoring) return;
@@ -225,7 +235,7 @@ export function usePerformanceMonitor(config: PerformanceConfig = {}) {
     setIsMonitoring(false);
 
     // Disconnect observers
-    observerRefs.current.forEach(observer => observer.disconnect());
+    observerRefs.current.forEach((observer) => observer.disconnect());
     observerRefs.current = [];
 
     log('info', 'Performance monitoring stopped');
@@ -255,7 +265,7 @@ export function usePerformanceMonitor(config: PerformanceConfig = {}) {
     getMetrics,
     clearMetrics,
     collectMetrics,
-    checkThresholds
+    checkThresholds,
   };
 }
 
@@ -286,7 +296,7 @@ export function useBundleAnalysis() {
   return {
     analysis,
     isLoading,
-    analyzeBundle
+    analyzeBundle,
   };
 }
 
@@ -326,7 +336,7 @@ export function useMemoryMonitor(threshold: number = 100 * 1024 * 1024) {
   return {
     memoryUsage,
     isExceedingThreshold,
-    checkMemory
+    checkMemory,
   };
 }
 
@@ -354,16 +364,18 @@ export function useRenderMonitor(componentName: string) {
     lastRenderTime.current = currentTime;
 
     // Log performance if it's slow
-    if (renderTime > 16) { // More than one frame at 60fps
+    if (renderTime > 16) {
+      // More than one frame at 60fps
       logger.warn(`${componentName} render took ${renderTime.toFixed(2)}ms`);
     }
 
     return () => {
       // Component unmount
-      const avgRenderTime = renderCount.current > 0
-        ? totalRenderTime.current / renderCount.current
-        : 0;
-      logger.info(`${componentName} unmounted after ${renderCount.current} renders. Avg render time: ${avgRenderTime.toFixed(2)}ms`);
+      const avgRenderTime =
+        renderCount.current > 0 ? totalRenderTime.current / renderCount.current : 0;
+      logger.info(
+        `${componentName} unmounted after ${renderCount.current} renders. Avg render time: ${avgRenderTime.toFixed(2)}ms`,
+      );
     };
   });
 
@@ -380,7 +392,7 @@ export function useRenderMonitor(componentName: string) {
   }, []);
 
   return {
-    getStats
+    getStats,
   };
 }
 
@@ -398,7 +410,7 @@ export const performanceUtils = {
   debounce: <T extends (...args: any[]) => any>(
     func: T,
     wait: number,
-    options: { leading?: boolean; trailing?: boolean; monitor?: boolean } = {}
+    options: { leading?: boolean; trailing?: boolean; monitor?: boolean } = {},
   ): T => {
     let timeout: NodeJS.Timeout | null = null;
     let lastCallTime = 0;
@@ -425,7 +437,9 @@ export const performanceUtils = {
       }
 
       if (options.monitor && callCount % 100 === 0) {
-        logger.info(`Debounced function called ${callCount} times, last call: ${now - lastCallTime}ms ago`);
+        logger.info(
+          `Debounced function called ${callCount} times, last call: ${now - lastCallTime}ms ago`,
+        );
       }
     }) as T;
 
@@ -438,7 +452,7 @@ export const performanceUtils = {
   throttle: <T extends (...args: any[]) => any>(
     func: T,
     limit: number,
-    options: { leading?: boolean; trailing?: boolean; monitor?: boolean } = {}
+    options: { leading?: boolean; trailing?: boolean; monitor?: boolean } = {},
   ): T => {
     let inThrottle: boolean;
     let lastFunc: NodeJS.Timeout;
@@ -452,12 +466,15 @@ export const performanceUtils = {
         inThrottle = true;
       } else {
         clearTimeout(lastFunc);
-        lastFunc = setTimeout(() => {
-          if ((Date.now() - lastRan) >= limit) {
-            func(...args);
-            lastRan = Date.now();
-          }
-        }, Math.max(limit - (Date.now() - lastRan), 0));
+        lastFunc = setTimeout(
+          () => {
+            if (Date.now() - lastRan >= limit) {
+              func(...args);
+              lastRan = Date.now();
+            }
+          },
+          Math.max(limit - (Date.now() - lastRan), 0),
+        );
       }
 
       callCount++;
@@ -472,7 +489,7 @@ export const performanceUtils = {
    */
   memoize: <T extends (...args: any[]) => any>(
     func: T,
-    options: { maxSize?: number; monitor?: boolean } = {}
+    options: { maxSize?: number; monitor?: boolean } = {},
   ): T => {
     const cache = new Map();
     const maxSize = options.maxSize || 100;
@@ -485,7 +502,9 @@ export const performanceUtils = {
       if (cache.has(key)) {
         hitCount++;
         if (options.monitor && hitCount % 100 === 0) {
-          logger.info(`Cache hit ratio: ${(hitCount / (hitCount + missCount) * 100).toFixed(2)}%`);
+          logger.info(
+            `Cache hit ratio: ${((hitCount / (hitCount + missCount)) * 100).toFixed(2)}%`,
+          );
         }
         return cache.get(key);
       }
@@ -539,14 +558,17 @@ export const performanceUtils = {
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
     const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
 
-    const visibleHeight = Math.max(0, Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0));
+    const visibleHeight = Math.max(
+      0,
+      Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0),
+    );
     const visibleWidth = Math.max(0, Math.min(rect.right, viewportWidth) - Math.max(rect.left, 0));
 
     const visibleArea = visibleHeight * visibleWidth;
     const totalArea = rect.height * rect.width;
 
     return totalArea > 0 ? visibleArea / totalArea : 0;
-  }
+  },
 };
 
 /**
@@ -590,7 +612,7 @@ export class PerformanceProfiler {
           avg: times.reduce((a, b) => a + b, 0) / times.length,
           min: Math.min(...times),
           max: Math.max(...times),
-          count: times.length
+          count: times.length,
         };
       }
     }
@@ -612,5 +634,5 @@ export default {
   useRenderMonitor,
   performanceUtils,
   PerformanceProfiler,
-  profiler
+  profiler,
 };

@@ -42,14 +42,20 @@ HTMLCanvasElement.prototype.getBoundingClientRect = vi.fn(() => ({
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    canvas: ({ children, ...props }: any) => <canvas {...props} data-testid="particle-canvas">{children}</canvas>,
+    canvas: ({ children, ...props }: any) => (
+      <canvas {...props} data-testid="particle-canvas">
+        {children}
+      </canvas>
+    ),
   },
 }));
 
 describe('FloatingParticleCanvas', () => {
   it('renders without crashing', () => {
     const { container } = render(<FloatingParticleCanvas />);
-    const canvas = container.querySelector('canvas') || container.querySelector('[data-testid="particle-canvas"]');
+    const canvas =
+      container.querySelector('canvas') ||
+      container.querySelector('[data-testid="particle-canvas"]');
     expect(canvas).toBeInTheDocument();
   });
 
@@ -62,11 +68,11 @@ describe('FloatingParticleCanvas', () => {
   it('responds to mouse movement', async () => {
     const { container } = render(<FloatingParticleCanvas interactionRadius={100} />);
     const canvas = container.querySelector('canvas');
-    
+
     if (canvas) {
       fireEvent.mouseMove(canvas, { clientX: 100, clientY: 100 });
     }
-    
+
     await waitFor(() => {
       expect(container.querySelector('canvas')).toBeInTheDocument();
     });

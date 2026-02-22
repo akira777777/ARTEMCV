@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useCallback } from 'react';
 
 /**
  * Accessibility Utilities and Hooks
- * 
+ *
  * Comprehensive accessibility utilities for improving screen reader support,
  * keyboard navigation, focus management, and ARIA compliance.
  */
@@ -30,7 +30,10 @@ export interface KeyboardNavigationOptions {
  * Hook for managing focus trapping within a container
  * Useful for modals, dialogs, and other focus-controlling components
  */
-export function useFocusTrap(isActive: boolean, options: FocusOptions = {}): React.RefObject<HTMLElement> {
+export function useFocusTrap(
+  isActive: boolean,
+  options: FocusOptions = {},
+): React.RefObject<HTMLElement> {
   const containerRef = useRef<HTMLElement>(null);
   const previouslyFocusedElement = useRef<HTMLElement | null>(null);
 
@@ -39,7 +42,7 @@ export function useFocusTrap(isActive: boolean, options: FocusOptions = {}): Rea
 
     // Store the currently focused element
     previouslyFocusedElement.current = document.activeElement as HTMLElement;
-    
+
     // Focus the first focusable element in the container
     const focusableElement = getFirstFocusableElement(containerRef.current);
     if (focusableElement) {
@@ -50,7 +53,7 @@ export function useFocusTrap(isActive: boolean, options: FocusOptions = {}): Rea
     const handleFocus = (e: FocusEvent) => {
       const target = e.target as HTMLElement;
       const container = containerRef.current;
-      
+
       if (!container || !target) return;
 
       // If focus leaves the container, redirect it back
@@ -81,53 +84,66 @@ export function useFocusTrap(isActive: boolean, options: FocusOptions = {}): Rea
  * Supports arrow keys, Home/End, and Tab navigation
  */
 export function useKeyboardNavigation(
-  options: KeyboardNavigationOptions = {}
+  options: KeyboardNavigationOptions = {},
 ): React.RefObject<HTMLElement> {
   const containerRef = useRef<HTMLElement>(null);
   const {
     enabled = true,
     focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    wrap = true
+    wrap = true,
   } = options;
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (!enabled || !containerRef.current) return;
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!enabled || !containerRef.current) return;
 
-    const container = containerRef.current;
-    const focusableElements = getFocusableElements(container, focusableSelector);
-    
-    if (focusableElements.length === 0) return;
+      const container = containerRef.current;
+      const focusableElements = getFocusableElements(container, focusableSelector);
 
-    const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement);
-    let nextIndex = currentIndex;
+      if (focusableElements.length === 0) return;
 
-    switch (e.key) {
-      case 'ArrowDown':
-      case 'ArrowRight':
-        e.preventDefault();
-        nextIndex = currentIndex < focusableElements.length - 1 ? currentIndex + 1 : (wrap ? 0 : currentIndex);
-        break;
-      case 'ArrowUp':
-      case 'ArrowLeft':
-        e.preventDefault();
-        nextIndex = currentIndex > 0 ? currentIndex - 1 : (wrap ? focusableElements.length - 1 : currentIndex);
-        break;
-      case 'Home':
-        e.preventDefault();
-        nextIndex = 0;
-        break;
-      case 'End':
-        e.preventDefault();
-        nextIndex = focusableElements.length - 1;
-        break;
-      default:
-        return;
-    }
+      const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement);
+      let nextIndex = currentIndex;
 
-    if (focusableElements[nextIndex]) {
-      focusableElements[nextIndex].focus();
-    }
-  }, [enabled, focusableSelector, wrap]);
+      switch (e.key) {
+        case 'ArrowDown':
+        case 'ArrowRight':
+          e.preventDefault();
+          nextIndex =
+            currentIndex < focusableElements.length - 1
+              ? currentIndex + 1
+              : wrap
+                ? 0
+                : currentIndex;
+          break;
+        case 'ArrowUp':
+        case 'ArrowLeft':
+          e.preventDefault();
+          nextIndex =
+            currentIndex > 0
+              ? currentIndex - 1
+              : wrap
+                ? focusableElements.length - 1
+                : currentIndex;
+          break;
+        case 'Home':
+          e.preventDefault();
+          nextIndex = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          nextIndex = focusableElements.length - 1;
+          break;
+        default:
+          return;
+      }
+
+      if (focusableElements[nextIndex]) {
+        focusableElements[nextIndex].focus();
+      }
+    },
+    [enabled, focusableSelector, wrap],
+  );
 
   useEffect(() => {
     if (!enabled) return;
@@ -174,7 +190,7 @@ export function useAnnouncement(): (message: string, priority?: 'polite' | 'asse
     if (announcementRef.current) {
       announcementRef.current.setAttribute('aria-live', priority);
       announcementRef.current.textContent = message;
-      
+
       // Clear the message after a short delay to allow for re-announcements
       setTimeout(() => {
         if (announcementRef.current) {
@@ -189,14 +205,17 @@ export function useAnnouncement(): (message: string, priority?: 'polite' | 'asse
  * Hook for managing skip links
  */
 export function useSkipLink(targetId: string): (e: React.MouseEvent | React.KeyboardEvent) => void {
-  return useCallback((e) => {
-    e.preventDefault();
-    const target = document.getElementById(targetId);
-    if (target) {
-      target.focus();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [targetId]);
+  return useCallback(
+    (e) => {
+      e.preventDefault();
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.focus();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    },
+    [targetId],
+  );
 }
 
 // ============================================================================
@@ -207,7 +226,8 @@ export function useSkipLink(targetId: string): (e: React.MouseEvent | React.Keyb
  * Get the first focusable element within a container
  */
 export function getFirstFocusableElement(container: HTMLElement): HTMLElement | null {
-  const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  const focusableSelector =
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
   return container.querySelector(focusableSelector) as HTMLElement;
 }
 
@@ -215,7 +235,8 @@ export function getFirstFocusableElement(container: HTMLElement): HTMLElement | 
  * Get all focusable elements within a container
  */
 export function getFocusableElements(container: HTMLElement, selector?: string): HTMLElement[] {
-  const focusableSelector = selector || 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  const focusableSelector =
+    selector || 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
   return Array.from(container.querySelectorAll(focusableSelector)) as HTMLElement[];
 }
 
@@ -252,10 +273,13 @@ export function focusElement(element: HTMLElement, options: FocusOptions = {}): 
 
   try {
     element.focus({
-      preventScroll: options.preventScroll
+      preventScroll: options.preventScroll,
     });
 
-    if (options.selectTextIfInput && (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement)) {
+    if (
+      options.selectTextIfInput &&
+      (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement)
+    ) {
       element.select();
     }
   } catch (error) {
@@ -302,19 +326,26 @@ export function generateAriaAttributes(props: {
  * Check color contrast ratio between two colors
  * Returns true if contrast meets WCAG AA standards
  */
-export function checkColorContrast(foregroundColor: string, backgroundColor: string, largeText = false): boolean {
+export function checkColorContrast(
+  foregroundColor: string,
+  backgroundColor: string,
+  largeText = false,
+): boolean {
   const getLuminance = (color: string): number => {
     // Convert hex to RGB
     let hex = color.replace('#', '');
     if (hex.length === 3) {
-      hex = hex.split('').map(char => char + char).join('');
+      hex = hex
+        .split('')
+        .map((char) => char + char)
+        .join('');
     }
-    
+
     const r = parseInt(hex.substr(0, 2), 16);
     const g = parseInt(hex.substr(2, 2), 16);
     const b = parseInt(hex.substr(4, 2), 16);
 
-    const [rs, gs, bs] = [r, g, b].map(c => {
+    const [rs, gs, bs] = [r, g, b].map((c) => {
       c = c / 255;
       return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
     });
@@ -338,7 +369,7 @@ export function checkColorContrast(foregroundColor: string, backgroundColor: str
  */
 export function announceLoadingState(isLoading: boolean, itemName?: string): void {
   const announcement = useAnnouncement();
-  const message = isLoading 
+  const message = isLoading
     ? `${itemName || 'Content'} is loading...`
     : `${itemName || 'Content'} has finished loading.`;
   announcement(message);
@@ -363,7 +394,7 @@ export function createAccessibleButtonProps(props: {
         e.preventDefault();
         props.onClick(e);
       }
-    }
+    },
   };
 }
 
@@ -452,12 +483,7 @@ export const LiveRegion: React.FC<{
   className?: string;
 }> = ({ children, priority = 'polite', className }) => {
   return (
-    <div
-      role="status"
-      aria-live={priority}
-      aria-atomic="true"
-      className={className}
-    >
+    <div role="status" aria-live={priority} aria-atomic="true" className={className}>
       {children}
     </div>
   );

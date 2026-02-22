@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -11,28 +10,28 @@ vi.mock('lucide-react', () => ({
   Send: () => <div data-testid="icon-send" />,
   Loader2: () => <div data-testid="icon-loader" />,
   Maximize2: () => <div data-testid="icon-maximize" />,
-  Minimize2: () => <div data-testid="icon-minimize" />
+  Minimize2: () => <div data-testid="icon-minimize" />,
 }));
 
 // Mock crypto
 Object.defineProperty(globalThis, 'crypto', {
   value: {
-    randomUUID: () => 'test-uuid'
-  }
+    randomUUID: () => 'test-uuid',
+  },
 });
 
 // Mock dependencies
 vi.mock('../lib/hooks', () => ({
   useReducedMotion: vi.fn(() => false),
-  useFetchWithTimeout: vi.fn(() => vi.fn())
+  useFetchWithTimeout: vi.fn(() => vi.fn()),
 }));
 
 vi.mock('../components/LanguageSwitcher', () => ({
-  default: () => <div>LanguageSwitcher</div>
+  default: () => <div>LanguageSwitcher</div>,
 }));
 
 vi.mock('../components/MobileMenu', () => ({
-  MobileMenu: () => <div>MobileMenu</div>
+  MobileMenu: () => <div>MobileMenu</div>,
 }));
 
 // Mock dependencies
@@ -40,15 +39,15 @@ const mockT = (key: string) => key;
 vi.mock('../i18n', () => ({
   useI18n: vi.fn(() => ({
     t: mockT,
-    lang: 'en'
-  }))
+    lang: 'en',
+  })),
 }));
 
 vi.mock('../lib/logger', () => ({
   default: {
     warn: vi.fn(),
-    error: vi.fn()
-  }
+    error: vi.fn(),
+  },
 }));
 
 // Mock localStorage and window methods

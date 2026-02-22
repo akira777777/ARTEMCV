@@ -28,13 +28,12 @@ function getPool(): Pool {
   }
 
   // SSL configuration: strict in production, flexible in development
-  const sslConfig =
-    process.env.DATABASE_SSL_CA
-      ? {
-          rejectUnauthorized: true,
-          ca: process.env.DATABASE_SSL_CA,
-        }
-      : process.env.NODE_ENV === 'production'
+  const sslConfig = process.env.DATABASE_SSL_CA
+    ? {
+        rejectUnauthorized: true,
+        ca: process.env.DATABASE_SSL_CA,
+      }
+    : process.env.NODE_ENV === 'production'
       ? { rejectUnauthorized: true }
       : { rejectUnauthorized: false };
 
@@ -57,10 +56,7 @@ function getPool(): Pool {
 /**
  * Execute a database query
  */
-export async function query(
-  text: string,
-  params?: unknown[]
-): Promise<QueryResult> {
+export async function query(text: string, params?: unknown[]): Promise<QueryResult> {
   const client = await getPool().connect();
   try {
     return await client.query(text, params);
@@ -72,9 +68,7 @@ export async function query(
 /**
  * Execute multiple queries in a transaction
  */
-export async function transaction<T>(
-  callback: (client: any) => Promise<T>
-): Promise<T> {
+export async function transaction<T>(callback: (client: any) => Promise<T>): Promise<T> {
   const client = await getPool().connect();
   try {
     await client.query('BEGIN');

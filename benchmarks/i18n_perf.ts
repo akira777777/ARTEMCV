@@ -4,14 +4,14 @@ import { performance } from 'perf_hooks';
 const localStorageMock = {
   getItem: (key: string) => {
     // Simulate some cost for synchronous I/O
-    for(let i=0; i<100; i++) {}
+    for (let i = 0; i < 100; i++) {}
     return null;
   },
-  setItem: () => {}
+  setItem: () => {},
 };
 
 const navigatorMock = {
-  language: 'en-US'
+  language: 'en-US',
 };
 
 // Set globals
@@ -19,7 +19,7 @@ const navigatorMock = {
 Object.defineProperty(global, 'navigator', {
   value: navigatorMock,
   writable: true,
-  configurable: true
+  configurable: true,
 });
 
 type Lang = 'en' | 'ru' | 'cs';
@@ -27,7 +27,7 @@ type Lang = 'en' | 'ru' | 'cs';
 // The logic from i18n.tsx
 function detect(): Lang {
   const fromStorage = localStorage.getItem('lang') as Lang | null;
-  if (fromStorage && ['en','ru','cs'].includes(fromStorage)) return fromStorage;
+  if (fromStorage && ['en', 'ru', 'cs'].includes(fromStorage)) return fromStorage;
   const nav = navigator.language.toLowerCase();
   if (nav.startsWith('cs')) return 'cs';
   if (nav.startsWith('ru')) return 'ru';
@@ -51,10 +51,10 @@ function simulateReRenders(iterations: number, mode: 'eager' | 'lazy') {
 
   // Initial Render (Mount)
   if (mode === 'eager') {
-      const val = detect(); // Eagerly executed
-      useState(val);
+    const val = detect(); // Eagerly executed
+    useState(val);
   } else {
-      useState(detect); // Passed as function
+    useState(detect); // Passed as function
   }
 
   // Re-renders

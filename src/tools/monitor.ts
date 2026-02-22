@@ -14,7 +14,7 @@ import { PlatformIOError } from '../utils/errors.js';
 export async function startMonitor(
   port?: string,
   baud?: number,
-  projectDir?: string
+  projectDir?: string,
 ): Promise<MonitorResult> {
   // Validate inputs
   if (port && !validateSerialPort(port)) {
@@ -29,7 +29,9 @@ export async function startMonitor(
     try {
       validateProjectPath(projectDir);
     } catch (error) {
-      throw new PlatformIOError(`Invalid project directory: ${error}`, 'INVALID_PATH', { projectDir });
+      throw new PlatformIOError(`Invalid project directory: ${error}`, 'INVALID_PATH', {
+        projectDir,
+      });
     }
   }
 
@@ -48,7 +50,7 @@ export async function startMonitor(
     command = `cd ${projectDir} && ${command}`;
   }
 
-  const message = 
+  const message =
     'Serial monitor requires interactive terminal access. ' +
     'Please run the following command in your terminal:\n\n' +
     `  ${command}\n\n` +
@@ -66,11 +68,7 @@ export async function startMonitor(
 /**
  * Gets the monitor command string for a project
  */
-export function getMonitorCommand(
-  port?: string,
-  baud?: number,
-  projectDir?: string
-): string {
+export function getMonitorCommand(port?: string, baud?: number, projectDir?: string): string {
   let command = 'pio device monitor';
 
   if (port) {
@@ -144,7 +142,7 @@ export function getRawMonitorInstructions(port: string, baud: number): MonitorRe
 
   const command = `pio device monitor --port ${port} --baud ${baud} --raw`;
 
-  const message = 
+  const message =
     'Raw monitor mode provides unfiltered serial output.\n' +
     'Run the following command in your terminal:\n\n' +
     `  ${command}\n\n` +

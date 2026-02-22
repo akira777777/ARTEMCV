@@ -18,7 +18,7 @@ describe('getContactSubmissions Performance', () => {
     // Mock implementation with delay
     // We use a simplified mock that returns valid structure but waits
     vi.mocked(db.query).mockImplementation(async (sql, params) => {
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
 
       if (typeof sql === 'string' && sql.includes('COUNT')) {
         return {
@@ -26,7 +26,7 @@ describe('getContactSubmissions Performance', () => {
           rowCount: 1,
           command: 'SELECT',
           oid: 0,
-          fields: []
+          fields: [],
         };
       }
 
@@ -39,13 +39,13 @@ describe('getContactSubmissions Performance', () => {
             subject: 'Hi',
             message: 'Hello',
             created_at: new Date().toISOString(),
-            status: 'new'
-          }
+            status: 'new',
+          },
         ],
         rowCount: 1,
         command: 'SELECT',
         oid: 0,
-        fields: []
+        fields: [],
       };
     });
 

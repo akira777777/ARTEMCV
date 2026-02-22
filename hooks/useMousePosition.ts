@@ -50,7 +50,7 @@ export function useMousePosition(options: UseMousePositionOptions = {}): MousePo
   const updatePosition = useCallback(
     (clientX: number, clientY: number) => {
       const now = performance.now();
-      
+
       // Store pending update
       pendingUpdateRef.current = { x: clientX, y: clientY };
 
@@ -60,8 +60,8 @@ export function useMousePosition(options: UseMousePositionOptions = {}): MousePo
           rafRef.current = requestAnimationFrame(() => {
             if (pendingUpdateRef.current) {
               const { x, y } = pendingUpdateRef.current;
-              
-              let newPosition: MousePosition = {
+
+              const newPosition: MousePosition = {
                 x,
                 y,
                 elementX: 0,
@@ -73,13 +73,13 @@ export function useMousePosition(options: UseMousePositionOptions = {}): MousePo
                 const rect = ref.current.getBoundingClientRect();
                 const relativeX = x - rect.left;
                 const relativeY = y - rect.top;
-                
+
                 newPosition.elementX = Math.max(0, Math.min(1, relativeX / rect.width));
                 newPosition.elementY = Math.max(0, Math.min(1, relativeY / rect.height));
-                newPosition.isInside = 
-                  relativeX >= 0 && 
-                  relativeX <= rect.width && 
-                  relativeY >= 0 && 
+                newPosition.isInside =
+                  relativeX >= 0 &&
+                  relativeX <= rect.width &&
+                  relativeY >= 0 &&
                   relativeY <= rect.height;
               }
 
@@ -92,7 +92,7 @@ export function useMousePosition(options: UseMousePositionOptions = {}): MousePo
         }
       }
     },
-    [ref, throttleMs]
+    [ref, throttleMs],
   );
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export function useMousePosition(options: UseMousePositionOptions = {}): MousePo
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    
+
     if (includeTouch) {
       window.addEventListener('touchmove', handleTouchMove, { passive: true });
     }

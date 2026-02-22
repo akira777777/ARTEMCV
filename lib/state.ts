@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
 /**
  * Enhanced State Management Utilities
- * 
+ *
  * Advanced state management patterns with persistence, validation,
  * and performance optimizations.
  */
@@ -59,7 +59,7 @@ export interface UseAsyncStateResult<T> {
  */
 export function useStateEnhanced<T>(
   initialValue: T,
-  options: StateOptions<T> = {}
+  options: StateOptions<T> = {},
 ): [T, (value: T | ((prev: T) => T)) => void, { isValid: boolean; error: string | null }] {
   const {
     persist = false,
@@ -68,7 +68,7 @@ export function useStateEnhanced<T>(
     defaultValue,
     debounceMs = 0,
     history = false,
-    historyLimit = 10
+    historyLimit = 10,
   } = options;
 
   const [value, setValue] = useState<T>(initialValue);
@@ -140,26 +140,30 @@ export function useStateEnhanced<T>(
   }, [value, validate]);
 
   // History management
-  const updateValue = useCallback((newValue: T | ((prev: T) => T)) => {
-    const resolvedValue = typeof newValue === 'function' ? (newValue as Function)(value) : newValue;
-    
-    setValue(resolvedValue);
+  const updateValue = useCallback(
+    (newValue: T | ((prev: T) => T)) => {
+      const resolvedValue =
+        typeof newValue === 'function' ? (newValue as Function)(value) : newValue;
 
-    if (history) {
-      setHistory(prev => {
-        const newHistory = prev.slice(0, historyRef.current + 1);
-        newHistory.push(resolvedValue);
-        
-        if (newHistory.length > historyLimit) {
-          newHistory.shift();
-        } else {
-          historyRef.current++;
-        }
-        
-        return newHistory;
-      });
-    }
-  }, [value, history, historyLimit]);
+      setValue(resolvedValue);
+
+      if (history) {
+        setHistory((prev) => {
+          const newHistory = prev.slice(0, historyRef.current + 1);
+          newHistory.push(resolvedValue);
+
+          if (newHistory.length > historyLimit) {
+            newHistory.shift();
+          } else {
+            historyRef.current++;
+          }
+
+          return newHistory;
+        });
+      }
+    },
+    [value, history, historyLimit],
+  );
 
   return [value, updateValue, { isValid, error }];
 }
@@ -169,41 +173,45 @@ export function useStateEnhanced<T>(
  */
 export function useStateWithHistory<T>(
   initialValue: T,
-  options: { limit?: number } = {}
+  options: { limit?: number } = {},
 ): UseStateWithHistoryResult<T> {
   const { limit = 10 } = options;
   const [value, setValue] = useState<T>(initialValue);
   const [history, setHistory] = useState<T[]>([initialValue]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const setValueWithHistory = useCallback((newValue: T | ((prev: T) => T)) => {
-    const resolvedValue = typeof newValue === 'function' ? (newValue as Function)(value) : newValue;
-    
-    setValue(resolvedValue);
-    setHistory(prev => {
-      const newHistory = prev.slice(0, currentIndex + 1);
-      newHistory.push(resolvedValue);
-      
-      if (newHistory.length > limit) {
-        newHistory.shift();
-      } else {
-        setCurrentIndex(newHistory.length - 1);
-      }
-      
-      return newHistory;
-    });
-  }, [value, currentIndex, limit]);
+  const setValueWithHistory = useCallback(
+    (newValue: T | ((prev: T) => T)) => {
+      const resolvedValue =
+        typeof newValue === 'function' ? (newValue as Function)(value) : newValue;
+
+      setValue(resolvedValue);
+      setHistory((prev) => {
+        const newHistory = prev.slice(0, currentIndex + 1);
+        newHistory.push(resolvedValue);
+
+        if (newHistory.length > limit) {
+          newHistory.shift();
+        } else {
+          setCurrentIndex(newHistory.length - 1);
+        }
+
+        return newHistory;
+      });
+    },
+    [value, currentIndex, limit],
+  );
 
   const undo = useCallback(() => {
     if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
+      setCurrentIndex((prev) => prev - 1);
       setValue(history[currentIndex - 1]);
     }
   }, [currentIndex, history]);
 
   const redo = useCallback(() => {
     if (currentIndex < history.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+      setCurrentIndex((prev) => prev + 1);
       setValue(history[currentIndex + 1]);
     }
   }, [currentIndex, history]);
@@ -222,17 +230,14 @@ export function useStateWithHistory<T>(
     canRedo: currentIndex < history.length - 1,
     undo,
     redo,
-    clearHistory
+    clearHistory,
   };
 }
 
 /**
  * Local storage hook with error handling and validation
  */
-export function useLocalStorage<T>(
-  key: string,
-  initialValue: T
-): UseLocalStorageResult<T> {
+export function useLocalStorage<T>(key: string, initialValue: T): UseLocalStorageResult<T> {
   const [value, setValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
@@ -245,16 +250,19 @@ export function useLocalStorage<T>(
 
   const [error, setError] = useState<string | null>(null);
 
-  const setValueWrapper = useCallback((value: T) => {
-    try {
-      setError(null);
-      setValue(value);
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (err) {
-      setError('Failed to save to localStorage');
-      console.error(`Error setting localStorage key "${key}":`, err);
-    }
-  }, [key]);
+  const setValueWrapper = useCallback(
+    (value: T) => {
+      try {
+        setError(null);
+        setValue(value);
+        window.localStorage.setItem(key, JSON.stringify(value));
+      } catch (err) {
+        setError('Failed to save to localStorage');
+        console.error(`Error setting localStorage key "${key}":`, err);
+      }
+    },
+    [key],
+  );
 
   const removeValue = useCallback(() => {
     try {
@@ -273,10 +281,7 @@ export function useLocalStorage<T>(
 /**
  * Session storage hook with error handling and validation
  */
-export function useSessionStorage<T>(
-  key: string,
-  initialValue: T
-): UseSessionStorageResult<T> {
+export function useSessionStorage<T>(key: string, initialValue: T): UseSessionStorageResult<T> {
   const [value, setValue] = useState<T>(() => {
     try {
       const item = window.sessionStorage.getItem(key);
@@ -289,16 +294,19 @@ export function useSessionStorage<T>(
 
   const [error, setError] = useState<string | null>(null);
 
-  const setValueWrapper = useCallback((value: T) => {
-    try {
-      setError(null);
-      setValue(value);
-      window.sessionStorage.setItem(key, JSON.stringify(value));
-    } catch (err) {
-      setError('Failed to save to sessionStorage');
-      console.error(`Error setting sessionStorage key "${key}":`, err);
-    }
-  }, [key]);
+  const setValueWrapper = useCallback(
+    (value: T) => {
+      try {
+        setError(null);
+        setValue(value);
+        window.sessionStorage.setItem(key, JSON.stringify(value));
+      } catch (err) {
+        setError('Failed to save to sessionStorage');
+        console.error(`Error setting sessionStorage key "${key}":`, err);
+      }
+    },
+    [key],
+  );
 
   const removeValue = useCallback(() => {
     try {
@@ -351,35 +359,38 @@ export function useAsyncState<T>(): UseAsyncStateResult<T> {
  */
 export function useStateThrottled<T>(
   initialValue: T,
-  throttleMs: number = 100
+  throttleMs: number = 100,
 ): [T, (value: T) => void] {
   const [value, setValue] = useState<T>(initialValue);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const nextValueRef = useRef<T | null>(null);
   const isUpdatingRef = useRef(false);
 
-  const setValueThrottled = useCallback((newValue: T) => {
-    nextValueRef.current = newValue;
+  const setValueThrottled = useCallback(
+    (newValue: T) => {
+      nextValueRef.current = newValue;
 
-    if (isUpdatingRef.current) {
-      return;
-    }
-
-    isUpdatingRef.current = true;
-    setValue(newValue);
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      if (nextValueRef.current !== null && nextValueRef.current !== newValue) {
-        setValue(nextValueRef.current);
-        nextValueRef.current = null;
+      if (isUpdatingRef.current) {
+        return;
       }
-      isUpdatingRef.current = false;
-    }, throttleMs);
-  }, [throttleMs]);
+
+      isUpdatingRef.current = true;
+      setValue(newValue);
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        if (nextValueRef.current !== null && nextValueRef.current !== newValue) {
+          setValue(nextValueRef.current);
+          nextValueRef.current = null;
+        }
+        isUpdatingRef.current = false;
+      }, throttleMs);
+    },
+    [throttleMs],
+  );
 
   useEffect(() => {
     return () => {
@@ -397,23 +408,26 @@ export function useStateThrottled<T>(
  */
 export function useStateDebounced<T>(
   initialValue: T,
-  debounceMs: number = 300
+  debounceMs: number = 300,
 ): [T, T, (value: T) => void] {
   const [value, setValue] = useState<T>(initialValue);
   const [debouncedValue, setDebouncedValue] = useState<T>(initialValue);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const setValueDebounced = useCallback((newValue: T) => {
-    setValue(newValue);
+  const setValueDebounced = useCallback(
+    (newValue: T) => {
+      setValue(newValue);
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
 
-    timeoutRef.current = setTimeout(() => {
-      setDebouncedValue(newValue);
-    }, debounceMs);
-  }, [debounceMs]);
+      timeoutRef.current = setTimeout(() => {
+        setDebouncedValue(newValue);
+      }, debounceMs);
+    },
+    [debounceMs],
+  );
 
   useEffect(() => {
     return () => {
@@ -432,7 +446,7 @@ export function useStateDebounced<T>(
 export function useDerivedState<T, D>(
   dependencies: D[],
   deriveFn: (dependencies: D[]) => T,
-  options: { cacheSize?: number; equalityFn?: (a: T, b: T) => boolean } = {}
+  options: { cacheSize?: number; equalityFn?: (a: T, b: T) => boolean } = {},
 ): T {
   const { cacheSize = 10, equalityFn = (a: T, b: T) => a === b } = options;
   const cacheRef = useRef<Map<string, T>>(new Map());
@@ -481,7 +495,7 @@ export function useDerivedState<T, D>(
  */
 export function createStateReducer<T, A>(
   reducer: (state: T, action: A) => T,
-  middleware: Array<(state: T, action: A, next: (state: T, action: A) => T) => T> = []
+  middleware: Array<(state: T, action: A, next: (state: T, action: A) => T) => T> = [],
 ) {
   return (state: T, action: A): T => {
     const next = (s: T, a: A) => reducer(s, a);
@@ -507,7 +521,7 @@ export function createStateValidator<T>(rules: Record<keyof T, (value: any) => b
 
     return {
       isValid: Object.keys(errors).length === 0,
-      errors
+      errors,
     };
   };
 }
@@ -554,7 +568,7 @@ export const statePersistence = {
       console.error('Failed to clear localStorage', error);
       return false;
     }
-  }
+  },
 };
 
 export default {
@@ -568,5 +582,5 @@ export default {
   useDerivedState,
   createStateReducer,
   createStateValidator,
-  statePersistence
+  statePersistence,
 };

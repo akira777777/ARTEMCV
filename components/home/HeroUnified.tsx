@@ -98,7 +98,7 @@ export const HeroUnified: React.FC = () => {
         />
 
         {/* Grid Pattern */}
-        <div 
+        <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage: `
@@ -111,10 +111,7 @@ export const HeroUnified: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <motion.div
-        className="relative z-10 w-full max-w-6xl mx-auto px-6"
-        style={{ opacity, y }}
-      >
+      <motion.div className="relative z-10 w-full max-w-6xl mx-auto px-6" style={{ opacity, y }}>
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -131,25 +128,14 @@ export const HeroUnified: React.FC = () => {
 
           {/* Main Heading */}
           <motion.div variants={itemVariants} className="mb-6">
-            <Heading
-              as="h1"
-              size="display"
-              className="max-w-4xl mx-auto"
-            >
-              {t('hero.title.line1')}{' '}
-              <GradientText animate>
-                {t('hero.title.line2')}
-              </GradientText>
+            <Heading as="h1" size="display" className="max-w-4xl mx-auto">
+              {t('hero.title.line1')} <GradientText animate>{t('hero.title.line2')}</GradientText>
             </Heading>
           </motion.div>
 
           {/* Description */}
           <motion.div variants={itemVariants} className="mb-10">
-            <Text
-              size="lg"
-              color="secondary"
-              className="max-w-2xl mx-auto leading-relaxed"
-            >
+            <Text size="lg" color="secondary" className="max-w-2xl mx-auto leading-relaxed">
               {t('hero.description')}
             </Text>
           </motion.div>
@@ -167,11 +153,7 @@ export const HeroUnified: React.FC = () => {
             >
               {t('hero.cta.explore')}
             </Button>
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={scrollToContact}
-            >
+            <Button variant="secondary" size="lg" onClick={scrollToContact}>
               {t('hero.cta.contact')}
             </Button>
           </motion.div>
@@ -188,18 +170,14 @@ export const HeroUnified: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 + index * 0.1, duration: 0.5 }}
-                whileHover={{ 
+                whileHover={{
                   borderColor: 'rgba(16, 185, 129, 0.3)',
-                  transition: { duration: 0.2 }
+                  transition: { duration: 0.2 },
                 }}
               >
                 <stat.icon className="w-5 h-5 mx-auto mb-3 text-emerald-400/80" />
-                <div className="text-2xl md:text-3xl font-bold text-white mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-xs text-zinc-500 uppercase tracking-wider">
-                  {stat.label}
-                </div>
+                <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-xs text-zinc-500 uppercase tracking-wider">{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>

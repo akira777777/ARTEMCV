@@ -11,9 +11,7 @@ import { ContactUnified } from '../components/home/ContactUnified';
 import { FooterUnified } from '../components/home/FooterUnified';
 
 // Lazy load chat
-const SimpleTelegramChat = React.lazy(() => 
-  import('../components/SimpleTelegramChat')
-);
+const SimpleTelegramChat = React.lazy(() => import('../components/SimpleTelegramChat'));
 
 /**
  * Home Page - New Unified Version
@@ -24,7 +22,7 @@ const HomePage: React.FC = () => {
       <SkipLink />
       <Navigation />
       <ScrollProgress />
-      
+
       <main id="main-content" tabIndex={-1} className="outline-none">
         <HeroUnified />
         <WorksUnified />

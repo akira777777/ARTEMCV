@@ -42,7 +42,7 @@ export function validateProjectPath(projectPath: string): string {
 
   // Prevent path traversal attacks by ensuring no suspicious patterns
   const normalizedPath = path.normalize(absolutePath);
-  
+
   // Check for suspicious patterns
   if (normalizedPath.includes('..') || normalizedPath !== absolutePath) {
     throw new Error('Invalid project path: path traversal detected');
@@ -102,7 +102,7 @@ export function validateSerialPort(port: string): boolean {
 
   // Unix/Linux/macOS patterns: /dev/ttyUSB0, /dev/ttyACM0, /dev/cu.usbserial-*
   const unixPattern = /^\/dev\/(tty(USB|ACM|S)\d+|cu\.[a-zA-Z0-9_\-\.]+)$/;
-  
+
   // Windows patterns: COM1, COM10, etc.
   const windowsPattern = /^COM\d{1,3}$/;
 
@@ -180,8 +180,7 @@ export function validateBaudRate(baud: number): boolean {
 
   // Common baud rates
   const validBaudRates = [
-    300, 1200, 2400, 4800, 9600, 14400, 19200, 28800,
-    38400, 57600, 115200, 230400, 460800, 921600
+    300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200, 230400, 460800, 921600,
   ];
 
   return validBaudRates.includes(baud) || (baud > 0 && baud <= 2000000);

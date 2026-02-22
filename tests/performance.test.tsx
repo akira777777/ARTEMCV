@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React, { useRef } from 'react';
-import { 
-  debounce, 
-  useThrottleRAF, 
+import {
+  debounce,
+  useThrottleRAF,
   isInViewport,
   requestIdle,
   preloadResource,
-  preconnect
+  preconnect,
 } from '../lib/performance';
 
 describe('Performance Utilities', () => {
@@ -39,9 +39,9 @@ describe('Performance Utilities', () => {
       vi.advanceTimersByTime(50);
       debouncedFn();
       vi.advanceTimersByTime(50);
-      
+
       expect(fn).not.toHaveBeenCalled();
-      
+
       vi.advanceTimersByTime(50);
       expect(fn).toHaveBeenCalledTimes(1);
     });
@@ -108,11 +108,12 @@ describe('Performance Utilities', () => {
 
     it('calls callback via setTimeout when requestIdleCallback not available', () => {
       const fn = vi.fn();
-      const originalRIC = (window as typeof window & { requestIdleCallback?: typeof setTimeout }).requestIdleCallback;
+      const originalRIC = (window as typeof window & { requestIdleCallback?: typeof setTimeout })
+        .requestIdleCallback;
       Object.defineProperty(window, 'requestIdleCallback', {
         value: undefined,
         writable: true,
-        configurable: true
+        configurable: true,
       });
 
       requestIdle(fn);
@@ -122,17 +123,21 @@ describe('Performance Utilities', () => {
 
       // Restore
       if (originalRIC) {
-        (window as typeof window & { requestIdleCallback?: typeof setTimeout }).requestIdleCallback = originalRIC;
+        (
+          window as typeof window & { requestIdleCallback?: typeof setTimeout }
+        ).requestIdleCallback = originalRIC;
       }
     });
   });
 
   describe('preconnect', () => {
     it('creates link element with correct attributes', () => {
-      const appendChildSpy = vi.spyOn(document.head, 'appendChild').mockImplementation(() => document.createElement('link'));
-      
+      const appendChildSpy = vi
+        .spyOn(document.head, 'appendChild')
+        .mockImplementation(() => document.createElement('link'));
+
       preconnect('https://example.com', true);
-      
+
       expect(appendChildSpy).toHaveBeenCalled();
       const linkElement = appendChildSpy.mock.calls[0][0] as HTMLLinkElement;
       expect(linkElement.rel).toBe('preconnect');
@@ -145,10 +150,12 @@ describe('Performance Utilities', () => {
 
   describe('preloadResource', () => {
     it('creates preload link for scripts', () => {
-      const appendChildSpy = vi.spyOn(document.head, 'appendChild').mockImplementation(() => document.createElement('link'));
-      
+      const appendChildSpy = vi
+        .spyOn(document.head, 'appendChild')
+        .mockImplementation(() => document.createElement('link'));
+
       preloadResource('/script.js', 'script');
-      
+
       const linkElement = appendChildSpy.mock.calls[0][0] as HTMLLinkElement;
       expect(linkElement.rel).toBe('preload');
       expect(linkElement.as).toBe('script');
@@ -157,10 +164,12 @@ describe('Performance Utilities', () => {
     });
 
     it('creates preload link for fonts with crossorigin', () => {
-      const appendChildSpy = vi.spyOn(document.head, 'appendChild').mockImplementation(() => document.createElement('link'));
-      
+      const appendChildSpy = vi
+        .spyOn(document.head, 'appendChild')
+        .mockImplementation(() => document.createElement('link'));
+
       preloadResource('/font.woff2', 'font', 'font/woff2');
-      
+
       const linkElement = appendChildSpy.mock.calls[0][0] as HTMLLinkElement;
       expect(linkElement.rel).toBe('preload');
       expect(linkElement.as).toBe('font');
@@ -175,7 +184,7 @@ describe('Performance Utilities', () => {
 describe('Component Performance', () => {
   it('measures render count correctly', () => {
     let renderCount = 0;
-    
+
     const TestComponent: React.FC = () => {
       renderCount++;
       return <div>Test</div>;

@@ -31,14 +31,15 @@ interface UseMediaQueryOptions {
  */
 export function useMediaQuery(
   query: string | Breakpoint,
-  options: UseMediaQueryOptions = {}
+  options: UseMediaQueryOptions = {},
 ): boolean {
   const { defaultValue = false, onMatch } = options;
-  
+
   // Convert breakpoint to media query
-  const mediaQuery = typeof query === 'string' && query in breakpoints
-    ? `(min-width: ${breakpoints[query as Breakpoint]}px)`
-    : query;
+  const mediaQuery =
+    typeof query === 'string' && query in breakpoints
+      ? `(min-width: ${breakpoints[query as Breakpoint]}px)`
+      : query;
 
   const [matches, setMatches] = useState<boolean>(defaultValue);
 
@@ -48,7 +49,7 @@ export function useMediaQuery(
       setMatches(newMatches);
       onMatch?.(newMatches);
     },
-    [onMatch]
+    [onMatch],
   );
 
   useEffect(() => {
@@ -58,7 +59,7 @@ export function useMediaQuery(
     }
 
     const mediaQueryList = window.matchMedia(mediaQuery);
-    
+
     // Set initial value
     handleChange(mediaQueryList);
 

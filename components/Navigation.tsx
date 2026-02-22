@@ -4,13 +4,13 @@ import { useReducedMotion } from '../lib/hooks';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useI18n } from '../i18n';
 import { MobileMenu } from './MobileMenu';
-import { 
-  useFocusTrap, 
-  useKeyboardNavigation, 
+import {
+  useFocusTrap,
+  useKeyboardNavigation,
   generateAriaAttributes,
   createAccessibleButtonProps,
   createAccessibleLinkProps,
-  checkColorContrast 
+  checkColorContrast,
 } from './AccessibilityUtils';
 
 const navItems: { key: string; href: string }[] = [
@@ -29,11 +29,11 @@ const NavLink = React.memo<{
   onClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
 }>(({ item, isActive, onClick }) => {
   const { t } = useI18n();
-  
+
   const ariaProps = generateAriaAttributes({
     label: t(item.key),
     current: isActive ? 'page' : undefined,
-    disabled: false
+    disabled: false,
   });
 
   return (
@@ -43,9 +43,11 @@ const NavLink = React.memo<{
         onClick={(e) => onClick(e, item.href)}
         className={`
           px-4 py-2 rounded-xl text-xs font-bold tracking-widest transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-95
-          ${isActive
-            ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]'
-            : 'text-neutral-400 hover:text-white hover:bg-white/10 hover:scale-105'}
+          ${
+            isActive
+              ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]'
+              : 'text-neutral-400 hover:text-white hover:bg-white/10 hover:scale-105'
+          }
         `}
         {...ariaProps}
         tabIndex={0}
@@ -70,12 +72,12 @@ export const Navigation: React.FC = React.memo(() => {
   const [active, setActive] = useState('nav.home');
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollYRef = useRef(0);
-  
+
   // Add keyboard navigation support
   const navRef = useKeyboardNavigation({
     enabled: true,
     focusableSelector: 'a[href], button',
-    wrap: true
+    wrap: true,
   });
 
   // Use IntersectionObserver for high-performance section tracking
@@ -88,7 +90,7 @@ export const Navigation: React.FC = React.memo(() => {
         // currently prominent in the viewport.
         if (entry.isIntersecting) {
           const id = entry.target.id;
-          const item = navItems.find(i => i.href === `#${id}`);
+          const item = navItems.find((i) => i.href === `#${id}`);
           if (item) {
             setActive(item.key);
           }
@@ -99,10 +101,10 @@ export const Navigation: React.FC = React.memo(() => {
     const observer = new IntersectionObserver(observerCallback, {
       // Trigger when section occupies the top-middle part of viewport
       rootMargin: '-20% 0px -70% 0px',
-      threshold: 0
+      threshold: 0,
     });
 
-    navItems.forEach(item => {
+    navItems.forEach((item) => {
       const el = document.getElementById(item.href.substring(1));
       if (el) {
         observer.observe(el);
@@ -138,27 +140,28 @@ export const Navigation: React.FC = React.memo(() => {
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
-      setActive(navItems.find(item => item.href === href)?.key || '');
+      setActive(navItems.find((item) => item.href === href)?.key || '');
     }
   }, []);
 
   // Memoize nav items to prevent unnecessary re-renders
-  const navLinks = useMemo(() => 
-    navItems.map(item => (
-      <NavLink 
-        key={item.key}
-        item={item}
-        isActive={active === item.key}
-        onClick={handleLinkClick}
-      />
-    )),
-    [active, handleLinkClick]
+  const navLinks = useMemo(
+    () =>
+      navItems.map((item) => (
+        <NavLink
+          key={item.key}
+          item={item}
+          isActive={active === item.key}
+          onClick={handleLinkClick}
+        />
+      )),
+    [active, handleLinkClick],
   );
 
   const transitionClass = prefersReducedMotion ? '' : 'transition-all duration-500 ease-in-out';
 
   return (
-    <motion.header 
+    <motion.header
       className={`
         fixed top-0 left-0 right-0 z-50 ${transitionClass}
         ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
@@ -170,7 +173,7 @@ export const Navigation: React.FC = React.memo(() => {
       aria-label="Main website header"
     >
       <div className="mx-4 mt-4 md:mx-8 md:mt-6">
-        <motion.nav 
+        <motion.nav
           ref={navRef}
           className="bg-black/20 backdrop-blur-md border border-white/10 rounded-3xl px-6 py-4 flex justify-between items-center hover:border-purple-500/30 ease-smooth"
           whileHover={{
@@ -180,18 +183,21 @@ export const Navigation: React.FC = React.memo(() => {
           aria-label="Primary navigation"
         >
           {/* Logo */}
-          <motion.a 
-            href="#home" 
+          <motion.a
+            href="#home"
             onClick={(e) => handleLinkClick(e, '#home')}
             className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg"
             aria-label={t('nav.logo.label')}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-xl font-display font-black tracking-tighter text-white group-hover:text-purple-400 transition-colors" aria-hidden="true">
+            <span
+              className="text-xl font-display font-black tracking-tighter text-white group-hover:text-purple-400 transition-colors"
+              aria-hidden="true"
+            >
               ARTEM.DEV
             </span>
-            <motion.span 
+            <motion.span
               className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500"
               animate={{
                 scale: [1, 1.3, 1],
@@ -216,7 +222,7 @@ export const Navigation: React.FC = React.memo(() => {
               <LanguageSwitcher />
             </div>
           </div>
-          
+
           {/* Mobile Menu */}
           <div className="md:hidden flex items-center">
             <MobileMenu />

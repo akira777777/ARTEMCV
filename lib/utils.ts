@@ -50,7 +50,7 @@ export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function fetchWithTimeout(
   url: string,
   options: RequestInit = {},
-  timeoutMs: number = 12_000
+  timeoutMs: number = 12_000,
 ): Promise<Response> {
   const timeoutController = new AbortController();
   const timeout = setTimeout(() => timeoutController.abort(), timeoutMs);
@@ -63,9 +63,11 @@ export async function fetchWithTimeout(
   let cleanup = () => {};
   let combinedSignal = timeoutController.signal;
 
-  const anySignal = (AbortSignal as typeof AbortSignal & {
-    any?: (signals: AbortSignal[]) => AbortSignal;
-  }).any;
+  const anySignal = (
+    AbortSignal as typeof AbortSignal & {
+      any?: (signals: AbortSignal[]) => AbortSignal;
+    }
+  ).any;
 
   if (signals.length > 1) {
     if (typeof anySignal === 'function') {
@@ -125,7 +127,8 @@ export function checkWebPSupport(): Promise<boolean> {
       webpSupportCache = isSupported;
       resolve(isSupported);
     };
-    img.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+    img.src =
+      'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
   });
 
   return webpSupportPromise;

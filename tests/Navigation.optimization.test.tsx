@@ -5,15 +5,15 @@ import { Navigation } from '../components/Navigation';
 
 // Mock необходимые зависимости
 vi.mock('../lib/hooks', () => ({
-  useReducedMotion: vi.fn(() => false)
+  useReducedMotion: vi.fn(() => false),
 }));
 
 vi.mock('../components/LanguageSwitcher', () => ({
-  default: () => <div>LanguageSwitcher</div>
+  default: () => <div>LanguageSwitcher</div>,
 }));
 
 vi.mock('../components/MobileMenu', () => ({
-  MobileMenu: () => <div>MobileMenu</div>
+  MobileMenu: () => <div>MobileMenu</div>,
 }));
 
 const mockT = (key: string) => key;
@@ -21,8 +21,8 @@ const mockT = (key: string) => key;
 vi.mock('../i18n', () => ({
   useI18n: vi.fn(() => ({
     t: mockT,
-    lang: 'en'
-  }))
+    lang: 'en',
+  })),
 }));
 
 describe('Navigation Component Tests', () => {
@@ -44,10 +44,10 @@ describe('Navigation Component Tests', () => {
       'nav.lab',
       'nav.services',
       'nav.about',
-      'nav.contact'
+      'nav.contact',
     ];
 
-    navItems.forEach(item => {
+    navItems.forEach((item) => {
       const link = screen.getByText(item);
       expect(link).toBeInTheDocument();
     });
@@ -60,7 +60,7 @@ describe('Navigation Component Tests', () => {
     Object.defineProperty(window, 'scrollY', {
       writable: true,
       configurable: true,
-      value: 200
+      value: 200,
     });
 
     fireEvent.scroll(window, { target: { scrollY: 200 } });

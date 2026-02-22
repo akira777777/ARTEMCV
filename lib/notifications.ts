@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 
 /**
  * Enhanced Notification Management Utilities
- * 
+ *
  * Advanced notification system with toast, snackbar, modal notifications,
  * and comprehensive user preferences.
  */
@@ -24,7 +24,13 @@ export interface Notification {
     variant?: 'primary' | 'secondary' | 'danger';
   }>;
   icon?: React.ReactNode;
-  position?: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+  position?:
+    | 'top-left'
+    | 'top-center'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-center'
+    | 'bottom-right';
   dismissible?: boolean;
   onDismiss?: () => void;
   createdAt: number;
@@ -82,11 +88,11 @@ export function useNotifications(initialPreferences?: Partial<NotificationPrefer
       enabled: false,
       startTime: '22:00',
       endTime: '08:00',
-      days: [0, 6] // Weekend
+      days: [0, 6], // Weekend
     },
     maxNotifications: 50,
     animation: true,
-    position: 'top-right'
+    position: 'top-right',
   });
 
   const notificationQueue = useRef<Notification[]>([]);
@@ -97,14 +103,14 @@ export function useNotifications(initialPreferences?: Partial<NotificationPrefer
   // Initialize preferences
   useEffect(() => {
     if (initialPreferences) {
-      setPreferences(prev => ({ ...prev, ...initialPreferences }));
+      setPreferences((prev) => ({ ...prev, ...initialPreferences }));
     }
 
     // Load from localStorage
     try {
       const saved = localStorage.getItem('notification-preferences');
       if (saved) {
-        setPreferences(prev => ({ ...prev, ...JSON.parse(saved) }));
+        setPreferences((prev) => ({ ...prev, ...JSON.parse(saved) }));
       }
     } catch (error) {
       console.warn('Failed to load notification preferences:', error);
@@ -160,7 +166,7 @@ export function useNotifications(initialPreferences?: Partial<NotificationPrefer
       }
 
       soundRef.current.volume = preferences.soundVolume;
-      soundRef.current.play().catch(error => {
+      soundRef.current.play().catch((error) => {
         console.warn('Failed to play notification sound:', error);
       });
     } catch (error) {
@@ -180,47 +186,54 @@ export function useNotifications(initialPreferences?: Partial<NotificationPrefer
   }, [preferences.vibration, isDoNotDisturbActive]);
 
   // Add notification
-  const add = useCallback((notificationData: Omit<Notification, 'id' | 'createdAt'>): string => {
-    if (!preferences.enabled || isDoNotDisturbActive()) {
-      // Queue notification for later
-      const queuedNotification = {
+  const add = useCallback(
+    (notificationData: Omit<Notification, 'id' | 'createdAt'>): string => {
+      if (!preferences.enabled || isDoNotDisturbActive()) {
+        // Queue notification for later
+        const queuedNotification = {
+          ...notificationData,
+          id: `queued-${Date.now()}`,
+          createdAt: Date.now(),
+        };
+        notificationQueue.current.push(queuedNotification);
+        return queuedNotification.id;
+      }
+
+      const newNotification: Notification = {
         ...notificationData,
-        id: `queued-${Date.now()}`,
-        createdAt: Date.now()
+        id: `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        createdAt: Date.now(),
+        read: false,
       };
-      notificationQueue.current.push(queuedNotification);
-      return queuedNotification.id;
-    }
 
-    const newNotification: Notification = {
-      ...notificationData,
-      id: `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      createdAt: Date.now(),
-      read: false
-    };
+      setNotifications((prev) => {
+        const updated = [newNotification, ...prev];
+        return updated.slice(0, preferences.maxNotifications);
+      });
 
-    setNotifications(prev => {
-      const updated = [newNotification, ...prev];
-      return updated.slice(0, preferences.maxNotifications);
-    });
+      // Play sound and vibrate
+      playSound();
+      vibrate();
 
-    // Play sound and vibrate
-    playSound();
-    vibrate();
+      // Auto-dismiss if not persistent
+      if (
+        !notificationData.persistent &&
+        notificationData.duration &&
+        notificationData.duration > 0
+      ) {
+        setTimeout(() => {
+          dismiss(newNotification.id);
+        }, notificationData.duration);
+      }
 
-    // Auto-dismiss if not persistent
-    if (!notificationData.persistent && notificationData.duration && notificationData.duration > 0) {
-      setTimeout(() => {
-        dismiss(newNotification.id);
-      }, notificationData.duration);
-    }
-
-    return newNotification.id;
-  }, [preferences, isDoNotDisturbActive, playSound, vibrate]);
+      return newNotification.id;
+    },
+    [preferences, isDoNotDisturbActive, playSound, vibrate],
+  );
 
   // Remove notification
   const remove = useCallback((id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
   // Clear all notifications
@@ -229,29 +242,30 @@ export function useNotifications(initialPreferences?: Partial<NotificationPrefer
   }, []);
 
   // Dismiss notification
-  const dismiss = useCallback((id: string) => {
-    const notification = notifications.find(n => n.id === id);
-    if (notification) {
-      notification.onDismiss?.();
-      remove(id);
-    }
-  }, [notifications, remove]);
+  const dismiss = useCallback(
+    (id: string) => {
+      const notification = notifications.find((n) => n.id === id);
+      if (notification) {
+        notification.onDismiss?.();
+        remove(id);
+      }
+    },
+    [notifications, remove],
+  );
 
   // Mark notification as read
   const markAsRead = useCallback((id: string) => {
-    setNotifications(prev => prev.map(n => 
-      n.id === id ? { ...n, read: true } : n
-    ));
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
   }, []);
 
   // Mark all as read
   const markAllAsRead = useCallback(() => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   }, []);
 
   // Get unread count
   const getUnreadCount = useCallback(() => {
-    return notifications.filter(n => !n.read).length;
+    return notifications.filter((n) => !n.read).length;
   }, [notifications]);
 
   // Get all notifications
@@ -260,9 +274,12 @@ export function useNotifications(initialPreferences?: Partial<NotificationPrefer
   }, [notifications]);
 
   // Set preferences
-  const setNotificationPreferences = useCallback((newPreferences: Partial<NotificationPreferences>) => {
-    setPreferences(prev => ({ ...prev, ...newPreferences }));
-  }, []);
+  const setNotificationPreferences = useCallback(
+    (newPreferences: Partial<NotificationPreferences>) => {
+      setPreferences((prev) => ({ ...prev, ...newPreferences }));
+    },
+    [],
+  );
 
   // Get preferences
   const getNotificationPreferences = useCallback(() => {
@@ -276,7 +293,7 @@ export function useNotifications(initialPreferences?: Partial<NotificationPrefer
     const queued = [...notificationQueue.current];
     notificationQueue.current = [];
 
-    queued.forEach(notification => {
+    queued.forEach((notification) => {
       add(notification);
     });
   }, [add]);
@@ -307,7 +324,7 @@ export function useNotifications(initialPreferences?: Partial<NotificationPrefer
     setPreferences: setNotificationPreferences,
     getPreferences: getNotificationPreferences,
     isDoNotDisturbActive,
-    processQueue
+    processQueue,
   };
 }
 
@@ -317,55 +334,70 @@ export function useNotifications(initialPreferences?: Partial<NotificationPrefer
 export function useToast() {
   const { add, dismiss } = useNotifications();
 
-  const showToast = useCallback((message: string, options: Partial<Notification> = {}) => {
-    return add({
-      message,
-      type: 'info',
-      duration: 3000,
-      dismissible: true,
-      ...options
-    });
-  }, [add]);
+  const showToast = useCallback(
+    (message: string, options: Partial<Notification> = {}) => {
+      return add({
+        message,
+        type: 'info',
+        duration: 3000,
+        dismissible: true,
+        ...options,
+      });
+    },
+    [add],
+  );
 
-  const showSuccess = useCallback((message: string, options: Partial<Notification> = {}) => {
-    return add({
-      message,
-      type: 'success',
-      duration: 3000,
-      dismissible: true,
-      ...options
-    });
-  }, [add]);
+  const showSuccess = useCallback(
+    (message: string, options: Partial<Notification> = {}) => {
+      return add({
+        message,
+        type: 'success',
+        duration: 3000,
+        dismissible: true,
+        ...options,
+      });
+    },
+    [add],
+  );
 
-  const showWarning = useCallback((message: string, options: Partial<Notification> = {}) => {
-    return add({
-      message,
-      type: 'warning',
-      duration: 5000,
-      dismissible: true,
-      ...options
-    });
-  }, [add]);
+  const showWarning = useCallback(
+    (message: string, options: Partial<Notification> = {}) => {
+      return add({
+        message,
+        type: 'warning',
+        duration: 5000,
+        dismissible: true,
+        ...options,
+      });
+    },
+    [add],
+  );
 
-  const showError = useCallback((message: string, options: Partial<Notification> = {}) => {
-    return add({
-      message,
-      type: 'error',
-      duration: 0, // Don't auto-dismiss errors
-      dismissible: true,
-      ...options
-    });
-  }, [add]);
+  const showError = useCallback(
+    (message: string, options: Partial<Notification> = {}) => {
+      return add({
+        message,
+        type: 'error',
+        duration: 0, // Don't auto-dismiss errors
+        dismissible: true,
+        ...options,
+      });
+    },
+    [add],
+  );
 
-  const showLoading = useCallback((message: string, options: Partial<Notification> = {}) => {
-    return add({
-      message,
-      type: 'loading',
-      persistent: true,
-      dismissible: false,
-      ...options
-    });
-  }, [add]);
+  const showLoading = useCallback(
+    (message: string, options: Partial<Notification> = {}) => {
+      return add({
+        message,
+        type: 'loading',
+        persistent: true,
+        dismissible: false,
+        ...options,
+      });
+    },
+    [add],
+  );
 
   return {
     showToast,
@@ -373,7 +405,7 @@ export function useToast() {
     showWarning,
     showError,
     showLoading,
-    dismiss
+    dismiss,
   };
 }
 
@@ -388,7 +420,11 @@ export const notificationUtils = {
   /**
    * Create notification with default settings
    */
-  createNotification: (type: Notification['type'], message: string, options: Partial<Notification> = {}): Notification => {
+  createNotification: (
+    type: Notification['type'],
+    message: string,
+    options: Partial<Notification> = {},
+  ): Notification => {
     return {
       id: `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type,
@@ -398,7 +434,7 @@ export const notificationUtils = {
       dismissible: type !== 'loading',
       createdAt: Date.now(),
       read: false,
-      ...options
+      ...options,
     };
   },
 
@@ -427,18 +463,26 @@ export const notificationUtils = {
    */
   getIcon: (type: Notification['type']): string => {
     switch (type) {
-      case 'success': return '✓';
-      case 'warning': return '⚠️';
-      case 'error': return '✗';
-      case 'loading': return '⟳';
-      default: return 'ℹ️';
+      case 'success':
+        return '✓';
+      case 'warning':
+        return '⚠️';
+      case 'error':
+        return '✗';
+      case 'loading':
+        return '⟳';
+      default:
+        return 'ℹ️';
     }
   },
 
   /**
    * Check if notification should be shown based on preferences
    */
-  shouldShowNotification: (notification: Notification, preferences: NotificationPreferences): boolean => {
+  shouldShowNotification: (
+    notification: Notification,
+    preferences: NotificationPreferences,
+  ): boolean => {
     if (!preferences.enabled) return false;
     if (!preferences.categories[notification.category || 'default']) return false;
     if (preferences.doNotDisturb.enabled && isDoNotDisturbActive(preferences)) return false;
@@ -450,15 +494,18 @@ export const notificationUtils = {
    * Group notifications by category
    */
   groupByCategory: (notifications: Notification[]): Record<string, Notification[]> => {
-    return notifications.reduce((groups, notification) => {
-      const category = notification.category || 'default';
-      if (!groups[category]) {
-        groups[category] = [];
-      }
-      groups[category].push(notification);
-      return groups;
-    }, {} as Record<string, Notification[]>);
-  }
+    return notifications.reduce(
+      (groups, notification) => {
+        const category = notification.category || 'default';
+        if (!groups[category]) {
+          groups[category] = [];
+        }
+        groups[category].push(notification);
+        return groups;
+      },
+      {} as Record<string, Notification[]>,
+    );
+  },
 };
 
 // ============================================================================
@@ -514,7 +561,7 @@ export const browserNotifications = {
 
     return new Notification(title, {
       icon: '/favicon.ico',
-      ...options
+      ...options,
     });
   },
 
@@ -530,12 +577,12 @@ export const browserNotifications = {
    */
   getPermission: (): NotificationPermission => {
     return 'Notification' in window ? Notification.permission : 'denied';
-  }
+  },
 };
 
 export default {
   useNotifications,
   useToast,
   notificationUtils,
-  browserNotifications
+  browserNotifications,
 };

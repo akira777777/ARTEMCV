@@ -62,8 +62,9 @@ const translations: Record<Lang, Dict> = {
     'contact.error.timeout': 'Network timeout. Please try again later.',
     'contact.reach_out': 'Or reach out through:',
 
-    'cta.title': "Ready to Evolve?",
-    'cta.subtitle': 'Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.',
+    'cta.title': 'Ready to Evolve?',
+    'cta.subtitle':
+      'Ready to bring your vision to life? I specialize in creating high-performance, interactive web experiences tailored to your needs.',
     'cta.button': 'Hire Me',
     'cta.secondary': 'View GitHub',
     'cta.stat.projects': 'Projects Completed',
@@ -72,18 +73,22 @@ const translations: Record<Lang, Dict> = {
     'cta.stat.awards': 'Awards',
 
     'project.1.title': 'Detailing Hub 3D',
-    'project.1.desc': 'Interactive 3D car configurator using React Three Fiber. Custom shader implementation for realistic paint finishes and real-time reflection probes.',
+    'project.1.desc':
+      'Interactive 3D car configurator using React Three Fiber. Custom shader implementation for realistic paint finishes and real-time reflection probes.',
     'project.2.title': 'Dental Clinic Ecosystem',
-    'project.2.desc': 'AI-powered appointment orchestration and diagnostic visualization. Real-time data sync using WebSockets for live clinic availability.',
+    'project.2.desc':
+      'AI-powered appointment orchestration and diagnostic visualization. Real-time data sync using WebSockets for live clinic availability.',
     'project.3.title': 'The Barbershop Grid',
-    'project.3.desc': 'Magnetic scroll-driven gallery with dynamic layout shifts. Optimized image delivery via Edge functions to ensure <100ms LCP.',
+    'project.3.desc':
+      'Magnetic scroll-driven gallery with dynamic layout shifts. Optimized image delivery via Edge functions to ensure <100ms LCP.',
     'project.4.title': 'Detailing Service',
     'project.4.desc': 'Legacy Detailing Service Landing.',
 
     'hero.badge': 'Senior Frontend Architect',
     'hero.title.line1': 'ARTEM',
     'hero.title.line2': 'MIKHAILOV',
-    'hero.description': 'Engineering high-performance interactive 3D ecosystems and results-oriented digital interfaces for 2026.',
+    'hero.description':
+      'Engineering high-performance interactive 3D ecosystems and results-oriented digital interfaces for 2026.',
     'hero.cta.portfolio': 'Explore Projects',
     'hero.cta.explore': 'Explore Projects',
     'hero.cta.contact': "Let's Talk",
@@ -105,7 +110,8 @@ const translations: Record<Lang, Dict> = {
 
     'about.badge': 'Ecosystem 2026',
     'about.title': 'Cutting Edge Stack',
-    'about.desc': 'I build high-performance digital experiences where precision engineering meets immersive design. Specializing in Next.js, Three.js, and AI-driven SaaS.',
+    'about.desc':
+      'I build high-performance digital experiences where precision engineering meets immersive design. Specializing in Next.js, Three.js, and AI-driven SaaS.',
     'about.cta.collaborate': "LET'S COLLABORATE",
     'about.expertise': 'TECHNICAL EXPERTISE',
     'about.offer': 'WHAT I OFFER',
@@ -132,7 +138,8 @@ const translations: Record<Lang, Dict> = {
     'footer.contacts': 'Contacts',
     'footer.copyright': 'Full Stack Developer',
     'footer.build': "LET'S BUILD",
-    'footer.ready.desc': "Ready to bring your project to life? Let's create something exceptional together.",
+    'footer.ready.desc':
+      "Ready to bring your project to life? Let's create something exceptional together.",
     'footer.social': 'Social',
     'footer.status': 'Status',
     'footer.version': 'Version',
@@ -172,7 +179,7 @@ const translations: Record<Lang, Dict> = {
     'chat.initial': 'Quietly observing. How can I assist with your strategy today?',
     'chat.error.sending': 'Error sending message',
     'chat.error.timeout': 'Timeout sending message. Please try again.',
-    'scroll_to_top': 'Scroll to top',
+    scroll_to_top: 'Scroll to top',
     'works.scroll_left': 'Scroll projects left',
     'works.scroll_right': 'Scroll projects right',
     'switch.to': 'Switch to',
@@ -193,7 +200,8 @@ const translations: Record<Lang, Dict> = {
 
     'lab.badge': 'Interactive Lab',
     'lab.title': 'Live 3D accents for the wow effect.',
-    'lab.desc': 'Added an interactive tilt card and a holographic orb — both work without heavy libraries, using only CSS 3D and Framer Motion. Smooth parallax, glass surfaces, and live hints.',
+    'lab.desc':
+      'Added an interactive tilt card and a holographic orb — both work without heavy libraries, using only CSS 3D and Framer Motion. Smooth parallax, glass surfaces, and live hints.',
     'lab.orb': 'Holo Orb',
     'lab.tokens': 'Depth Tokens',
     'lab.tokens.desc': 'Adaptable for any section: cards, CTA, case previews, or avatars.',
@@ -201,7 +209,8 @@ const translations: Record<Lang, Dict> = {
     'lab.tilt.hint': 'Hover to explore',
     'lab.subtitle': 'Experimental R&D',
     'lab.main_title': 'The Digital Lab',
-    'lab.main_desc': 'Exploring the boundaries of fluid dynamics, spatial UI, and AI-driven frontend architectures.',
+    'lab.main_desc':
+      'Exploring the boundaries of fluid dynamics, spatial UI, and AI-driven frontend architectures.',
     'lab.card1.title': 'Spatial Navigation',
     'lab.card1.desc': 'Z-axis focused navigation paradigms for future spatial browsers.',
     'lab.card2.title': 'Predictive UI',
@@ -216,23 +225,29 @@ const translations: Record<Lang, Dict> = {
     'stack.performance': 'High Performance Only',
 
     'detailing.hero.title': 'DETAILING HUB',
-    'detailing.hero.desc': 'A high-performance interactive 3D platform for automotive enthusiasts to customize and book premium services.',
+    'detailing.hero.desc':
+      'A high-performance interactive 3D platform for automotive enthusiasts to customize and book premium services.',
     'detailing.hero.rotate': 'Click & Drag to Rotate',
     'detailing.tech.badge': 'Architecture',
     'detailing.tech.title': 'Technical Sophistication',
     'detailing.tech.render.part1': 'Real-time Rendering',
     'detailing.tech.render.part2': 'Optimization',
-    'detailing.tech.render.desc': 'Custom GLSL shaders and geometry instancing to achieve 144FPS on desktop and 60FPS on mobile devices, ensuring fluid transitions during paint customization.',
+    'detailing.tech.render.desc':
+      'Custom GLSL shaders and geometry instancing to achieve 144FPS on desktop and 60FPS on mobile devices, ensuring fluid transitions during paint customization.',
     'detailing.tech.engine.part1': 'Serverless',
     'detailing.tech.engine.part2': 'Booking Engine',
-    'detailing.tech.engine.desc': 'A headless commerce architecture utilizing serverless functions for instant calendar sync and automated service dispatch.',
+    'detailing.tech.engine.desc':
+      'A headless commerce architecture utilizing serverless functions for instant calendar sync and automated service dispatch.',
     'detailing.tech.latency': 'Latency',
     'detailing.tech.dynamic_light.title': 'Dynamic Lighting',
-    'detailing.tech.dynamic_light.desc': 'HDR-mapped environments for photorealistic reflections on car bodies.',
+    'detailing.tech.dynamic_light.desc':
+      'HDR-mapped environments for photorealistic reflections on car bodies.',
     'detailing.tech.post_process.title': 'Post-Processing',
-    'detailing.tech.post_process.desc': 'Bloom, SSAO, and TAA layers for a premium cinematic aesthetic.',
+    'detailing.tech.post_process.desc':
+      'Bloom, SSAO, and TAA layers for a premium cinematic aesthetic.',
     'detailing.tech.responsive.title': 'Responsive 3D',
-    'detailing.tech.responsive.desc': 'Unified UI controls across desktop, tablet, and mobile browsers.',
+    'detailing.tech.responsive.desc':
+      'Unified UI controls across desktop, tablet, and mobile browsers.',
     'detailing.footer.engineer': '© 2026 Senior Frontend Engineer & 3D Specialist.',
     'detailing.footer.type': 'Project Type',
     'detailing.footer.webgl': 'Interactive WebGL',
@@ -243,9 +258,10 @@ const translations: Record<Lang, Dict> = {
     'detailing.nav.home_label': 'Return to home',
 
     'error.title': 'Something went wrong',
-    'error.description': 'We encountered an unexpected error. Please try refreshing the page or come back later.',
+    'error.description':
+      'We encountered an unexpected error. Please try refreshing the page or come back later.',
     'error.details': 'Error Details',
-    'error.retry': 'Try Again'
+    'error.retry': 'Try Again',
   },
   ru: {
     'header.services': 'Услуги',
@@ -303,7 +319,8 @@ const translations: Record<Lang, Dict> = {
     'contact.reach_out': 'Или свяжитесь через:',
 
     'cta.title': 'Готовы к эволюции?',
-    'cta.subtitle': 'Готовы воплотить ваше видение в жизнь? Я специализируюсь на создании высокопроизводительных интерактивных веб-приложений, адаптированных под ваши потребности.',
+    'cta.subtitle':
+      'Готовы воплотить ваше видение в жизнь? Я специализируюсь на создании высокопроизводительных интерактивных веб-приложений, адаптированных под ваши потребности.',
     'cta.button': 'Начать сотрудничество',
     'cta.secondary': 'Смотреть GitHub',
     'cta.stat.projects': 'Завершено проектов',
@@ -312,11 +329,14 @@ const translations: Record<Lang, Dict> = {
     'cta.stat.awards': 'Награды',
 
     'project.1.title': 'Barber Shop',
-    'project.1.desc': 'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',
+    'project.1.desc':
+      'AI-диспетчер барбершопа: онлайн-запись, анти-овербукинг, CRM клиентов и платежная аналитика. Оптимизирован под многокресельные салоны.',
     'project.2.title': 'Dental Clinic Vakalova',
-    'project.2.desc': 'Лендинг и запись к врачу: каталог услуг, интерактивные планы лечения, отзывы пациентов. Уделено внимание доступности и скорости загрузки.',
+    'project.2.desc':
+      'Лендинг и запись к врачу: каталог услуг, интерактивные планы лечения, отзывы пациентов. Уделено внимание доступности и скорости загрузки.',
     'project.3.title': 'Game Marketplace',
-    'project.3.desc': 'Современный маркетплейс игр с каталогом, корзиной покупок, системой фильтрации и адаптивным интерфейсом. Реализованы анимации и плавные переходы.',
+    'project.3.desc':
+      'Современный маркетплейс игр с каталогом, корзиной покупок, системой фильтрации и адаптивным интерфейсом. Реализованы анимации и плавные переходы.',
     'project.4.title': 'Detailing Service',
     'project.4.desc': 'Лендинг для сервиса детейлинга.',
     'contact.help.optional': 'Необязательно',
@@ -325,7 +345,8 @@ const translations: Record<Lang, Dict> = {
     'hero.badge': 'Старший фронтенд-архитектор',
     'hero.title.line1': 'АРТЕМ',
     'hero.title.line2': 'МИХАЙЛОВ',
-    'hero.description': 'Проектирую высокопроизводительные интерактивные 3D-экосистемы и ориентированные на результат цифровые интерфейсы для 2026 года.',
+    'hero.description':
+      'Проектирую высокопроизводительные интерактивные 3D-экосистемы и ориентированные на результат цифровые интерфейсы для 2026 года.',
     'hero.cta.portfolio': 'Портфолио',
     'hero.cta.explore': 'Портфолио',
     'hero.cta.contact': 'Связаться',
@@ -347,7 +368,8 @@ const translations: Record<Lang, Dict> = {
 
     'about.badge': 'Экосистема 2026',
     'about.title': 'Современный стек',
-    'about.desc': 'Я создаю высокопроизводительные цифровые решения, где точное проектирование встречается с иммерсивным дизайном. Специализируюсь на Next.js, Three.js и AI-SaaS.',
+    'about.desc':
+      'Я создаю высокопроизводительные цифровые решения, где точное проектирование встречается с иммерсивным дизайном. Специализируюсь на Next.js, Three.js и AI-SaaS.',
     'about.cta.collaborate': 'ДАВАЙТЕ СОТРУДНИЧАТЬ',
     'about.expertise': 'ТЕХНИЧЕСКАЯ ЭКСПЕРТИЗА',
     'about.offer': 'ЧТО Я ПРЕДЛАГАЮ',
@@ -374,7 +396,8 @@ const translations: Record<Lang, Dict> = {
     'footer.contacts': 'Контакты',
     'footer.copyright': 'Full Stack разработчик',
     'footer.build': 'ПОСТРОИМ ВМЕСТЕ',
-    'footer.ready.desc': 'Готовы воплотить проект в жизнь? Давайте создадим что-то исключительное вместе.',
+    'footer.ready.desc':
+      'Готовы воплотить проект в жизнь? Давайте создадим что-то исключительное вместе.',
     'footer.social': 'Социальные сети',
     'footer.status': 'Статус',
     'footer.version': 'Версия',
@@ -414,7 +437,7 @@ const translations: Record<Lang, Dict> = {
     'chat.initial': 'Тихо наблюдаю. Чем помочь со стратегией сегодня?',
     'chat.error.sending': 'Ошибка при отправке сообщения',
     'chat.error.timeout': 'Timeout при отправке. Попробуйте позже.',
-    'scroll_to_top': 'Вернуться наверх',
+    scroll_to_top: 'Вернуться наверх',
     'works.scroll_left': 'Листать проекты влево',
     'works.scroll_right': 'Листать проекты вправо',
     'switch.to': 'Переключить на',
@@ -435,7 +458,8 @@ const translations: Record<Lang, Dict> = {
 
     'lab.badge': 'Интерактивная Лаборатория',
     'lab.title': 'Живые 3D-акценты для вау-эффекта.',
-    'lab.desc': 'Добавил интерактивную tilt-карту и голографический шар — оба работают без тяжёлых библиотек, только CSS 3D and Framer Motion. Мягкие параллаксы, стеклянные поверхности, живые подсказки.',
+    'lab.desc':
+      'Добавил интерактивную tilt-карту и голографический шар — оба работают без тяжёлых библиотек, только CSS 3D and Framer Motion. Мягкие параллаксы, стеклянные поверхности, живые подсказки.',
     'lab.orb': 'Голо-шар',
     'lab.tokens': 'Токены глубины',
     'lab.tokens.desc': 'Адаптируй под любые секции: карточки, CTA, превью кейсов или аватары.',
@@ -443,11 +467,13 @@ const translations: Record<Lang, Dict> = {
     'lab.tilt.hint': 'Наведите для изучения',
     'lab.subtitle': 'Экспериментальные R&D',
     'lab.main_title': 'Цифровая лаборатория',
-    'lab.main_desc': 'Исследование границ гидродинамики, пространственных интерфейсов и фронтенд-архитектур на базе AI.',
+    'lab.main_desc':
+      'Исследование границ гидродинамики, пространственных интерфейсов и фронтенд-архитектур на базе AI.',
     'lab.card1.title': 'Пространственная навигация',
     'lab.card1.desc': 'Парадигмы навигации по оси Z для браузеров будущего.',
     'lab.card2.title': 'Прогностический UI',
-    'lab.card2.desc': 'Компоненты с интеграцией LLM, адаптирующие макет под намерения пользователя.',
+    'lab.card2.desc':
+      'Компоненты с интеграцией LLM, адаптирующие макет под намерения пользователя.',
 
     'stack.nextjs.name': 'Next.js 16',
     'stack.nextjs.desc': 'SSR Фреймворк',
@@ -458,23 +484,29 @@ const translations: Record<Lang, Dict> = {
     'stack.performance': 'Только высокая производительность',
 
     'detailing.hero.title': 'DETAILING HUB',
-    'detailing.hero.desc': 'Высокопроизводительная интерактивная 3D-платформа для любителей авто: кастомизация и бронирование премиальных услуг.',
+    'detailing.hero.desc':
+      'Высокопроизводительная интерактивная 3D-платформа для любителей авто: кастомизация и бронирование премиальных услуг.',
     'detailing.hero.rotate': 'Нажмите и тяните для вращения',
     'detailing.tech.badge': 'Архитектура',
     'detailing.tech.title': 'Техническая сложность',
     'detailing.tech.render.part1': 'Оптимизация рендеринга',
     'detailing.tech.render.part2': 'в реальном времени',
-    'detailing.tech.render.desc': 'Кастомные шейдеры GLSL и инстансинг геометрии для достижения 144FPS на десктопах и 60FPS на мобильных устройствах.',
+    'detailing.tech.render.desc':
+      'Кастомные шейдеры GLSL и инстансинг геометрии для достижения 144FPS на десктопах и 60FPS на мобильных устройствах.',
     'detailing.tech.engine.part1': 'Serverless движок',
     'detailing.tech.engine.part2': 'бронирования',
-    'detailing.tech.engine.desc': 'Архитектура headless commerce с использованием serverless-функций для мгновенной синхронизации календаря.',
+    'detailing.tech.engine.desc':
+      'Архитектура headless commerce с использованием serverless-функций для мгновенной синхронизации календаря.',
     'detailing.tech.latency': 'Задержка',
     'detailing.tech.dynamic_light.title': 'Динамическое освещение',
-    'detailing.tech.dynamic_light.desc': 'HDR-карты окружения для фотореалистичных отражений на кузовах автомобилей.',
+    'detailing.tech.dynamic_light.desc':
+      'HDR-карты окружения для фотореалистичных отражений на кузовах автомобилей.',
     'detailing.tech.post_process.title': 'Пост-обработка',
-    'detailing.tech.post_process.desc': 'Слои Bloom, SSAO и TAA для создания премиальной кинематографической эстетики.',
+    'detailing.tech.post_process.desc':
+      'Слои Bloom, SSAO и TAA для создания премиальной кинематографической эстетики.',
     'detailing.tech.responsive.title': 'Адаптивный 3D',
-    'detailing.tech.responsive.desc': 'Единое управление интерфейсом для десктопных, планшетных и мобильных браузеров.',
+    'detailing.tech.responsive.desc':
+      'Единое управление интерфейсом для десктопных, планшетных и мобильных браузеров.',
     'detailing.footer.engineer': '© 2026 Старший Frontend-инженер и 3D-специалист.',
     'detailing.footer.type': 'Тип проекта',
     'detailing.footer.webgl': 'Интерактивный WebGL',
@@ -485,9 +517,10 @@ const translations: Record<Lang, Dict> = {
     'detailing.nav.home_label': 'Вернуться на главную',
 
     'error.title': 'Что-то пошло не так',
-    'error.description': 'Произошла неожиданная ошибка. Попробуйте обновить страницу или вернитесь позже.',
+    'error.description':
+      'Произошла неожиданная ошибка. Попробуйте обновить страницу или вернитесь позже.',
     'error.details': 'Детали ошибки',
-    'error.retry': 'Попробовать снова'
+    'error.retry': 'Попробовать снова',
   },
   cs: {
     'header.services': 'Služby',
@@ -547,7 +580,8 @@ const translations: Record<Lang, Dict> = {
     'contact.help.message_min': 'Minimálně 10 znaků',
 
     'cta.title': 'Jste připraveni na evoluci?',
-    'cta.subtitle': 'Jste připraveni oživit svůj projekt? Specializuji se na vytváření vysoce výkonných interaktivních webových prostředí přizpůsobených vašim potřebám.',
+    'cta.subtitle':
+      'Jste připraveni oživit svůj projekt? Specializuji se na vytváření vysoce výkonných interaktivních webových prostředí přizpůsobených vašim potřebám.',
     'cta.button': 'Najmout mě',
     'cta.secondary': 'Zobrazit GitHub',
     'cta.stat.projects': 'Dokončené projekty',
@@ -556,18 +590,22 @@ const translations: Record<Lang, Dict> = {
     'cta.stat.awards': 'Ocenění',
 
     'project.1.title': 'Detailing Hub 3D',
-    'project.1.desc': 'Interaktivní 3D konfigurátor aut postavený na React Three Fiber. Vlastní shadery pro realistické laky a odrazy v reálném čase.',
+    'project.1.desc':
+      'Interaktivní 3D konfigurátor aut postavený na React Three Fiber. Vlastní shadery pro realistické laky a odrazy v reálném čase.',
     'project.2.title': 'Dental Clinic Ecosystem',
-    'project.2.desc': 'AI systém pro správu termínů a vizualizaci diagnostiky. Synchronizace dat v reálném čase přes WebSockets pro aktuální dostupnost kliniky.',
+    'project.2.desc':
+      'AI systém pro správu termínů a vizualizaci diagnostiky. Synchronizace dat v reálném čase přes WebSockets pro aktuální dostupnost kliniky.',
     'project.3.title': 'The Barbershop Grid',
-    'project.3.desc': 'Galerie s magnetickým scrollováním a dynamickým rozložením. Optimalizované doručování obrázků přes Edge funkce pro LCP <100ms.',
+    'project.3.desc':
+      'Galerie s magnetickým scrollováním a dynamickým rozložením. Optimalizované doručování obrázků přes Edge funkce pro LCP <100ms.',
     'project.4.title': 'Detailing Service',
     'project.4.desc': 'Starší vstupní stránka pro detailing servis.',
 
     'hero.badge': 'Senior Frontend Architekt',
     'hero.title.line1': 'ARTEM',
     'hero.title.line2': 'MIKHAILOV',
-    'hero.description': 'Navrhuji vysoce výkonné interaktivní 3D ekosystémy a na výsledky zaměřená digitální rozhraní pro rok 2026.',
+    'hero.description':
+      'Navrhuji vysoce výkonné interaktivní 3D ekosystémy a na výsledky zaměřená digitální rozhraní pro rok 2026.',
     'hero.cta.portfolio': 'Portfolio',
     'hero.cta.explore': 'Portfolio',
     'hero.cta.contact': 'Kontakt',
@@ -589,7 +627,8 @@ const translations: Record<Lang, Dict> = {
 
     'about.badge': 'Ekosystém 2026',
     'about.title': 'Moderní stack',
-    'about.desc': 'Vytvářím vysoce výkonná digitální prostředí, kde se precizní inženýrství potkává s imerzivním designem. Specializuji se na Next.js, Three.js a AI-driven SaaS.',
+    'about.desc':
+      'Vytvářím vysoce výkonná digitální prostředí, kde se precizní inženýrství potkává s imerzivním designem. Specializuji se na Next.js, Three.js a AI-driven SaaS.',
     'about.cta.collaborate': 'POĎME SPOLUPRACOVAT',
     'about.expertise': 'TECHNICKÁ EXPERTÍZA',
     'about.offer': 'CO NABÍZÍM',
@@ -616,7 +655,8 @@ const translations: Record<Lang, Dict> = {
     'footer.contacts': 'Kontakty',
     'footer.copyright': 'Full Stack vývojář',
     'footer.build': 'POSTAVME TO',
-    'footer.ready.desc': 'Jste připraveni oživit svůj projekt? Pojďme společně vytvořit něco výjimečného.',
+    'footer.ready.desc':
+      'Jste připraveni oživit svůj projekt? Pojďme společně vytvořit něco výjimečného.',
     'footer.social': 'Sociální sítě',
     'footer.status': 'Stav',
     'footer.version': 'Verze',
@@ -656,7 +696,7 @@ const translations: Record<Lang, Dict> = {
     'chat.initial': 'Tiše pozoruji. Jak mohu dnes pomoci se strategií?',
     'chat.error.sending': 'Chyba při odesílání zprávy',
     'chat.error.timeout': 'Časový limit vypršel. Zkuste to prosím znovu.',
-    'scroll_to_top': 'Zpět nahoru',
+    scroll_to_top: 'Zpět nahoru',
     'works.scroll_left': 'Posunout projekty doleva',
     'works.scroll_right': 'Posunout projekty doprava',
     'switch.to': 'Přepnout na',
@@ -677,7 +717,8 @@ const translations: Record<Lang, Dict> = {
 
     'lab.badge': 'Interaktivní Laboratoř',
     'lab.title': 'Živé 3D akcenty pro wow efekt.',
-    'lab.desc': 'Přidána interaktivní tilt karta a holografická koule — obojí funguje bez těžkých knihoven, pouze s CSS 3D a Framer Motion. Plynulý parallax, skleněné povrchy a živé nápovědy.',
+    'lab.desc':
+      'Přidána interaktivní tilt karta a holografická koule — obojí funguje bez těžkých knihoven, pouze s CSS 3D a Framer Motion. Plynulý parallax, skleněné povrchy a živé nápovědy.',
     'lab.orb': 'Holo koule',
     'lab.tokens': 'Tokeny hloubky',
     'lab.tokens.desc': 'Adaptabilní pro jakoukoli sekci: karty, CTA, náhledy případů nebo avatary.',
@@ -685,11 +726,13 @@ const translations: Record<Lang, Dict> = {
     'lab.tilt.hint': 'Najetím prozkoumejte',
     'lab.subtitle': 'Experimentální R&D',
     'lab.main_title': 'Digitální laboratoř',
-    'lab.main_desc': 'Zkoumání hranic hydrodynamiky, prostorového UI a frontendových architektur řízených AI.',
+    'lab.main_desc':
+      'Zkoumání hranic hydrodynamiky, prostorového UI a frontendových architektur řízených AI.',
     'lab.card1.title': 'Prostorová navigace',
     'lab.card1.desc': 'Navigační paradigmata zaměřená na osu Z pro budoucí prostorové prohlížeče.',
     'lab.card2.title': 'Prediktivní UI',
-    'lab.card2.desc': 'Komponenty integrované s LLM, které přizpůsobují rozložení podle záměru uživatele.',
+    'lab.card2.desc':
+      'Komponenty integrované s LLM, které přizpůsobují rozložení podle záměru uživatele.',
 
     'stack.nextjs.name': 'Next.js 16',
     'stack.nextjs.desc': 'SSR Framework',
@@ -700,23 +743,28 @@ const translations: Record<Lang, Dict> = {
     'stack.performance': 'Pouze vysoký výkon',
 
     'detailing.hero.title': 'DETAILING HUB',
-    'detailing.hero.desc': 'Vysoce výkonná interaktivní 3D platforma pro automobilové nadšence k přizpůsobení a rezervaci prémiových služeb.',
+    'detailing.hero.desc':
+      'Vysoce výkonná interaktivní 3D platforma pro automobilové nadšence k přizpůsobení a rezervaci prémiových služeb.',
     'detailing.hero.rotate': 'Klikněte a táhněte pro rotaci',
     'detailing.tech.badge': 'Architektura',
     'detailing.tech.title': 'Technická propracovanost',
     'detailing.tech.render.part1': 'Optimalizace vykreslování',
     'detailing.tech.render.part2': 'v reálném čase',
-    'detailing.tech.render.desc': 'Vlastní shadery GLSL a instancování geometrie pro dosažení 144FPS na desktopu a 60FPS na mobilních zařízeních.',
+    'detailing.tech.render.desc':
+      'Vlastní shadery GLSL a instancování geometrie pro dosažení 144FPS na desktopu a 60FPS na mobilních zařízeních.',
     'detailing.tech.engine.part1': 'Serverless rezervační',
     'detailing.tech.engine.part2': 'systém',
-    'detailing.tech.engine.desc': 'Headless commerce architektura využívající serverless funkce pro okamžitou synchronizaci kalendáře.',
+    'detailing.tech.engine.desc':
+      'Headless commerce architektura využívající serverless funkce pro okamžitou synchronizaci kalendáře.',
     'detailing.tech.latency': 'Latence',
     'detailing.tech.dynamic_light.title': 'Dynamické osvětlení',
-    'detailing.tech.dynamic_light.desc': 'HDR mapovaná prostředí pro fotorealistické odrazy na karoseriích automobilů.',
+    'detailing.tech.dynamic_light.desc':
+      'HDR mapovaná prostředí pro fotorealistické odrazy na karoseriích automobilů.',
     'detailing.tech.post_process.title': 'Post-processing',
     'detailing.tech.post_process.desc': 'Vrstvy Bloom, SSAO a TAA pro prémiovou filmovou estetiku.',
     'detailing.tech.responsive.title': 'Responzivní 3D',
-    'detailing.tech.responsive.desc': 'Sjednocené ovládací prvky UI napříč desktopovými, tabletovými a mobilními prohlížeči.',
+    'detailing.tech.responsive.desc':
+      'Sjednocené ovládací prvky UI napříč desktopovými, tabletovými a mobilními prohlížeči.',
     'detailing.footer.engineer': '© 2026 Senior Frontend Engineer & 3D specialista.',
     'detailing.footer.type': 'Typ projektu',
     'detailing.footer.webgl': 'Interaktivní WebGL',
@@ -727,10 +775,11 @@ const translations: Record<Lang, Dict> = {
     'detailing.nav.home_label': 'Návrat na domovskou stránku',
 
     'error.title': 'Něco se pokazilo',
-    'error.description': 'Nastala neočekávaná chyba. Zkuste prosím stránku obnovit nebo se vraťte později.',
+    'error.description':
+      'Nastala neočekávaná chyba. Zkuste prosím stránku obnovit nebo se vraťte později.',
     'error.details': 'Podrobnosti chyby',
-    'error.retry': 'Zkusit znovu'
-  }
+    'error.retry': 'Zkusit znovu',
+  },
 };
 
 interface I18nCtx {
@@ -760,7 +809,9 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const setLang = (l: Lang) => {
     setLangState(l);
-    try { localStorage.setItem('lang', l); } catch {}
+    try {
+      localStorage.setItem('lang', l);
+    } catch {}
   };
 
   useEffect(() => {
@@ -769,10 +820,13 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [lang]);
 
-  const t = useMemo(() => (key: string) => {
-    const dict = translations[lang] || translations.en;
-    return dict[key] ?? key;
-  }, [lang]);
+  const t = useMemo(
+    () => (key: string) => {
+      const dict = translations[lang] || translations.en;
+      return dict[key] ?? key;
+    },
+    [lang],
+  );
 
   const value = useMemo(() => ({ lang, setLang, t }), [lang, t]);
 

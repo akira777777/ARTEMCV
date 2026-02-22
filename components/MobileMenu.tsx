@@ -54,7 +54,7 @@ const MobileMenuItemComponent: React.FC<{
           />
         )}
       </button>
-      
+
       {item.submenu && item.submenu.length > 0 && (
         <AnimatePresence>
           {isExpanded && (
@@ -126,7 +126,7 @@ export const MobileMenu: React.FC = () => {
               onClick={() => setIsOpen(false)}
               aria-hidden="true"
             />
-            
+
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
@@ -150,21 +150,18 @@ export const MobileMenu: React.FC = () => {
                     <X className="w-6 h-6 text-white" />
                   </button>
                 </div>
-                
+
                 <div className="flex-1 overflow-y-auto p-4">
                   <nav aria-label={t('nav.aria.label')}>
                     <ul className="space-y-1">
                       {navItems.map((item, index) => (
                         <li key={item.key}>
-                          <MobileMenuItemComponent
-                            item={item}
-                            onClick={handleLinkClick}
-                          />
+                          <MobileMenuItemComponent item={item} onClick={handleLinkClick} />
                         </li>
                       ))}
                     </ul>
                   </nav>
-                  
+
                   <div className="mt-8 pt-6 border-t border-white/10">
                     <div className="px-4">
                       <div className="text-sm text-neutral-400 mb-4">{t('nav.language')}</div>
@@ -172,7 +169,7 @@ export const MobileMenu: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="p-6 border-t border-white/10 text-center">
                   <div className="text-xs text-neutral-500">
                     © {new Date().getFullYear()} ARTEM.DEV

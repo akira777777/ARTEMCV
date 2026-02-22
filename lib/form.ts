@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 
 /**
  * Enhanced Form Management Utilities
- * 
+ *
  * Advanced form handling with validation, state management,
  * performance optimization, and accessibility features.
  */
@@ -21,7 +21,17 @@ export interface FieldValidation {
 
 export interface FieldConfig {
   name: string;
-  type: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'textarea' | 'select' | 'checkbox' | 'radio';
+  type:
+    | 'text'
+    | 'email'
+    | 'password'
+    | 'number'
+    | 'tel'
+    | 'url'
+    | 'textarea'
+    | 'select'
+    | 'checkbox'
+    | 'radio';
   label: string;
   placeholder?: string;
   validation?: FieldValidation;
@@ -82,7 +92,7 @@ export function useForm(options: UseFormOptions = {}) {
     validateOnBlur = true,
     debounceMs = 300,
     persistKey,
-    resetOnSubmit = false
+    resetOnSubmit = false,
   } = options;
 
   const [state, setState] = useState<FormState>({
@@ -92,7 +102,7 @@ export function useForm(options: UseFormOptions = {}) {
     isValid: true,
     isSubmitting: false,
     isDirty: false,
-    submitCount: 0
+    submitCount: 0,
   });
 
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -106,10 +116,10 @@ export function useForm(options: UseFormOptions = {}) {
       const persisted = localStorage.getItem(persistKey);
       if (persisted) {
         const parsed = JSON.parse(persisted);
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           values: { ...initialValues, ...parsed.values },
-          touched: parsed.touched || {}
+          touched: parsed.touched || {},
         }));
       }
     } catch (error) {
@@ -127,10 +137,13 @@ export function useForm(options: UseFormOptions = {}) {
 
     debounceRef.current = setTimeout(() => {
       try {
-        localStorage.setItem(persistKey, JSON.stringify({
-          values: state.values,
-          touched: state.touched
-        }));
+        localStorage.setItem(
+          persistKey,
+          JSON.stringify({
+            values: state.values,
+            touched: state.touched,
+          }),
+        );
       } catch (error) {
         console.warn(`Failed to persist form state: ${persistKey}`, error);
       }
@@ -154,79 +167,88 @@ export function useForm(options: UseFormOptions = {}) {
   }, []);
 
   // Validation function
-  const validateField = useCallback(async (name: string, value: any): Promise<string | null> => {
-    const validation = validationSchema[name];
-    if (!validation) return null;
+  const validateField = useCallback(
+    async (name: string, value: any): Promise<string | null> => {
+      const validation = validationSchema[name];
+      if (!validation) return null;
 
-    // Required validation
-    if (validation.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
-      return 'This field is required';
-    }
-
-    // Min length validation
-    if (validation.minLength && value && value.length < validation.minLength) {
-      return `Minimum length is ${validation.minLength} characters`;
-    }
-
-    // Max length validation
-    if (validation.maxLength && value && value.length > validation.maxLength) {
-      return `Maximum length is ${validation.maxLength} characters`;
-    }
-
-    // Pattern validation
-    if (validation.pattern && value && !validation.pattern.test(value)) {
-      return 'Invalid format';
-    }
-
-    // Custom validation
-    if (validation.custom) {
-      const result = await validation.custom(value);
-      if (typeof result === 'string') {
-        return result;
-      } else if (result === false) {
-        return 'Invalid value';
+      // Required validation
+      if (validation.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
+        return 'This field is required';
       }
-    }
 
-    return null;
-  }, [validationSchema]);
+      // Min length validation
+      if (validation.minLength && value && value.length < validation.minLength) {
+        return `Minimum length is ${validation.minLength} characters`;
+      }
+
+      // Max length validation
+      if (validation.maxLength && value && value.length > validation.maxLength) {
+        return `Maximum length is ${validation.maxLength} characters`;
+      }
+
+      // Pattern validation
+      if (validation.pattern && value && !validation.pattern.test(value)) {
+        return 'Invalid format';
+      }
+
+      // Custom validation
+      if (validation.custom) {
+        const result = await validation.custom(value);
+        if (typeof result === 'string') {
+          return result;
+        } else if (result === false) {
+          return 'Invalid value';
+        }
+      }
+
+      return null;
+    },
+    [validationSchema],
+  );
 
   // Update field value
-  const setValue = useCallback(async (name: string, value: any) => {
-    setState(prev => {
-      const newValues = { ...prev.values, [name]: value };
-      const newTouched = { ...prev.touched, [name]: true };
-      const newIsDirty = JSON.stringify(newValues) !== JSON.stringify(initialValues);
+  const setValue = useCallback(
+    async (name: string, value: any) => {
+      setState((prev) => {
+        const newValues = { ...prev.values, [name]: value };
+        const newTouched = { ...prev.touched, [name]: true };
+        const newIsDirty = JSON.stringify(newValues) !== JSON.stringify(initialValues);
 
-      return {
-        ...prev,
-        values: newValues,
-        touched: newTouched,
-        isDirty: newIsDirty
-      };
-    });
+        return {
+          ...prev,
+          values: newValues,
+          touched: newTouched,
+          isDirty: newIsDirty,
+        };
+      });
 
-    // Validate on change if enabled
-    if (validateOnChange) {
-      const error = await validateField(name, value);
-      setState(prev => ({
-        ...prev,
-        errors: { ...prev.errors, [name]: error }
-      }));
-    }
-  }, [validateField, validateOnChange, initialValues]);
+      // Validate on change if enabled
+      if (validateOnChange) {
+        const error = await validateField(name, value);
+        setState((prev) => ({
+          ...prev,
+          errors: { ...prev.errors, [name]: error },
+        }));
+      }
+    },
+    [validateField, validateOnChange, initialValues],
+  );
 
   // Handle field blur
-  const handleBlur = useCallback(async (name: string) => {
-    if (validateOnBlur) {
-      const error = await validateField(name, state.values[name]);
-      setState(prev => ({
-        ...prev,
-        errors: { ...prev.errors, [name]: error },
-        touched: { ...prev.touched, [name]: true }
-      }));
-    }
-  }, [validateField, validateOnBlur, state.values]);
+  const handleBlur = useCallback(
+    async (name: string) => {
+      if (validateOnBlur) {
+        const error = await validateField(name, state.values[name]);
+        setState((prev) => ({
+          ...prev,
+          errors: { ...prev.errors, [name]: error },
+          touched: { ...prev.touched, [name]: true },
+        }));
+      }
+    },
+    [validateField, validateOnBlur, state.values],
+  );
 
   // Validate entire form
   const validateForm = useCallback(async (): Promise<boolean> => {
@@ -239,51 +261,57 @@ export function useForm(options: UseFormOptions = {}) {
       }
     }
 
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      errors
+      errors,
     }));
 
     return Object.keys(errors).length === 0;
   }, [state.values, validateField]);
 
   // Submit form
-  const submit = useCallback(async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+  const submit = useCallback(
+    async (e?: React.FormEvent) => {
+      if (e) e.preventDefault();
 
-    setState(prev => ({ ...prev, isSubmitting: true }));
+      setState((prev) => ({ ...prev, isSubmitting: true }));
 
-    try {
-      const isValid = await validateForm();
-      setState(prev => ({ ...prev, submitCount: prev.submitCount + 1 }));
+      try {
+        const isValid = await validateForm();
+        setState((prev) => ({ ...prev, submitCount: prev.submitCount + 1 }));
 
-      if (isValid && onSubmit) {
-        await onSubmit(state.values);
-        
-        if (resetOnSubmit) {
-          setState({
-            values: { ...initialValues },
-            errors: {},
-            touched: {},
-            isValid: true,
-            isSubmitting: false,
-            isDirty: false,
-            submitCount: 0
-          });
+        if (isValid && onSubmit) {
+          await onSubmit(state.values);
+
+          if (resetOnSubmit) {
+            setState({
+              values: { ...initialValues },
+              errors: {},
+              touched: {},
+              isValid: true,
+              isSubmitting: false,
+              isDirty: false,
+              submitCount: 0,
+            });
+          } else {
+            setState((prev) => ({ ...prev, isSubmitting: false }));
+          }
         } else {
-          setState(prev => ({ ...prev, isSubmitting: false }));
+          setState((prev) => ({ ...prev, isSubmitting: false }));
         }
-      } else {
-        setState(prev => ({ ...prev, isSubmitting: false }));
+      } catch (error) {
+        setState((prev) => ({
+          ...prev,
+          isSubmitting: false,
+          errors: {
+            ...prev.errors,
+            submit: error instanceof Error ? error.message : 'Submission failed',
+          },
+        }));
       }
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        isSubmitting: false,
-        errors: { ...prev.errors, submit: error instanceof Error ? error.message : 'Submission failed' }
-      }));
-    }
-  }, [validateForm, onSubmit, state.values, resetOnSubmit, initialValues]);
+    },
+    [validateForm, onSubmit, state.values, resetOnSubmit, initialValues],
+  );
 
   // Reset form
   const reset = useCallback(() => {
@@ -294,7 +322,7 @@ export function useForm(options: UseFormOptions = {}) {
       isValid: true,
       isSubmitting: false,
       isDirty: false,
-      submitCount: 0
+      submitCount: 0,
     });
 
     if (persistKey) {
@@ -308,21 +336,21 @@ export function useForm(options: UseFormOptions = {}) {
 
   // Clear errors
   const clearErrors = useCallback(() => {
-    setState(prev => ({ ...prev, errors: {} }));
+    setState((prev) => ({ ...prev, errors: {} }));
   }, []);
 
   // Check if form is valid
   const isFormValid = useCallback(async () => {
     const errors = await Promise.all(
       Object.entries(state.values).map(async ([name, value]) => ({
-        [name]: await validateField(name, value)
-      }))
+        [name]: await validateField(name, value),
+      })),
     );
 
     const errorObj = Object.assign({}, ...errors);
-    const isValid = Object.values(errorObj).every(error => !error);
+    const isValid = Object.values(errorObj).every((error) => !error);
 
-    setState(prev => ({ ...prev, errors: errorObj }));
+    setState((prev) => ({ ...prev, errors: errorObj }));
     return isValid;
   }, [state.values, validateField]);
 
@@ -334,14 +362,18 @@ export function useForm(options: UseFormOptions = {}) {
     submit,
     reset,
     clearErrors,
-    isFormValid
+    isFormValid,
   };
 }
 
 /**
  * Individual field hook for form management
  */
-export function useField(name: string, form: ReturnType<typeof useForm>, config?: FieldConfig): UseFieldResult {
+export function useField(
+  name: string,
+  form: ReturnType<typeof useForm>,
+  config?: FieldConfig,
+): UseFieldResult {
   const { values, errors, touched, setValue, handleBlur } = form;
   const [isFocused, setIsFocused] = useState(false);
 
@@ -350,9 +382,12 @@ export function useField(name: string, form: ReturnType<typeof useForm>, config?
   const isTouched = touched[name];
   const isValid = !error && isTouched;
 
-  const onChange = useCallback((newValue: any) => {
-    setValue(name, newValue);
-  }, [name, setValue]);
+  const onChange = useCallback(
+    (newValue: any) => {
+      setValue(name, newValue);
+    },
+    [name, setValue],
+  );
 
   const onBlur = useCallback(() => {
     setIsFocused(false);
@@ -363,16 +398,22 @@ export function useField(name: string, form: ReturnType<typeof useForm>, config?
     setIsFocused(true);
   }, []);
 
-  const setValueDirect = useCallback((newValue: any) => {
-    setValue(name, newValue);
-  }, [name, setValue]);
+  const setValueDirect = useCallback(
+    (newValue: any) => {
+      setValue(name, newValue);
+    },
+    [name, setValue],
+  );
 
-  const setError = useCallback((newError: string | null) => {
-    form.setState(prev => ({
-      ...prev,
-      errors: { ...prev.errors, [name]: newError }
-    }));
-  }, [name, form.setState]);
+  const setError = useCallback(
+    (newError: string | null) => {
+      form.setState((prev) => ({
+        ...prev,
+        errors: { ...prev.errors, [name]: newError },
+      }));
+    },
+    [name, form.setState],
+  );
 
   const clearError = useCallback(() => {
     setError(null);
@@ -388,7 +429,7 @@ export function useField(name: string, form: ReturnType<typeof useForm>, config?
     onFocus,
     setValue: setValueDirect,
     setError,
-    clearError
+    clearError,
   };
 }
 
@@ -398,15 +439,15 @@ export function useField(name: string, form: ReturnType<typeof useForm>, config?
 export const formValidation = {
   email: {
     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    message: 'Please enter a valid email address'
+    message: 'Please enter a valid email address',
   },
   phone: {
     pattern: /^\+?[\d\s\-\(\)]{10,}$/,
-    message: 'Please enter a valid phone number'
+    message: 'Please enter a valid phone number',
   },
   url: {
     pattern: /^https?:\/\/.+\..+$/,
-    message: 'Please enter a valid URL'
+    message: 'Please enter a valid URL',
   },
   password: {
     minLength: 8,
@@ -418,19 +459,22 @@ export const formValidation = {
       const errors: string[] = [];
 
       if (password.length < 8) errors.push('Password must be at least 8 characters long');
-      if (!/[a-z]/.test(password)) errors.push('Password must contain at least one lowercase letter');
-      if (!/[A-Z]/.test(password)) errors.push('Password must contain at least one uppercase letter');
+      if (!/[a-z]/.test(password))
+        errors.push('Password must contain at least one lowercase letter');
+      if (!/[A-Z]/.test(password))
+        errors.push('Password must contain at least one uppercase letter');
       if (!/\d/.test(password)) errors.push('Password must contain at least one number');
-      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) errors.push('Password must contain at least one special character');
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password))
+        errors.push('Password must contain at least one special character');
 
       return errors.length === 0 ? true : errors.join('. ');
-    }
+    },
   },
   name: {
     pattern: /^[a-zA-Z\s\-']+$/,
     minLength: 2,
-    message: 'Please enter a valid name'
-  }
+    message: 'Please enter a valid name',
+  },
 };
 
 /**
@@ -465,7 +509,7 @@ export const formPersistence = {
       console.error(`Failed to remove form state: ${key}`, error);
       return false;
     }
-  }
+  },
 };
 
 /**
@@ -476,7 +520,7 @@ export const formAccessibility = {
     'aria-label': fieldName,
     'aria-required': required || undefined,
     'aria-invalid': error ? 'true' : undefined,
-    'aria-describedby': error ? `${fieldName}-error` : undefined
+    'aria-describedby': error ? `${fieldName}-error` : undefined,
   }),
 
   generateErrorId: (fieldName: string) => `${fieldName}-error`,
@@ -488,7 +532,7 @@ export const formAccessibility = {
         (firstError as HTMLElement).focus();
       }
     }
-  }
+  },
 };
 
 export default {
@@ -496,5 +540,5 @@ export default {
   useField,
   formValidation,
   formPersistence,
-  formAccessibility
+  formAccessibility,
 };

@@ -122,18 +122,24 @@ describe('errorUtils', () => {
       const info = errorUtils.createErrorInfo('Log test');
       errorUtils.logError(info);
 
-      expect(console.error).toHaveBeenCalledWith('[Error]', expect.objectContaining({
-        message: 'Log test'
-      }));
+      expect(console.error).toHaveBeenCalledWith(
+        '[Error]',
+        expect.objectContaining({
+          message: 'Log test',
+        }),
+      );
     });
 
     it('should log error with specified level', () => {
       const info = errorUtils.createErrorInfo('Warn test');
       errorUtils.logError(info, 'warn');
 
-      expect(console.warn).toHaveBeenCalledWith('[Error]', expect.objectContaining({
-        message: 'Warn test'
-      }));
+      expect(console.warn).toHaveBeenCalledWith(
+        '[Error]',
+        expect.objectContaining({
+          message: 'Warn test',
+        }),
+      );
     });
 
     it('should fallback to console.error if level is invalid', () => {
@@ -152,10 +158,13 @@ describe('errorUtils', () => {
       const result = await errorUtils.reportError(info);
 
       expect(result).toBe(true);
-      expect(global.fetch).toHaveBeenCalledWith('/api/errors', expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify(info)
-      }));
+      expect(global.fetch).toHaveBeenCalledWith(
+        '/api/errors',
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify(info),
+        }),
+      );
     });
 
     it('should return false when reporting fails', async () => {
@@ -181,7 +190,7 @@ describe('errorUtils', () => {
       const mockData = { data: 'test' };
       (global.fetch as any).mockResolvedValue({
         ok: true,
-        json: vi.fn().mockResolvedValue(mockData)
+        json: vi.fn().mockResolvedValue(mockData),
       });
 
       const result = await errorUtils.fetchWithRetry('/api/test');
@@ -195,7 +204,7 @@ describe('errorUtils', () => {
         .mockResolvedValueOnce({ ok: false, status: 500 })
         .mockResolvedValueOnce({
           ok: true,
-          json: vi.fn().mockResolvedValue(mockData)
+          json: vi.fn().mockResolvedValue(mockData),
         });
 
       const result = await errorUtils.fetchWithRetry('/api/retry', {}, 3, 10);
@@ -206,19 +215,18 @@ describe('errorUtils', () => {
     it('should throw error after max retries', async () => {
       (global.fetch as any).mockResolvedValue({ ok: false, status: 500 });
 
-      await expect(errorUtils.fetchWithRetry('/api/fail', {}, 2, 10))
-        .rejects.toThrow('HTTP error! status: 500');
+      await expect(errorUtils.fetchWithRetry('/api/fail', {}, 2, 10)).rejects.toThrow(
+        'HTTP error! status: 500',
+      );
       expect(global.fetch).toHaveBeenCalledTimes(2);
     });
 
     it('should retry on network error', async () => {
       const mockData = { data: 'recovered' };
-      (global.fetch as any)
-        .mockRejectedValueOnce(new Error('Network fail'))
-        .mockResolvedValueOnce({
-          ok: true,
-          json: vi.fn().mockResolvedValue(mockData)
-        });
+      (global.fetch as any).mockRejectedValueOnce(new Error('Network fail')).mockResolvedValueOnce({
+        ok: true,
+        json: vi.fn().mockResolvedValue(mockData),
+      });
 
       const result = await errorUtils.fetchWithRetry('/api/network-retry', {}, 3, 10);
       expect(result).toEqual(mockData);
@@ -230,17 +238,17 @@ describe('errorUtils', () => {
     it('should return all recovery strategies', () => {
       const strategies = errorUtils.createRecoveryStrategies();
       expect(strategies).toHaveLength(4);
-      expect(strategies.map(s => s.id)).toEqual([
+      expect(strategies.map((s) => s.id)).toEqual([
         'cache-clear',
         'service-worker-reset',
         'local-storage-reset',
-        'page-reload'
+        'page-reload',
       ]);
     });
 
     it('should execute cache-clear strategy', async () => {
       const strategies = errorUtils.createRecoveryStrategies();
-      const strategy = strategies.find(s => s.id === 'cache-clear')!;
+      const strategy = strategies.find((s) => s.id === 'cache-clear')!;
 
       (window.caches.keys as any).mockResolvedValue(['cache1', 'cache2']);
 
@@ -252,11 +260,11 @@ describe('errorUtils', () => {
 
     it('should execute service-worker-reset strategy', async () => {
       const strategies = errorUtils.createRecoveryStrategies();
-      const strategy = strategies.find(s => s.id === 'service-worker-reset')!;
+      const strategy = strategies.find((s) => s.id === 'service-worker-reset')!;
 
       const mockUnregister = vi.fn().mockResolvedValue(true);
       (navigator.serviceWorker.getRegistrations as any).mockResolvedValue([
-        { unregister: mockUnregister }
+        { unregister: mockUnregister },
       ]);
 
       const result = await strategy.execute();
@@ -266,7 +274,7 @@ describe('errorUtils', () => {
 
     it('should execute local-storage-reset strategy', async () => {
       const strategies = errorUtils.createRecoveryStrategies();
-      const strategy = strategies.find(s => s.id === 'local-storage-reset')!;
+      const strategy = strategies.find((s) => s.id === 'local-storage-reset')!;
 
       const result = await strategy.execute();
       expect(result).toBe(true);
@@ -275,7 +283,7 @@ describe('errorUtils', () => {
 
     it('should execute page-reload strategy', async () => {
       const strategies = errorUtils.createRecoveryStrategies();
-      const strategy = strategies.find(s => s.id === 'page-reload')!;
+      const strategy = strategies.find((s) => s.id === 'page-reload')!;
 
       const result = await strategy.execute();
       expect(result).toBe(true);
@@ -284,7 +292,7 @@ describe('errorUtils', () => {
 
     it('should handle failures in strategies', async () => {
       const strategies = errorUtils.createRecoveryStrategies();
-      const strategy = strategies.find(s => s.id === 'cache-clear')!;
+      const strategy = strategies.find((s) => s.id === 'cache-clear')!;
 
       (window.caches.keys as any).mockRejectedValue(new Error('Cache fail'));
 
@@ -313,7 +321,9 @@ describe('errorUtils', () => {
 
     it('should request geolocation if state is prompt', async () => {
       (navigator.permissions.query as any).mockResolvedValue({ state: 'prompt' });
-      (navigator.geolocation.getCurrentPosition as any).mockImplementation((success: any) => success());
+      (navigator.geolocation.getCurrentPosition as any).mockImplementation((success: any) =>
+        success(),
+      );
 
       const result = await errorUtils.handlePermissionError('geolocation');
       expect(result).toBe('granted');
@@ -323,15 +333,15 @@ describe('errorUtils', () => {
     it('should reject if permission is denied', async () => {
       (navigator.permissions.query as any).mockResolvedValue({ state: 'denied' });
 
-      await expect(errorUtils.handlePermissionError('notifications'))
-        .rejects.toThrow('Permission notifications denied');
+      await expect(errorUtils.handlePermissionError('notifications')).rejects.toThrow(
+        'Permission notifications denied',
+      );
     });
   });
 
   describe('createErrorBoundary', () => {
     const TestComponent = () => <div>Test Component</div>;
-    const FallbackComponent = ({ error }: { error: Error }) =>
-      <div>Fallback: {error.message}</div>;
+    const FallbackComponent = ({ error }: { error: Error }) => <div>Fallback: {error.message}</div>;
 
     it('should render the component when there is no error', () => {
       const Wrapped = errorUtils.createErrorBoundary(TestComponent);
@@ -347,7 +357,7 @@ describe('errorUtils', () => {
       act(() => {
         const errorEvent = new ErrorEvent('error', {
           message: 'HOC error',
-          error: new Error('HOC error')
+          error: new Error('HOC error'),
         });
         window.dispatchEvent(errorEvent);
       });

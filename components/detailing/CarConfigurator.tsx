@@ -25,22 +25,22 @@ function Model() {
 const CarConfigurator: React.FC = () => {
   return (
     <div className="w-full h-full relative">
-      <Canvas 
-              camera={{ 
-                position: [0, 0, 5] as const, // Typed tuple for camera position
-                fov: 45 
-              }}
-              gl={{ 
-                // WebGL performance optimizations
-                antialias: true,
-                alpha: false,
-                stencil: false,
-                depth: true,
-                preserveDrawingBuffer: false // Better performance, disabled buffer preservation
-              }}
-              frameloop="always"
-              dpr={globalThis.devicePixelRatio || 1} // Explicit device pixel ratio
-            >
+      <Canvas
+        camera={{
+          position: [0, 0, 5] as const, // Typed tuple for camera position
+          fov: 45,
+        }}
+        gl={{
+          // WebGL performance optimizations
+          antialias: true,
+          alpha: false,
+          stencil: false,
+          depth: true,
+          preserveDrawingBuffer: false, // Better performance, disabled buffer preservation
+        }}
+        frameloop="always"
+        dpr={globalThis.devicePixelRatio || 1} // Explicit device pixel ratio
+      >
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
         <Environment preset="city" />
@@ -53,7 +53,9 @@ const CarConfigurator: React.FC = () => {
         <div className="absolute top-[35%] left-[25%] animate-pulse flex items-center gap-4">
           <div className="w-3 h-3 bg-blue-500 rounded-full shadow-[0_0_0_4px_rgba(59,130,246,0.3)]"></div>
           <div className="bg-white/5 backdrop-blur-md px-4 py-2 rounded-lg border border-blue-500/30">
-            <p className="text-xs font-bold uppercase tracking-wider text-blue-500">Paint Protection</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-blue-500">
+              Paint Protection
+            </p>
             <p className="text-sm text-white/80">Ceramic coating visualization</p>
           </div>
         </div>

@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 
 /**
  * Enhanced Accessibility Management Utilities
- * 
+ *
  * Comprehensive accessibility tools for keyboard navigation,
  * screen reader support, focus management, and ARIA attributes.
  */
@@ -35,7 +35,7 @@ export interface AriaAttributes {
   'aria-level'?: number;
   'aria-posinset'?: number;
   'aria-setsize'?: number;
-  'role'?: string;
+  role?: string;
 }
 
 export interface KeyboardNavigationOptions {
@@ -82,7 +82,7 @@ export function useAriaAttributes(attributes: AriaAttributes = {}) {
 
     return () => {
       // Clean up ARIA attributes
-      Object.keys(attributes).forEach(key => {
+      Object.keys(attributes).forEach((key) => {
         element.removeAttribute(key);
       });
     };
@@ -100,7 +100,7 @@ export function useKeyboardNavigation(options: KeyboardNavigationOptions = {}) {
     focusableSelector = '[tabindex], button, [href], input, select, textarea, [contenteditable="true"]',
     wrap = true,
     vertical = true,
-    horizontal = true
+    horizontal = true,
   } = options;
 
   const containerRef = useRef<HTMLElement>(null);
@@ -110,86 +110,97 @@ export function useKeyboardNavigation(options: KeyboardNavigationOptions = {}) {
     const container = containerRef.current;
     if (!container) return [];
 
-    return Array.from(container.querySelectorAll<HTMLElement>(focusableSelector))
-      .filter(element => {
+    return Array.from(container.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+      (element) => {
         const style = window.getComputedStyle(element);
-        return style.display !== 'none' && style.visibility !== 'hidden' && !element.hasAttribute('disabled');
-      });
+        return (
+          style.display !== 'none' &&
+          style.visibility !== 'hidden' &&
+          !element.hasAttribute('disabled')
+        );
+      },
+    );
   }, [focusableSelector]);
 
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (!enabled) return;
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (!enabled) return;
 
-    const focusableElements = getFocusableElements();
-    if (focusableElements.length === 0) return;
+      const focusableElements = getFocusableElements();
+      if (focusableElements.length === 0) return;
 
-    const currentIndex = focusedIndex >= 0 ? focusedIndex : focusableElements.indexOf(document.activeElement as HTMLElement);
-    let nextIndex = currentIndex;
+      const currentIndex =
+        focusedIndex >= 0
+          ? focusedIndex
+          : focusableElements.indexOf(document.activeElement as HTMLElement);
+      let nextIndex = currentIndex;
 
-    switch (event.key) {
-      case 'ArrowDown':
-        if (vertical) {
-          event.preventDefault();
-          nextIndex = currentIndex + 1;
-          if (nextIndex >= focusableElements.length) {
-            nextIndex = wrap ? 0 : focusableElements.length - 1;
+      switch (event.key) {
+        case 'ArrowDown':
+          if (vertical) {
+            event.preventDefault();
+            nextIndex = currentIndex + 1;
+            if (nextIndex >= focusableElements.length) {
+              nextIndex = wrap ? 0 : focusableElements.length - 1;
+            }
           }
-        }
-        break;
+          break;
 
-      case 'ArrowUp':
-        if (vertical) {
-          event.preventDefault();
-          nextIndex = currentIndex - 1;
-          if (nextIndex < 0) {
-            nextIndex = wrap ? focusableElements.length - 1 : 0;
+        case 'ArrowUp':
+          if (vertical) {
+            event.preventDefault();
+            nextIndex = currentIndex - 1;
+            if (nextIndex < 0) {
+              nextIndex = wrap ? focusableElements.length - 1 : 0;
+            }
           }
-        }
-        break;
+          break;
 
-      case 'ArrowRight':
-        if (horizontal) {
-          event.preventDefault();
-          nextIndex = currentIndex + 1;
-          if (nextIndex >= focusableElements.length) {
-            nextIndex = wrap ? 0 : focusableElements.length - 1;
+        case 'ArrowRight':
+          if (horizontal) {
+            event.preventDefault();
+            nextIndex = currentIndex + 1;
+            if (nextIndex >= focusableElements.length) {
+              nextIndex = wrap ? 0 : focusableElements.length - 1;
+            }
           }
-        }
-        break;
+          break;
 
-      case 'ArrowLeft':
-        if (horizontal) {
-          event.preventDefault();
-          nextIndex = currentIndex - 1;
-          if (nextIndex < 0) {
-            nextIndex = wrap ? focusableElements.length - 1 : 0;
+        case 'ArrowLeft':
+          if (horizontal) {
+            event.preventDefault();
+            nextIndex = currentIndex - 1;
+            if (nextIndex < 0) {
+              nextIndex = wrap ? focusableElements.length - 1 : 0;
+            }
           }
-        }
-        break;
+          break;
 
-      case 'Home':
-        event.preventDefault();
-        nextIndex = 0;
-        break;
+        case 'Home':
+          event.preventDefault();
+          nextIndex = 0;
+          break;
 
-      case 'End':
-        event.preventDefault();
-        nextIndex = focusableElements.length - 1;
-        break;
+        case 'End':
+          event.preventDefault();
+          nextIndex = focusableElements.length - 1;
+          break;
 
-      case 'Tab':
-        // Handle custom tab behavior if needed
-        break;
+        case 'Tab':
+          // Handle custom tab behavior if needed
+          break;
 
-      default:
-        return;
-    }
+        default:
+          return;
+      }
 
-    if (nextIndex !== currentIndex) {
-      setFocusedIndex(nextIndex);
-      focusableElements[nextIndex]?.focus();
-    }
-  }, [enabled, getFocusableElements, focusedIndex, vertical, horizontal, wrap]);
+      if (nextIndex !== currentIndex) {
+        setFocusedIndex(nextIndex);
+        focusableElements[nextIndex]?.focus();
+      }
+    },
+    [enabled, getFocusableElements, focusedIndex, vertical, horizontal, wrap],
+  );
 
   useEffect(() => {
     const container = containerRef.current;
@@ -203,7 +214,7 @@ export function useKeyboardNavigation(options: KeyboardNavigationOptions = {}) {
     containerRef,
     focusedIndex,
     setFocusedIndex,
-    getFocusableElements
+    getFocusableElements,
   };
 }
 
@@ -215,7 +226,7 @@ export function useFocusManagement(options: FocusManagementOptions = {}) {
     restoreFocus = true,
     preventScroll = false,
     focusFirst = false,
-    focusLast = false
+    focusLast = false,
   } = options;
 
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -240,10 +251,10 @@ export function useFocusManagement(options: FocusManagementOptions = {}) {
     if (!container) return;
 
     const focusableElements = container.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
 
-    const firstElement = Array.from(focusableElements).find(element => {
+    const firstElement = Array.from(focusableElements).find((element) => {
       const style = window.getComputedStyle(element);
       return style.display !== 'none' && style.visibility !== 'hidden';
     });
@@ -256,13 +267,15 @@ export function useFocusManagement(options: FocusManagementOptions = {}) {
     if (!container) return;
 
     const focusableElements = container.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
 
-    const lastElement = Array.from(focusableElements).reverse().find(element => {
-      const style = window.getComputedStyle(element);
-      return style.display !== 'none' && style.visibility !== 'hidden';
-    });
+    const lastElement = Array.from(focusableElements)
+      .reverse()
+      .find((element) => {
+        const style = window.getComputedStyle(element);
+        return style.display !== 'none' && style.visibility !== 'hidden';
+      });
 
     lastElement?.focus({ preventScroll });
   }, [preventScroll]);
@@ -272,7 +285,7 @@ export function useFocusManagement(options: FocusManagementOptions = {}) {
     if (!container) return;
 
     const focusableElements = container.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
 
     const firstElement = focusableElements[0];
@@ -313,7 +326,7 @@ export function useFocusManagement(options: FocusManagementOptions = {}) {
     restoreFocus,
     focusFirstElement,
     focusLastElement,
-    trapFocus
+    trapFocus,
   };
 }
 
@@ -321,11 +334,7 @@ export function useFocusManagement(options: FocusManagementOptions = {}) {
  * Screen reader announcement hook
  */
 export function useScreenReader(options: ScreenReaderOptions = {}) {
-  const {
-    liveRegion = true,
-    announce = true,
-    politeness = 'polite'
-  } = options;
+  const { liveRegion = true, announce = true, politeness = 'polite' } = options;
 
   const announcementRef = useRef<HTMLDivElement | null>(null);
   const [announcement, setAnnouncement] = useState('');
@@ -351,40 +360,49 @@ export function useScreenReader(options: ScreenReaderOptions = {}) {
     }
   }, [liveRegion, politeness]);
 
-  const announce = useCallback((message: string) => {
-    if (!announce || !announcementRef.current) return;
+  const announce = useCallback(
+    (message: string) => {
+      if (!announce || !announcementRef.current) return;
 
-    setAnnouncement(message);
-    setTimeout(() => {
-      setAnnouncement('');
-    }, 100);
-  }, [announce]);
-
-  const announcePolite = useCallback((message: string) => {
-    if (announcementRef.current) {
-      announcementRef.current.setAttribute('aria-live', 'polite');
-      announce(message);
+      setAnnouncement(message);
       setTimeout(() => {
-        announcementRef.current?.setAttribute('aria-live', politeness);
+        setAnnouncement('');
       }, 100);
-    }
-  }, [announce, politeness]);
+    },
+    [announce],
+  );
 
-  const announceAssertive = useCallback((message: string) => {
-    if (announcementRef.current) {
-      announcementRef.current.setAttribute('aria-live', 'assertive');
-      announce(message);
-      setTimeout(() => {
-        announcementRef.current?.setAttribute('aria-live', politeness);
-      }, 100);
-    }
-  }, [announce, politeness]);
+  const announcePolite = useCallback(
+    (message: string) => {
+      if (announcementRef.current) {
+        announcementRef.current.setAttribute('aria-live', 'polite');
+        announce(message);
+        setTimeout(() => {
+          announcementRef.current?.setAttribute('aria-live', politeness);
+        }, 100);
+      }
+    },
+    [announce, politeness],
+  );
+
+  const announceAssertive = useCallback(
+    (message: string) => {
+      if (announcementRef.current) {
+        announcementRef.current.setAttribute('aria-live', 'assertive');
+        announce(message);
+        setTimeout(() => {
+          announcementRef.current?.setAttribute('aria-live', politeness);
+        }, 100);
+      }
+    },
+    [announce, politeness],
+  );
 
   return {
     announcement,
     announce,
     announcePolite,
-    announceAssertive
+    announceAssertive,
   };
 }
 
@@ -392,14 +410,16 @@ export function useScreenReader(options: ScreenReaderOptions = {}) {
  * Skip link management hook
  */
 export function useSkipLinks() {
-  const [skipLinks, setSkipLinks] = useState<Array<{ id: string; label: string; href: string }>>([]);
+  const [skipLinks, setSkipLinks] = useState<Array<{ id: string; label: string; href: string }>>(
+    [],
+  );
 
   const addSkipLink = useCallback((link: { id: string; label: string; href: string }) => {
-    setSkipLinks(prev => [...prev, link]);
+    setSkipLinks((prev) => [...prev, link]);
   }, []);
 
   const removeSkipLink = useCallback((id: string) => {
-    setSkipLinks(prev => prev.filter(link => link.id !== id));
+    setSkipLinks((prev) => prev.filter((link) => link.id !== id));
   }, []);
 
   useEffect(() => {
@@ -417,11 +437,15 @@ export function useSkipLinks() {
     }
 
     // Render skip links
-    container.innerHTML = skipLinks.map(link => `
+    container.innerHTML = skipLinks
+      .map(
+        (link) => `
       <a href="${link.href}" id="${link.id}" class="skip-link">
         ${link.label}
       </a>
-    `).join('');
+    `,
+      )
+      .join('');
 
     // Add focus styles
     const style = document.createElement('style');
@@ -451,7 +475,7 @@ export function useSkipLinks() {
   return {
     skipLinks,
     addSkipLink,
-    removeSkipLink
+    removeSkipLink,
   };
 }
 
@@ -523,20 +547,20 @@ export const accessibilityUtils = {
         return {
           role: 'button',
           tabindex: 0,
-          'aria-pressed': options.pressed || false
+          'aria-pressed': options.pressed || false,
         };
 
       case 'link':
         return {
           role: 'link',
-          tabindex: 0
+          tabindex: 0,
         };
 
       case 'checkbox':
         return {
           role: 'checkbox',
           'aria-checked': options.checked || false,
-          'aria-label': options.label
+          'aria-label': options.label,
         };
 
       case 'radio':
@@ -545,7 +569,7 @@ export const accessibilityUtils = {
           'aria-checked': options.checked || false,
           'aria-label': options.label,
           'aria-posinset': options.posinset,
-          'aria-setsize': options.setsize
+          'aria-setsize': options.setsize,
         };
 
       case 'tab':
@@ -553,14 +577,14 @@ export const accessibilityUtils = {
           role: 'tab',
           'aria-selected': options.selected || false,
           'aria-controls': options.controls,
-          tabindex: options.selected ? 0 : -1
+          tabindex: options.selected ? 0 : -1,
         };
 
       case 'tabpanel':
         return {
           role: 'tabpanel',
           'aria-labelledby': options.labelledby,
-          hidden: !options.active
+          hidden: !options.active,
         };
 
       case 'dialog':
@@ -568,7 +592,7 @@ export const accessibilityUtils = {
           role: 'dialog',
           'aria-modal': true,
           'aria-labelledby': options.titleId,
-          'aria-describedby': options.descriptionId
+          'aria-describedby': options.descriptionId,
         };
 
       default:
@@ -591,10 +615,10 @@ export const accessibilityUtils = {
       'a[href]',
       'area[href]',
       '[tabindex]',
-      '[contenteditable="true"]'
+      '[contenteditable="true"]',
     ];
 
-    return focusableSelectors.some(selector => element.matches(selector));
+    return focusableSelectors.some((selector) => element.matches(selector));
   },
 
   /**
@@ -609,14 +633,15 @@ export const accessibilityUtils = {
       'a[href]',
       'area[href]',
       '[tabindex]:not([tabindex="-1"])',
-      '[contenteditable="true"]'
+      '[contenteditable="true"]',
     ];
 
-    return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors.join(', ')))
-      .filter(element => {
-        const style = window.getComputedStyle(element);
-        return style.display !== 'none' && style.visibility !== 'hidden';
-      });
+    return Array.from(
+      container.querySelectorAll<HTMLElement>(focusableSelectors.join(', ')),
+    ).filter((element) => {
+      const style = window.getComputedStyle(element);
+      return style.display !== 'none' && style.visibility !== 'hidden';
+    });
   },
 
   /**
@@ -639,19 +664,21 @@ export const accessibilityUtils = {
    * Announce message to screen readers
    */
   announce: (message: string, politeness: 'polite' | 'assertive' = 'polite'): void => {
-    const liveRegion = document.getElementById('sr-live-region') || (() => {
-      const element = document.createElement('div');
-      element.id = 'sr-live-region';
-      element.setAttribute('aria-live', politeness);
-      element.setAttribute('aria-atomic', 'true');
-      element.style.position = 'absolute';
-      element.style.left = '-10000px';
-      element.style.width = '1px';
-      element.style.height = '1px';
-      element.style.overflow = 'hidden';
-      document.body.appendChild(element);
-      return element;
-    })();
+    const liveRegion =
+      document.getElementById('sr-live-region') ||
+      (() => {
+        const element = document.createElement('div');
+        element.id = 'sr-live-region';
+        element.setAttribute('aria-live', politeness);
+        element.setAttribute('aria-atomic', 'true');
+        element.style.position = 'absolute';
+        element.style.left = '-10000px';
+        element.style.width = '1px';
+        element.style.height = '1px';
+        element.style.overflow = 'hidden';
+        document.body.appendChild(element);
+        return element;
+      })();
 
     liveRegion.textContent = message;
     setTimeout(() => {
@@ -703,9 +730,9 @@ export const accessibilityUtils = {
         element.removeEventListener('keydown', handleKeyDown);
         element.setAttribute('aria-hidden', 'true');
         originalActiveElement?.focus();
-      }
+      },
     };
-  }
+  },
 };
 
 export default {
@@ -716,5 +743,5 @@ export default {
   useSkipLinks,
   useHighContrast,
   useReducedMotion,
-  accessibilityUtils
+  accessibilityUtils,
 };

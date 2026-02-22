@@ -6,11 +6,7 @@ import { I18nProvider } from '../i18n';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 const renderWithI18n = (ui: React.ReactElement) => {
-  return render(
-    <I18nProvider>
-      {ui}
-    </I18nProvider>
-  );
+  return render(<I18nProvider>{ui}</I18nProvider>);
 };
 
 describe('ContactSectionSecure', () => {
@@ -28,9 +24,7 @@ describe('ContactSectionSecure', () => {
     const submit = screen.getByRole('button', { name: /send message/i });
     await userEvent.click(submit);
 
-    expect(
-      await screen.findByText(/please fill in all required fields/i)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/please fill in all required fields/i)).toBeInTheDocument();
   });
 
   it('submits valid form and shows success message', async () => {
@@ -41,7 +35,10 @@ describe('ContactSectionSecure', () => {
 
     await userEvent.type(screen.getByRole('textbox', { name: /name/i }), 'Jules');
     await userEvent.type(screen.getByRole('textbox', { name: /email/i }), 'jules@example.com');
-    await userEvent.type(screen.getByRole('textbox', { name: /message/i }), 'Hello, I need a website built for me.');
+    await userEvent.type(
+      screen.getByRole('textbox', { name: /message/i }),
+      'Hello, I need a website built for me.',
+    );
 
     await userEvent.click(screen.getByRole('button', { name: /send message/i }));
 
@@ -56,13 +53,14 @@ describe('ContactSectionSecure', () => {
 
     await userEvent.type(screen.getByRole('textbox', { name: /name/i }), 'Jules');
     await userEvent.type(screen.getByRole('textbox', { name: /email/i }), 'invalid-email');
-    await userEvent.type(screen.getByRole('textbox', { name: /message/i }), 'Hello, I need a website built.');
+    await userEvent.type(
+      screen.getByRole('textbox', { name: /message/i }),
+      'Hello, I need a website built.',
+    );
 
     await userEvent.click(screen.getByRole('button', { name: /send message/i }));
 
-    expect(
-      await screen.findByText(/please enter a valid email/i)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/please enter a valid email/i)).toBeInTheDocument();
   });
 
   it('silently accepts honeypot submissions without a network call', async () => {

@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 
 /**
  * Enhanced Cache Management Utilities
- * 
+ *
  * Advanced caching with LRU eviction, persistence, compression,
  * and performance optimization.
  */
@@ -58,7 +58,7 @@ export function useCache<T = any>(config: CacheConfig = {}) {
     persistenceStrategy = 'localStorage',
     compressionThreshold = 1024, // 1KB
     evictionPolicy = 'lru',
-    maxSizeInBytes
+    maxSizeInBytes,
   } = config;
 
   const [cache, setCache] = useState<Map<string, CacheEntry<T>>>(new Map());
@@ -69,7 +69,7 @@ export function useCache<T = any>(config: CacheConfig = {}) {
     misses: 0,
     hitRate: 0,
     totalSizeInBytes: 0,
-    maxSizeInBytes
+    maxSizeInBytes,
   });
 
   const cacheRef = useRef<Map<string, CacheEntry<T>>>(new Map());
@@ -80,7 +80,7 @@ export function useCache<T = any>(config: CacheConfig = {}) {
     misses: 0,
     hitRate: 0,
     totalSizeInBytes: 0,
-    maxSizeInBytes
+    maxSizeInBytes,
   });
 
   // Initialize from persistence
@@ -126,7 +126,7 @@ export function useCache<T = any>(config: CacheConfig = {}) {
     try {
       const data = {
         entries: Array.from(cacheRef.current.entries()).map(([key, entry]) => entry),
-        stats: statsRef.current
+        stats: statsRef.current,
       };
 
       const serialized = JSON.stringify(data);
@@ -161,9 +161,12 @@ export function useCache<T = any>(config: CacheConfig = {}) {
   }, []);
 
   // Check if entry has expired
-  const isExpired = useCallback((entry: CacheEntry<T>): boolean => {
-    return Date.now() - entry.timestamp > ttl;
-  }, [ttl]);
+  const isExpired = useCallback(
+    (entry: CacheEntry<T>): boolean => {
+      return Date.now() - entry.timestamp > ttl;
+    },
+    [ttl],
+  );
 
   // Evict entries based on policy
   const evictEntries = useCallback(() => {
@@ -182,7 +185,7 @@ export function useCache<T = any>(config: CacheConfig = {}) {
 
     // Apply eviction policy if still over size limit
     if (currentCache.size > maxSize) {
-      let entries: Array<[string, CacheEntry<T>]> = Array.from(currentCache.entries());
+      const entries: Array<[string, CacheEntry<T>]> = Array.from(currentCache.entries());
 
       switch (evictionPolicy) {
         case 'lru':
@@ -205,8 +208,9 @@ export function useCache<T = any>(config: CacheConfig = {}) {
 
     // Check byte size limit
     if (maxSizeInBytes && currentStats.totalSizeInBytes > maxSizeInBytes) {
-      let entries: Array<[string, CacheEntry<T>]> = Array.from(currentCache.entries())
-        .sort((a, b) => a[1].timestamp - b[1].timestamp);
+      const entries: Array<[string, CacheEntry<T>]> = Array.from(currentCache.entries()).sort(
+        (a, b) => a[1].timestamp - b[1].timestamp,
+      );
 
       while (currentStats.totalSizeInBytes > maxSizeInBytes && entries.length > 0) {
         const [key, entry] = entries.shift()!;
@@ -222,90 +226,99 @@ export function useCache<T = any>(config: CacheConfig = {}) {
   }, [maxSize, evictionPolicy, maxSizeInBytes, isExpired]);
 
   // Get value from cache
-  const get = useCallback((key: string): T | null => {
-    const currentCache = cacheRef.current;
-    const currentStats = statsRef.current;
+  const get = useCallback(
+    (key: string): T | null => {
+      const currentCache = cacheRef.current;
+      const currentStats = statsRef.current;
 
-    const entry = currentCache.get(key);
+      const entry = currentCache.get(key);
 
-    if (!entry || isExpired(entry)) {
-      currentStats.misses++;
+      if (!entry || isExpired(entry)) {
+        currentStats.misses++;
+        currentStats.hitRate = currentStats.hits / (currentStats.hits + currentStats.misses);
+        statsRef.current = currentStats;
+        setStats({ ...currentStats });
+        return null;
+      }
+
+      // Update access count and timestamp for LRU
+      entry.accessCount++;
+      entry.timestamp = Date.now();
+
+      currentStats.hits++;
       currentStats.hitRate = currentStats.hits / (currentStats.hits + currentStats.misses);
       statsRef.current = currentStats;
       setStats({ ...currentStats });
-      return null;
-    }
 
-    // Update access count and timestamp for LRU
-    entry.accessCount++;
-    entry.timestamp = Date.now();
-
-    currentStats.hits++;
-    currentStats.hitRate = currentStats.hits / (currentStats.hits + currentStats.misses);
-    statsRef.current = currentStats;
-    setStats({ ...currentStats });
-
-    return entry.value;
-  }, [isExpired]);
+      return entry.value;
+    },
+    [isExpired],
+  );
 
   // Set value in cache
-  const set = useCallback((key: string, value: T): void => {
-    const currentCache = cacheRef.current;
-    const currentStats = statsRef.current;
+  const set = useCallback(
+    (key: string, value: T): void => {
+      const currentCache = cacheRef.current;
+      const currentStats = statsRef.current;
 
-    const existingEntry = currentCache.get(key);
-    const entrySize = calculateEntrySize({ key, value, timestamp: Date.now(), accessCount: 0 });
+      const existingEntry = currentCache.get(key);
+      const entrySize = calculateEntrySize({ key, value, timestamp: Date.now(), accessCount: 0 });
 
-    if (existingEntry) {
-      currentStats.totalSizeInBytes -= existingEntry.size || 0;
-    }
-
-    currentStats.totalSizeInBytes += entrySize;
-
-    const newEntry: CacheEntry<T> = {
-      key,
-      value,
-      timestamp: Date.now(),
-      accessCount: 0,
-      size: entrySize
-    };
-
-    currentCache.set(key, newEntry);
-
-    // Compress if needed
-    if (compression && entrySize > compressionThreshold) {
-      try {
-        // Simple compression simulation (in real implementation, use a compression library)
-        newEntry.value = JSON.parse(JSON.stringify(value)) as T;
-      } catch (error) {
-        console.warn('Compression failed:', error);
+      if (existingEntry) {
+        currentStats.totalSizeInBytes -= existingEntry.size || 0;
       }
-    }
 
-    evictEntries();
-    saveToPersistence();
-  }, [calculateEntrySize, compression, compressionThreshold, evictEntries, saveToPersistence]);
+      currentStats.totalSizeInBytes += entrySize;
+
+      const newEntry: CacheEntry<T> = {
+        key,
+        value,
+        timestamp: Date.now(),
+        accessCount: 0,
+        size: entrySize,
+      };
+
+      currentCache.set(key, newEntry);
+
+      // Compress if needed
+      if (compression && entrySize > compressionThreshold) {
+        try {
+          // Simple compression simulation (in real implementation, use a compression library)
+          newEntry.value = JSON.parse(JSON.stringify(value)) as T;
+        } catch (error) {
+          console.warn('Compression failed:', error);
+        }
+      }
+
+      evictEntries();
+      saveToPersistence();
+    },
+    [calculateEntrySize, compression, compressionThreshold, evictEntries, saveToPersistence],
+  );
 
   // Delete entry from cache
-  const del = useCallback((key: string): boolean => {
-    const currentCache = cacheRef.current;
-    const currentStats = statsRef.current;
+  const del = useCallback(
+    (key: string): boolean => {
+      const currentCache = cacheRef.current;
+      const currentStats = statsRef.current;
 
-    const entry = currentCache.get(key);
-    if (!entry) return false;
+      const entry = currentCache.get(key);
+      if (!entry) return false;
 
-    currentCache.delete(key);
-    currentStats.totalSizeInBytes -= entry.size || 0;
-    currentStats.size = currentCache.size;
+      currentCache.delete(key);
+      currentStats.totalSizeInBytes -= entry.size || 0;
+      currentStats.size = currentCache.size;
 
-    cacheRef.current = currentCache;
-    statsRef.current = currentStats;
-    setCache(new Map(currentCache));
-    setStats({ ...currentStats });
+      cacheRef.current = currentCache;
+      statsRef.current = currentStats;
+      setCache(new Map(currentCache));
+      setStats({ ...currentStats });
 
-    saveToPersistence();
-    return true;
-  }, [saveToPersistence]);
+      saveToPersistence();
+      return true;
+    },
+    [saveToPersistence],
+  );
 
   // Clear cache
   const clear = useCallback((): void => {
@@ -317,7 +330,7 @@ export function useCache<T = any>(config: CacheConfig = {}) {
       misses: 0,
       hitRate: 0,
       totalSizeInBytes: 0,
-      maxSizeInBytes
+      maxSizeInBytes,
     };
 
     setCache(new Map());
@@ -361,7 +374,7 @@ export function useCache<T = any>(config: CacheConfig = {}) {
     clear,
     getStats,
     cache: cacheRef.current,
-    stats: statsRef.current
+    stats: statsRef.current,
   };
 }
 
@@ -377,9 +390,15 @@ export function useCachedData<T = any>(
     refetchOnMount?: boolean;
     refetchOnWindowFocus?: boolean;
     refetchInterval?: number;
-  } = {}
+  } = {},
 ) {
-  const { ttl = 5 * 60 * 1000, staleTime = 2 * 60 * 1000, refetchOnMount = true, refetchOnWindowFocus = false, refetchInterval } = options;
+  const {
+    ttl = 5 * 60 * 1000,
+    staleTime = 2 * 60 * 1000,
+    refetchOnMount = true,
+    refetchOnWindowFocus = false,
+    refetchInterval,
+  } = options;
 
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
@@ -388,42 +407,44 @@ export function useCachedData<T = any>(
 
   const cache = useCache<T>({ maxSize: 50, ttl });
 
-  const fetchData = useCallback(async (force = false) => {
-    if (!mountedRef.current) return;
+  const fetchData = useCallback(
+    async (force = false) => {
+      if (!mountedRef.current) return;
 
-    setLoading(true);
-    setError(null);
+      setLoading(true);
+      setError(null);
 
-    try {
-      // Try to get from cache first
-      if (!force) {
-        const cachedData = cache.get(key);
-        if (cachedData) {
-          // Direct O(1) Map lookup instead of O(n) Array.from+find
-          const entry = cache.cache.get(key);
-          const isStale = entry && (Date.now() - entry.timestamp > staleTime);
+      try {
+        // Try to get from cache first
+        if (!force) {
+          const cachedData = cache.get(key);
+          if (cachedData) {
+            // Direct O(1) Map lookup instead of O(n) Array.from+find
+            const entry = cache.cache.get(key);
+            const isStale = entry && Date.now() - entry.timestamp > staleTime;
 
-          if (!isStale) {
-            setData(cachedData);
-            setLoading(false);
-            return;
+            if (!isStale) {
+              setData(cachedData);
+              setLoading(false);
+              return;
+            }
           }
         }
-      }
 
-      // Fetch fresh data
-      const freshData = await fetcher();
-      cache.set(key, freshData);
-      setData(freshData);
-
-    } catch (err) {
-      setError(err);
-    } finally {
-      if (mountedRef.current) {
-        setLoading(false);
+        // Fetch fresh data
+        const freshData = await fetcher();
+        cache.set(key, freshData);
+        setData(freshData);
+      } catch (err) {
+        setError(err);
+      } finally {
+        if (mountedRef.current) {
+          setLoading(false);
+        }
       }
-    }
-  }, [key, fetcher, cache, staleTime]);
+    },
+    [key, fetcher, cache, staleTime],
+  );
 
   // Initial fetch
   useEffect(() => {
@@ -473,7 +494,7 @@ export function useCachedData<T = any>(
     loading,
     error,
     refetch,
-    invalidate
+    invalidate,
   };
 }
 
@@ -551,19 +572,19 @@ export const cacheUtils = {
       localStorage: {
         size: localStorageUsage,
         limit: 5 * 1024 * 1024, // 5MB estimate
-        usagePercent: (localStorageUsage / (5 * 1024 * 1024)) * 100
+        usagePercent: (localStorageUsage / (5 * 1024 * 1024)) * 100,
       },
       sessionStorage: {
         size: sessionStorageUsage,
         limit: 5 * 1024 * 1024, // 5MB estimate
-        usagePercent: (sessionStorageUsage / (5 * 1024 * 1024)) * 100
-      }
+        usagePercent: (sessionStorageUsage / (5 * 1024 * 1024)) * 100,
+      },
     };
-  }
+  },
 };
 
 export default {
   useCache,
   useCachedData,
-  cacheUtils
+  cacheUtils,
 };

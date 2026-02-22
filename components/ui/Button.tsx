@@ -29,7 +29,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 /**
  * Modern Button Component
- * 
+ *
  * @example
  * <Button variant="primary" size="md">Click me</Button>
  * <Button variant="secondary" leftIcon={<Icon />}>With Icon</Button>
@@ -49,7 +49,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       disabled,
       ...props
     },
-    ref
+    ref,
   ) => {
     const baseStyles = `
       inline-flex items-center justify-center gap-2
@@ -101,13 +101,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={cn(
-          baseStyles,
-          variants[variant],
-          sizes[size],
-          fullWidth && 'w-full',
-          className
-        )}
+        className={cn(baseStyles, variants[variant], sizes[size], fullWidth && 'w-full', className)}
         disabled={disabled || isLoading}
         {...props}
       >
@@ -135,7 +129,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {!isLoading && rightIcon}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = 'Button';
