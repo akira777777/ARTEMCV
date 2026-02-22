@@ -123,8 +123,8 @@ describe('BackgroundPaths Utility Functions', () => {
       
       // Color opacity should increase progressively (with some tolerance for floating point)
       for (let i = 1; i < paths.length; i++) {
-        const opacity1 = parseFloat(paths[i - 1].color.match(/,\s*([\d.]+)\s*\)$/)?.[1] || '0');
-        const opacity2 = parseFloat(paths[i].color.match(/,\s*([\d.]+)\s*\)$/)?.[1] || '0');
+        const opacity1 = parseFloat(paths[i - 1].color.match(/\s*,\s*([\d.]+)\s*\)$/)?.[1] || '0');
+        const opacity2 = parseFloat(paths[i].color.match(/\s*,\s*([\d.]+)\s*\)$/)?.[1] || '0');
         expect(opacity2).toBeGreaterThanOrEqual(opacity1 - 0.001); // Allow small floating point differences
       }
     });
@@ -331,8 +331,8 @@ describe('BackgroundPaths Utility Functions', () => {
         expect(path.width).toBeLessThan(2);
         
         // Color progression: rgba(15,23,42,0.1 + i * 0.03)
-        // Fix the regex to match the opacity value before the closing parenthesis
-        const opacityMatch = path.color.match(/,\s*([\d.]+)\s*\)$/);
+        // Robust opacity extraction from color string
+        const opacityMatch = path.color.match(/\s*,\s*([\d.]+)\s*\)$/);
         const opacityValue = parseFloat(opacityMatch?.[1] || '0');
         expect(opacityValue).toBeGreaterThanOrEqual(0);
         expect(opacityValue).toBeLessThan(1);
