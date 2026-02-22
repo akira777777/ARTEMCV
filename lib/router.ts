@@ -13,7 +13,7 @@ import React, { useEffect, useRef, useCallback, useState, useMemo } from 'react'
 
 export interface RouteConfig {
   path: string;
-  component: React.ComponentType<any> // eslint-disable-line @typescript-eslint/no-explicit-any | (() => Promise<{ default: React.ComponentType<any> // eslint-disable-line @typescript-eslint/no-explicit-any }>);
+  component: React.ComponentType<any> | (() => Promise<{ default: React.ComponentType<any> }>);
   exact?: boolean;
   title?: string;
   description?: string;
@@ -99,7 +99,7 @@ export function useRouter(routes: RouteConfig[] = []) {
   });
 
   const [loadedComponents, setLoadedComponents] = useState<
-    Record<string, React.ComponentType<any> // eslint-disable-line @typescript-eslint/no-explicit-any>
+    Record<string, React.ComponentType<any>>
   >({});
   const [preloadedComponents, setPreloadedComponents] = useState<Set<string>>(new Set());
   const mountedRef = useRef(true);
@@ -241,7 +241,7 @@ export function useRouter(routes: RouteConfig[] = []) {
 
       const { route } = match;
       try {
-        await loadComponent(route);
+        const Component = await loadComponent(route);
         setPreloadedComponents((prev) => new Set([...prev, path]));
       } catch (error) {
         console.warn(`Failed to preload component for ${path}:`, error);
@@ -363,7 +363,7 @@ export function useQueryParams<T extends Record<string, string> = Record<string,
     setParams(newParams);
   }, []);
 
-  const updateParams = useCallback((newParams: Partial<T>, _options?: NavigationOptions = {}) => {
+  const updateParams = useCallback((newParams: Partial<T>, options: NavigationOptions = {}) => {
     const url = new URL(window.location.href);
     Object.entries(newParams).forEach(([key, value]) => {
       if (value === null || value === undefined) {
@@ -472,7 +472,7 @@ export const routerUtils = {
   /**
    * Create accessible link component
    */
-  createAccessibleLink: (Component: React.ComponentType<any> // eslint-disable-line @typescript-eslint/no-explicit-any) => {
+  createAccessibleLink: (Component: React.ComponentType<any>) => {
     return function AccessibleLink(props: any) {
       const { href, children, ...rest } = props;
 
@@ -533,14 +533,14 @@ function hasRoles(requiredRoles: string[]): boolean {
 /**
  * Component loading helper with error boundaries
  */
-async function loadComponent(route: RouteConfig): Promise<React.ComponentType<any> // eslint-disable-line @typescript-eslint/no-explicit-any> {
+async function loadComponent(route: RouteConfig): Promise<React.ComponentType<any>> {
   if (
     typeof route.component === 'function' &&
     route.component.constructor.name === 'AsyncFunction'
   ) {
     try {
       const loadComponentFn = route.component as () => Promise<{
-        default: React.ComponentType<any> // eslint-disable-line @typescript-eslint/no-explicit-any;
+        default: React.ComponentType<any>;
       }>;
       const module = await loadComponentFn();
       return module.default;
@@ -549,7 +549,7 @@ async function loadComponent(route: RouteConfig): Promise<React.ComponentType<an
       throw error;
     }
   }
-  return route.component as React.ComponentType<any> // eslint-disable-line @typescript-eslint/no-explicit-any;
+  return route.component as React.ComponentType<any>;
 }
 
 export default {
