@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -20,7 +21,7 @@ import (
 	"github.com/render-oss/render-mcp-server/pkg/session"
 )
 
-func Serve(transport string) *server.MCPServer {
+func Serve(transport string) error {
 	// Create MCP server
 	s := server.NewMCPServer(
 		"render-mcp-server",
@@ -29,8 +30,7 @@ func Serve(transport string) *server.MCPServer {
 
 	c, err := client.NewDefaultClient()
 	if err != nil {
-		// TODO: We can't create a client unless we're logged in, so we should handle that error case.
-		panic(err)
+		return fmt.Errorf("failed to create default client: %w", err)
 	}
 
 	s.AddTools(owner.Tools(c)...)
@@ -47,7 +47,7 @@ func Serve(transport string) *server.MCPServer {
 			log.Print("using Redis session store\n")
 			sessionStore, err = session.NewRedisStore(redisURL)
 			if err != nil {
-				log.Fatalf("failed to initialize Redis session store: %v", err)
+				return fmt.Errorf("failed to initialize Redis session store: %w", err)
 			}
 		} else {
 			log.Print("using in-memory session store\n")
@@ -61,7 +61,7 @@ func Serve(transport string) *server.MCPServer {
 			))).
 			Start(":10000")
 		if err != nil {
-			log.Fatalf("Starting Streamable server: %v\n:", err)
+			return fmt.Errorf("starting Streamable server: %w", err)
 		}
 	} else {
 		err := server.ServeStdio(s, server.WithStdioContextFunc(multicontext.MultiStdioContextFunc(
@@ -69,9 +69,9 @@ func Serve(transport string) *server.MCPServer {
 			authn.ContextWithAPITokenFromConfig,
 		)))
 		if err != nil {
-			log.Fatalf("Starting STDIO server: %v\n", err)
+			return fmt.Errorf("starting STDIO server: %w", err)
 		}
 	}
 
-	return s
+	return nil
 }

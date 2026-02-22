@@ -26,5 +26,8 @@ func main() {
 	}
 
 	// Start the server
-	cmd.Serve(transport)
+	if err := cmd.Serve(transport); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
 }
