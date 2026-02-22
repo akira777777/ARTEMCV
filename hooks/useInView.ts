@@ -90,8 +90,12 @@ export function useInViewMultiple(
   const refs = Array.from({ length: count }).map((_, i) => {
     // Return an object that acts like a ref by reading/writing to the main array
     return {
-      get current() { return elementsRef.current[i] || null; },
-      set current(el) { elementsRef.current[i] = el; }
+      get current() {
+        return elementsRef.current[i] || null;
+      },
+      set current(el) {
+        elementsRef.current[i] = el;
+      },
     } as RefObject<HTMLElement | null>;
   });
 

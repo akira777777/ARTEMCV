@@ -59,8 +59,8 @@ export const ContactUnified: React.FC = () => {
               Let&apos;s Work Together
             </Heading>
             <Text size="lg" color="secondary" className="mb-8">
-              Have a project in mind? I&apos;d love to hear about it. Send me a message and let&apos;s create
-              something amazing.
+              Have a project in mind? I&apos;d love to hear about it. Send me a message and
+              let&apos;s create something amazing.
             </Text>
 
             <div className="space-y-4 mb-8">
