@@ -241,7 +241,7 @@ export function useRouter(routes: RouteConfig[] = []) {
 
       const { route } = match;
       try {
-        const Component = await loadComponent(route);
+        await loadComponent(route);
         setPreloadedComponents((prev) => new Set([...prev, path]));
       } catch (error) {
         console.warn(`Failed to preload component for ${path}:`, error);
@@ -363,7 +363,7 @@ export function useQueryParams<T extends Record<string, string> = Record<string,
     setParams(newParams);
   }, []);
 
-  const updateParams = useCallback((newParams: Partial<T>, options: NavigationOptions = {}) => {
+  const updateParams = useCallback((newParams: Partial<T>, _options?: NavigationOptions = {}) => {
     const url = new URL(window.location.href);
     Object.entries(newParams).forEach(([key, value]) => {
       if (value === null || value === undefined) {
