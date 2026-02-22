@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:playwright": "node scripts/playwright_check.cjs"
   },
   "dependencies": {
     "react": "^19.2.0",
