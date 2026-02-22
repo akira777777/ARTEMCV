@@ -64,7 +64,7 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
       typescript-eslint:
-        specifier: ^8.36.0
+        specifier: ^8.56.0
         version: 8.56.0(eslint@10.0.1)(typescript@5.9.3)
       vite:
         specifier: ^7.3.1
