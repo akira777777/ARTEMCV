@@ -9,6 +9,7 @@ export interface Board {
  * The implementation should handle async fetching/paging if necessary.
  */
 export async function forEachBoard(callback: (board: Board) => void | Promise<void>): Promise<void> {
+  void callback;
   // Real implementation would go here.
 }
 
