@@ -81,7 +81,7 @@ export function useRouter(routes: RouteConfig[] = []) {
     for (const route of routes) {
       const regex = pathToRegex(route.path, route.exact);
       const match = path.match(regex);
-      
+
       if (match) {
         const params = extractParams(route.path, match);
         return { route, params };
@@ -341,7 +341,7 @@ export const routerUtils = {
     const escapedPath = path
       .replace(/:[^\s/]+/g, '([^/]+)')
       .replace(/\*/g, '(.*)');
-    
+
     const regex = new RegExp(`^${escapedPath}${exact ? '$' : ''}`);
     return regex;
   },
@@ -352,7 +352,7 @@ export const routerUtils = {
   extractParams: (path: string, match: RegExpMatchArray) => {
     const params: Record<string, string> = {};
     const paramNames = path.match(/:([a-zA-Z]+)/g) || [];
-    
+
     paramNames.forEach((param, index) => {
       const paramName = param.slice(1);
       params[paramName] = match[index + 1];
@@ -478,7 +478,8 @@ function hasRoles(requiredRoles: string[]): boolean {
 async function loadComponent(route: RouteConfig): Promise<React.ComponentType<any>> {
   if (typeof route.component === 'function' && route.component.constructor.name === 'AsyncFunction') {
     try {
-      const module = await (route.component as () => Promise<{ default: React.ComponentType<any> }>());
+      const loadComponentFn = route.component as () => Promise<{ default: React.ComponentType<any> }>;
+      const module = await loadComponentFn();
       return module.default;
     } catch (error) {
       console.error(`Failed to load component for route ${route.path}:`, error);

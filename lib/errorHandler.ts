@@ -590,22 +590,23 @@ export const errorUtils = {
         }
 
         return (
-          <div style={{
-            padding: '20px',
+          <div style= {{
+          padding: '20px',
             border: '1px solid #ccc',
-            borderRadius: '4px',
-            backgroundColor: '#f5f5f5'
-          }}>
-            <h2>Something went wrong</h2>
-            <p>{error.message}</p>
-            <button onClick={() => window.location.reload()}>
-              Reload Page
-            </button>
-          </div>
+              borderRadius: '4px',
+                backgroundColor: '#f5f5f5'
+        }
+      }>
+        <h2>Something went wrong </h2>
+          < p > { error.message } </p>
+          < button onClick = {() => window.location.reload()}>
+            Reload Page
+              </button>
+              </div>
         );
       }
 
-      return React.createElement(Component, props);
+return React.createElement(Component, props);
     };
   }
 };
@@ -647,6 +648,3 @@ export default {
   errorUtils,
   sentryUtils
 };
-     
-
-[Response interrupted by a tool use result. Only one tool may be used at a time and should be placed at the end of the message.]

@@ -392,7 +392,7 @@ export function useScreenReader(options: ScreenReaderOptions = {}) {
  * Skip link management hook
  */
 export function useSkipLinks() {
-  const [skipLinks, setSkipLinks] = useState<Array<{ id: string; label: string; href: string }>>([]));
+  const [skipLinks, setSkipLinks] = useState<Array<{ id: string; label: string; href: string }>>([]);
 
   const addSkipLink = useCallback((link: { id: string; label: string; href: string }) => {
     setSkipLinks(prev => [...prev, link]);
@@ -466,10 +466,10 @@ export function useHighContrast() {
       const testElement = document.createElement('div');
       testElement.style.color = 'rgb(1, 2, 3)';
       document.body.appendChild(testElement);
-      
+
       const computedStyle = window.getComputedStyle(testElement);
       const isHC = computedStyle.color !== 'rgb(1, 2, 3)';
-      
+
       document.body.removeChild(testElement);
       setIsHighContrast(isHC);
     };

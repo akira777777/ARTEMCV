@@ -318,3 +318,5 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
 });
 
 SimpleTelegramChat.displayName = 'SimpleTelegramChat';
+
+export default SimpleTelegramChat;

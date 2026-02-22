@@ -24,8 +24,8 @@ export const staggerContainer = {
  */
 export const fadeUp = {
   hidden: { opacity: 0, y: 20 },
-  show: { 
-    opacity: 1, 
+  show: {
+    opacity: 1,
     y: 0,
     transition: {
       type: 'spring',
@@ -40,8 +40,8 @@ export const fadeUp = {
  */
 export const fadeDown = {
   hidden: { opacity: 0, y: -20 },
-  show: { 
-    opacity: 1, 
+  show: {
+    opacity: 1,
     y: 0,
     transition: {
       type: 'spring',
@@ -56,8 +56,8 @@ export const fadeDown = {
  */
 export const fadeLeft = {
   hidden: { opacity: 0, x: 20 },
-  show: { 
-    opacity: 1, 
+  show: {
+    opacity: 1,
     x: 0,
     transition: {
       type: 'spring',
@@ -72,8 +72,8 @@ export const fadeLeft = {
  */
 export const fadeRight = {
   hidden: { opacity: 0, x: -20 },
-  show: { 
-    opacity: 1, 
+  show: {
+    opacity: 1,
     x: 0,
     transition: {
       type: 'spring',
@@ -88,8 +88,8 @@ export const fadeRight = {
  */
 export const scaleUp = {
   hidden: { opacity: 0, scale: 0.8 },
-  show: { 
-    opacity: 1, 
+  show: {
+    opacity: 1,
     scale: 1,
     transition: {
       type: 'spring',
@@ -104,8 +104,8 @@ export const scaleUp = {
  */
 export const blurReveal = {
   hidden: { opacity: 0, filter: 'blur(10px)' },
-  show: { 
-    opacity: 1, 
+  show: {
+    opacity: 1,
     filter: 'blur(0px)',
     transition: {
       duration: 0.5
@@ -161,19 +161,19 @@ export function useParallax(value: any, distance: number) {
 export function useMagnetic(strength: number = 0.3) {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  
+
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    
+
     const x = (e.clientX - centerX) * strength;
     const y = (e.clientY - centerY) * strength;
-    
+
     setPosition({ x, y });
   };
-  
+
   const handleMouseLeave = () => {
     setPosition({ x: 0, y: 0 });
   };
@@ -196,9 +196,9 @@ interface AnimatedCardProps {
   onClick?: () => void;
 }
 
-export const AnimatedCard: React.FC<AnimatedCardProps> = ({ 
-  children, 
-  className = '', 
+export const AnimatedCard: React.FC<AnimatedCardProps> = ({
+  children,
+  className = '',
   tilt = true,
   glow = true,
   onClick
@@ -208,16 +208,16 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!ref.current || !tilt) return;
-    
+
     const rect = ref.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    
+
     const rotateX = ((y - centerY) / centerY) * -10;
     const rotateY = ((x - centerX) / centerX) * 10;
-    
+
     setRotate({ x: rotateX, y: rotateY });
   };
 
@@ -232,10 +232,10 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
       onClick={onClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      animate={{ 
-        rotateX: rotate.x, 
+      animate={{
+        rotateX: rotate.x,
         rotateY: rotate.y,
-        boxShadow: glow 
+        boxShadow: glow
           ? `0 ${20 + Math.abs(rotate.x)}px ${40 + Math.abs(rotate.y)}px rgba(99, 102, 241, ${0.1 + Math.abs(rotate.x) / 100})`
           : '0 4px 6px -1px rgb(0 0 0 / 0.1)'
       }}
@@ -257,8 +257,8 @@ interface MagneticButtonProps {
   strength?: number;
 }
 
-export const MagneticButton: React.FC<MagneticButtonProps> = ({ 
-  children, 
+export const MagneticButton: React.FC<MagneticButtonProps> = ({
+  children,
   className = '',
   onClick,
   strength = 0.3
@@ -293,8 +293,8 @@ interface RevealProps {
   duration?: number;
 }
 
-export const Reveal: React.FC<RevealProps> = ({ 
-  children, 
+export const Reveal: React.FC<RevealProps> = ({
+  children,
   className = '',
   direction = 'up',
   delay = 0,
@@ -340,8 +340,8 @@ interface ParallaxSectionProps {
   speed?: number;
 }
 
-export const ParallaxSection: React.FC<ParallaxSectionProps> = ({ 
-  children, 
+export const ParallaxSection: React.FC<ParallaxSectionProps> = ({
+  children,
   className = '',
   speed = 0.5
 }) => {
@@ -350,7 +350,7 @@ export const ParallaxSection: React.FC<ParallaxSectionProps> = ({
     target: ref,
     offset: ['start end', 'end start']
   });
-  
+
   const y = useTransform(scrollYProgress, [0, 1], [0, -100 * speed]);
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 1, 0.3]);
 
@@ -370,8 +370,8 @@ interface StaggeredListProps {
   delay?: number;
 }
 
-export const StaggeredList: React.FC<StaggeredListProps> = ({ 
-  children, 
+export const StaggeredList: React.FC<StaggeredListProps> = ({
+  children,
   className = '',
   delay = 0.1
 }) => {
@@ -406,8 +406,8 @@ interface GlowButtonProps {
   color?: string;
 }
 
-export const GlowButton: React.FC<GlowButtonProps> = ({ 
-  children, 
+export const GlowButton: React.FC<GlowButtonProps> = ({
+  children,
   className = '',
   onClick,
   color = '#6366f1'
@@ -425,7 +425,7 @@ export const GlowButton: React.FC<GlowButtonProps> = ({
     >
       <motion.div
         className="absolute inset-0 opacity-0"
-        animate={{ 
+        animate={{
           opacity: isHovered ? 1 : 0,
         }}
         style={{
@@ -435,7 +435,7 @@ export const GlowButton: React.FC<GlowButtonProps> = ({
       <motion.span
         className="absolute inset-0"
         animate={{
-          boxShadow: isHovered 
+          boxShadow: isHovered
             ? `0 0 20px ${color}80, 0 0 40px ${color}40, 0 0 60px ${color}20`
             : 'none'
         }}
@@ -454,8 +454,8 @@ interface AnimatedUnderlineProps {
   color?: string;
 }
 
-export const AnimatedUnderline: React.FC<AnimatedUnderlineProps> = ({ 
-  children, 
+export const AnimatedUnderline: React.FC<AnimatedUnderlineProps> = ({
+  children,
   className = '',
   color = '#6366f1'
 }) => {
@@ -487,7 +487,7 @@ interface AnimatedGradientProps {
   speed?: number;
 }
 
-export const AnimatedGradient: React.FC<AnimatedGradientProps> = ({ 
+export const AnimatedGradient: React.FC<AnimatedGradientProps> = ({
   className = '',
   colors = ['#6366f1', '#8b5cf6', '#ec4899', '#6366f1'],
   speed = 5
@@ -521,8 +521,8 @@ interface FloatingProps {
   speed?: number;
 }
 
-export const Floating: React.FC<FloatingProps> = ({ 
-  children, 
+export const Floating: React.FC<FloatingProps> = ({
+  children,
   className = '',
   amplitude = 10,
   speed = 3
@@ -554,8 +554,8 @@ interface ProgressBarProps {
   color?: string;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ 
-  progress, 
+export const ProgressBar: React.FC<ProgressBarProps> = ({
+  progress,
   className = '',
   color = '#6366f1'
 }) => {
@@ -569,7 +569,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     <div className={`h-1 bg-white/10 rounded-full overflow-hidden ${className}`}>
       <motion.div
         className="h-full origin-left"
-        style={{ 
+        style={{
           scaleX,
           backgroundColor: color
         }}
@@ -587,15 +587,15 @@ interface ShakeProps {
   trigger: boolean;
 }
 
-export const Shake: React.FC<ShakeProps> = ({ 
-  children, 
+export const Shake: React.FC<ShakeProps> = ({
+  children,
   className = '',
-  trigger 
+  trigger
 }) => {
   return (
     <motion.div
       className={className}
-      animate={trigger ? { 
+      animate={trigger ? {
         x: [-10, 10, -10, 10, -5, 5, -2, 2, 0]
       } : { x: 0 }}
       transition={{ duration: 0.5 }}
@@ -614,8 +614,8 @@ interface BounceProps {
   trigger?: boolean;
 }
 
-export const Bounce: React.FC<BounceProps> = ({ 
-  children, 
+export const Bounce: React.FC<BounceProps> = ({
+  children,
   className = '',
   trigger = true
 }) => {
@@ -641,9 +641,9 @@ export const Bounce: React.FC<BounceProps> = ({
  */
 export const pageTransition = {
   initial: { opacity: 0, y: 20, scale: 0.95 },
-  animate: { 
-    opacity: 1, 
-    y: 0, 
+  animate: {
+    opacity: 1,
+    y: 0,
     scale: 1,
     transition: {
       type: 'spring',
@@ -651,8 +651,8 @@ export const pageTransition = {
       damping: 20
     }
   },
-  exit: { 
-    opacity: 0, 
+  exit: {
+    opacity: 0,
     y: -20,
     scale: 0.95,
     transition: {
@@ -666,13 +666,13 @@ export const pageTransition = {
  */
 export const blurTransition = {
   initial: { opacity: 0, filter: 'blur(10px)' },
-  animate: { 
-    opacity: 1, 
+  animate: {
+    opacity: 1,
     filter: 'blur(0px)',
     transition: { duration: 0.4 }
   },
-  exit: { 
-    opacity: 0, 
+  exit: {
+    opacity: 0,
     filter: 'blur(10px)',
     transition: { duration: 0.2 }
   }
@@ -683,8 +683,8 @@ export const blurTransition = {
  */
 export const slideTransition = {
   initial: { opacity: 0, x: -100 },
-  animate: { 
-    opacity: 1, 
+  animate: {
+    opacity: 1,
     x: 0,
     transition: {
       type: 'spring',
@@ -692,8 +692,8 @@ export const slideTransition = {
       damping: 25
     }
   },
-  exit: { 
-    opacity: 0, 
+  exit: {
+    opacity: 0,
     x: 100,
     transition: { duration: 0.2 }
   }
@@ -726,13 +726,3 @@ export default {
   blurTransition,
   slideTransition
 };
-</content>
-<task_progress>
-- [x] Улучшить BentoGrid анимации (stagger, hover эффекты)
-- [ ] Добавить интерактивные 3D-tilt карточки
-- [ ] Улучшить переходы страниц
-- [ ] Добавить scroll-triggered анимации
-- [ ] Добавить параллакс эффекты
-- [ ] Улучшить CinematicHero
-- [ ] Анимировать навигацию
-- [ ] Создать новые Framer Motion компоненты

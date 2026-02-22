@@ -61,9 +61,9 @@ describe('Validation Utils', () => {
     });
 
     it('should handle HTML entities correctly', () => {
-      const htmlString = 'Hello & < > " '';
+      const htmlString = 'Hello & < > " \\'';
       const result = sanitizeString(htmlString, 100);
-      expect(result).toBe('Hello &amp; &lt; &gt; &quot; '');
+      expect(result).toBe('Hello &amp; &lt; &gt; &quot; &#39;');
     });
   });
 });
@@ -95,7 +95,7 @@ describe('Accessibility Utils', () => {
       // Colors that pass AA for large text but not normal text
       const mediumContrast = '#808080'; // Gray
       const white = '#ffffff';
-      
+
       expect(checkColorContrast(mediumContrast, white, true)).toBe(true); // Large text
       expect(checkColorContrast(mediumContrast, white, false)).toBe(false); // Normal text
     });
@@ -109,14 +109,14 @@ describe('Performance Utils', () => {
       // For now, we'll test the concept
       let callCount = 0;
       const mockCallback = () => callCount++;
-      
+
       // Simulate rapid calls
       const interval = setInterval(mockCallback, 10);
       setTimeout(() => clearInterval(interval), 100);
-      
+
       // Wait for debounce period
       await new Promise(resolve => setTimeout(resolve, 200));
-      
+
       // This is a simplified test - in real implementation you'd use @testing-library/react
       expect(callCount).toBeGreaterThan(0);
     });
@@ -134,7 +134,7 @@ describe('Integration Tests', () => {
 
       // Test email validation
       expect(EMAIL_REGEX.test(formData.email)).toBe(true);
-      
+
       // Test sanitization
       const sanitizedData = {
         name: sanitizeString(formData.name, 100),
@@ -235,12 +235,12 @@ describe('Performance Tests', () => {
     it('should handle large strings efficiently', () => {
       const largeString = 'a'.repeat(10000);
       const startTime = performance.now();
-      
+
       const result = sanitizeString(largeString, 5000);
-      
+
       const endTime = performance.now();
       const duration = endTime - startTime;
-      
+
       expect(result.length).toBe(5000);
       expect(duration).toBeLessThan(100); // Should complete in under 100ms
     });
