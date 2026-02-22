@@ -18,12 +18,11 @@ module.exports = {
     'coverage',
   ],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh', 'prettier'],
+  plugins: ['prettier'],
   rules: {
     'prettier/prettier': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
-    'react-refresh/only-export-components': ['off', { allowConstantExport: true }],
     'react/prop-types': 'off',
     'react/no-unknown-property': 'off',
     'react/display-name': 'off',

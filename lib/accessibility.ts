@@ -244,7 +244,7 @@ export function useFocusManagement(options: FocusManagementOptions = {}) {
     } catch (error) {
       console.warn('Failed to restore focus:', error);
     }
-  }, [restoreFocus, preventScroll]);
+  }, [shouldRestoreFocus, preventScroll]);
 
   const focusFirstElement = useCallback(() => {
     const container = containerRef.current;
@@ -369,7 +369,7 @@ export function useScreenReader(options: ScreenReaderOptions = {}) {
         setAnnouncement('');
       }, 100);
     },
-    [announce],
+    [shouldAnnounce],
   );
 
   const announcePolite = useCallback(
@@ -608,7 +608,7 @@ export const accessibilityUtils = {
    */
   isFocusable: (element: HTMLElement): boolean => {
     if (element.tabIndex > 0) return true;
-    if (element.disabled) return false;
+    if ('disabled' in element && (element as HTMLButtonElement).disabled) return false;
 
     const focusableSelectors = [
       'input:not([disabled])',

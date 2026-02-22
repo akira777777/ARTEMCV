@@ -40,7 +40,7 @@ export interface UseLocalStorageResult<T> {
   error: string | null;
 }
 
-export interface UseSessionStorageResult<T> extends UseLocalStorageResult<T> {}
+export type UseSessionStorageResult<T> = UseLocalStorageResult<T>;
 
 export interface UseAsyncStateResult<T> {
   data: T | null;
@@ -67,14 +67,14 @@ export function useStateEnhanced<T>(
     validate,
     defaultValue,
     debounceMs = 0,
-    history = false,
+    history: enableHistory = false,
     historyLimit = 10,
   } = options;
 
   const [value, setValue] = useState<T>(initialValue);
   const [isValid, setIsValid] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [history, setHistory] = useState<T[]>(history ? [initialValue] : []);
+  const [historyState, setHistory] = useState<T[]>(enableHistory ? [initialValue] : []);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const historyRef = useRef<number>(0);
 
@@ -87,7 +87,7 @@ export function useStateEnhanced<T>(
       if (stored) {
         const parsed = JSON.parse(stored);
         setValue(parsed);
-        if (history) {
+        if (enableHistory) {
           setHistory([parsed]);
           historyRef.current = 0;
         }
@@ -98,7 +98,7 @@ export function useStateEnhanced<T>(
         setValue(defaultValue);
       }
     }
-  }, [persist, persistKey, defaultValue, history]);
+  }, [persist, persistKey, defaultValue, enableHistory]);
 
   // Debounced persistence
   useEffect(() => {
@@ -143,11 +143,11 @@ export function useStateEnhanced<T>(
   const updateValue = useCallback(
     (newValue: T | ((prev: T) => T)) => {
       const resolvedValue =
-        typeof newValue === 'function' ? (newValue as Function)(value) : newValue;
+        typeof newValue === 'function' ? (newValue as (prev: T) => T)(value) : newValue;
 
       setValue(resolvedValue);
 
-      if (history) {
+      if (enableHistory) {
         setHistory((prev) => {
           const newHistory = prev.slice(0, historyRef.current + 1);
           newHistory.push(resolvedValue);
@@ -162,7 +162,7 @@ export function useStateEnhanced<T>(
         });
       }
     },
-    [value, history, historyLimit],
+    [value, enableHistory, historyLimit],
   );
 
   return [value, updateValue, { isValid, error }];
@@ -465,8 +465,10 @@ export function useDerivedState<T, D>(
 
     // Limit cache size
     if (cacheRef.current.size > cacheSize) {
-      const firstKey = cacheRef.current.keys().next().value;
-      cacheRef.current.delete(firstKey);
+      const firstKey = cacheRef.current.keys().next().value as string | undefined;
+      if (firstKey !== undefined) {
+        cacheRef.current.delete(firstKey);
+      }
     }
 
     return newValue;
@@ -498,8 +500,13 @@ export function createStateReducer<T, A>(
   middleware: Array<(state: T, action: A, next: (state: T, action: A) => T) => T> = [],
 ) {
   return (state: T, action: A): T => {
-    const next = (s: T, a: A) => reducer(s, a);
-    return middleware.reduceRight((acc, mw) => (s, a) => mw(s, a, acc), next)(state, action);
+    let result = reducer(state, action);
+    for (let i = middleware.length - 1; i >= 0; i--) {
+      const mw = middleware[i];
+      const prevResult = result;
+      result = mw(state, action, () => prevResult);
+    }
+    return result;
   };
 }
 
@@ -510,7 +517,10 @@ export function createStateValidator<T>(rules: Record<keyof T, (value: any) => b
   return (state: T): { isValid: boolean; errors: Partial<Record<keyof T, string>> } => {
     const errors: Partial<Record<keyof T, string>> = {};
 
-    for (const [key, rule] of Object.entries(rules)) {
+    for (const [key, rule] of Object.entries(rules) as [
+      string,
+      (value: any) => boolean | string,
+    ][]) {
       const result = rule(state[key as keyof T]);
       if (typeof result === 'string') {
         errors[key as keyof T] = result;

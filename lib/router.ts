@@ -43,6 +43,45 @@ export interface NavigationOptions {
 }
 
 // ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+function pathToRegex(path: string, exact: boolean = false): RegExp {
+  const escapedPath = path.replace(/:[^\s/]+/g, '([^/]+)').replace(/\*/g, '(.*)');
+  return new RegExp(`^${escapedPath}${exact ? '$' : ''}`);
+}
+
+function extractParams(path: string, match: RegExpMatchArray): Record<string, string> {
+  const params: Record<string, string> = {};
+  const paramNames = path.match(/:([a-zA-Z]+)/g) || [];
+  paramNames.forEach((param, index) => {
+    const paramName = param.slice(1);
+    params[paramName] = match[index + 1];
+  });
+  return params;
+}
+
+function buildUrl(path: string, query: Record<string, string>): string {
+  const url = new URL(path, window.location.origin);
+  Object.entries(query).forEach(([key, value]) => {
+    if (value !== null && value !== undefined) {
+      url.searchParams.set(key, String(value));
+    }
+  });
+  return url.pathname + url.search;
+}
+
+function updateMetaTags(route: RouteConfig, description?: string): void {
+  if (route.title) {
+    document.title = route.title;
+  }
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription && (description || route.description)) {
+    metaDescription.setAttribute('content', description || route.description || '');
+  }
+}
+
+// ============================================================================
 // HOOKS
 // ============================================================================
 
@@ -289,14 +328,14 @@ export function useBreadcrumbs(routes: RouteConfig[], currentPath: string) {
     const pathSegments = currentPath.split('/').filter(Boolean);
     const result: Array<{ label: string; path: string }> = [];
 
-    let currentPath = '';
+    let builtPath = '';
     for (const segment of pathSegments) {
-      currentPath += `/${segment}`;
-      const route = routes.find((r) => r.path === currentPath);
+      builtPath += `/${segment}`;
+      const route = routes.find((r) => r.path === builtPath);
       if (route) {
         result.push({
           label: route.breadcrumbs?.[0]?.label || segment,
-          path: currentPath,
+          path: builtPath,
         });
       }
     }
