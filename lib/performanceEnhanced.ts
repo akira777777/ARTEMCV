@@ -335,7 +335,12 @@ export function useMemoryMonitor(threshold: number = 100 * 1024 * 1024) {
  */
 export function useRenderMonitor(componentName: string) {
   const renderCount = useRef(0);
-  const renderTimes = useRef<number[]>([]);
+  // Track running statistics instead of accumulating every render time in an
+  // unbounded array.  The spread-based Math.max/min on a large array can cause
+  // a "Maximum call stack size exceeded" error and wastes memory.
+  const totalRenderTime = useRef(0);
+  const minRenderTime = useRef(Infinity);
+  const maxRenderTime = useRef(0);
   const lastRenderTime = useRef(performance.now());
 
   useEffect(() => {
@@ -343,7 +348,9 @@ export function useRenderMonitor(componentName: string) {
     const currentTime = performance.now();
     const renderTime = currentTime - lastRenderTime.current;
 
-    renderTimes.current.push(renderTime);
+    totalRenderTime.current += renderTime;
+    if (renderTime < minRenderTime.current) minRenderTime.current = renderTime;
+    if (renderTime > maxRenderTime.current) maxRenderTime.current = renderTime;
     lastRenderTime.current = currentTime;
 
     // Log performance if it's slow
@@ -353,22 +360,22 @@ export function useRenderMonitor(componentName: string) {
 
     return () => {
       // Component unmount
-      const avgRenderTime = renderTimes.current.reduce((a, b) => a + b, 0) / renderTimes.current.length;
+      const avgRenderTime = renderCount.current > 0
+        ? totalRenderTime.current / renderCount.current
+        : 0;
       logger.info(`${componentName} unmounted after ${renderCount.current} renders. Avg render time: ${avgRenderTime.toFixed(2)}ms`);
     };
   });
 
   const getStats = useCallback(() => {
-    const avgRenderTime = renderTimes.current.reduce((a, b) => a + b, 0) / renderTimes.current.length;
-    const maxRenderTime = Math.max(...renderTimes.current);
-    const minRenderTime = Math.min(...renderTimes.current);
+    const count = renderCount.current;
+    const avgRenderTime = count > 0 ? totalRenderTime.current / count : 0;
 
     return {
-      renderCount: renderCount.current,
+      renderCount: count,
       avgRenderTime,
-      maxRenderTime,
-      minRenderTime,
-      renderTimes: [...renderTimes.current]
+      maxRenderTime: count > 0 ? maxRenderTime.current : 0,
+      minRenderTime: count > 0 ? minRenderTime.current : 0,
     };
   }, []);
 

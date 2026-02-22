@@ -399,7 +399,8 @@ export function useCachedData<T = any>(
       if (!force) {
         const cachedData = cache.get(key);
         if (cachedData) {
-          const entry = Array.from(cache.cache.entries()).find(([k]) => k === key)?.[1];
+          // Direct O(1) Map lookup instead of O(n) Array.from+find
+          const entry = cache.cache.get(key);
           const isStale = entry && (Date.now() - entry.timestamp > staleTime);
 
           if (!isStale) {
