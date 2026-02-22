@@ -77,5 +77,11 @@
   "bugs": {
     "url": "https://github.com/akira777777/ARTEMCV/issues"
   },
-  "homepage": "https://github.com/akira777777/ARTEMCV#readme"
+  "homepage": "https://github.com/akira777777/ARTEMCV#readme",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  }
 }

@@ -79,7 +79,7 @@ export default defineConfig(({ mode }) => {
       // cssMinify: 'lightningcss', // Temporarily disable due to compatibility issues
       
       // Chunk size warnings and limits
-      chunkSizeWarningLimit: 300,
+      chunkSizeWarningLimit: 1000,
       
       // Enable module preloading
       modulePreload: {
