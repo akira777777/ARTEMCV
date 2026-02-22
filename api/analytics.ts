@@ -70,7 +70,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Cache-Control', 'no-store');
 
   // API key validation
-  const apiKey = req.headers.authorization?.replace('Bearer ', '');
+  // Support both Authorization header and cookie-based auth for defense in depth
+  const apiKey = req.headers.authorization?.replace('Bearer ', '') || req.cookies?.authToken;
   if (!validateApiKey(apiKey)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }

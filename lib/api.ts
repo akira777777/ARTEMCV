@@ -5,6 +5,12 @@ import { useEffect, useRef, useCallback, useState } from 'react';
  * 
  * Advanced API handling with caching, error handling, retry logic,
  * authentication, and performance optimization.
+ *
+ * SECURITY NOTICE:
+ * This module has been updated to use cookie-based authentication for
+ * improved security. For maximum protection against XSS (Cross-Site Scripting),
+ * it is strongly recommended that the authentication token ('authToken')
+ * is set by the server using the 'HttpOnly' flag.
  */
 
 // ============================================================================
@@ -195,7 +201,10 @@ export function useApi(config: ApiConfig = {}) {
     const fetchConfig: RequestInit = {
       method: processedConfig.method || 'GET',
       headers: requestHeaders,
-      signal: abortController.signal
+      signal: abortController.signal,
+      // Include cookies in cross-origin requests if needed,
+      // and always include for same-origin requests.
+      credentials: processedConfig.auth ? 'include' : 'same-origin'
     };
 
     // Add body for POST/PUT/PATCH requests
@@ -527,20 +536,48 @@ export const apiUtils = {
 
 /**
  * Authentication helpers
+ *
+ * SECURITY NOTE: While these helpers use document.cookie for storage,
+ * for maximum security against XSS, the 'authToken' cookie should be
+ * issued by the server with the 'HttpOnly' flag. This prevents
+ * client-side scripts from accessing the token.
  */
-function getAuthToken(): string | null {
-  return localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-}
+export function getAuthToken(): string | null {
+  if (typeof document === 'undefined') return null;
 
-function setAuthToken(token: string, remember: boolean = false): void {
-  if (remember) {
-    localStorage.setItem('authToken', token);
-  } else {
-    sessionStorage.setItem('authToken', token);
+  const name = 'authToken=';
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i].trim();
+    if (c.indexOf(name) === 0) {
+      return decodeURIComponent(c.substring(name.length));
+    }
   }
+  return null;
 }
 
-function clearAuthToken(): void {
+export function setAuthToken(token: string, remember: boolean = false): void {
+  if (typeof document === 'undefined') return;
+
+  let expires = '';
+  if (remember) {
+    const date = new Date();
+    date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 days
+    expires = "; expires=" + date.toUTCString();
+  }
+
+  // Set cookie with security best practices
+  // Note: HttpOnly cannot be set via JavaScript
+  document.cookie = `authToken=${encodeURIComponent(token)}${expires}; path=/; SameSite=Strict; Secure`;
+}
+
+export function clearAuthToken(): void {
+  if (typeof document === 'undefined') return;
+
+  // Clear by setting expiration to the past
+  document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict; Secure";
+
+  // Also clear legacy storage just in case
   localStorage.removeItem('authToken');
   sessionStorage.removeItem('authToken');
 }
