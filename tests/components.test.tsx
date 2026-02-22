@@ -1,8 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import * as React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { vi } from 'vitest';
+import sendContactForm from '../lib/api-client';
+import { useAnnouncement, announceLoadingState } from '../components/AccessibilityUtils';
 
 // Mock external dependencies
 vi.mock('../lib/api-client', () => ({
@@ -31,18 +33,14 @@ vi.mock('../lib/validation', () => ({
 }));
 
 describe('ContactSectionEnhanced', () => {
-  const mockSendContactForm = vi.mocked(await import('../lib/api-client')).sendContactForm;
+  const mockSendContactForm = vi.mocked(sendContactForm);
   const mockAnnouncement = vi.fn();
   const mockAnnounceLoadingState = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(await import('../components/AccessibilityUtils')).useAnnouncement.mockReturnValue(
-      mockAnnouncement,
-    );
-    vi.mocked(
-      await import('../components/AccessibilityUtils'),
-    ).announceLoadingState.mockImplementation(mockAnnounceLoadingState);
+    vi.mocked(useAnnouncement).mockReturnValue(mockAnnouncement);
+    vi.mocked(announceLoadingState).mockImplementation(mockAnnounceLoadingState);
   });
 
   it('should render contact form with all required fields', () => {

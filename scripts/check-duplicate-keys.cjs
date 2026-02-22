@@ -33,7 +33,7 @@ console.log('Czech keys:', csKeys.length);
 function findDuplicates(keys, lang) {
   const seen = new Set();
   const duplicates = [];
-  keys.forEach(k => {
+  keys.forEach((k) => {
     if (seen.has(k)) {
       duplicates.push(k);
     } else {
@@ -56,9 +56,9 @@ const ruSet = new Set(ruKeys);
 const csSet = new Set(csKeys);
 
 const allKeys = new Set([...enKeys, ...ruKeys, ...csKeys]);
-const missingInRu = [...allKeys].filter(k => !ruSet.has(k));
-const missingInCs = [...allKeys].filter(k => !csSet.has(k));
-const missingInEn = [...allKeys].filter(k => !enSet.has(k));
+const missingInRu = [...allKeys].filter((k) => !ruSet.has(k));
+const missingInCs = [...allKeys].filter((k) => !csSet.has(k));
+const missingInEn = [...allKeys].filter((k) => !enSet.has(k));
 
 if (missingInRu.length > 0) {
   console.log('\nKeys missing in Russian:', missingInRu);

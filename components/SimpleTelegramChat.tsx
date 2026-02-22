@@ -101,17 +101,6 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
       const currentName = userName.trim();
       if (!currentName) {
         setUserName(trimmedInput);
-        try {
-          localStorage.setItem('chat_user_name', trimmedInput);
-        } catch {}
-
-        setInputValue('');
-        setError(null);
-        setMessages((prev) => [
-          ...prev,
-          { id: createId(), role: 'user', text: trimmedInput, timestamp: new Date() },
-          { id: createId(), role: 'bot', text: t('chat.bot.welcome'), timestamp: new Date() },
-        ]);
         return;
       }
 
@@ -189,11 +178,11 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
             timestamp: new Date(),
           },
         ]);
-      } finally {
-        abortControllerRef.current = null;
-        if (!isMountedRef.current) return;
-        setLoading(false);
       }
+
+      abortControllerRef.current = null;
+      if (!isMountedRef.current) return;
+      setLoading(false);
     },
     [inputValue, userName, loading, fetchWithTimeout, t],
   );
@@ -261,10 +250,9 @@ export const SimpleTelegramChat: React.FC = React.memo(() => {
               <div
                 className={`
                   max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed
-                  ${
-                    msg.role === 'user'
-                      ? 'bg-white text-black rounded-tr-none'
-                      : 'bg-white/10 text-neutral-200 rounded-tl-none border border-white/5'
+                  ${msg.role === 'user'
+                    ? 'bg-white text-black rounded-tr-none'
+                    : 'bg-white/10 text-neutral-200 rounded-tl-none border border-white/5'
                   }
                 `}
               >

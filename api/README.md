@@ -27,6 +27,7 @@ Sends a contact form submission to a configured Telegram chat.
 ```
 
 **Fields:**
+
 - `name` (string, required): Sender's name (min 2 chars, max 100 chars)
 - `email` (string, required): Valid email address (max 254 chars per RFC 5321)
 - `subject` (string, optional): Message subject (max 200 chars)
@@ -36,6 +37,7 @@ Sends a contact form submission to a configured Telegram chat.
 #### Response Codes
 
 - **200 OK**: Message sent successfully
+
   ```json
   {
     "ok": true,
@@ -44,6 +46,7 @@ Sends a contact form submission to a configured Telegram chat.
   ```
 
 - **400 Bad Request**: Invalid request data
+
   ```json
   {
     "error": "Missing required fields: name, email"
@@ -51,6 +54,7 @@ Sends a contact form submission to a configured Telegram chat.
   ```
 
 - **413 Payload Too Large**: Request exceeds 100KB
+
   ```json
   {
     "error": "Request too large"
@@ -58,6 +62,7 @@ Sends a contact form submission to a configured Telegram chat.
   ```
 
 - **415 Unsupported Media Type**: Invalid Content-Type
+
   ```json
   {
     "error": "Content-Type must be application/json"
@@ -65,6 +70,7 @@ Sends a contact form submission to a configured Telegram chat.
   ```
 
 - **429 Too Many Requests**: Rate limit exceeded (5 requests per minute per IP)
+
   ```json
   {
     "error": "Too many requests. Please try again later."
@@ -72,6 +78,7 @@ Sends a contact form submission to a configured Telegram chat.
   ```
 
 - **502 Bad Gateway**: Telegram API error
+
   ```json
   {
     "error": "Failed to send message"
@@ -79,6 +86,7 @@ Sends a contact form submission to a configured Telegram chat.
   ```
 
 - **504 Gateway Timeout**: Request timeout (12 seconds)
+
   ```json
   {
     "error": "Request timeout"
@@ -95,20 +103,24 @@ Sends a contact form submission to a configured Telegram chat.
 ## Security Features
 
 ### Rate Limiting
+
 - Maximum 5 requests per minute per IP address
 - Old rate limit entries are automatically cleaned up when map size exceeds 1000 entries
 
 ### Input Validation
+
 - All fields are sanitized and validated
 - Maximum length enforced on all inputs
 - Email format validation using RFC-compliant regex
 - HTML escaping to prevent XSS in Telegram messages
 
 ### Request Size Limiting
+
 - Maximum request size: 100KB
 - Prevents DOS attacks via large payloads
 
 ### CORS Protection
+
 - Configurable allowed origins via `ALLOWED_ORIGINS` environment variable
 - If not configured, allows all origins (suitable for public APIs)
 - Includes security headers:
@@ -118,10 +130,12 @@ Sends a contact form submission to a configured Telegram chat.
   - `Vary: Origin` (to prevent cache issues)
 
 ### Honeypot Field
+
 - Hidden `hp` field to detect bot submissions
 - Bots that fill this field receive a silent success response
 
 ### Timeout Protection
+
 - 12-second timeout on Telegram API requests
 - Uses AbortController to cancel hanging requests
 
@@ -172,6 +186,7 @@ The API logs all requests in JSON format for monitoring:
 ```
 
 **Log Actions:**
+
 - `preflight`: CORS preflight request
 - `invalid_method`: Non-POST request received
 - `rate_limited`: IP exceeded rate limit
@@ -191,6 +206,7 @@ npm run test:run
 ```
 
 The test suite includes:
+
 - 32 backend-specific tests covering:
   - Email validation
   - HTML escaping
@@ -208,17 +224,20 @@ The test suite includes:
 ### Local Development
 
 1. Install dependencies:
+
    ```bash
    npm install
    ```
 
 2. Create `.env.local` with required variables:
+
    ```bash
    cp .env.example .env.local
    # Edit .env.local with your values
    ```
 
 3. Run development server:
+
    ```bash
    npm run dev
    ```
@@ -275,6 +294,7 @@ npm run typecheck
 ### Monitoring
 
 Check Vercel logs for:
+
 - Rate limiting patterns
 - Telegram API errors
 - Validation failures

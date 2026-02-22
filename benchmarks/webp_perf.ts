@@ -26,9 +26,9 @@ class MockImage {
   }
 }
 
-// @ts-ignore
+// @ts-expect-error Mocking global Image
 global.Image = MockImage;
-// @ts-ignore
+// @ts-expect-error Mocking global window
 global.window = {};
 
 // Current (Old) implementation logic

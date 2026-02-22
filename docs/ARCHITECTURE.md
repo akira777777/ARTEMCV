@@ -6,17 +6,17 @@ This document provides a comprehensive overview of the ARTEMCV portfolio applica
 
 ## Tech Stack
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| Framework | React 19 | UI component library |
-| Language | TypeScript 5.8 | Type safety and developer experience |
-| Build Tool | Vite 6.2 | Fast development and optimized builds |
-| Styling | Tailwind CSS 4.1 | Utility-first CSS framework |
-| Animation | Framer Motion 12 | Declarative animations |
-| 3D Graphics | Three.js + React Three Fiber | 3D visualizations |
-| Backend | Vercel Serverless Functions | API endpoints |
-| Database | Neon PostgreSQL | Data persistence |
-| Testing | Vitest + Testing Library | Unit and integration tests |
+| Layer       | Technology                   | Purpose                               |
+| ----------- | ---------------------------- | ------------------------------------- |
+| Framework   | React 19                     | UI component library                  |
+| Language    | TypeScript 5.8               | Type safety and developer experience  |
+| Build Tool  | Vite 6.2                     | Fast development and optimized builds |
+| Styling     | Tailwind CSS 4.1             | Utility-first CSS framework           |
+| Animation   | Framer Motion 12             | Declarative animations                |
+| 3D Graphics | Three.js + React Three Fiber | 3D visualizations                     |
+| Backend     | Vercel Serverless Functions  | API endpoints                         |
+| Database    | Neon PostgreSQL              | Data persistence                      |
+| Testing     | Vitest + Testing Library     | Unit and integration tests            |
 
 ## Directory Structure
 
@@ -49,12 +49,13 @@ ARTEMCV/
 ### 1. Component Architecture
 
 #### Container/Presentational Pattern
+
 ```typescript
 // Container Component (Smart)
 const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({});
   const handleSubmit = async () => { /* ... */ };
-  
+
   return <ContactForm data={formData} onSubmit={handleSubmit} />;
 };
 
@@ -65,6 +66,7 @@ const ContactForm: React.FC<Props> = ({ data, onSubmit }) => {
 ```
 
 #### Compound Component Pattern
+
 ```typescript
 const Card = {
   Root: CardRoot,
@@ -83,23 +85,27 @@ const Card = {
 ### 2. State Management
 
 #### Local State (useState)
+
 - Form inputs
 - UI toggles (modals, menus)
 - Component-specific data
 
 #### Context API
+
 - Theme preferences
 - Language/i18n
 - Accessibility settings
 - User authentication
 
 #### External State (Future)
+
 - Zustand or Redux for complex global state
 - React Query for server state
 
 ### 3. Data Fetching
 
 #### API Client Pattern
+
 ```typescript
 // lib/api-client.ts
 const api = createApiClient({
@@ -113,6 +119,7 @@ const response = await api.post('/send-telegram', formData);
 ```
 
 #### Error Handling Strategy
+
 ```typescript
 try {
   const result = await api.post('/endpoint', data);
@@ -132,6 +139,7 @@ try {
 ### 4. Performance Optimizations
 
 #### Code Splitting
+
 ```typescript
 // Route-based splitting
 const DetailingHub = lazy(() => import('./pages/DetailingHub'));
@@ -141,9 +149,10 @@ const HeavyChart = lazy(() => import('./components/HeavyChart'));
 ```
 
 #### Memoization Strategy
+
 ```typescript
 // Memoize expensive computations
-const filteredData = useMemo(() => 
+const filteredData = useMemo(() =>
   data.filter(item => item.active),
   [data]
 );
@@ -158,6 +167,7 @@ const ListItem = memo(({ item }) => <div>{item.name}</div>);
 ```
 
 #### Virtualization (for long lists)
+
 ```typescript
 // Use react-window for lists > 50 items
 import { FixedSizeList } from 'react-window';
@@ -166,24 +176,26 @@ import { FixedSizeList } from 'react-window';
 ### 5. Styling Architecture
 
 #### Tailwind Organization
+
 ```typescript
 // Base styles
-const baseStyles = "flex items-center justify-center";
+const baseStyles = 'flex items-center justify-center';
 
 // Conditional styles with clsx + tailwind-merge
 const className = cn(
-  "px-4 py-2 rounded-lg",
-  isActive && "bg-blue-500 text-white",
-  isDisabled && "opacity-50 cursor-not-allowed"
+  'px-4 py-2 rounded-lg',
+  isActive && 'bg-blue-500 text-white',
+  isDisabled && 'opacity-50 cursor-not-allowed',
 );
 ```
 
 #### Design Tokens
+
 ```css
 /* index.css */
 :root {
-  --color-primary: #10B981;
-  --color-secondary: #06B6D4;
+  --color-primary: #10b981;
+  --color-secondary: #06b6d4;
   --spacing-unit: 0.25rem;
   --radius-sm: 0.375rem;
 }
@@ -192,6 +204,7 @@ const className = cn(
 ## Security Best Practices
 
 ### 1. Input Validation
+
 ```typescript
 // Server-side validation
 const result = validateObject(body, {
@@ -206,6 +219,7 @@ if (!result.valid) {
 ```
 
 ### 2. XSS Prevention
+
 ```typescript
 // Sanitize user input
 const safeHtml = escapeHtml(userInput);
@@ -215,6 +229,7 @@ const safeHtml = escapeHtml(userInput);
 ```
 
 ### 3. CSRF Protection
+
 ```typescript
 // Use SameSite cookies
 res.setHeader('Set-Cookie', 'session=abc; SameSite=Strict; Secure');
@@ -229,6 +244,7 @@ if (!allowedOrigins.includes(origin)) {
 ## Testing Strategy
 
 ### Unit Tests
+
 ```typescript
 describe('validation', () => {
   it('validates email format', () => {
@@ -239,6 +255,7 @@ describe('validation', () => {
 ```
 
 ### Integration Tests
+
 ```typescript
 describe('ContactForm', () => {
   it('submits form successfully', async () => {
@@ -251,6 +268,7 @@ describe('ContactForm', () => {
 ```
 
 ### E2E Tests
+
 ```typescript
 // Using Playwright
 test('user can submit contact form', async ({ page }) => {
@@ -265,6 +283,7 @@ test('user can submit contact form', async ({ page }) => {
 ## Deployment Architecture
 
 ### Vercel Platform
+
 ```
 ┌─────────────────┐
 │   Vercel Edge   │
@@ -282,6 +301,7 @@ test('user can submit contact form', async ({ page }) => {
 ```
 
 ### Environment Configuration
+
 ```env
 # Production
 NODE_ENV=production
@@ -298,6 +318,7 @@ DATABASE_URL=postgresql://localhost/...
 ## Monitoring & Observability
 
 ### Logging
+
 ```typescript
 const logger = createLogger({ context: 'ContactForm' });
 
@@ -306,11 +327,13 @@ logger.error('Submission failed', error, { formData });
 ```
 
 ### Error Tracking
+
 - ErrorBoundary catches React errors
 - API errors logged with correlation IDs
 - Client-side errors reported to analytics endpoint
 
 ### Performance Monitoring
+
 - Web Vitals tracking (LCP, FID, CLS)
 - Custom performance marks for key user journeys
 - Bundle size monitoring
@@ -318,6 +341,7 @@ logger.error('Submission failed', error, { formData });
 ## Future Enhancements
 
 ### Planned Architecture Improvements
+
 1. **Micro-frontends**: Split large sections into independent deployables
 2. **Edge Functions**: Move API routes to Edge for lower latency
 3. **GraphQL**: Replace REST with GraphQL for flexible data fetching
@@ -325,6 +349,7 @@ logger.error('Submission failed', error, { formData });
 5. **PWA**: Service worker for offline support
 
 ### Scalability Considerations
+
 - Database connection pooling
 - Redis caching layer
 - CDN asset optimization

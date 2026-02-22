@@ -19,6 +19,7 @@
 A high-performance, motion-rich portfolio website showcasing full-stack development expertise. Features a multilingual interface (English, Russian, Czech), interactive 3D elements, Telegram chat integration, and a responsive design system built with React 19 and Tailwind CSS.
 
 **Key Highlights:**
+
 - 🎨 **Interactive Design**: 3D card effects, parallax scrolling, cursor trails, and magnetic buttons
 - 🌍 **Multilingual**: Supports English, Russian, and Czech with dynamic language switching
 - 📱 **Responsive**: Mobile-first design with optimized layouts for all screen sizes
@@ -29,6 +30,7 @@ A high-performance, motion-rich portfolio website showcasing full-stack developm
 ## ✨ Features
 
 ### Core Sections
+
 - **Hero Section**: Interactive 3D card deck with mouse parallax effects and statistics showcase
 - **Work Gallery**: Featured projects with detailed case studies, tech stacks, and live demos
 - **About**: Services offered and comprehensive technical expertise listing
@@ -36,6 +38,7 @@ A high-performance, motion-rich portfolio website showcasing full-stack developm
 - **Chat Widget**: Real-time Telegram messaging with expandable interface
 
 ### Technical Features
+
 - **Internationalization (i18n)**: Context-based translation system with localStorage persistence
 - **Error Boundaries**: Graceful error handling with detailed fallback UI
 - **Animation System**: Framer Motion with reduced motion detection
@@ -46,29 +49,34 @@ A high-performance, motion-rich portfolio website showcasing full-stack developm
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Node.js** (v20+ recommended)
 - **npm** or **pnpm**
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/akira777777/ARTEMCV.git
    cd ARTEMCV
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Configure environment** (optional for Telegram features)
+
    ```bash
    cp .env.example .env.local
    # Add your VITE_TELEGRAM_CHAT_ID if using Telegram integration
    ```
 
 4. **Start development server**
+
    ```bash
    npm run dev
    ```
@@ -76,6 +84,7 @@ A high-performance, motion-rich portfolio website showcasing full-stack developm
    Visit [http://localhost:5173](http://localhost:5173)
 
 ### Alternative Development Commands
+
 ```bash
 # Run tests
 npm run test
@@ -118,6 +127,7 @@ ARTEMCV/
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **Framework**: React 19.2.4 with TypeScript 5.8.3
 - **Build Tool**: Vite 6.4.1
 - **Styling**: Tailwind CSS 4.1.18
@@ -125,11 +135,13 @@ ARTEMCV/
 - **Icons**: Lucide React 0.563.0
 
 ### Backend & Deployment
+
 - **Serverless**: Vercel Functions (@vercel/node)
 - **API Integration**: Telegram Bot API
 - **Hosting**: Vercel (configured with vercel.json)
 
 ### Development Tools
+
 - **Testing**: Vitest 4.0.18 with Testing Library
 - **Linting**: TypeScript compiler
 - **Package Manager**: npm / pnpm
@@ -137,21 +149,25 @@ ARTEMCV/
 ## 📦 Build & Deployment
 
 ### Production Build
+
 ```bash
 npm run build
 ```
 
 Output is in `dist/` directory:
+
 - **Bundle Size**: ~103 KB gzipped
 - **Build Time**: ~1.6s
 - **Optimized**: Tree-shaking, minification, code splitting
 
 ### Preview Production Build
+
 ```bash
 npm run preview
 ```
 
 ### Deploy to Vercel
+
 ```bash
 # Install Vercel CLI
 npm i -g vercel
@@ -165,11 +181,13 @@ Or connect your GitHub repository to Vercel for automatic deployments.
 ## 🌐 Internationalization
 
 The site supports three languages:
+
 - **English** (default)
 - **Russian** (Русский)
 - **Czech** (Čeština)
 
 Language detection priority:
+
 1. User selection (stored in localStorage)
 2. Browser language (`navigator.language`)
 3. Default fallback (English)
@@ -199,16 +217,16 @@ ALLOWED_ORIGINS=https://yourdomain.com
 
 ## 📝 Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run test` | Run tests in watch mode |
-| `npm run test:run` | Run tests once |
-| `npm run typecheck` | Check TypeScript types |
-| `npm run db:migrate` | Run contact analytics migrations |
-| `npm run images:optimize` | Optimize image assets |
+| Command                   | Description                      |
+| ------------------------- | -------------------------------- |
+| `npm run dev`             | Start development server         |
+| `npm run build`           | Build for production             |
+| `npm run preview`         | Preview production build         |
+| `npm run test`            | Run tests in watch mode          |
+| `npm run test:run`        | Run tests once                   |
+| `npm run typecheck`       | Check TypeScript types           |
+| `npm run db:migrate`      | Run contact analytics migrations |
+| `npm run images:optimize` | Optimize image assets            |
 
 ## 🤝 Contributing
 

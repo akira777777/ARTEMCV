@@ -142,7 +142,7 @@ export async function getPlatformIOVersion(): Promise<string> {
     const result = await execPioCommand(['--version'], { timeout: 5000 });
     if (result.exitCode === 0) {
       // Output format: "PlatformIO Core, version X.Y.Z"
-      const match = result.stdout.match(/version\s+([\d\.]+)/i);
+      const match = result.stdout.match(/version\s+([\d.]+)/i);
       return match ? match[1] : result.stdout.trim();
     }
     throw new PlatformIOError('Failed to get PlatformIO version');

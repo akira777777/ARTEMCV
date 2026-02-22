@@ -366,13 +366,35 @@ export function checkColorContrast(
 
 /**
  * Announce loading state changes to screen readers
+ * Note: Since this is a utility function, not a hook or component, it uses the global fallback approach.
+ * For React components, prefer using the `useAnnouncement` hook directly.
  */
 export function announceLoadingState(isLoading: boolean, itemName?: string): void {
-  const announcement = useAnnouncement();
   const message = isLoading
     ? `${itemName || 'Content'} is loading...`
     : `${itemName || 'Content'} has finished loading.`;
-  announcement(message);
+
+  // Use a global fallback for announcements when outside React context
+  const liveRegion =
+    document.getElementById('sr-global-announcer') ||
+    (() => {
+      const element = document.createElement('div');
+      element.id = 'sr-global-announcer';
+      element.setAttribute('aria-live', 'polite');
+      element.setAttribute('aria-atomic', 'true');
+      element.style.position = 'absolute';
+      element.style.left = '-10000px';
+      element.style.width = '1px';
+      element.style.height = '1px';
+      element.style.overflow = 'hidden';
+      document.body.appendChild(element);
+      return element;
+    })();
+
+  liveRegion.textContent = message;
+  setTimeout(() => {
+    liveRegion.textContent = '';
+  }, 1000);
 }
 
 /**
@@ -460,6 +482,7 @@ export const ScreenReaderOnly: React.FC<{
 }> = ({ children }) => {
   return (
     <span
+      className="sr-only"
       style={{
         position: 'absolute',
         left: '-10000px',
@@ -479,7 +502,7 @@ export const ScreenReaderOnly: React.FC<{
  */
 export const LiveRegion: React.FC<{
   children: React.ReactNode;
-  priority?: 'polite' | 'assertive';
+  priority?: 'polite' | 'assertive' | 'off';
   className?: string;
 }> = ({ children, priority = 'polite', className }) => {
   return (

@@ -1,4 +1,3 @@
-
 import sharp from 'sharp';
 import fs from 'fs';
 import path from 'path';
@@ -35,9 +34,7 @@ async function optimizeImages() {
         }
 
         try {
-          await sharp(inputPath)
-            .webp({ quality: 80, effort: 6 })
-            .toFile(outputPath);
+          await sharp(inputPath).webp({ quality: 80, effort: 6 }).toFile(outputPath);
           console.log(`✅ Optimized: ${file} -> ${webpName}`);
         } catch (err) {
           console.error(`❌ Error optimizing ${file}:`, err);

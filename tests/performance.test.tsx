@@ -201,6 +201,7 @@ describe('Component Performance', () => {
     const MemoComponent = React.memo<{ value: number }>(({ value }) => {
       return <div data-testid="value">{value}</div>;
     });
+    MemoComponent.displayName = 'MemoComponent';
 
     const Parent: React.FC = () => {
       const [, setState] = React.useState(0);

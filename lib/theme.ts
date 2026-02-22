@@ -331,6 +331,7 @@ export function useTheme(options: ThemeOptions = {}) {
     }
 
     return themeConfig;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customTheme, enableSystemTheme, enableHighContrast]);
 
   // Apply theme to document

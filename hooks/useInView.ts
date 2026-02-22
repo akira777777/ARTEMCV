@@ -77,8 +77,23 @@ export function useInViewMultiple(
   count: number,
   options: UseInViewOptions = {},
 ): { refs: RefObject<HTMLElement | null>[]; inViewStates: boolean[] } {
-  const refs = Array.from({ length: count }, () => useRef<HTMLElement>(null));
+  // Create the state array first
   const [inViewStates, setInViewStates] = useState<boolean[]>(Array(count).fill(false));
+
+  // Create refs outside loop if possible, or use a single ref to array
+  // Given hooks must be called exactly the same number of times, and count is dynamic,
+  // we cannot call useRef inside a loop or array initializer dynamically if it changes.
+  // Instead, use a single ref that holds an array of elements.
+  const elementsRef = useRef<(HTMLElement | null)[]>([]);
+
+  // Create a stable array of ref objects to return for compatibility
+  const refs = Array.from({ length: count }).map((_, i) => {
+    // Return an object that acts like a ref by reading/writing to the main array
+    return {
+      get current() { return elementsRef.current[i] || null; },
+      set current(el) { elementsRef.current[i] = el; }
+    } as RefObject<HTMLElement | null>;
+  });
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];

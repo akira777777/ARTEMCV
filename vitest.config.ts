@@ -39,9 +39,6 @@ export default defineConfig({
     testTimeout: 10000,
     hookTimeout: 10000,
     css: true,
-    deps: {
-      inline: ['vitest-canvas-mock'],
-    },
   },
   resolve: {
     alias: {

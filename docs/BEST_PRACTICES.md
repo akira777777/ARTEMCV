@@ -67,7 +67,7 @@ function isError(response: ApiResponse): response is ErrorResponse {
 ```typescript
 // ✅ Good: Constrain generics for type safety
 function findById<T extends { id: string }>(items: T[], id: string): T | undefined {
-  return items.find(item => item.id === id);
+  return items.find((item) => item.id === id);
 }
 ```
 
@@ -85,10 +85,10 @@ interface UserProfileProps {
 
 export const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
   const { data, isLoading } = useUser(userId);
-  
+
   if (isLoading) return <LoadingSpinner />;
   if (!data) return <NotFound />;
-  
+
   return (
     <article className="user-profile">
       <UserAvatar src={data.avatar} />
@@ -106,11 +106,11 @@ const Component: React.FC = () => {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const theme = useTheme();
-  
+
   useEffect(() => {
     // Effect logic
   }, [count]);
-  
+
   return <div ref={ref}>{count}</div>;
 };
 
@@ -133,7 +133,7 @@ useEffect(() => {
 // ✅ Good: Use functional updates to avoid dependency
 useEffect(() => {
   const timer = setInterval(() => {
-    setCount(c => c + 1); // Functional update
+    setCount((c) => c + 1); // Functional update
   }, 1000);
   return () => clearInterval(timer);
 }, []); // No dependencies needed
@@ -162,16 +162,16 @@ const handleSubmit = useCallback((event: FormEvent) => {
 // ✅ Good: Group related classes, use cn() for conditionals
 const buttonClass = cn(
   // Layout
-  "inline-flex items-center justify-center",
+  'inline-flex items-center justify-center',
   // Spacing
-  "px-4 py-2",
+  'px-4 py-2',
   // Appearance
-  "bg-blue-500 text-white rounded-lg",
+  'bg-blue-500 text-white rounded-lg',
   // Interactive states
-  "hover:bg-blue-600 focus:ring-2 focus:ring-blue-300",
-  "disabled:opacity-50 disabled:cursor-not-allowed",
+  'hover:bg-blue-600 focus:ring-2 focus:ring-blue-300',
+  'disabled:opacity-50 disabled:cursor-not-allowed',
   // Transitions
-  "transition-colors duration-200"
+  'transition-colors duration-200',
 );
 ```
 
@@ -214,7 +214,7 @@ const buttonClass = cn(
 
 ```typescript
 // ✅ Good: Memoize expensive computations
-const sortedData = useMemo(() => 
+const sortedData = useMemo(() =>
   data.sort((a, b) => b.score - a.score),
   [data]
 );
@@ -286,10 +286,10 @@ describe('Calculator', () => {
     const calculator = new Calculator();
     const a = 5;
     const b = 3;
-    
+
     // Act
     const result = calculator.add(a, b);
-    
+
     // Assert
     expect(result).toBe(8);
   });
@@ -304,15 +304,15 @@ describe('Button', () => {
     render(<Button>Click me</Button>);
     expect(screen.getByText('Click me')).toBeInTheDocument();
   });
-  
+
   it('calls onClick when clicked', async () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click</Button>);
-    
+
     await userEvent.click(screen.getByText('Click'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
-  
+
   it('is disabled when loading', () => {
     render(<Button isLoading>Loading</Button>);
     expect(screen.getByRole('button')).toBeDisabled();
@@ -376,9 +376,7 @@ const safeHtml = escapeHtml(userInput);
 
 ```typescript
 // ✅ Good: HTTP-only cookies
-res.setHeader('Set-Cookie', 
-  'token=abc; HttpOnly; Secure; SameSite=Strict; Max-Age=3600'
-);
+res.setHeader('Set-Cookie', 'token=abc; HttpOnly; Secure; SameSite=Strict; Max-Age=3600');
 
 // ✅ Good: Verify JWT properly
 const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -418,20 +416,24 @@ docs/architecture-update
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Manual testing completed
 - [ ] E2E tests passing
 
 ## Checklist
+
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated
@@ -443,6 +445,7 @@ Brief description of changes
 ## Code Review Checklist
 
 ### Before Submitting
+
 - [ ] Code follows TypeScript strict mode
 - [ ] All tests passing
 - [ ] No console.log statements
@@ -453,6 +456,7 @@ Brief description of changes
 - [ ] Performance optimized (memoization, lazy loading)
 
 ### During Review
+
 - [ ] Logic is correct and efficient
 - [ ] Error handling is comprehensive
 - [ ] Security considerations addressed

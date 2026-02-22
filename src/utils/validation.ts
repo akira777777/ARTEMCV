@@ -20,7 +20,7 @@ export function validateBoardId(boardId: string): boolean {
   }
 
   // Only allow alphanumeric, hyphen, underscore, and dot
-  const validPattern = /^[a-zA-Z0-9_\-\.]+$/;
+  const validPattern = /^[a-zA-Z0-9_\-.]+$/;
   return validPattern.test(boardId);
 }
 
@@ -85,10 +85,13 @@ export function sanitizeInput(input: string): string {
   }
 
   // Remove control characters and other dangerous characters
-  return input
-    .replace(/[\x00-\x1F\x7F]/g, '') // Remove control characters
-    .replace(/[;&|`$()]/g, '') // Remove shell special characters
-    .trim();
+  return (
+    input
+      // eslint-disable-next-line no-control-regex
+      .replace(/[\x00-\x1F\x7F]/g, '') // Remove control characters
+      .replace(/[;&|`$()]/g, '') // Remove shell special characters
+      .trim()
+  );
 }
 
 /**
@@ -101,7 +104,7 @@ export function validateSerialPort(port: string): boolean {
   }
 
   // Unix/Linux/macOS patterns: /dev/ttyUSB0, /dev/ttyACM0, /dev/cu.usbserial-*
-  const unixPattern = /^\/dev\/(tty(USB|ACM|S)\d+|cu\.[a-zA-Z0-9_\-\.]+)$/;
+  const unixPattern = /^\/dev\/(tty(USB|ACM|S)\d+|cu\.[a-zA-Z0-9_\-.]+)$/;
 
   // Windows patterns: COM1, COM10, etc.
   const windowsPattern = /^COM\d{1,3}$/;
@@ -125,7 +128,7 @@ export function validateLibraryName(name: string): boolean {
 
   // Allow alphanumeric, spaces, hyphens, underscores, and dots
   // Also allow @ for scoped packages and numbers for IDs
-  const validPattern = /^[a-zA-Z0-9_\-\.\s@]+$/;
+  const validPattern = /^[a-zA-Z0-9_\-.\s@]+$/;
   return validPattern.test(name);
 }
 
@@ -138,7 +141,7 @@ export function validateFramework(framework: string): boolean {
   }
 
   // Framework names should be lowercase alphanumeric with optional hyphens
-  const validPattern = /^[a-z0-9\-]+$/;
+  const validPattern = /^[a-z0-9-]+$/;
   return validPattern.test(framework) && framework.length > 0 && framework.length <= 30;
 }
 
@@ -151,7 +154,7 @@ export function validateEnvironmentName(env: string): boolean {
   }
 
   // Environment names are alphanumeric with underscores and hyphens
-  const validPattern = /^[a-zA-Z0-9_\-]+$/;
+  const validPattern = /^[a-zA-Z0-9_-]+$/;
   return validPattern.test(env) && env.length > 0 && env.length <= 50;
 }
 
@@ -165,7 +168,7 @@ export function validateVersion(version: string): boolean {
   }
 
   // Semantic version with optional prefix (^, ~, >, <, >=, <=, =)
-  const validPattern = /^[\^~><=]*\d+(\.\d+){0,2}([a-zA-Z0-9\-\+\.]*)?$/;
+  const validPattern = /^[\^~><=]*\d+(\.\d+){0,2}([a-zA-Z0-9-+.]+)?$/;
   return validPattern.test(version) && version.length <= 50;
 }
 
@@ -195,6 +198,7 @@ export function isTextSafe(text: string): boolean {
   }
 
   // Check for null bytes and other control characters that shouldn't be in normal text
+  // eslint-disable-next-line no-control-regex
   return !text.includes('\0') && !/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(text);
 }
 

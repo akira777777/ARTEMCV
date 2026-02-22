@@ -8,7 +8,7 @@ class MockIntersectionObserver implements IntersectionObserver {
   readonly thresholds: number[];
 
   constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
-    this.root = options?.root || null;
+    this.root = (options?.root as Element) || null;
     this.rootMargin = options?.rootMargin || '0px';
     this.thresholds = Array.isArray(options?.threshold)
       ? options.threshold
@@ -162,7 +162,7 @@ Object.defineProperty(window, 'navigator', {
 });
 
 // Mock URL
-global.URL = class URL {
+(global as any).URL = class URL {
   constructor(url: string, base?: string | URL) {
     this.href = url;
     this.origin = base ? new URL(base).origin : '';
@@ -192,7 +192,7 @@ global.URL = class URL {
 };
 
 // Mock URLSearchParams
-global.URLSearchParams = class URLSearchParams {
+(global as any).URLSearchParams = class URLSearchParams {
   constructor(init?: string | string[][] | Record<string, string> | URLSearchParams) {}
 
   append(name: string, value: string): void {}
@@ -271,9 +271,11 @@ expect.extend({
 });
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface Matchers<R> {
       toBeAccessible(): R;
+      _dummy?: Extract<R, never>; // To prevent empty object type warning
     }
   }
 }

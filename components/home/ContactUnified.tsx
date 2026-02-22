@@ -56,10 +56,10 @@ export const ContactUnified: React.FC = () => {
               Get In Touch
             </Label>
             <Heading as="h2" size="lg" className="mb-6">
-              Let's Work Together
+              Let&apos;s Work Together
             </Heading>
             <Text size="lg" color="secondary" className="mb-8">
-              Have a project in mind? I'd love to hear about it. Send me a message and let's create
+              Have a project in mind? I&apos;d love to hear about it. Send me a message and let&apos;s create
               something amazing.
             </Text>
 
@@ -115,7 +115,7 @@ export const ContactUnified: React.FC = () => {
                     Message Sent!
                   </Heading>
                   <Text color="secondary">
-                    Thank you for reaching out. I'll get back to you soon.
+                    Thank you for reaching out. I&apos;ll get back to you soon.
                   </Text>
                 </div>
               ) : (

@@ -1,4 +1,5 @@
 # JULESCV: AI Agent Instructions
+
 ## Architecture Overview
 
 **Vite SPA + Vercel Serverless Hybrid**
@@ -8,14 +9,17 @@
 - Data-driven content: [constants.tsx](../constants.tsx) exports `PROJECTS[]` and `SKILLS[]` arrays; components map from these to avoid hardcoded JSX
 
 **Critical data flow:**
+
 1. User language preference → [i18n.tsx](../i18n.tsx) context → all components use `useI18n().t(key)`
 2. Form submissions (contact) → [ContactSectionSecure.tsx](../components/ContactSectionSecure.tsx) → Telegram serverless endpoint [api/send-telegram.ts](../api/send-telegram.ts) on Vercel
 3. Scroll detection → [Navigation.tsx](../components/Navigation.tsx) auto-detects active section based on viewport position
+
 ## Conventions & Patterns
 
 **Styling:** Tailwind only (no CSS-in-JS); dark theme (`bg-black`, `text-white`), high contrast, rounded corners, subtle gradients and glows. Reference: [components/Hero.tsx](../components/Hero.tsx) for gradient text, [components/About.tsx](../components/About.tsx) for service card hover states.
 
-**Internationalization:** 
+**Internationalization:**
+
 - Context-based via `useI18n()` hook
 - Supports: `en | ru | cs` (Czech)
 - Detection order: localStorage → navigator.language → default English
@@ -30,20 +34,24 @@
 ## Critical Workflows
 
 **Development (prefer these over plain `npm run dev`):**
+
 - `npm run dev:clean` — clears Vite cache, runs dev server (use for cache issues)
 - `npm run dev:prod` — builds then previews (closest to production)
 - `npm run build` → `npm run preview` — explicit build + preview
 
 **Testing:**
+
 - `npm run test` — Vitest watch mode
 - `npm run test:run` — single run
 
 **Environment variables:**
+
 - Vite inlines only `VITE_*` prefix (rest are stripped)
 - `VITE_TELEGRAM_CHAT_ID` — optional client-side hint; [send-telegram.ts](../api/send-telegram.ts) can override
 - `.env.local` is git-ignored; set locally or in Vercel dashboard
 
 **Telegram integration:**
+
 - Endpoint: `/api/send-telegram` serverless on Vercel (preferred for secrets)
 - HTML escaping: use `escapeHtml()` utility to prevent Telegram parse errors
 - Honeypot field (`hp`) silently succeeds if filled (spam bot detection)
@@ -61,11 +69,13 @@
 ## Common Patterns
 
 **Adding a project:**
+
 1. Append to `PROJECTS[]` in [constants.tsx](../constants.tsx) with new `Project` object
 2. Place screenshot in `public/` (e.g., `public/projectname.png`)
 3. [WorkGallery.tsx](../components/WorkGallery.tsx) auto-renders via `.map()`
 
 **Form submissions:**
+
 - Validate in component before fetch
 - Use `AbortController` with 12s timeout to prevent hangs
 - Return JSON response; expect serverless to use same format

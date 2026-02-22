@@ -223,7 +223,7 @@ export function useKeyboardNavigation(options: KeyboardNavigationOptions = {}) {
  */
 export function useFocusManagement(options: FocusManagementOptions = {}) {
   const {
-    restoreFocus = true,
+    restoreFocus: shouldRestoreFocus = true,
     preventScroll = false,
     focusFirst = false,
     focusLast = false,
@@ -237,7 +237,7 @@ export function useFocusManagement(options: FocusManagementOptions = {}) {
   }, []);
 
   const restoreFocus = useCallback(() => {
-    if (!restoreFocus || !previousFocusRef.current) return;
+    if (!shouldRestoreFocus || !previousFocusRef.current) return;
 
     try {
       previousFocusRef.current.focus({ preventScroll });
@@ -334,7 +334,7 @@ export function useFocusManagement(options: FocusManagementOptions = {}) {
  * Screen reader announcement hook
  */
 export function useScreenReader(options: ScreenReaderOptions = {}) {
-  const { liveRegion = true, announce = true, politeness = 'polite' } = options;
+  const { liveRegion = true, announce: shouldAnnounce = true, politeness = 'polite' } = options;
 
   const announcementRef = useRef<HTMLDivElement | null>(null);
   const [announcement, setAnnouncement] = useState('');
@@ -356,13 +356,13 @@ export function useScreenReader(options: ScreenReaderOptions = {}) {
       document.body.appendChild(newContainer);
       announcementRef.current = newContainer;
     } else {
-      announcementRef.current = container;
+      announcementRef.current = container as HTMLDivElement;
     }
   }, [liveRegion, politeness]);
 
   const announce = useCallback(
     (message: string) => {
-      if (!announce || !announcementRef.current) return;
+      if (!shouldAnnounce || !announcementRef.current) return;
 
       setAnnouncement(message);
       setTimeout(() => {
@@ -541,19 +541,22 @@ export const accessibilityUtils = {
   /**
    * Generate ARIA attributes for common patterns
    */
-  generateAriaAttributes: (type: string, options: Record<string, any> = {}): AriaAttributes => {
+  generateAriaAttributes: (
+    type: string,
+    options: Record<string, any> = {},
+  ): Record<string, any> => {
     switch (type) {
       case 'button':
         return {
           role: 'button',
-          tabindex: 0,
+          tabIndex: 0,
           'aria-pressed': options.pressed || false,
         };
 
       case 'link':
         return {
           role: 'link',
-          tabindex: 0,
+          tabIndex: 0,
         };
 
       case 'checkbox':
@@ -577,7 +580,7 @@ export const accessibilityUtils = {
           role: 'tab',
           'aria-selected': options.selected || false,
           'aria-controls': options.controls,
-          tabindex: options.selected ? 0 : -1,
+          tabIndex: options.selected ? 0 : -1,
         };
 
       case 'tabpanel':

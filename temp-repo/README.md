@@ -70,12 +70,15 @@ The server exposes 11 MCP tools for comprehensive embedded development:
 ### Board Discovery
 
 #### `list_boards`
+
 Lists all available PlatformIO boards with optional filtering.
 
 **Parameters:**
+
 - `filter` (optional): Filter by platform, framework, or MCU (e.g., "esp32", "arduino", "stm32")
 
 **Example:**
+
 ```json
 {
   "filter": "esp32"
@@ -83,12 +86,15 @@ Lists all available PlatformIO boards with optional filtering.
 ```
 
 #### `get_board_info`
+
 Gets detailed information about a specific board.
 
 **Parameters:**
+
 - `boardId` (required): Board ID (e.g., "esp32dev", "uno", "nucleo_f401re")
 
 **Example:**
+
 ```json
 {
   "boardId": "esp32dev"
@@ -98,6 +104,7 @@ Gets detailed information about a specific board.
 ### Device Management
 
 #### `list_devices`
+
 Lists all connected serial devices for firmware upload and monitoring.
 
 **Parameters:** None
@@ -105,15 +112,18 @@ Lists all connected serial devices for firmware upload and monitoring.
 ### Project Operations
 
 #### `init_project`
+
 Initializes a new PlatformIO project with specified board and framework.
 
 **Parameters:**
+
 - `board` (required): Board ID
 - `framework` (optional): Framework (e.g., "arduino", "espidf", "mbed")
 - `projectDir` (required): Project directory path
 - `platformOptions` (optional): Additional platform options
 
 **Example:**
+
 ```json
 {
   "board": "esp32dev",
@@ -123,13 +133,16 @@ Initializes a new PlatformIO project with specified board and framework.
 ```
 
 #### `build_project`
+
 Compiles the project and generates firmware binary.
 
 **Parameters:**
+
 - `projectDir` (required): Path to project directory
 - `environment` (optional): Specific environment from platformio.ini
 
 **Example:**
+
 ```json
 {
   "projectDir": "/path/to/my-project"
@@ -137,20 +150,25 @@ Compiles the project and generates firmware binary.
 ```
 
 #### `clean_project`
+
 Removes build artifacts from the project.
 
 **Parameters:**
+
 - `projectDir` (required): Path to project directory
 
 #### `upload_firmware`
+
 Uploads compiled firmware to a connected device.
 
 **Parameters:**
+
 - `projectDir` (required): Path to project directory
 - `port` (optional): Upload port (auto-detected if not specified)
 - `environment` (optional): Specific environment from platformio.ini
 
 **Example:**
+
 ```json
 {
   "projectDir": "/path/to/my-project",
@@ -159,9 +177,11 @@ Uploads compiled firmware to a connected device.
 ```
 
 #### `start_monitor`
+
 Provides instructions and command for starting serial monitor.
 
 **Parameters:**
+
 - `port` (optional): Serial port
 - `baud` (optional): Baud rate (e.g., 115200)
 - `projectDir` (optional): Project directory
@@ -169,13 +189,16 @@ Provides instructions and command for starting serial monitor.
 ### Library Management
 
 #### `search_libraries`
+
 Searches the PlatformIO library registry.
 
 **Parameters:**
+
 - `query` (required): Search query
 - `limit` (optional): Maximum results (default: 20)
 
 **Example:**
+
 ```json
 {
   "query": "wifi",
@@ -184,14 +207,17 @@ Searches the PlatformIO library registry.
 ```
 
 #### `install_library`
+
 Installs a library from the PlatformIO registry.
 
 **Parameters:**
+
 - `library` (required): Library name or ID
 - `projectDir` (optional): Project directory (installs globally if not specified)
 - `version` (optional): Specific version (e.g., "1.0.0")
 
 **Example:**
+
 ```json
 {
   "library": "ArduinoJson",
@@ -201,9 +227,11 @@ Installs a library from the PlatformIO registry.
 ```
 
 #### `list_installed_libraries`
+
 Lists installed libraries (globally or for a project).
 
 **Parameters:**
+
 - `projectDir` (optional): Project directory (lists global libraries if not specified)
 
 ## Usage with Cline
@@ -269,20 +297,20 @@ platformio-mcp/
 
 ```typescript
 // 1. List ESP32 boards
-await listBoards("esp32");
+await listBoards('esp32');
 
 // 2. Initialize project
 await initProject({
-  board: "esp32dev",
-  framework: "arduino",
-  projectDir: "/path/to/esp32-blink"
+  board: 'esp32dev',
+  framework: 'arduino',
+  projectDir: '/path/to/esp32-blink',
 });
 
 // 3. Build project
-await buildProject("/path/to/esp32-blink");
+await buildProject('/path/to/esp32-blink');
 
 // 4. Upload firmware
-await uploadFirmware("/path/to/esp32-blink");
+await uploadFirmware('/path/to/esp32-blink');
 
 // 5. Start serial monitor
 await startMonitor();
@@ -292,12 +320,12 @@ await startMonitor();
 
 ```typescript
 // Search for libraries
-const libraries = await searchLibraries("ArduinoJson", 10);
+const libraries = await searchLibraries('ArduinoJson', 10);
 
 // Install library to project
-await installLibrary("ArduinoJson", {
-  projectDir: "/path/to/my-project",
-  version: "^6.21.0"
+await installLibrary('ArduinoJson', {
+  projectDir: '/path/to/my-project',
+  version: '^6.21.0',
 });
 ```
 
@@ -351,6 +379,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## Support
 
 For issues and questions:
+
 - Open an issue on GitHub
 - Check PlatformIO documentation: https://docs.platformio.org
 - Join PlatformIO community: https://community.platformio.org

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, act } from '@testing-library/react';
-import React from 'react';
+import * as React from 'react';
 import { errorUtils } from '../lib/errorHandler';
 
 // Mock global objects
@@ -66,7 +66,7 @@ describe('errorUtils', () => {
   });
 
   afterEach(() => {
-    window.location = originalLocation;
+    (window as any).location = originalLocation;
     Object.defineProperty(window, 'navigator', {
       configurable: true,
       value: originalNavigator,

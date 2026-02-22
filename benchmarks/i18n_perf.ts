@@ -4,10 +4,14 @@ import { performance } from 'perf_hooks';
 const localStorageMock = {
   getItem: (key: string) => {
     // Simulate some cost for synchronous I/O
-    for (let i = 0; i < 100; i++) {}
+    for (let i = 0; i < 100; i++) {
+      // Empty loop to burn cycles
+    }
     return null;
   },
-  setItem: () => {},
+  setItem: () => {
+    // no-op mock
+  },
 };
 
 const navigatorMock = {
@@ -38,13 +42,18 @@ function simulateReRenders(iterations: number, mode: 'eager' | 'lazy') {
   let state: Lang | undefined;
 
   // Mock useState
-  const useState = (initial: any) => {
+  const mockUseState = (initial: any) => {
     // React initializes state only once (simulated here)
     if (state === undefined) {
       if (typeof initial === 'function') state = initial();
       else state = initial;
     }
-    return [state, () => {}];
+    return [
+      state,
+      () => {
+        // no-op mock set state
+      },
+    ];
   };
 
   const start = performance.now();
@@ -52,20 +61,20 @@ function simulateReRenders(iterations: number, mode: 'eager' | 'lazy') {
   // Initial Render (Mount)
   if (mode === 'eager') {
     const val = detect(); // Eagerly executed
-    useState(val);
+    mockUseState(val);
   } else {
-    useState(detect); // Passed as function
+    mockUseState(detect); // Passed as function
   }
 
   // Re-renders
   for (let i = 0; i < iterations; i++) {
     if (mode === 'eager') {
-      // In eager mode, detect() is called every time BEFORE useState
+      // In eager mode, detect() is called every time BEFORE mockUseState
       const val = detect();
-      useState(val);
+      mockUseState(val);
     } else {
-      // In lazy mode, detect is passed, but useState doesn't call it on re-render
-      useState(detect);
+      // In lazy mode, detect is passed, but mockUseState doesn't call it on re-render
+      mockUseState(detect);
     }
   }
 
