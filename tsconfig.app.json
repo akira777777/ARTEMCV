@@ -45,9 +45,11 @@
       "@assets/*": [
         "./src/assets/*"
       ]
-    }
+    },
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src"
+    "src",
+    "lib"
   ]
 }

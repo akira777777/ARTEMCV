@@ -1,6 +1,13 @@
+
+/* ============================================================
+   ARTEMCV STUDIO — DESIGN TOKENS & GLOBAL RESET
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
 :root {
   color-scheme: light;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   font-weight: 400;
@@ -8,96 +15,109 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --bg: #f6f1ea;
-  --ink: #1c1e24;
-  --muted: #5f6470;
-  --accent: #d46a2f;
-  --accent-2: #2f7b74;
-  --surface: #ffffff;
-  --surface-2: #f2ece5;
-  --line: rgba(28, 30, 36, 0.12);
-  --line-strong: rgba(28, 30, 36, 0.18);
-  --shadow: 0 24px 60px rgba(24, 27, 33, 0.14);
-  --shadow-soft: 0 14px 30px rgba(24, 27, 33, 0.08);
-  --shadow-strong: 0 32px 70px rgba(24, 27, 33, 0.18);
-  --display: 'Instrument Serif', serif;
+  /* Color Palette */
+  --bg:             #f5efe7;
+  --bg-rich:        #ede6db;
+  --ink:            #181b22;
+  --ink-soft:       #2d3040;
+  --muted:          #5f6470;
+  --muted-light:    #8a909e;
+
+  /* Accent System */
+  --accent:         #c8601e;
+  --accent-hover:   #b0521a;
+  --accent-glow:    rgba(200, 96, 30, 0.22);
+  --accent-2:       #267a72;
+  --accent-2-hover: #1e6660;
+  --accent-gold:    #c09020;
+
+  /* Surfaces */
+  --surface:        #ffffff;
+  --surface-2:      #f2ece4;
+  --surface-3:      #eae2d8;
+  --glass:          rgba(255,255,255,0.72);
+  --glass-dark:     rgba(24,27,34,0.85);
+
+  /* Lines */
+  --line:           rgba(28, 30, 36, 0.1);
+  --line-strong:    rgba(28, 30, 36, 0.16);
+  --line-accent:    rgba(200, 96, 30, 0.28);
+
+  /* Shadows */
+  --shadow-xs:      0 2px 8px rgba(18,21,28,0.06);
+  --shadow-sm:      0 6px 18px rgba(18,21,28,0.09);
+  --shadow:         0 16px 44px rgba(18,21,28,0.13);
+  --shadow-soft:    0 12px 32px rgba(18,21,28,0.08);
+  --shadow-strong:  0 32px 72px rgba(18,21,28,0.17);
+  --shadow-glow:    0 0 40px rgba(200, 96, 30, 0.18);
+
+  /* Typography */
+  --display:        'Instrument Serif', Georgia, serif;
+
+  /* Radii */
+  --r-sm:   10px;
+  --r-md:   16px;
+  --r-lg:   24px;
+  --r-xl:   32px;
+  --r-full: 9999px;
+
+  /* Transitions */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring:cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* ─── RESET ───────────────────────────────────────────────── */
+*,
+*::before,
+*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at top left, #fbf6f1 0%, #f6f1ea 45%, #f0e9e2 100%);
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 5%, rgba(246,228,210,0.55) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 95%, rgba(38,122,114,0.08) 0%, transparent 55%);
   color: var(--ink);
   font-size: 1rem;
+  overflow-x: hidden;
 }
 
-img,
-svg {
-  max-width: 100%;
-  display: block;
-}
-
-a {
-  color: inherit;
-}
-
-button {
-  font-family: inherit;
-}
+img, svg { max-width: 100%; display: block; }
+a { color: inherit; }
+button { font-family: inherit; cursor: pointer; }
 
 p {
   color: var(--muted);
   font-size: 1rem;
+  line-height: 1.7;
 }
 
-h1,
-h2,
-h3,
-h4 {
+h1, h2, h3, h4 {
   color: var(--ink);
   font-weight: 600;
-  line-height: 1.15;
+  line-height: 1.14;
+  letter-spacing: -0.02em;
 }
 
-h1 {
-  font-size: clamp(2.6rem, 5vw, 4.2rem);
-}
+h1 { font-size: clamp(2.5rem, 5.5vw, 4.5rem); }
+h2 { font-size: clamp(1.9rem, 3.6vw, 3rem); }
+h3 { font-size: clamp(1.2rem, 2.2vw, 1.65rem); }
+h4 { font-size: clamp(1rem, 1.7vw, 1.25rem); }
 
-h2 {
-  font-size: clamp(2rem, 3.5vw, 2.9rem);
-}
+#root { min-height: 100vh; }
 
-h3 {
-  font-size: clamp(1.25rem, 2vw, 1.6rem);
-}
-
-h4 {
-  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
-}
-
-#root {
-  min-height: 100vh;
-}
-
+/* Focus Styles */
 a:focus-visible,
 button:focus-visible,
 [role='button']:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--accent) 65%, transparent);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 999px;
+  border-radius: var(--r-full);
 }
 
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  html { scroll-behavior: auto; }
 }
