@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { sendContactForm, type ContactFormData } from '../lib/api-client';
 
 export const ContactSectionEnhanced: React.FC = () => {
@@ -32,22 +32,34 @@ export const ContactSectionEnhanced: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="section cta reveal" data-reveal>
+    <section id="contact" className="section cta reveal" data-reveal aria-labelledby="contact-heading">
       <div className="container">
         <div className="cta-card reveal" data-reveal>
           <div>
             <p className="eyebrow">Next Step</p>
-            <h2>Ready to build your next Webflow experience?</h2>
+            <h2 id="contact-heading">Ready to build your next Webflow experience?</h2>
+            <p style={{ marginTop: '1rem' }}>
+              Tell us about your project and we will get back to you within one business day.
+            </p>
+            <div style={{ marginTop: '2rem', display: 'grid', gap: '0.65rem' }}>
+              {['No commitment required', 'Response within 24 hours', 'Free initial consultation'].map((item) => (
+                <p key={item} className="cta-meta">{item}</p>
+              ))}
+            </div>
+          </div>
+          <div>
             {status === 'success' ? (
               <div role="status" className="success-message">
-                <h3>Thank you!</h3>
-                <p>We've received your message and will get back to you soon.</p>
-                <button onClick={() => setStatus('idle')} className="btn ghost">Send another message</button>
+                <h3>Message received!</h3>
+                <p>We have received your message and will get back to you within 24 hours.</p>
+                <button onClick={() => setStatus('idle')} className="btn ghost" type="button">
+                  Send another message
+                </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="contact-form">
+              <form onSubmit={handleSubmit} className="contact-form" noValidate>
                 <div className="form-group">
-                  <label htmlFor="name">Name</label>
+                  <label htmlFor="name">Full name</label>
                   <input
                     type="text"
                     id="name"
@@ -56,10 +68,11 @@ export const ContactSectionEnhanced: React.FC = () => {
                     onChange={handleChange}
                     required
                     placeholder="Your Name"
+                    autoComplete="name"
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">Email address</label>
                   <input
                     type="email"
                     id="email"
@@ -68,24 +81,29 @@ export const ContactSectionEnhanced: React.FC = () => {
                     onChange={handleChange}
                     required
                     placeholder="your@email.com"
+                    autoComplete="email"
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="message">Message</label>
+                  <label htmlFor="message">Tell us about your project</label>
                   <textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
                     required
-                    placeholder="Tell us about your project"
-                  ></textarea>
+                    placeholder="Describe what you are building, your timeline, and any specific goals..."
+                  />
                 </div>
                 <div className="cta-actions">
                   <button type="submit" className="btn primary" disabled={status === 'loading'}>
                     {status === 'loading' ? 'Sending...' : 'Send Message'}
                   </button>
-                  {status === 'error' && <p className="error-text">Something went wrong. Please try again.</p>}
+                  {status === 'error' && (
+                    <p className="error-text" role="alert">
+                      Something went wrong. Please try again or email us directly.
+                    </p>
+                  )}
                 </div>
               </form>
             )}
