@@ -7,16 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Dependencies
 node_modules
-.pnp
-.pnp.js
-
-# Lock files - we use package-lock.json
-pnpm-lock.yaml
-yarn.lock
-
-# Build
 dist
 dist-ssr
 *.local
@@ -31,18 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Environment
-.env
-.env.local
-.env.*.local
-
-# Testing
-coverage
-.nyc_output
-
-# Temporary files
-*.tmp
-*.temp
-.cache
-.jules/bolt.md

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useEffect, useRef, useCallback, useState, useMemo } from 'react';
 
 /**
@@ -75,9 +76,22 @@ function updateMetaTags(route: RouteConfig, description?: string): void {
   if (route.title) {
     document.title = route.title;
   }
-  const metaDescription = document.querySelector('meta[name="description"]');
-  if (metaDescription && (description || route.description)) {
-    metaDescription.setAttribute('content', description || route.description || '');
+  let metaDescription = document.querySelector('meta[name="description"]');
+  if (!metaDescription) {
+    metaDescription = document.createElement('meta');
+    metaDescription.setAttribute('name', 'description');
+    document.head.appendChild(metaDescription);
+  }
+  metaDescription.setAttribute('content', description || route.description || '');
+
+  if (route.keywords) {
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.setAttribute('name', 'keywords');
+      document.head.appendChild(metaKeywords);
+    }
+    metaKeywords.setAttribute('content', route.keywords.join(', '));
   }
 }
 
@@ -242,7 +256,11 @@ export function useRouter(routes: RouteConfig[] = []) {
       const { route } = match;
       try {
         const Component = await loadComponent(route);
-        setPreloadedComponents((prev) => new Set([...prev, path]));
+        setPreloadedComponents((prev) => {
+          const newSet = new Set(prev);
+          newSet.add(path);
+          return newSet;
+        });
       } catch (error) {
         console.warn(`Failed to preload component for ${path}:`, error);
       }
@@ -388,90 +406,11 @@ export function useQueryParams<T extends Record<string, string> = Record<string,
  * Router utilities for common tasks
  */
 export const routerUtils = {
-  /**
-   * Convert path to regex for matching
-   */
-  pathToRegex: (path: string, exact: boolean = false) => {
-    const escapedPath = path.replace(/:[^\s/]+/g, '([^/]+)').replace(/\*/g, '(.*)');
+  pathToRegex,
+  extractParams,
+  buildUrl,
+  updateMetaTags,
 
-    const regex = new RegExp(`^${escapedPath}${exact ? '$' : ''}`);
-    return regex;
-  },
-
-  /**
-   * Extract parameters from URL match
-   */
-  extractParams: (path: string, match: RegExpMatchArray) => {
-    const params: Record<string, string> = {};
-    const paramNames = path.match(/:([a-zA-Z]+)/g) || [];
-
-    paramNames.forEach((param, index) => {
-      const paramName = param.slice(1);
-      params[paramName] = match[index + 1];
-    });
-
-    return params;
-  },
-
-  /**
-   * Build URL from path and query parameters
-   */
-  buildUrl: (path: string, query: Record<string, string>) => {
-    const url = new URL(path, window.location.origin);
-    Object.entries(query).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        url.searchParams.set(key, String(value));
-      }
-    });
-    return url.pathname + url.search;
-  },
-
-  /**
-   * Update meta tags for SEO
-   */
-  updateMetaTags: (route: RouteConfig, description?: string) => {
-    // Update title
-    if (route.title) {
-      document.title = route.title;
-    }
-
-    // Update meta description
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.setAttribute('name', 'description');
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.setAttribute('content', description || route.description || '');
-
-    // Update meta keywords
-    if (route.keywords) {
-      let metaKeywords = document.querySelector('meta[name="keywords"]');
-      if (!metaKeywords) {
-        metaKeywords = document.createElement('meta');
-        metaKeywords.setAttribute('name', 'keywords');
-        document.head.appendChild(metaKeywords);
-      }
-      metaKeywords.setAttribute('content', route.keywords.join(', '));
-    }
-
-    // Update Open Graph tags
-    const ogTitle =
-      document.querySelector('meta[property="og:title"]') || document.createElement('meta');
-    ogTitle.setAttribute('property', 'og:title');
-    ogTitle.setAttribute('content', route.title || document.title);
-    document.head.appendChild(ogTitle);
-
-    const ogDescription =
-      document.querySelector('meta[property="og:description"]') || document.createElement('meta');
-    ogDescription.setAttribute('property', 'og:description');
-    ogDescription.setAttribute('content', description || route.description || '');
-    document.head.appendChild(ogDescription);
-  },
-
-  /**
-   * Create accessible link component
-   */
   createAccessibleLink: (Component: React.ComponentType<any>) => {
     return function AccessibleLink(props: any) {
       const { href, children, ...rest } = props;
@@ -492,16 +431,10 @@ export const routerUtils = {
     };
   },
 
-  /**
-   * Scroll to top on route change
-   */
   scrollToTop: () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   },
 
-  /**
-   * Check if path is external
-   */
   isExternalPath: (path: string) => {
     return /^(https?:)?\/\//.test(path) || path.startsWith('mailto:') || path.startsWith('tel:');
   },

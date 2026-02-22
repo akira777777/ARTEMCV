@@ -269,20 +269,22 @@ export function useApi(config: ApiConfig = {}) {
           abortControllersRef.current.delete(cacheKey);
 
           return apiResponse;
-        } catch (error) {
+        } catch (error: unknown) {
           lastError = error;
 
+          const errorObj = error as Error & { status?: number; name?: string };
           // Don't retry on abort or network errors
-          if (error.name === 'AbortError' || !navigator.onLine) {
+          if (errorObj.name === 'AbortError' || !navigator.onLine) {
             break;
           }
 
           // Don't retry on 4xx errors (except 408, 429)
           if (
             attempt > 0 &&
-            error.status >= 400 &&
-            error.status < 500 &&
-            ![408, 429].includes(error.status)
+            errorObj.status !== undefined &&
+            errorObj.status >= 400 &&
+            errorObj.status < 500 &&
+            ![408, 429].includes(errorObj.status)
           ) {
             break;
           }

@@ -37,7 +37,7 @@ export const fadeUp = {
     opacity: 1,
     y: 0,
     transition: {
-      type: 'spring',
+      type: 'spring' as const,
       stiffness: 100,
       damping: 20,
     },
@@ -169,8 +169,8 @@ export function useParallax(value: any, distance: number) {
 /**
  * Hook for magnetic effect on elements
  */
-export function useMagnetic(strength: number = 0.3) {
-  const ref = useRef<HTMLDivElement>(null);
+export function useMagnetic<T extends HTMLElement = HTMLDivElement>(strength: number = 0.3) {
+  const ref = useRef<HTMLDivElement | null>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -274,11 +274,12 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
   onClick,
   strength = 0.3,
 }) => {
-  const { ref, position, handleMouseMove, handleMouseLeave } = useMagnetic(strength);
+  const { ref, position, handleMouseMove, handleMouseLeave } =
+    useMagnetic<HTMLButtonElement>(strength);
 
   return (
     <motion.button
-      ref={ref}
+      ref={ref as unknown as React.RefObject<HTMLButtonElement>}
       className={className}
       onClick={onClick}
       onMouseMove={handleMouseMove}
@@ -334,13 +335,7 @@ export const Reveal: React.FC<RevealProps> = ({
       className={className}
       initial="hidden"
       animate={isInView ? 'show' : 'hidden'}
-      variants={{
-        ...getVariants(),
-        show: {
-          ...getVariants().show.transition,
-          delay,
-        },
-      }}
+      custom={{ delay }}
     >
       {children}
     </motion.div>

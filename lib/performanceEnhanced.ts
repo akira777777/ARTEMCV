@@ -8,6 +8,37 @@ import { logger } from './logger-enhanced';
  */
 
 // ============================================================================
+// BROWSER API TYPE DECLARATIONS
+// ============================================================================
+
+interface MemoryInfo {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+}
+
+interface LayoutShift extends PerformanceEntry {
+  value: number;
+  hadRecentInput: boolean;
+}
+
+interface FirstInputEvent extends PerformanceEventTiming {
+  processingStart: number;
+}
+
+interface PerformanceEventTiming extends PerformanceEntry {
+  processingStart: number;
+  processingEnd: number;
+  duration: number;
+}
+
+declare global {
+  interface Performance {
+    memory?: MemoryInfo;
+  }
+}
+
+// ============================================================================
 // TYPES
 // ============================================================================
 
@@ -130,7 +161,7 @@ export function usePerformanceMonitor(config: PerformanceConfig = {}) {
       largestContentfulPaint: lcp,
       cumulativeLayoutShift: cls,
       firstInputDelay: fid,
-      timeToInteractive: navigation.domInteractive - navigation.navigationStart,
+      timeToInteractive: navigation.domInteractive - navigation.fetchStart,
       totalBlockingTime: resource.reduce((acc, entry) => {
         const duration = entry.duration;
         return acc + (duration > 50 ? duration - 50 : 0);
@@ -606,7 +637,7 @@ export class PerformanceProfiler {
   getAllStats(): Record<string, { avg: number; min: number; max: number; count: number }> {
     const stats: Record<string, { avg: number; min: number; max: number; count: number }> = {};
 
-    for (const [name, times] of this.measurements) {
+    this.measurements.forEach((times, name) => {
       if (times.length > 0) {
         stats[name] = {
           avg: times.reduce((a, b) => a + b, 0) / times.length,
@@ -615,7 +646,7 @@ export class PerformanceProfiler {
           count: times.length,
         };
       }
-    }
+    });
 
     return stats;
   }

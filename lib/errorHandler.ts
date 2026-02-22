@@ -77,7 +77,8 @@ export function useErrorBoundary(config: ErrorHandlerConfig = {}) {
     (errorInfo: ErrorInfo) => {
       if (!enableLogging) return;
 
-      const logFn = console[logLevel as keyof Console] || console.error;
+      const logFn =
+        (console as unknown as Record<string, (...args: any[]) => void>)[logLevel] || console.error;
       logFn('[Error Handler]', errorInfo);
     },
     [enableLogging, logLevel],
@@ -407,7 +408,8 @@ export const errorUtils = {
    * Log error with context
    */
   logError: (error: ErrorInfo, level: 'debug' | 'info' | 'warn' | 'error' = 'error') => {
-    const logFn = console[level as keyof Console] || console.error;
+    const logFn =
+      (console as unknown as Record<string, (...args: any[]) => void>)[level] || console.error;
     logFn('[Error]', {
       message: error.message,
       severity: error.severity,
