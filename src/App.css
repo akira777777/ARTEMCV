@@ -902,3 +902,70 @@ main {
     transform: none !important;
   }
 }
+
+/* Contact Form Styles */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.error-text {
+  color: #d93025;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.success-message {
+  padding: 2rem;
+  background: var(--surface-2);
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.success-message h3 {
+  color: var(--accent-2);
+  margin-bottom: 0.5rem;
+}
+
+.success-message p {
+  margin-bottom: 1.5rem;
+}

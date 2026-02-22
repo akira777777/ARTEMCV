@@ -1,3 +1,4 @@
+import { ContactSectionEnhanced } from "./components/ContactSectionEnhanced";
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
@@ -479,29 +480,7 @@ function App() {
           </div>
         </section>
 
-        <section id="contact" className="section cta reveal" data-reveal>
-          <div className="container">
-            <div className="cta-card reveal" data-reveal>
-              <div>
-                <p className="eyebrow">Next Step</p>
-                <h2>Ready to build your next Webflow experience?</h2>
-                <p>
-                  Let&apos;s craft a modular, modern site that scales with your brand. We can start with
-                  a short discovery call and move into structured, high-clarity delivery.
-                </p>
-              </div>
-              <div className="cta-actions">
-                <a className="btn primary" href="mailto:studio@artemcv.co">
-                  Schedule a call
-                </a>
-                <a className="btn ghost" href="mailto:hello@artemcv.co">
-                  Email the studio
-                </a>
-                <span className="cta-meta">Available for March 2026 onboarding</span>
-              </div>
-            </div>
-          </div>
-        </section>
+        <ContactSectionEnhanced />
       </main>
 
       <footer className="site-footer reveal" data-reveal>
