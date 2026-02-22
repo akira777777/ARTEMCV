@@ -25,3 +25,10 @@ dist-ssr
 
 # MCP Settings
 mcp_settings*.json
+
+# Temporary Maintenance Scripts and Diagnostic Artifacts
+fix_*.py
+analyze_syntax.py
+diagnose_files.py
+*.html
+!index.html
