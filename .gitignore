@@ -7,7 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+.pnp
+.pnp.js
+
+# Lock files - we use package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Build
 dist
 dist-ssr
 *.local
@@ -23,16 +32,16 @@ dist-ssr
 *.sln
 *.sw?
 
-# Windows reserved names
-nul
-prn
-con
-lpt[1-9]
-com[1-9]
-
-# System/IDE files
-.Jules/
-.bolt/
-
-# Environment variables
+# Environment
 .env
+.env.local
+.env.*.local
+
+# Testing
+coverage
+.nyc_output
+
+# Temporary files
+*.tmp
+*.temp
+.cache

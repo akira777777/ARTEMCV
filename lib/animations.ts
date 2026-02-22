@@ -1,646 +1,538 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
-import { motion, useAnimation, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import type { Variants, Transition, TargetAndTransition } from 'framer-motion';
+import { smooth, smoothOut, snap, bounce, springs, durations, staggers } from './easings';
 
 /**
- * Enhanced Animation Management Utilities
- * 
- * Advanced animation controls, performance optimization, and accessibility features.
+ * Animation variants for Framer Motion
+ * All variants respect prefers-reduced-motion when used with useReducedMotion hook
  */
 
 // ============================================================================
-// TYPES
+// Fade Animations
 // ============================================================================
 
-export interface AnimationConfig {
-  duration?: number;
-  delay?: number;
-  easing?: string | number[];
-  repeat?: number | boolean;
-  repeatDelay?: number;
-  yoyo?: boolean;
-  stiffness?: number;
-  damping?: number;
-  mass?: number;
-  velocity?: number;
-  visibility?: boolean;
-  reduceMotion?: boolean;
-}
-
-export interface ScrollAnimationConfig extends AnimationConfig {
-  trigger?: string | Element;
-  rootMargin?: string;
-  threshold?: number | number[];
-  once?: boolean;
-}
-
-export interface ParallaxConfig extends AnimationConfig {
-  speed?: number;
-  direction?: 'up' | 'down' | 'left' | 'right';
-  amplitude?: number;
-}
-
-export interface StaggerConfig extends AnimationConfig {
-  stagger?: number;
-  from?: 'first' | 'last' | 'center' | 'edges';
-  axis?: 'x' | 'y' | 'both';
-}
-
-// ============================================================================
-// HOOKS
-// ============================================================================
-
-/**
- * Advanced animation controls hook
- */
-export function useAnimationControls(config: AnimationConfig = {}) {
-  const {
-    duration = 0.5,
-    delay = 0,
-    easing = 'easeInOut',
-    repeat = 0,
-    repeatDelay = 0,
-    yoyo = false,
-    stiffness = 100,
-    damping = 10,
-    mass = 1,
-    velocity = 0,
-    visibility = true,
-    reduceMotion = false
-  } = config;
-
-  const controls = useAnimation();
-  const motionValue = useMotionValue(0);
-  const spring = useSpring(motionValue, {
-    stiffness,
-    damping,
-    mass,
-    velocity
-  });
-
-  const animateTo = useCallback(async (target: number, options: AnimationConfig = {}) => {
-    if (reduceMotion) {
-      motionValue.set(target);
-      return;
-    }
-
-    const animationOptions = {
-      duration: options.duration || duration,
-      delay: options.delay || delay,
-      easing: options.easing || easing,
-      repeat: options.repeat !== undefined ? options.repeat : repeat,
-      repeatDelay: options.repeatDelay || repeatDelay,
-      yoyo: options.yoyo !== undefined ? options.yoyo : yoyo
-    };
-
-    await controls.start({
-      opacity: target,
-      transition: animationOptions
-    });
-
-    motionValue.set(target);
-  }, [controls, motionValue, reduceMotion, duration, delay, easing, repeat, repeatDelay, yoyo]);
-
-  const fadeIn = useCallback(async (options: AnimationConfig = {}) => {
-    await animateTo(1, options);
-  }, [animateTo]);
-
-  const fadeOut = useCallback(async (options: AnimationConfig = {}) => {
-    await animateTo(0, options);
-  }, [animateTo]);
-
-  const toggleVisibility = useCallback(async () => {
-    const current = motionValue.get();
-    await animateTo(current === 1 ? 0 : 1);
-  }, [animateTo, motionValue]);
-
-  const reset = useCallback(() => {
-    motionValue.set(0);
-    controls.stop();
-  }, [motionValue, controls]);
-
-  return {
-    controls,
-    motionValue,
-    spring,
-    animateTo,
-    fadeIn,
-    fadeOut,
-    toggleVisibility,
-    reset,
-    isVisible: motionValue.get() === 1
-  };
-}
-
-/**
- * Scroll-triggered animation hook
- */
-export function useScrollAnimation(config: ScrollAnimationConfig = {}) {
-  const {
-    trigger,
-    rootMargin = '0px',
-    threshold = 0.1,
-    once = true,
-    ...animationConfig
-  } = config;
-
-  const [isInView, setIsInView] = useState(false);
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const controls = useAnimation();
-  const elementRef = useRef<HTMLElement>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  const animateIn = useCallback(async () => {
-    if (hasAnimated && once) return;
-
-    await controls.start({
-      opacity: 1,
-      transform: 'translateY(0)',
-      transition: {
-        duration: animationConfig.duration || 0.6,
-        ease: animationConfig.easing || 'easeOut'
-      }
-    });
-
-    setHasAnimated(true);
-  }, [controls, hasAnimated, once, animationConfig]);
-
-  const animateOut = useCallback(async () => {
-    await controls.start({
-      opacity: 0,
-      transform: 'translateY(20px)',
-      transition: {
-        duration: animationConfig.duration || 0.3,
-        ease: animationConfig.easing || 'easeIn'
-      }
-    });
-  }, [controls, animationConfig]);
-
-  useEffect(() => {
-    const element = elementRef.current || (typeof trigger === 'string' ? document.querySelector(trigger) : trigger);
-    if (!element) return;
-
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          animateIn();
-        } else if (!once) {
-          setIsInView(false);
-          animateOut();
-        }
-      });
-    };
-
-    observerRef.current = new IntersectionObserver(handleIntersection, {
-      rootMargin,
-      threshold
-    });
-
-    observerRef.current.observe(element);
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [trigger, rootMargin, threshold, once, animateIn, animateOut]);
-
-  return {
-    ref: elementRef,
-    controls,
-    isInView,
-    hasAnimated,
-    animateIn,
-    animateOut
-  };
-}
-
-/**
- * Parallax animation hook
- */
-export function useParallax(config: ParallaxConfig = {}) {
-  const {
-    speed = 0.5,
-    direction = 'up',
-    amplitude = 100,
-    ...animationConfig
-  } = config;
-
-  const motionValue = useMotionValue(0);
-  const transform = useTransform(motionValue, [0, 1], [0, amplitude * speed]);
-
-  const applyParallax = useCallback((scrollY: number) => {
-    const parallaxValue = scrollY * speed;
-    motionValue.set(parallaxValue);
-  }, [motionValue, speed]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      applyParallax(scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [applyParallax]);
-
-  const getStyle = useCallback(() => {
-    switch (direction) {
-      case 'up':
-        return { transform: `translateY(${transform.get()}px)` };
-      case 'down':
-        return { transform: `translateY(-${transform.get()}px)` };
-      case 'left':
-        return { transform: `translateX(${transform.get()}px)` };
-      case 'right':
-        return { transform: `translateX(-${transform.get()}px)` };
-      default:
-        return { transform: `translateY(${transform.get()}px)` };
-    }
-  }, [direction, transform]);
-
-  return {
-    motionValue,
-    transform,
-    applyParallax,
-    getStyle
-  };
-}
-
-/**
- * Staggered animation hook for lists and grids
- */
-export function useStaggerAnimation(config: StaggerConfig = {}) {
-  const {
-    stagger = 0.1,
-    from = 'first',
-    axis = 'y',
-    ...animationConfig
-  } = config;
-
-  const controls = useAnimation();
-  const itemsRef = useRef<HTMLElement[]>([]);
-
-  const animateStagger = useCallback(async (direction: 'in' | 'out' = 'in') => {
-    const items = itemsRef.current.filter(Boolean);
-    if (items.length === 0) return;
-
-    const targets = direction === 'in' 
-      ? { opacity: 1, transform: 'translateY(0)' }
-      : { opacity: 0, transform: 'translateY(20px)' };
-
-    const baseDelay = animationConfig.delay || 0;
-    const baseDuration = animationConfig.duration || 0.3;
-
-    // Calculate stagger order based on 'from' option
-    let orderedItems = items;
-    switch (from) {
-      case 'last':
-        orderedItems = [...items].reverse();
-        break;
-      case 'center':
-        const centerIndex = Math.floor(items.length / 2);
-        orderedItems = [];
-        orderedItems.push(items[centerIndex]);
-        for (let i = 1; i <= centerIndex; i++) {
-          if (centerIndex + i < items.length) orderedItems.push(items[centerIndex + i]);
-          if (centerIndex - i >= 0) orderedItems.push(items[centerIndex - i]);
-        }
-        break;
-      case 'edges':
-        orderedItems = [];
-        for (let i = 0; i < Math.ceil(items.length / 2); i++) {
-          if (i < items.length) orderedItems.push(items[i]);
-          if (items.length - 1 - i > i) orderedItems.push(items[items.length - 1 - i]);
-        }
-        break;
-    }
-
-    // Animate with stagger
-    for (let i = 0; i < orderedItems.length; i++) {
-      const item = orderedItems[i];
-      await controls.start({
-        ...targets,
-        transition: {
-          duration: baseDuration,
-          delay: baseDelay + (i * stagger),
-          ease: animationConfig.easing || 'easeOut'
-        }
-      }, { root: item });
-    }
-  }, [controls, animationConfig, stagger]);
-
-  const addRef = useCallback((element: HTMLElement | null, index: number) => {
-    if (element) {
-      itemsRef.current[index] = element;
-    }
-  }, []);
-
-  return {
-    controls,
-    addRef,
-    animateStagger
-  };
-}
-
-/**
- * Hover animation hook with spring physics
- */
-export function useHoverAnimation(config: AnimationConfig = {}) {
-  const {
-    stiffness = 300,
-    damping = 30,
-    mass = 1
-  } = config;
-
-  const scale = useMotionValue(1);
-  const rotate = useMotionValue(0);
-  const springScale = useSpring(scale, { stiffness, damping, mass });
-  const springRotate = useSpring(rotate, { stiffness, damping, mass });
-
-  const handleMouseEnter = useCallback(() => {
-    scale.set(1.05);
-    rotate.set(2);
-  }, [scale, rotate]);
-
-  const handleMouseLeave = useCallback(() => {
-    scale.set(1);
-    rotate.set(0);
-  }, [scale, rotate]);
-
-  const getStyle = useCallback(() => ({
-    scale: springScale,
-    rotate: springRotate
-  }), [springScale, springRotate]);
-
-  return {
-    handleMouseEnter,
-    handleMouseLeave,
-    getStyle
-  };
-}
-
-/**
- * Loading animation hook with customizable patterns
- */
-export function useLoadingAnimation(pattern: 'spinner' | 'pulse' | 'wave' | 'dots' = 'spinner') {
-  const controls = useAnimation();
-
-  const startLoading = useCallback(async () => {
-    switch (pattern) {
-      case 'spinner':
-        await controls.start({
-          rotate: 360,
-          transition: {
-            duration: 1,
-            repeat: Infinity,
-            ease: 'linear'
-          }
-        });
-        break;
-      case 'pulse':
-        await controls.start({
-          scale: [1, 1.2, 1],
-          opacity: [1, 0.5, 1],
-          transition: {
-            duration: 1.5,
-            repeat: Infinity,
-            ease: 'easeInOut'
-          }
-        });
-        break;
-      case 'wave':
-        await controls.start({
-          y: [-10, 10, -10],
-          transition: {
-            duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut'
-          }
-        });
-        break;
-      case 'dots':
-        await controls.start({
-          y: [0, -5, 0, 5, 0],
-          transition: {
-            duration: 1,
-            repeat: Infinity,
-            ease: 'easeInOut'
-          }
-        });
-        break;
-    }
-  }, [controls, pattern]);
-
-  const stopLoading = useCallback(() => {
-    controls.stop();
-  }, [controls]);
-
-  return {
-    controls,
-    startLoading,
-    stopLoading
-  };
-}
-
-// ============================================================================
-// UTILITIES
-// ============================================================================
-
-/**
- * Animation utilities for common patterns
- */
-export const animationUtils = {
-  /**
-   * Create fade animation variants
-   */
-  createFadeVariants: (direction: 'up' | 'down' | 'left' | 'right' = 'up', distance: number = 20) => {
-    const translateMap = {
-      up: { y: [distance, 0] },
-      down: { y: [-distance, 0] },
-      left: { x: [distance, 0] },
-      right: { x: [-distance, 0] }
-    };
-
-    return {
-      hidden: {
-        opacity: 0,
-        ...translateMap[direction]
-      },
-      visible: {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        transition: {
-          duration: 0.6,
-          ease: 'easeOut'
-        }
-      }
-    };
+/** Fade in from bottom */
+export const fadeInUp: Variants = {
+  hidden: { 
+    opacity: 0, 
+    y: 30 
   },
-
-  /**
-   * Create slide animation variants
-   */
-  createSlideVariants: (direction: 'up' | 'down' | 'left' | 'right' = 'up') => {
-    const translateMap = {
-      up: { top: '-100%' },
-      down: { top: '100%' },
-      left: { left: '-100%' },
-      right: { left: '100%' }
-    };
-
-    return {
-      hidden: {
-        ...translateMap[direction],
-        opacity: 0
-      },
-      visible: {
-        top: 0,
-        left: 0,
-        opacity: 1,
-        transition: {
-          duration: 0.5,
-          ease: 'easeOut'
-        }
-      }
-    };
-  },
-
-  /**
-   * Create scale animation variants
-   */
-  createScaleVariants: (from: number = 0.8, to: number = 1) => ({
-    hidden: {
-      scale: from,
-      opacity: 0
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: durations.normal,
+      ease: smoothOut,
     },
-    visible: {
-      scale: to,
-      opacity: 1,
-      transition: {
-        duration: 0.3,
-        ease: 'easeOut'
-      }
-    }
-  }),
-
-  /**
-   * Create stagger container variants
-   */
-  createStaggerContainer: (stagger: number = 0.1, delayChildren: number = 0.1) => ({
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: stagger,
-        delayChildren
-      }
-    }
-  }),
-
-  /**
-   * Create stagger item variants
-   */
-  createStaggerItem: (delay: number = 0) => ({
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        delay,
-        ease: 'easeOut'
-      }
-    }
-  }),
-
-  /**
-   * Check if animations should be reduced
-   */
-  shouldReduceMotion: () => {
-    if (typeof window === 'undefined') return false;
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    return mediaQuery.matches;
   },
-
-  /**
-   * Create motion-safe animation props
-   */
-  motionSafe: (props: any) => {
-    if (animationUtils.shouldReduceMotion()) {
-      return {
-        initial: false,
-        animate: false,
-        transition: { duration: 0 }
-      };
-    }
-    return props;
-  },
-
-  /**
-   * Create accessible animation wrapper
-   */
-  createAccessibleAnimation: (Component: React.ComponentType<any>, description: string) => {
-    return function AccessibleAnimation(props: any) {
-      const shouldReduce = animationUtils.shouldReduceMotion();
-
-      if (shouldReduce) {
-        return React.createElement(Component, {
-          ...props,
-          'aria-label': description,
-          style: { animation: 'none' }
-        });
-      }
-
-      return React.createElement(motion.div, {
-        ...props,
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        transition: { duration: 0.3 },
-        'aria-label': description
-      });
-    };
-  }
 };
 
-/**
- * Performance-optimized animation components
+/** Fade in from top */
+export const fadeInDown: Variants = {
+  hidden: { 
+    opacity: 0, 
+    y: -30 
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: durations.normal,
+      ease: smoothOut,
+    },
+  },
+};
+
+/** Fade in from left */
+export const fadeInLeft: Variants = {
+  hidden: { 
+    opacity: 0, 
+    x: -30 
+  },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: {
+      duration: durations.normal,
+      ease: smoothOut,
+    },
+  },
+};
+
+/** Fade in from right */
+export const fadeInRight: Variants = {
+  hidden: { 
+    opacity: 0, 
+    x: 30 
+  },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: {
+      duration: durations.normal,
+      ease: smoothOut,
+    },
+  },
+};
+
+/** Simple fade in */
+export const fadeIn: Variants = {
+  hidden: { 
+    opacity: 0 
+  },
+  visible: { 
+    opacity: 1,
+    transition: {
+      duration: durations.normal,
+      ease: smooth,
+    },
+  },
+};
+
+/** Fade out */
+export const fadeOut: Variants = {
+  visible: { 
+    opacity: 1 
+  },
+  hidden: { 
+    opacity: 0,
+    transition: {
+      duration: durations.fast,
+      ease: smooth,
+    },
+  },
+};
+
+// ============================================================================
+// Scale Animations
+// ============================================================================
+
+/** Scale in from small */
+export const scaleIn: Variants = {
+  hidden: { 
+    opacity: 0, 
+    scale: 0.8 
+  },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    transition: {
+      duration: durations.normal,
+      ease: snap,
+    },
+  },
+};
+
+/** Scale in with bounce */
+export const scaleInBounce: Variants = {
+  hidden: { 
+    opacity: 0, 
+    scale: 0.5 
+  },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    transition: {
+      duration: durations.slow,
+      ease: bounce,
+    },
+  },
+};
+
+/** Scale out */
+export const scaleOut: Variants = {
+  visible: { 
+    opacity: 1, 
+    scale: 1 
+  },
+  hidden: { 
+    opacity: 0, 
+    scale: 0.8,
+    transition: {
+      duration: durations.fast,
+      ease: smooth,
+    },
+  },
+};
+
+/** Pop animation - scale with bounce */
+export const pop: Variants = {
+  hidden: { 
+    opacity: 0, 
+    scale: 0 
+  },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    transition: springs.bouncy,
+  },
+};
+
+// ============================================================================
+// Slide Animations
+// ============================================================================
+
+/** Slide in from bottom */
+export const slideIn: Variants = {
+  hidden: { 
+    y: '100%' 
+  },
+  visible: { 
+    y: 0,
+    transition: {
+      duration: durations.slow,
+      ease: smoothOut,
+    },
+  },
+};
+
+/** Slide in from left */
+export const slideInLeft: Variants = {
+  hidden: { 
+    x: '-100%' 
+  },
+  visible: { 
+    x: 0,
+    transition: {
+      duration: durations.slow,
+      ease: smoothOut,
+    },
+  },
+};
+
+/** Slide in from right */
+export const slideInRight: Variants = {
+  hidden: { 
+    x: '100%' 
+  },
+  visible: { 
+    x: 0,
+    transition: {
+      duration: durations.slow,
+      ease: smoothOut,
+    },
+  },
+};
+
+/** Slide out to bottom */
+export const slideOut: Variants = {
+  visible: { 
+    y: 0 
+  },
+  hidden: { 
+    y: '100%',
+    transition: {
+      duration: durations.normal,
+      ease: smooth,
+    },
+  },
+};
+
+// ============================================================================
+// Rotate Animations
+// ============================================================================
+
+/** Rotate in */
+export const rotateIn: Variants = {
+  hidden: { 
+    opacity: 0, 
+    rotate: -180, 
+    scale: 0.8 
+  },
+  visible: { 
+    opacity: 1, 
+    rotate: 0, 
+    scale: 1,
+    transition: springs.default,
+  },
+};
+
+/** Flip in from X axis */
+export const flipInX: Variants = {
+  hidden: { 
+    opacity: 0, 
+    rotateX: -90 
+  },
+  visible: { 
+    opacity: 1, 
+    rotateX: 0,
+    transition: {
+      duration: durations.slow,
+      ease: smoothOut,
+    },
+  },
+};
+
+/** Flip in from Y axis */
+export const flipInY: Variants = {
+  hidden: { 
+    opacity: 0, 
+    rotateY: -90 
+  },
+  visible: { 
+    opacity: 1, 
+    rotateY: 0,
+    transition: {
+      duration: durations.slow,
+      ease: smoothOut,
+    },
+  },
+};
+
+// ============================================================================
+// Special Animations
+// ============================================================================
+
+/** Pulse animation */
+export const pulse: Variants = {
+  initial: { 
+    scale: 1 
+  },
+  animate: {
+    scale: [1, 1.05, 1],
+    transition: {
+      duration: 2,
+      ease: 'easeInOut',
+      repeat: Infinity,
+    },
+  },
+};
+
+/** Float animation - gentle up/down movement */
+export const float: Variants = {
+  initial: { 
+    y: 0 
+  },
+  animate: {
+    y: [-10, 10, -10],
+    transition: {
+      duration: 6,
+      ease: 'easeInOut',
+      repeat: Infinity,
+    },
+  },
+};
+
+/** Shake animation - error feedback */
+export const shake: Variants = {
+  initial: { 
+    x: 0 
+  },
+  animate: {
+    x: [-10, 10, -10, 10, 0],
+    transition: {
+      duration: 0.5,
+      ease: 'easeInOut',
+    },
+  },
+};
+
+/** Glow animation - for emphasis */
+export const glow: Variants = {
+  initial: { 
+    boxShadow: '0 0 0 rgba(255, 255, 255, 0)' 
+  },
+  animate: {
+    boxShadow: [
+      '0 0 0 rgba(255, 255, 255, 0)',
+      '0 0 30px rgba(255, 255, 255, 0.3)',
+      '0 0 0 rgba(255, 255, 255, 0)',
+    ],
+    transition: {
+      duration: 2,
+      ease: 'easeInOut',
+      repeat: Infinity,
+    },
+  },
+};
+
+// ============================================================================
+// Container Variants (for staggering children)
+// ============================================================================
+
+interface StaggerContainerOptions {
+  /** Delay between children animations */
+  staggerChildren?: number;
+  /** Delay before starting animation */
+  delayChildren?: number;
+  /** Stagger direction */
+  staggerDirection?: 1 | -1;
+}
+
+/** Create a stagger container variant */
+export function staggerContainer(
+  options: StaggerContainerOptions = {}
+): Variants {
+  const {
+    staggerChildren = staggers.normal,
+    delayChildren = 0,
+    staggerDirection = 1,
+  } = options;
+
+  return {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren,
+        delayChildren,
+        staggerDirection,
+      },
+    },
+  };
+}
+
+/** Container that fades in with staggered children */
+export const staggerFadeIn: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: staggers.normal,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+/** Container with fast stagger */
+export const staggerFast: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: staggers.fast,
+    },
+  },
+};
+
+/** Container with slow stagger */
+export const staggerSlow: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: staggers.slow,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+// ============================================================================
+// Reduced Motion Support
+// ============================================================================
+
+/** Creates reduced-motion safe variants
+ * When reduced motion is preferred, animations will be instant
  */
-export const OptimizedAnimations = {
-  /**
-   * Lazy-loaded motion component
-   */
-  LazyMotion: motion.div,
+export function createAccessibleVariants(
+  variants: Variants,
+  reducedMotion: boolean
+): Variants {
+  if (!reducedMotion) return variants;
 
-  /**
-   * Performance-optimized animated div
-   */
-  AnimatedDiv: motion.div,
+  const accessibleVariants: Variants = {};
+  
+  for (const [key, value] of Object.entries(variants)) {
+    if (typeof value === 'object' && value !== null) {
+      // Keep the final state, remove animations
+      const { transition, ...rest } = value as TargetAndTransition;
+      accessibleVariants[key] = {
+        ...rest,
+        transition: { duration: 0 },
+      };
+    } else {
+      accessibleVariants[key] = value;
+    }
+  }
 
-  /**
-   * Performance-optimized animated section
-   */
-  AnimatedSection: motion.section,
+  return accessibleVariants;
+}
 
-  /**
-   * Performance-optimized animated button
-   */
-  AnimatedButton: motion.button,
-
-  /**
-   * Performance-optimized animated link
-   */
-  AnimatedLink: motion.a
+/** Empty animation for reduced motion preference */
+export const reducedMotionVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: { duration: 0 },
+  },
 };
 
-export default {
-  useAnimationControls,
-  useScrollAnimation,
-  useParallax,
-  useStaggerAnimation,
-  useHoverAnimation,
-  useLoadingAnimation,
-  animationUtils,
-  OptimizedAnimations
+// ============================================================================
+// Page Transitions
+// ============================================================================
+
+/** Page transition - fade and slide up */
+export const pageTransition: Variants = {
+  initial: { 
+    opacity: 0, 
+    y: 20 
+  },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: durations.normal,
+      ease: smoothOut,
+    },
+  },
+  exit: { 
+    opacity: 0, 
+    y: -20,
+    transition: {
+      duration: durations.fast,
+      ease: smooth,
+    },
+  },
 };
+
+/** Page transition - scale and fade */
+export const pageTransitionScale: Variants = {
+  initial: { 
+    opacity: 0, 
+    scale: 0.95 
+  },
+  animate: { 
+    opacity: 1, 
+    scale: 1,
+    transition: {
+      duration: durations.slow,
+      ease: snap,
+    },
+  },
+  exit: { 
+    opacity: 0, 
+    scale: 1.05,
+    transition: {
+      duration: durations.normal,
+      ease: smooth,
+    },
+  },
+};
+
+// ============================================================================
+// Hover Animations
+// ============================================================================
+
+/** Hover scale effect */
+export const hoverScale: TargetAndTransition = {
+  scale: 1.05,
+  transition: springs.snappy,
+};
+
+/** Hover lift effect */
+export const hoverLift: TargetAndTransition = {
+  y: -5,
+  transition: springs.snappy,
+};
+
+/** Hover glow effect */
+export const hoverGlow: TargetAndTransition = {
+  boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
+  transition: { duration: durations.fast },
+};
+
+/** Tap scale effect */
+export const tapScale: TargetAndTransition = {
+  scale: 0.95,
+};
+
+// ============================================================================
+// Export all easings for convenience
+// ============================================================================
+
+export { smooth, smoothOut, snap, bounce, springs, durations, staggers };

@@ -1,129 +1,131 @@
-import path from 'node:path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, '.', '');
-  const apiKey = env.VITE_API_KEY || env.GEMINI_API_KEY || env.API_KEY;
-  const isProd = mode === 'production';
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    react({
+      // Enable Fast Refresh
+      include: '**/*.{jsx,tsx}',
+    }),
+  ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './'),
+      '@components': path.resolve(__dirname, './components'),
+      '@hooks': path.resolve(__dirname, './hooks'),
+      '@lib': path.resolve(__dirname, './lib'),
+      '@styles': path.resolve(__dirname, './styles'),
+      '@pages': path.resolve(__dirname, './pages'),
+    },
+  },
+  css: {
+    devSourcemap: true,
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
+  },
+  build: {
+    // Optimization settings
+    target: 'es2020',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: true,
+    
+    // Minification
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+      },
+      format: {
+        comments: false,
+      },
+    },
+
+    // Chunking strategy
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-router': ['react-router-dom'],
+          'vendor-animation': ['framer-motion'],
+          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
+          'vendor-utils': ['clsx', 'tailwind-merge'],
+          'vendor-icons': ['lucide-react'],
+        },
+        // Asset naming
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name ? assetInfo.name.split('.') : [];
+          const ext = info[info.length - 1];
+          if (/\.css$/i.test(assetInfo.name || '')) {
+            return 'css/[name]-[hash][extname]';
+          }
+          if (/\.(png|jpe?g|gif|svg|webp|ico)$/i.test(assetInfo.name || '')) {
+            return 'images/[name]-[hash][extname]';
+          }
+          if (/\.(woff2?|ttf|otf|eot)$/i.test(assetInfo.name || '')) {
+            return 'fonts/[name]-[hash][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
+        },
+        // Chunk naming
+        chunkFileNames: 'js/[name]-[hash].js',
+        entryFileNames: 'js/[name]-[hash].js',
+      },
+    },
+
+    // Code splitting
+    cssCodeSplit: true,
+    
+    // Build performance
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 1000,
+  },
   
-  return {
-    server: {
-      port: 3000,
-      host: '0.0.0.0',
+  // Development server
+  server: {
+    port: 5173,
+    strictPort: false,
+    open: true,
+    host: true,
+    hmr: {
+      overlay: true,
     },
-    
-    plugins: [react()],
-    
-    build: {
-      // Use terser for better compression (smaller bundles)
-      minify: 'terser',
-          
-      // Advanced terser options for maximum compression
-      terserOptions: isProd ? {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: ['console.log', 'console.info', 'console.debug'],
-        },
-        format: {
-          comments: false,
-        },
-        mangle: true,
-      } : undefined,
-          
-      // Enhanced code splitting for better caching
-      rollupOptions: {
-        output: {
-          manualChunks: (id) => {
-            // React ecosystem
-            if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-              return 'react-vendor';
-            }
-            // Icons
-            if (id.includes('node_modules/lucide-react')) {
-              return 'icons';
-            }
-            // Animation libraries
-            if (id.includes('node_modules/framer-motion') || id.includes('node_modules/gsap')) {
-              return 'animation';
-            }
-            // 3D libraries (heavy)
-            if (id.includes('node_modules/three') || 
-                id.includes('node_modules/@react-three')) {
-              return 'three';
-            }
-            // Utilities
-            if (id.includes('node_modules/clsx') || 
-                id.includes('node_modules/tailwind-merge')) {
-              return 'utils';
-            }
-          },
-          // Optimize chunk file names
-          chunkFileNames: isProd ? 'assets/[name]-[hash:8].js' : 'assets/[name]-[hash].js',
-          entryFileNames: isProd ? 'assets/[name]-[hash:8].js' : 'assets/[name]-[hash].js',
-          assetFileNames: isProd ? 'assets/[name]-[hash:8].[ext]' : 'assets/[name]-[hash].[ext]',
-        },
-      },
-      
-      // Performance optimizations
-      reportCompressedSize: true,
-      sourcemap: false,
-      brotliSize: true,
-      
-      // Optimize for modern browsers
-      target: 'ES2020',
-      
-      // CSS optimizations
-      cssCodeSplit: true,
-      // cssMinify: 'lightningcss', // Temporarily disable due to compatibility issues
-      
-      // Chunk size warnings and limits
-      chunkSizeWarningLimit: 1000,
-      
-      // Enable module preloading
-      modulePreload: {
-        polyfill: true,
-      },
+  },
+  
+  // Preview server
+  preview: {
+    port: 4173,
+    strictPort: false,
+    open: true,
+    host: true,
+  },
+  
+  // Optimizations
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'framer-motion',
+      'lucide-react',
+      'clsx',
+      'tailwind-merge',
+    ],
+    exclude: [],
+  },
+  
+  // ESBuild options
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' },
+    target: 'es2020',
+    supported: {
+      'top-level-await': true,
     },
-    
-    // Enhanced dependency optimization
-    optimizeDeps: {
-      include: [
-        'react', 
-        'react-dom', 
-        'lucide-react',
-        'framer-motion'
-      ],
-      exclude: ['pg', 'dotenv'],
-      esbuildOptions: {
-        target: 'ES2020',
-      },
-    },
-    
-    test: {
-      environment: 'jsdom',
-      setupFiles: ['./tests/setup.ts'],
-      globals: true,
-      clearMocks: true,
-      coverage: {
-        provider: 'v8',
-        reporter: ['text', 'json', 'html'],
-      },
-      // Include unit test files only, exclude E2E tests
-      include: ['tests/**/*.test.{ts,tsx}'],
-      exclude: ['tests/e2e/**/*'],
-    },
-    
-    define: {
-      'process.env.API_KEY': JSON.stringify(apiKey),
-      'process.env.GEMINI_API_KEY': JSON.stringify(apiKey),
-    },
-    
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '.'),
-      },
-    },
-  };
+  },
 });

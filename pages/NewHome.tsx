@@ -3,22 +3,29 @@ import { Navigation } from '../components/Navigation';
 import { SkipLink } from '../components/SkipLink';
 import ScrollProgress from '../components/ScrollProgress';
 
-// Unified components (only new version)
+// New unified components
 import { HeroUnified } from '../components/home/HeroUnified';
 import { WorksUnified } from '../components/home/WorksUnified';
 import { AboutUnified } from '../components/home/AboutUnified';
 import { ContactUnified } from '../components/home/ContactUnified';
 import { FooterUnified } from '../components/home/FooterUnified';
 
-// Lazy load chat
+// Lazy load non-critical components
 const SimpleTelegramChat = React.lazy(() => 
   import('../components/SimpleTelegramChat')
 );
 
 /**
- * Home Page - New Unified Version
+ * New Home Page Component
+ * 
+ * Features:
+ * - Unified design system
+ * - Clean, minimal design
+ * - Optimized performance
+ * - View transitions ready
+ * - Accessibility focused
  */
-const HomePage: React.FC = () => {
+const NewHome: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
       <SkipLink />
@@ -26,14 +33,23 @@ const HomePage: React.FC = () => {
       <ScrollProgress />
       
       <main id="main-content" tabIndex={-1} className="outline-none">
+        {/* Hero Section */}
         <HeroUnified />
+
+        {/* Works/Projects Section */}
         <WorksUnified />
+
+        {/* About Section */}
         <AboutUnified />
+
+        {/* Contact Section */}
         <ContactUnified />
       </main>
 
+      {/* Footer */}
       <FooterUnified />
 
+      {/* Chat Widget - Lazy loaded */}
       <Suspense fallback={null}>
         <SimpleTelegramChat />
       </Suspense>
@@ -41,4 +57,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default NewHome;

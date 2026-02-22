@@ -7,68 +7,60 @@ import AccessibilityProvider from './components/AccessibilityProvider';
 import ErrorBoundary from './components/ErrorBoundary';
 import { PageTransition } from './components/PageTransition';
 
-// Lazy load heavy components
+// Lazy load main page
 const HomePage = lazy(() => import('./pages/HomePage'));
-const Home2026 = lazy(() => import('./pages/Home2026'));
-const DetailingHub = lazy(() => import('./pages/DetailingHub'));
-const CleanHome = lazy(() => import('./pages/CleanHome'));
 
 // Loading fallback
-const PageLoader = () => (
-  <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-    <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+const PageLoader: React.FC = () => (
+  <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-16 h-16 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+      <span className="text-sm text-zinc-500">Loading...</span>
+    </div>
   </div>
 );
 
-const AppRoutes = () => {
+/**
+ * App Routes
+ */
+const AppRoutes: React.FC = () => {
   const location = useLocation();
 
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={
-          <PageTransition>
-            <HomePage />
-          </PageTransition>
-        } />
-        <Route path="/home2026" element={
-          <PageTransition>
-            <Home2026 />
-          </PageTransition>
-        } />
-        <Route path="/clean" element={
-          <PageTransition>
-            <CleanHome />
-          </PageTransition>
-        } />
-        <Route path="/project/detailing" element={
-          <PageTransition>
-            <DetailingHub />
-          </PageTransition>
-        } />
-        <Route path="/detailing" element={
-          <PageTransition>
-            <DetailingHub />
-          </PageTransition>
-        } />
-        {/* Fallback for old routes or 404 could go here */}
-        <Route path="*" element={
-          <PageTransition>
-            <Home2026 />
-          </PageTransition>
-        } />
+        <Route
+          path="/"
+          element={
+            <PageTransition>
+              <HomePage />
+            </PageTransition>
+          }
+        />
+        {/* Redirect all other routes to home */}
+        <Route
+          path="*"
+          element={
+            <PageTransition>
+              <HomePage />
+            </PageTransition>
+          }
+        />
       </Routes>
     </AnimatePresence>
   );
 };
 
+/**
+ * Main App Component
+ */
 const App: React.FC = () => {
   return (
     <I18nProvider>
       <AccessibilityProvider>
         <ErrorBoundary>
           <Router>
-            <div className="relative min-h-screen bg-background dark text-white overflow-x-hidden">
+            <div className="relative min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
               <AccessibilityPanel />
               <Suspense fallback={<PageLoader />}>
                 <AppRoutes />
@@ -82,4 +74,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
