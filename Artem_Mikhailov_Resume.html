@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Artem Mikhailov — Full-Stack Web Developer specializing in React, TypeScript, Node.js, and modern web platforms." />
+  <meta name="keywords" content="Full-Stack Developer, React, TypeScript, Node.js, Vite, Tailwind CSS, PostgreSQL, Vercel, Neon, Express, Web Development, UI/UX, API Integration" />
+  <meta name="author" content="Artem Mikhailov" />
+  <title>Artem Mikhailov — Full-Stack Web Developer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Design Tokens ─────────────────────────────── */
+    :root {
+      --bg:          #f5efe7;
+      --bg-card:     #faf7f3;
+      --bg-dark:     #181b22;
+      --ink:         #181b22;
+      --ink-muted:   #52555e;
+      --ink-light:   #8a8d96;
+      --accent:      #c8601e;
+      --accent-pale: #fae8dd;
+      --teal:        #267a72;
+      --teal-pale:   #d8f0ed;
+      --gold:        #c09020;
+      --gold-pale:   #faf0d4;
+      --border:      rgba(24,27,34,0.10);
+      --border-strong: rgba(24,27,34,0.18);
+
+      --r-sm:  8px;
+      --r-md:  14px;
+      --r-lg:  20px;
+      --r-xl:  28px;
+
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-sans:  'Space Grotesk', system-ui, sans-serif;
+
+      --shadow-sm:   0 1px 4px rgba(24,27,34,0.06), 0 2px 8px rgba(24,27,34,0.04);
+      --shadow-md:   0 4px 16px rgba(24,27,34,0.08), 0 2px 6px rgba(24,27,34,0.05);
+      --shadow-lg:   0 8px 32px rgba(24,27,34,0.10), 0 4px 12px rgba(24,27,34,0.06);
+    }
+
+    /* ─── Reset ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--teal); text-decoration: underline; }
+    ul { list-style: none; }
+
+    /* ─── Layout ─────────────────────────────────────── */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ─── Header / Contact ───────────────────────────── */
+    .resume-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: start;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid var(--border-strong);
+      margin-bottom: 2.5rem;
+    }
+    .resume-header__name {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 0.35rem;
+    }
+    .resume-header__name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .resume-header__title {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      margin-bottom: 0.5rem;
+    }
+    .resume-header__tagline {
+      font-size: 0.9rem;
+      color: var(--ink-light);
+      max-width: 480px;
+    }
+    .resume-header__contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      align-items: flex-end;
+      font-size: 0.875rem;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--ink-muted);
+    }
+    .contact-item svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      stroke: var(--accent);
+    }
+    .contact-item a { color: var(--ink-muted); font-weight: 500; }
+    .contact-item a:hover { color: var(--accent); }
+
+    /* ─── Sections ───────────────────────────────────── */
+    .section { margin-bottom: 2.5rem; }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* ─── Summary ────────────────────────────────────── */
+    .summary-text {
+      font-size: 0.975rem;
+      color: var(--ink-muted);
+      max-width: 800px;
+      line-height: 1.75;
+    }
+
+    /* ─── Skills ─────────────────────────────────────── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .skill-group {}
+    .skill-group__label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .skill-tag {
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: var(--accent-pale);
+      color: var(--accent);
+      border: 1px solid rgba(200,96,30,0.2);
+      border-radius: var(--r-sm);
+      padding: 0.2rem 0.55rem;
+      line-height: 1.4;
+    }
+    .skill-tag.teal {
+      background: var(--teal-pale);
+      color: var(--teal);
+      border-color: rgba(38,122,114,0.2);
+    }
+    .skill-tag.gold {
+      background: var(--gold-pale);
+      color: var(--gold);
+      border-color: rgba(192,144,32,0.2);
+    }
+    .skill-tag.neutral {
+      background: rgba(24,27,34,0.05);
+      color: var(--ink-muted);
+      border-color: var(--border);
+    }
+
+    /* ─── Projects Grid ───────────────────────────────── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 1.25rem;
+    }
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 1.4rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .project-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .project-card__header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .project-card__title-block {}
+    .project-card__type {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--teal);
+      margin-bottom: 0.25rem;
+    }
+    .project-card__name {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--ink);
+    }
+    .project-card__links {
+      display: flex;
+      gap: 0.4rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: var(--r-sm);
+      border: 1.5px solid;
+      transition: all 0.2s;
+      white-space: nowrap;
+      text-decoration: none !important;
+    }
+    .project-link--primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff !important;
+    }
+    .project-link--primary:hover {
+      background: #b5511a;
+      border-color: #b5511a;
+      color: #fff !important;
+    }
+    .project-link--ghost {
+      background: transparent;
+      border-color: var(--border-strong);
+      color: var(--ink-muted) !important;
+    }
+    .project-link--ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent) !important;
+    }
+    .project-link svg {
+      width: 12px;
+      height: 12px;
+    }
+    .project-card__desc {
+      font-size: 0.885rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+    }
+    .project-card__metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .metric-badge {
+      font-size: 0.77rem;
+      font-weight: 600;
+      padding: 0.22rem 0.55rem;
+      border-radius: var(--r-sm);
+      background: var(--accent-pale);
+      color: var(--accent);
+      border: 1px solid rgba(200,96,30,0.15);
+    }
+    .metric-badge.teal {
+      background: var(--teal-pale);
+      color: var(--teal);
+      border-color: rgba(38,122,114,0.15);
+    }
+    .metric-badge.gold {
+      background: var(--gold-pale);
+      color: var(--gold);
+      border-color: rgba(192,144,32,0.15);
+    }
+    .project-card__tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .tech-tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.18rem 0.5rem;
+      border-radius: var(--r-sm);
+      background: rgba(24,27,34,0.05);
+      color: var(--ink-muted);
+      border: 1px solid var(--border);
+    }
+    .project-card__highlights {
+      font-size: 0.845rem;
+      color: var(--ink-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .project-card__highlights li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      line-height: 1.55;
+    }
+    .project-card__highlights li::before {
+      content: '→';
+      color: var(--accent);
+      font-size: 0.8rem;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    /* ─── Experience ─────────────────────────────────── */
+    .experience-list { display: flex; flex-direction: column; gap: 1.5rem; }
+    .exp-item {}
+    .exp-item__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.35rem;
+      flex-wrap: wrap;
+    }
+    .exp-item__role {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .exp-item__company {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+    .exp-item__date {
+      font-size: 0.82rem;
+      color: var(--ink-light);
+      white-space: nowrap;
+      font-weight: 500;
+    }
+    .exp-item__desc {
+      font-size: 0.875rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+    }
+    .exp-item__bullets {
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.28rem;
+    }
+    .exp-item__bullets li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+    .exp-item__bullets li::before {
+      content: '▸';
+      color: var(--accent);
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    /* ─── Education ──────────────────────────────────── */
+    .edu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .edu-item__degree { font-size: 0.975rem; font-weight: 600; }
+    .edu-item__school { font-size: 0.875rem; color: var(--ink-muted); margin-top: 0.15rem; }
+    .edu-item__date { font-size: 0.82rem; color: var(--ink-light); white-space: nowrap; }
+
+    /* ─── Responsive ─────────────────────────────────── */
+    @media (max-width: 680px) {
+      .resume-header {
+        grid-template-columns: 1fr;
+      }
+      .resume-header__contacts {
+        align-items: flex-start;
+      }
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      .project-card__header {
+        flex-direction: column;
+      }
+      .skills-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ─── Print ──────────────────────────────────────── */
+    @media print {
+      :root {
+        --bg: #ffffff;
+        --bg-card: #ffffff;
+        --shadow-sm: none;
+        --shadow-md: none;
+        --shadow-lg: none;
+      }
+      body { font-size: 12px; background: #fff; }
+      .page { padding: 0; max-width: 100%; }
+      .project-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .project-card:hover {
+        transform: none;
+        box-shadow: none;
+      }
+      .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+      .skills-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      a { color: inherit !important; text-decoration: none !important; }
+      .project-link { display: none; }
+      /* Show URL in parentheses for print */
+      .project-link--primary::after {
+        display: none;
+      }
+      .print-url {
+        font-size: 0.75rem;
+        color: #555;
+        display: block;
+      }
+      .section { margin-bottom: 1.5rem; }
+      .resume-header { margin-bottom: 1.5rem; }
+    }
+    @media not print {
+      .print-url { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Header ────────────────────────────────────────── -->
+  <header class="resume-header">
+    <div class="resume-header__info">
+      <h1 class="resume-header__name">Artem <em>Mikhailov</em></h1>
+      <p class="resume-header__title">Full-Stack Web Developer &amp; UI Engineer</p>
+      <p class="resume-header__tagline">
+        Crafting high-performance web applications with React, TypeScript, and modern cloud infrastructure.
+        Focused on measurable outcomes, scalable architecture, and exceptional user experience.
+      </p>
+    </div>
+    <div class="resume-header__contacts">
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <a href="mailto:artem@artemcv.studio">artem@artemcv.studio</a>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+        </svg>
+        <a href="https://github.com/akira777777" target="_blank" rel="noopener">github.com/akira777777</a>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>Available for freelance &amp; contract</span>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>Remote / Worldwide</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Professional Summary ───────────────────────────── -->
+  <section class="section" aria-labelledby="summary-heading">
+    <h2 class="section-title" id="summary-heading">Professional Summary</h2>
+    <p class="summary-text">
+      Full-stack web developer with hands-on experience building production-ready applications across
+      automotive, healthcare, hospitality, and e-commerce domains. Proficient in the modern JavaScript
+      ecosystem — React 19, TypeScript, Vite, Node.js / Express — and cloud deployment pipelines on
+      Vercel with Neon PostgreSQL. Skilled at translating business requirements into clean, maintainable
+      codebases with a strong emphasis on performance (Lighthouse 95+, PWA), accessibility, and
+      AI-augmented user experiences through Google Gemini integration. Comfortable owning features
+      end-to-end: from database schema design and RESTful API development to responsive UI and E2E
+      test coverage with Playwright.
+    </p>
+  </section>
+
+  <!-- ── Technical Skills ───────────────────────────────── -->
+  <section class="section" aria-labelledby="skills-heading">
+    <h2 class="section-title" id="skills-heading">Technical Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <p class="skill-group__label">Frontend</p>
+        <div class="skill-tags">
+          <span class="skill-tag">React 19</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">Vite</span>
+          <span class="skill-tag">JavaScript (ES2024)</span>
+          <span class="skill-tag">HTML5</span>
+          <span class="skill-tag">CSS3</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group__label">Styling &amp; UI</p>
+        <div class="skill-tags">
+          <span class="skill-tag teal">Tailwind CSS</span>
+          <span class="skill-tag teal">Framer Motion</span>
+          <span class="skill-tag teal">CSS Custom Properties</span>
+          <span class="skill-tag teal">Responsive Design</span>
+          <span class="skill-tag teal">PWA</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group__label">Backend &amp; Database</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Node.js</span>
+          <span class="skill-tag">Express 5</span>
+          <span class="skill-tag">PostgreSQL</span>
+          <span class="skill-tag">Prisma ORM</span>
+          <span class="skill-tag">Sequelize</span>
+          <span class="skill-tag">REST APIs</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group__label">Cloud &amp; DevOps</p>
+        <div class="skill-tags">
+          <span class="skill-tag gold">Vercel</span>
+          <span class="skill-tag gold">Neon (serverless PG)</span>
+          <span class="skill-tag gold">Docker</span>
+          <span class="skill-tag gold">GitHub CI/CD</span>
+          <span class="skill-tag gold">Serverless Functions</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group__label">State &amp; Data</p>
+        <div class="skill-tags">
+          <span class="skill-tag neutral">Zustand</span>
+          <span class="skill-tag neutral">React Context</span>
+          <span class="skill-tag neutral">React Router</span>
+          <span class="skill-tag neutral">Zod</span>
+          <span class="skill-tag neutral">JWT / bcryptjs</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group__label">Testing &amp; Tooling</p>
+        <div class="skill-tags">
+          <span class="skill-tag neutral">Playwright</span>
+          <span class="skill-tag neutral">Vitest</span>
+          <span class="skill-tag neutral">ESLint</span>
+          <span class="skill-tag neutral">Google Gemini AI</span>
+          <span class="skill-tag neutral">i18next</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Portfolio Projects ─────────────────────────────── -->
+  <section class="section" aria-labelledby="projects-heading">
+    <h2 class="section-title" id="projects-heading">Portfolio Projects</h2>
+    <div class="projects-grid">
+
+      <!-- Project 1: ARTEMCV Studio -->
+      <article class="project-card" aria-label="ARTEMCV Studio project">
+        <div class="project-card__header">
+          <div class="project-card__title-block">
+            <p class="project-card__type">Portfolio &amp; Agency Website</p>
+            <h3 class="project-card__name">ARTEMCV Studio</h3>
+          </div>
+          <div class="project-card__links">
+            <a href="https://github.com/akira777777/ARTEMCV"
+               class="project-link project-link--ghost"
+               target="_blank" rel="noopener"
+               aria-label="ARTEMCV Studio GitHub repository">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+              Code
+            </a>
+          </div>
+        </div>
+        <p class="project-card__desc">
+          Strategic Webflow-inspired agency portfolio showcasing digital services and case studies.
+          Features animated scroll reveals via Intersection Observer, sticky header with backdrop blur,
+          tabbed service focus areas, and a custom contact form with API integration.
+          Designed with a cohesive warm-toned design system built from scratch using CSS custom properties.
+        </p>
+        <ul class="project-card__highlights">
+          <li>Implemented CSS design token system (colors, radii, shadows, easing) for consistent theming across 10+ sections</li>
+          <li>Built scroll-driven progress indicator and IntersectionObserver reveal animations achieving 60 fps</li>
+          <li>Structured client-side router utility with regex-based pattern matching and parameter extraction</li>
+          <li>Integrated structured logging library with batched shipping, correlation IDs, and Core Web Vitals monitoring</li>
+        </ul>
+        <div class="project-card__metrics">
+          <span class="metric-badge teal">React 19</span>
+          <span class="metric-badge teal">TypeScript</span>
+          <span class="metric-badge">Vite 7</span>
+          <span class="metric-badge">CSS Design System</span>
+        </div>
+        <div class="project-card__tech">
+          <span class="tech-tag">React 19.2</span>
+          <span class="tech-tag">TypeScript 5.9</span>
+          <span class="tech-tag">Vite 7.3</span>
+          <span class="tech-tag">CSS Custom Properties</span>
+          <span class="tech-tag">IntersectionObserver API</span>
+          <span class="tech-tag">Playwright</span>
+          <span class="tech-tag">Vitest</span>
+          <span class="tech-tag">Space Grotesk / Instrument Serif</span>
+        </div>
+      </article>
+
+      <!-- Project 2: Luxe Detail -->
+      <article class="project-card" aria-label="Luxe Detail project">
+        <div class="project-card__header">
+          <div class="project-card__title-block">
+            <p class="project-card__type">Full-Stack SaaS · Automotive</p>
+            <h3 class="project-card__name">Luxe Detail</h3>
+          </div>
+          <div class="project-card__links">
+            <a href="https://github.com/akira777777/detailing"
+               class="project-link project-link--ghost"
+               target="_blank" rel="noopener"
+               aria-label="Luxe Detail GitHub repository">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+              Code
+            </a>
+          </div>
+        </div>
+        <p class="project-card__desc">
+          Premium automotive detailing platform with dynamic pricing calculator, calendar-based
+          appointment booking, before/after gallery with image sliders, and a user dashboard for
+          service history. Full-stack application with Express 5 backend, JWT authentication,
+          PostgreSQL on Neon, and PWA support with offline capability.
+        </p>
+        <ul class="project-card__highlights">
+          <li>Achieved Lighthouse score 95+ and PWA score 100/100 with code-splitting and lazy-loaded routes (bundle ~101 KB gzip)</li>
+          <li>Built dynamic pricing calculator engine supporting multiple vehicle classes and service tiers</li>
+          <li>Implemented real-time booking calendar with time-slot conflict detection and PostgreSQL persistence</li>
+          <li>Configured Express 5 with Helmet security headers, rate-limiting, bcryptjs password hashing, and JWT refresh tokens</li>
+          <li>Deployed i18n (i18next) for multi-language support with system locale detection</li>
+        </ul>
+        <div class="project-card__metrics">
+          <span class="metric-badge">Lighthouse 95+</span>
+          <span class="metric-badge teal">PWA 100/100</span>
+          <span class="metric-badge">FCP &lt; 1.5s</span>
+          <span class="metric-badge gold">Bundle ~101 KB</span>
+        </div>
+        <div class="project-card__tech">
+          <span class="tech-tag">React 19</span>
+          <span class="tech-tag">Vite 7</span>
+          <span class="tech-tag">Tailwind CSS 3</span>
+          <span class="tech-tag">Framer Motion 12</span>
+          <span class="tech-tag">Zustand 5</span>
+          <span class="tech-tag">Express 5</span>
+          <span class="tech-tag">PostgreSQL / Neon</span>
+          <span class="tech-tag">JWT</span>
+          <span class="tech-tag">bcryptjs</span>
+          <span class="tech-tag">i18next</span>
+          <span class="tech-tag">Playwright</span>
+          <span class="tech-tag">Vitest</span>
+          <span class="tech-tag">PWA</span>
+          <span class="tech-tag">Vercel</span>
+        </div>
+      </article>
+
+      <!-- Project 3: Vakalova Dental Clinic -->
+      <article class="project-card" aria-label="Vakalova Dental Clinic project">
+        <div class="project-card__header">
+          <div class="project-card__title-block">
+            <p class="project-card__type">Full-Stack SaaS · Healthcare</p>
+            <h3 class="project-card__name">Vakalova Dental Clinic</h3>
+          </div>
+          <div class="project-card__links">
+            <a href="https://github.com/akira777777/dental-clinic-vakalova"
+               class="project-link project-link--ghost"
+               target="_blank" rel="noopener"
+               aria-label="Vakalova Dental Clinic GitHub repository">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+              Code
+            </a>
+          </div>
+        </div>
+        <p class="project-card__desc">
+          Production-ready dental clinic platform built as a monorepo with separate React client
+          and Express server workspaces. Features an AI-powered patient assistant (Google Gemini),
+          appointment booking system, doctor profiles with specialties and ratings, transformation
+          gallery, and serverless Vercel API routes backed by Neon PostgreSQL via Prisma ORM.
+        </p>
+        <ul class="project-card__highlights">
+          <li>Integrated Google Gemini AI (1.38.0) chatbot for patient Q&amp;A, reducing anticipated support inquiries</li>
+          <li>Designed monorepo architecture (client + server + api/) with shared Prisma schema for type-safe DB access</li>
+          <li>Built serverless API layer on Vercel Functions enabling zero-cold-start performance at edge</li>
+          <li>Implemented Zod schema validation for all API boundaries and comprehensive doctor/appointment data models</li>
+          <li>Created before/after transformation carousel with smooth animation and accessible keyboard navigation</li>
+        </ul>
+        <div class="project-card__metrics">
+          <span class="metric-badge teal">AI-Powered Chat</span>
+          <span class="metric-badge">Serverless API</span>
+          <span class="metric-badge gold">Monorepo Architecture</span>
+          <span class="metric-badge">Production Ready</span>
+        </div>
+        <div class="project-card__tech">
+          <span class="tech-tag">React 19</span>
+          <span class="tech-tag">Vite 6</span>
+          <span class="tech-tag">Tailwind CSS 4</span>
+          <span class="tech-tag">Google Gemini AI</span>
+          <span class="tech-tag">Express 4</span>
+          <span class="tech-tag">Prisma ORM</span>
+          <span class="tech-tag">PostgreSQL / Neon</span>
+          <span class="tech-tag">Zod</span>
+          <span class="tech-tag">Vercel Serverless</span>
+          <span class="tech-tag">Lucide React</span>
+          <span class="tech-tag">CORS</span>
+        </div>
+      </article>
+
+      <!-- Project 4: Iron & Steel Barbershop -->
+      <article class="project-card" aria-label="Iron and Steel Barbershop project">
+        <div class="project-card__header">
+          <div class="project-card__title-block">
+            <p class="project-card__type">React SPA · Hospitality &amp; Retail</p>
+            <h3 class="project-card__name">Iron &amp; Steel Barbershop</h3>
+          </div>
+          <div class="project-card__links">
+            <a href="https://github.com/akira777777/barber_auto-copilot-prepare-deploy-vercel-neon"
+               class="project-link project-link--ghost"
+               target="_blank" rel="noopener"
+               aria-label="Iron and Steel Barbershop GitHub repository">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+              Code
+            </a>
+          </div>
+        </div>
+        <p class="project-card__desc">
+          Premium barbershop management system with brutalist-inspired design aesthetic.
+          Includes a 4-step online booking flow (service → barber → date/time → details),
+          AI Style Advisor powered by Google Gemini (photo upload for personalized haircut
+          recommendations), product shop with cart, and a comprehensive admin dashboard with
+          revenue analytics and booking management. Backend architecture planned with Docker,
+          Express, and Neon PostgreSQL.
+        </p>
+        <ul class="project-card__highlights">
+          <li>Engineered 4-step multi-stage booking wizard with state persistence across React component tree</li>
+          <li>Integrated Gemini Vision AI to analyze uploaded customer photos and return personalized style recommendations</li>
+          <li>Built admin dashboard UI with revenue metrics, daily booking stats, and bot manager monitor panels</li>
+          <li>Implemented shopping cart with drawer UI, quantity management, and optimistic state updates via React Context</li>
+          <li>Provided comprehensive documentation suite: ARCHITECTURE.md, DEMO_GUIDE.md, DEPLOYMENT.md, CLIENT_PRESENTATION.md</li>
+        </ul>
+        <div class="project-card__metrics">
+          <span class="metric-badge teal">AI Style Advisor</span>
+          <span class="metric-badge">4-Step Booking</span>
+          <span class="metric-badge gold">Admin Dashboard</span>
+          <span class="metric-badge">Product Shop</span>
+        </div>
+        <div class="project-card__tech">
+          <span class="tech-tag">React 19</span>
+          <span class="tech-tag">TypeScript 5.9</span>
+          <span class="tech-tag">Vite 7</span>
+          <span class="tech-tag">Tailwind CSS 4</span>
+          <span class="tech-tag">Tailwind Animate</span>
+          <span class="tech-tag">Google Gemini AI</span>
+          <span class="tech-tag">Lucide React</span>
+          <span class="tech-tag">Vercel Speed Insights</span>
+          <span class="tech-tag">Docker</span>
+          <span class="tech-tag">Express 5 (planned)</span>
+        </div>
+      </article>
+
+      <!-- Project 5: GameMarket -->
+      <article class="project-card" aria-label="GameMarket project">
+        <div class="project-card__header">
+          <div class="project-card__title-block">
+            <p class="project-card__type">Full-Stack Marketplace · E-Commerce</p>
+            <h3 class="project-card__name">GameMarket</h3>
+          </div>
+          <div class="project-card__links">
+            <a href="https://github.com/akira777777/marketplace"
+               class="project-link project-link--ghost"
+               target="_blank" rel="noopener"
+               aria-label="GameMarket GitHub repository">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+              Code
+            </a>
+          </div>
+        </div>
+        <p class="project-card__desc">
+          High-performance digital gaming assets marketplace covering skins, currencies, and
+          collectibles across League of Legends, Valorant, CS:GO, Fortnite, and Roblox.
+          Features a full product catalog with multi-category browsing, shopping cart with
+          quantity management, personal inventory tracker, market intelligence analytics,
+          item generator tool, and a review/rating system. Backed by an Express server.
+        </p>
+        <ul class="project-card__highlights">
+          <li>Designed multi-page SPA with 9 distinct pages (Home, Catalog, Details, Cart, Inventory, Generator, MarketIntel, Checkout) using React Router</li>
+          <li>Built CartContext with optimistic UI updates, quantity management, and persistent state across navigation</li>
+          <li>Implemented market intelligence dashboard displaying price trends and item rarity analytics</li>
+          <li>Integrated AI-powered item generator for custom skin/currency value analysis via Gemini API</li>
+          <li>Wrote Playwright E2E test suite covering critical user journeys: browse → add to cart → checkout</li>
+        </ul>
+        <div class="project-card__metrics">
+          <span class="metric-badge">9 SPA Pages</span>
+          <span class="metric-badge teal">Multi-Game Catalog</span>
+          <span class="metric-badge gold">Market Analytics</span>
+          <span class="metric-badge">E2E Tested</span>
+        </div>
+        <div class="project-card__tech">
+          <span class="tech-tag">React 19</span>
+          <span class="tech-tag">TypeScript 5.8</span>
+          <span class="tech-tag">Vite 6</span>
+          <span class="tech-tag">Tailwind CSS 4</span>
+          <span class="tech-tag">React Router</span>
+          <span class="tech-tag">React Context</span>
+          <span class="tech-tag">Google Gemini AI</span>
+          <span class="tech-tag">Express 4</span>
+          <span class="tech-tag">Playwright 1.58</span>
+          <span class="tech-tag">PostCSS</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── Experience ──────────────────────────────────────── -->
+  <section class="section" aria-labelledby="experience-heading">
+    <h2 class="section-title" id="experience-heading">Experience</h2>
+    <div class="experience-list">
+
+      <div class="exp-item">
+        <div class="exp-item__header">
+          <div>
+            <p class="exp-item__role">Freelance Full-Stack Web Developer</p>
+            <p class="exp-item__company">Self-Employed · ARTEMCV Studio</p>
+          </div>
+          <span class="exp-item__date">2024 — Present</span>
+        </div>
+        <ul class="exp-item__bullets">
+          <li>Designed and delivered 5 end-to-end production web applications spanning automotive, dental, hospitality, e-commerce, and agency domains</li>
+          <li>Maintained consistent tech stack (React 19, TypeScript, Vite, Tailwind CSS, Vercel, Neon) enabling rapid project onboarding and code reuse</li>
+          <li>Integrated Google Gemini AI capabilities (chat assistant, style advisor, item generator) into client-facing applications to enhance user engagement</li>
+          <li>Achieved Lighthouse performance scores of 95+ with PWA certification on the flagship detailing platform, with FCP under 1.5 s</li>
+          <li>Authored comprehensive documentation (ARCHITECTURE.md, DEPLOY guides, CLIENT_PRESENTATION decks) for handoff-ready deliverables</li>
+          <li>Set up Playwright E2E test suites covering accessibility, navigation, form validation, and API contracts across multiple projects</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Education ───────────────────────────────────────── -->
+  <section class="section" aria-labelledby="education-heading">
+    <h2 class="section-title" id="education-heading">Education &amp; Certifications</h2>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <div class="edu-item">
+        <div>
+          <p class="edu-item__degree">Self-Directed Full-Stack Development</p>
+          <p class="edu-item__school">Continuous learning via official docs, open-source contribution, and project-based practice — React, TypeScript, Node.js, PostgreSQL, and cloud deployment</p>
+        </div>
+        <span class="edu-item__date">2023 — Present</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
