@@ -32,3 +32,4 @@ analyze_syntax.py
 diagnose_files.py
 *.html
 !index.html
+!Artem_Mikhailov_Resume.html
